@@ -39,6 +39,24 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                                <a class="nav-link" href="{{ route('scheduling_solutions') }}">{{ __('Scheduling Solutions') }}</a>
+                        </li>
+                        <li class="nav-item">
+                                <a class="nav-link" href="{{ route('success_stories') }}">{{ __('Success Stories') }}</a>
+                        </li>
+                         <li class="nav-item">
+                                <a class="nav-link" href="{{ route('demo') }}">{{ __('Demo') }}</a>
+                        </li>
+                        <li class="nav-item">
+                                <a class="nav-link" href="{{ route('faq') }}">{{ __('FAQ') }}</a>
+                        </li>
+                         <li class="nav-item">
+                                <a class="nav-link" href="{{ route('signup') }}">{{ __('Signup') }}</a>
+                        </li>
+                           <li class="nav-item">
+                                <a class="nav-link" href="{{ route('contact') }}">{{ __('Contact') }}</a>
+                        </li>
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">

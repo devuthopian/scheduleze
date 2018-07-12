@@ -11,10 +11,15 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/', 'SchedulezeController@index');
+Route::get('/scheduling_solutions', 'SchedulezeController@scheduling_solutions')->name('scheduling_solutions');
+Route::get('/success_stories', 'SchedulezeController@success_stories')->name('success_stories');
+Route::get('/demo', 'SchedulezeController@demo')->name('demo');
+Route::get('/faq', 'SchedulezeController@faq')->name('faq');
+Route::get('/signup', 'SchedulezeController@signup')->name('signup');
+Route::get('/contact', 'SchedulezeController@contact')->name('contact');
+
