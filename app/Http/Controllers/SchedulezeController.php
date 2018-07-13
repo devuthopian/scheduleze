@@ -12,7 +12,7 @@ class SchedulezeController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-     public function index()
+    public function index()
     {
         return view('scheduleze.welcome');
     }
@@ -23,7 +23,7 @@ class SchedulezeController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-        public function scheduling_solutions()
+    public function scheduling_solutions()
     {
         return view('scheduleze.scheduling_solutions');
     }
@@ -34,7 +34,7 @@ class SchedulezeController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-        public function success_stories()
+    public function success_stories()
     {
         return view('scheduleze.success_stories');
     }
@@ -46,7 +46,7 @@ class SchedulezeController extends Controller
      */
 
 
-        public function demo()
+    public function demo()
     {
         return view('scheduleze.demo');
     }
@@ -57,7 +57,7 @@ class SchedulezeController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-        public function faq()
+    public function faq()
     {
         return view('scheduleze.faq');
     }
@@ -68,7 +68,7 @@ class SchedulezeController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-        public function signup()
+    public function signup()
     {
         return view('scheduleze.signup');
     }
@@ -79,7 +79,7 @@ class SchedulezeController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-        public function contact()
+    public function contact()
     {
         return view('welcome');
     }
