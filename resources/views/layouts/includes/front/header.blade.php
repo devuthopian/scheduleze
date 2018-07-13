@@ -9,7 +9,11 @@
 
 <div class="header_section">
   <div class="container">
-      <div class="head_left"><img src="images/logo.png" alt=""></div>
+      <div class="head_left">
+        <a href="{{ url('/') }}">
+          <img src="images/logo.png" alt="">
+        </a>
+      </div>
       <div class="head_right">
          <div class="navigation">
             <nav> 
@@ -17,9 +21,9 @@
               <ul>
                 <li><a href="{{ url('scheduling_solutions') }}">Scheduling Solutions</a></li>
                 <li><a href="{{ url('success_stories') }}">Success  Stories</a></li>
-                <li><a href="#">Demo</a></li>
+                <li><a href="{{ url('demo') }}">Demo</a></li>
                 <li><a href="{{ url('faq') }}">FAQ</a></li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="{{ url('contact') }}">Contact</a></li>
                 <li><a href="#">Client Login</a></li>         
               </ul>         
             </nav>

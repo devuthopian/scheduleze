@@ -1,12 +1,10 @@
-@extends('layouts.app')
+@extends('layouts.front')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">welcome</div>
-        </div>
+<form method="POST" action="{{ route('register') }}" aria-label="{{ __('Register') }}">
+@csrf
+    <div class="signup_section" style="min-height: 400px !important;">
+        
     </div>
-</div>
+</form>
 @endsection

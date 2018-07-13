@@ -12,19 +12,19 @@
      	<div class="container">
       		<div class="content_left">
        			<h3>How much does Scheduleze cost?</h3> 
-       			<p>How many calls have you missed in the last year? If you book only handful of additional appointments per year, your Scheduleze subscription will pay for itself. We charge a reoccurring monthly subscription fee starting at $75.</p>
+       			<p>How many calls have you missed in the last year? If you book only handful of additional appointments <strong>per year</strong>, your Scheduleze subscription will pay for itself. We charge a reoccurring monthly subscription fee starting at $75.</p>
        			<p>The administrator on the account may add and configure additional employees as needed. Each additional employee/user incurs a $10 monthly fee. Package pricing is available for large multi-user clients. Fees for the coming month are automatically billed to the credit card on file at the first of each month.</p>
 
       			<h3>What does the service include?</h3>
       			<p>The main software package and everything it takes to get you started regardless of your current web presence. If you have a fully developed website already see the <a href="#">web integration</a> FAQ below. If you don't have a website currently see the <a href="#">no website</a> FAQ for more details.</p>
 
       			<h3>Can Scheduleze integrate with my existing website?</h3>
-      			<p>Yes. Choose "I want Scheduleze integrated on my website" when you sign up. Level 2 and 3 of our pricing includes integrating your sites graphic style into the scheduler pages and we'll provide you with server-appropriate code snippets and documentation a qualified webmaster would need to integrate Scheduleze directly into your website's home page. Either let us know when you sign up, or contact <a href="#">support@Scheduleze.com</a> at anytime after your sign up to request assistance. We're here to make your Scheduleze experience as smooth as possible. </p>
+      			<p>Yes. Choose "I want Scheduleze integrated on my website" when you sign up. Level 2 and 3 of our pricing includes integrating your sites graphic style into the scheduler pages and we'll provide you with server-appropriate code snippets and documentation a qualified webmaster would need to integrate Scheduleze directly into your website's home page. Either let us know when you sign up, or contact <a href="mailto:support@Scheduleze.com">support@Scheduleze.com</a> at anytime after your sign up to request assistance. We're here to make your Scheduleze experience as smooth as possible. </p>
       			<p>The Scheduleze front-end user forms are compatible with all server software packages including Microsoft IIS, Linux and FreeBSD webservers. Scheduleze integration will require that you have access to upload your modified web page and run simple include scripts (standard on most hosting accounts).</p>
 
       			<h3>What if I don't have my own website?</h3>
-      			<p>Scheduleze is for you. When you sign up, a mini-site will be created for you. Clients access your schedule by going to www.Scheduleze.com/username, such as www.Scheduleze.com/parsons. Customers see your name, and contact information, as well as the scheduling form on your front page. It is possible to customize the look and feel of your Scheduleze home page, although this requires some knowledge of proper web HTML and image preparation techniques. If you desire graphical customization, contact <a href="#">support@Scheduleze.com</a> after you sign up to discuss the best solution for you.</p>
-
+      			<p>Scheduleze is for you. When you sign up, a mini-site will be created for you. Clients access your schedule by going to www.Scheduleze.com/username, such as www.Scheduleze.com/parsons. Customers see your name, and contact information, as well as the scheduling form on your front page. It is possible to customize the look and feel of your Scheduleze home page, although this requires some knowledge of proper web HTML and image preparation techniques. If you desire graphical customization, contact <a href="mailto:support@Scheduleze.com">support@Scheduleze.com</a> after you sign up to discuss the best solution for you.</p>
+      			
       			<h3>Can I add more locations later?</h3>
       			<p>Yes. You can add/edit/remove the locations you serve at anytime. You can also change the drive time from one location to another to adjust for road construction delays, seasonal congestion and other factors that change over time.</p>
 
@@ -66,7 +66,7 @@
 		          	<li><a href="#">Taking Days off  </a></li>
 		          	<li><a href="#">Booking override  </a></li>
 		          	<li><a href="#">Business expansion  </a></li>
-		          	
+
 		        </ul> 
       		</div>     
      	</div>

@@ -81,6 +81,6 @@ class SchedulezeController extends Controller
 
     public function contact()
     {
-        return view('welcome');
+        return view('scheduleze.contact');
     }
 }

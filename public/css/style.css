@@ -34,11 +34,7 @@ a:hover {
   padding: 0px 10px;
   list-style: none;
   display: inline-block;
-  border-right: 2px solid #fff;
   line-height: 12px;
-}
-.head_top_bar ul li:last-child {
-  border-right: 0px solid #fff;
 }
 .head_top_bar ul li a {
   color: #fff;
@@ -122,6 +118,29 @@ a:hover {
 }
 .content_section .content_right ul li a:hover {
   color: #f15d22;
+}
+.content_section .form_cont select {
+  width: 33%;
+  padding: 10px 10px;
+  border: 1px solid #666;
+  margin-bottom: 20px;
+}
+.content_section .form_cont input[type="checkbox"] {
+  margin: 0 5px 0 0;
+  position: relative;
+  top: 2px;
+}
+.content_section .form_cont span {
+  margin: 0 20px 0 0;
+}
+.content_section .form_cont input[type="Submit"] {
+    background: #f15d22;
+    padding: 10px 30px;
+    margin: 0px 0px 40px;
+    border: 0px;
+    border-radius: 30px;
+    color: #fff;
+    font-size: 16px;
 }
 .signup_section {
   width: 100%;
