@@ -29,7 +29,7 @@ $(document).ready(function() {
     });
 
    $("body").on('click', '.note_link', function(event) {
-        /* Act on the event */
+        /* Act on the event */ 
         var getid = $(this).attr('id');
         $('.trtable_'+getid).remove();
     });
