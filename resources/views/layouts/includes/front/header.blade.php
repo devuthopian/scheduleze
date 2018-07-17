@@ -23,6 +23,7 @@
                 <li><a href="{{ url('success_stories') }}">Success  Stories</a></li>
                 <li><a href="{{ url('demo') }}">Demo</a></li>
                 <li><a href="{{ url('faq') }}">FAQ</a></li>
+                <li><a href="{{ route('storebuildtype') }}">{{ __('nav.services') }}</a></li>
                 <li><a href="{{ url('contact') }}">Contact</a></li>
                 <li><a href="#">Client Login</a></li>         
               </ul>         

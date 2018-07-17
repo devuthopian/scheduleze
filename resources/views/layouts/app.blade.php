@@ -51,10 +51,13 @@
                         <li class="nav-item">
                                 <a class="nav-link" href="{{ route('faq') }}">{{ __('FAQ') }}</a>
                         </li>
-                         <li class="nav-item">
+                        <li class="nav-item">
+                                <a class="nav-link" href="{{ route('signup') }}">{{ __('nav.services') }}</a>
+                        </li> 
+                        <li class="nav-item">
                                 <a class="nav-link" href="{{ route('signup') }}">{{ __('Signup') }}</a>
                         </li>
-                           <li class="nav-item">
+                        <li class="nav-item">
                                 <a class="nav-link" href="{{ route('contact') }}">{{ __('Contact') }}</a>
                         </li>
                         <!-- Authentication Links -->

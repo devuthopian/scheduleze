@@ -267,3 +267,7 @@ a:hover {
     border-bottom: 0px solid #eee;
 }
 }
+.tip {
+    padding: 0px 200px 4px 38px;
+    font-size: 14px;
+}
