@@ -50,10 +50,10 @@
 									</td>
 									<td>
 										<select name="forcecall[{{ $i }}]" size="1">
-											<option value="1" selected="">Book using size/age</option>
-											<option value="2">Book as standalone</option>
-											<option value="0">Require phone call</option>
-											<option value="3">Use as Label</option>
+											<option value="1" @if($BuildType->status == 1) selected="" @endif>Book using size/age</option>
+											<option value="2" @if($BuildType->status == 2) selected="" @endif>Book as standalone</option>
+											<option value="0" @if($BuildType->status == 0) selected="" @endif>Require phone call</option>
+											<option value="3" @if($BuildType->status == 3) selected="" @endif>Use as Label</option>
 										</select>
 									</td>
 									<td>
