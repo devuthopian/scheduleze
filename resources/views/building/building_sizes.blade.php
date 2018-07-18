@@ -1,7 +1,7 @@
 @extends('layouts.front')
 
 @section('content')
-	{!! Form::open([ 'route' => ['storebuildtype'],'method' => 'post'] ) !!}
+	{!! Form::open([ 'route' => ['storebuildsizes'],'method' => 'post'] ) !!}
 		<div class="frameadmin">
 			<span class="head">
 				Setting Building Types and Prices<br>
@@ -32,7 +32,7 @@
 						</tr>
 						<tbody class="txtBuildId">
 							@php $i=0;  @endphp
-							@forelse($BuildingType as $BuildType)
+							@forelse($BuildingSizes as $BuildType)
 								<tr class="trtable_{{ $i }}">
 									<td>
 										<input type="text" name="desc[{{ $i }}]" size="32" value="{{ $BuildType->name }}" required>
@@ -57,14 +57,14 @@
 										</select>
 									</td>
 									<td>
-										<a href='#' class='note_link' id="{{ $i }}" data-model="building_types" data-id="{{ $BuildType->id }}">Remove</a>
+										<a href='#' class='note_link' id="{{ $i }}" data-model="building_sizes" data-id="{{ $BuildType->id }}">Remove</a>
 									</td>
 								</tr>
 								@php $i++; @endphp
 							@empty
 							    <tr class="trtable_0">
-									<td><input type="text" name="desc[0]" size="32" value="" required></td>
-									<input type="hidden" name="id[0]" value="0">
+									<td><input type="text" name="desc[0]" size="32" value="" required>
+									<input type="hidden" name="id[0]" value="0"></td>
 									<td>				
 										{!! show_buffer(0, 10800) !!}
 									</td>
