@@ -26,4 +26,7 @@ Route::get('/buildingtypes', 'BuildingController@index')->name('buildingtypes');
 Route::get('/storebuildtype', 'BuildingController@store')->name('storebuildtype');
 Route::get('/user/verify/{token}', 'Auth\RegisterController@verifyUser');
 
+Route::get('/account_info', 'Auth\RegisterController@account_info');
+Route::post('/account_info_save', 'Auth\RegisterController@account_info_save')->name('account_info_save');
+
 
