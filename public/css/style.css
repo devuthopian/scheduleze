@@ -46,12 +46,12 @@ a:hover {
   padding: 20px 0;
 }
 .header_section .head_left {
-	width: 25%;
-	float: left;
+  width: 25%;
+  float: left;
 }
 .header_section .head_right {
-	width: 75%;
-	float: right;
+  width: 75%;
+  float: right;
   text-align: right;
 }
 .banner_section {
@@ -267,11 +267,6 @@ a:hover {
     border-bottom: 0px solid #eee;
 }
 }
-
-.tip {
-    padding: 0px 200px 4px 38px;
-    font-size: 14px;
-}
 /*custom font */
 @import url(https://fonts.googleapis.com/css?family=Montserrat);
 
@@ -454,3 +449,7 @@ a:hover {
     background: #C5C5F1;
     text-decoration: none;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8603b5a5b709df4d7a200c346d6f5387fd171b05
