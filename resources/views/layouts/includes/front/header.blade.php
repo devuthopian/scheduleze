@@ -65,23 +65,20 @@
                            </li>
                        </ul>
                     </li>
-                        <li>
-                       <a href="#">Services</a>
-                       <ul class="dropdown-menu">
-                           <li>
-                               <a href="#">Building Types</a>
-                           </li>
-                           <li>
-                               <a href="#">Building Sizes</a>
-                           </li>
-                           <li>
-                               <a href="#">Building Ages</a>
-                           </li>
-                             <li>
-                               <a href="#">Add-on Services</a>
-                           </li>
-                       </ul>
-                    </li>
+                       <li>
+                   <a href="{{ route('buildingtypes') }}">{{ __('nav.services') }}</a>
+                   <ul class="dropdown-menu">
+                       <li>
+                           <a href="{{ route('buildingtypes') }}">{{ __('nav.buildtype') }}</a>
+                       </li>
+                       <li>
+                           <a href="{{ route('buildingsizes') }}">{{ __('nav.buildsizes') }}</a>
+                       </li>
+                       <li>
+                           <a href="{{ route('storebuildtype') }}">{{ __('nav.buildages') }}</a>
+                       </li>
+                   </ul>
+               </li>
                           <li>
                        <a href="#">Locations</a>
                        <ul class="dropdown-menu">
