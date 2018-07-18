@@ -124,31 +124,6 @@
                       </ul>         
                       </nav>
                         @endguest
-            <nav> 
-              <a href="#" class="n_toggle"><i class="fa fa-bars fa-2x"></i></a>
-              <ul>
-                <li><a href="{{ url('scheduling_solutions') }}">Scheduling Solutions</a></li>
-                <li><a href="{{ url('success_stories') }}">Success  Stories</a></li>
-                <li><a href="{{ url('demo') }}">Demo</a></li>
-                <li><a href="{{ url('faq') }}">FAQ</a></li>
-                <li>
-                    <a href="{{ route('buildingtypes') }}">{{ __('nav.services') }}</a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a href="{{ route('buildingtypes') }}">{{ __('nav.buildtype') }}</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('buildingsizes') }}">{{ __('nav.buildsizes') }}</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('storebuildtype') }}">{{ __('nav.buildages') }}</a>
-                        </li>
-                    </ul>
-                </li>
-                <li><a href="{{ url('contact') }}">Contact</a></li>
-                <li><a href="#">Client Login</a></li>         
-              </ul>         
-            </nav>
         </div>
     </div>
   </div>
