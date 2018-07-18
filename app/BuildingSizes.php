@@ -4,8 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class BuildingType extends Model
+class BuildingSizes extends Model
 {
-    protected $table = 'building_types';
+    protected $table = 'building_sizes';
 	protected $guarded = [ 'id' ];
 }

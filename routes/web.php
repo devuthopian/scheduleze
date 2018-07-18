@@ -23,7 +23,10 @@ Route::get('/faq', 'SchedulezeController@faq')->name('faq');
 Route::get('/signup', 'SchedulezeController@signup')->name('signup');
 Route::get('/contact', 'SchedulezeController@contact')->name('contact');
 Route::get('/buildingtypes', 'BuildingController@index')->name('buildingtypes');
-Route::get('/storebuildtype', 'BuildingController@store')->name('storebuildtype');
+Route::get('/buildingsizes', 'BuildingController@buildsizes')->name('buildingsizes');
+Route::post('/storebuildtype', 'BuildingController@store')->name('storebuildtype');
+Route::post('/storebuildsizes', 'BuildingController@storebuildsizes')->name('storebuildsizes');
+Route::post('/ajaxrequest', 'BuildingController@updatebuild');
 Route::get('/user/verify/{token}', 'Auth\RegisterController@verifyUser');
 
 Route::get('/account_info', 'Auth\RegisterController@account_info');

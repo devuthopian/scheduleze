@@ -23,7 +23,20 @@
                 <li><a href="{{ url('success_stories') }}">Success  Stories</a></li>
                 <li><a href="{{ url('demo') }}">Demo</a></li>
                 <li><a href="{{ url('faq') }}">FAQ</a></li>
-                <li><a href="{{ route('storebuildtype') }}">{{ __('nav.services') }}</a></li>
+                <li>
+                    <a href="{{ route('buildingtypes') }}">{{ __('nav.services') }}</a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="{{ route('buildingtypes') }}">{{ __('nav.buildtype') }}</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('buildingsizes') }}">{{ __('nav.buildsizes') }}</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('storebuildtype') }}">{{ __('nav.buildages') }}</a>
+                        </li>
+                    </ul>
+                </li>
                 <li><a href="{{ url('contact') }}">Contact</a></li>
                 <li><a href="#">Client Login</a></li>         
               </ul>         
@@ -32,3 +45,12 @@
     </div>
   </div>
 </div>
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif

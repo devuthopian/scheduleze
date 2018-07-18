@@ -14,6 +14,9 @@ return [
     */
 
     'services' => 'Services',
+    'buildtype' => 'Building Types',
+    'buildsizes' => 'Building Sizes',
+    'buildages' => 'Building Ages',
     'next' => 'Next &raquo;',
 
 ];
