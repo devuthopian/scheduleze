@@ -1,9 +1,32 @@
 <div class="head_top_bar">
   <div class="container">
-   <ul>
-     <li><a href="{{ url('register') }}">Signup</a></li>
-     <li><a href="#">Newsletter</a></li>
-   </ul>
+  <ul>
+
+    @guest
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('Clinet Login') }}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('register') }}">{{ __('Signup') }}</a>
+                            </li>
+                             <li><a href="#">Newsletter</a></li>
+                        @else
+                            <li class="nav-item dropdown">
+                                 <a class="dropdown-item" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
+                                    </a>
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                        {{ Auth::user()->name }} <span class="caret"></span>
+                                    </a>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
+                                
+                            </li>
+                        @endguest
+                     </ul>
   </div>
 </div>
 
