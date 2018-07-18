@@ -19,13 +19,31 @@
             <fieldset>
                 <h2 class="fs-title">Personal Details</h2>
                 <br>
-                <input type="text" name="business_name" placeholder="Business Name"/>
-                <input type="text" name="contact_firstname" placeholder="Contact Firstname"/>
-                <input type="text" name="contact_lastname" placeholder="Contact Lastname"/>
-                <input type="text" name="business_address" placeholder="Business Address"/>
+                <input required type="text" name="business_name" id="business_name" placeholder="Business Name"/>
+                <div class="form-group has-error business_name" style="display: none;">
+                <span class="help-block ">Business Name is Required</span>
+               </div>
+                <input type="text" name="contact_firstname" id="contact_firstname" placeholder="Contact Firstname"/>
+                <div class="form-group has-error contact_firstname" style="display: none;">
+                <span class="help-block ">Contact Firstname is Required</span>
+               </div>
+                <input type="text" name="contact_lastname" id="contact_lastname" placeholder="Contact Lastname"/>
+                <div class="form-group has-error contact_lastname" style="display: none;">
+                <span class="help-block ">Contact Lastname is Required</span>
+               </div>
+                <input type="text" name="business_address" id ="business_address" placeholder="Business Address"/>
+                <div class="form-group has-error business_address" style="display: none;">
+                <span class="help-block ">Business Address is Required</span>
+               </div>
                 <input type="text" name="business_city" placeholder="Business City"/>
+                <div class="form-group has-error business_city" id="business_city" style="display: none;">
+                <span class="help-block ">Business City is Required</span>
+               </div>
                  <div class="col-md-8">
                 <select name="business_state" size="1"  class="form-control">
+                <div class="form-group has-error business_state" id="business_city" style="display: none;">
+                <span class="help-block ">Business State is Required</span>
+               </div>
                 <option value="">Business State</option>
                 <option value="AK">AK</option>
                 <option value="AL">AL</option>
@@ -82,13 +100,17 @@
             </div>
              <div class="col-md-4">
                 <input type="text" name="business_zip" placeholder="ZIP"/>
+                <div class="form-group has-error business_zip" id="business_zip" style="display: none;">
+                <span class="help-block ">Business zip is Required</span>
+               </div>
+
               </div>
                 <input type="text" name="business_phone" placeholder="Business Phone"/>
                 <input type="button" name="next" class="next action-button" value="Next"/>
             </fieldset>
             <fieldset>
                 <h2 class="fs-title">Additional Information</h2><br>
-                <input type="text" name="additional_phone" placeholder="Additional Phone"/>
+                <input type="text" name="additional_phone" id="additional_phone" placeholder="Additional Phone"/>
                 <select name="timezone" class="form-control">
                 <option value="Timezone">Select Timezone</option>
                 <option value="Eastern">Eastern</option>
@@ -108,18 +130,15 @@
             <fieldset>
                 <h2 class="fs-title">Create your account</h2>
                 <h3 class="fs-subtitle">Fill in your credentials</h3>
-                <input type="text" name="Username" placeholder="Username"/>
-                <input type="password" name="pass" placeholder="Password"/>
-                <input type="password" name="cpass" placeholder="Confirm Password"/>
+                <input required type="text" name="Username" id="Username" placeholder="Username"/>
+                <input required type="password" name="pass" id="pass" placeholder="Password"/>
+                <input required type="password" name="cpass" id="cpass" placeholder="Confirm Password"/>
                 <select name="use_scheduleze" class="form-control">
                 <option value="I am not sure, please contact me to discuss options">I am not sure, please contact me to discuss options</option>
                 <option value="saab">I'd like to use Scheduleze on-the-fly web page to take bookings</option>
                 <option value="opel">I would like to use Scheduleze on my existing website</option>
                 <option value="audi">I would like to have my own site for use with Scheduleze   </option>
                 <option value="audi"> I don't currently have a website, contact me about options </option>
-
-
-
                 </select>
                 <input type="button" name="previous" class="previous action-button-previous" value="Previous"/>
                 <input type="submit" name="submit" class="submit action-button" value="Submit"/>

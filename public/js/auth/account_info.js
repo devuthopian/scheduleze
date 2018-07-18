@@ -5,6 +5,23 @@ var left, opacity, scale; //fieldset properties which we will animate
 var animating; //flag to prevent quick multi-click glitches
 
 $(".next").click(function(){
+	if($('.active').html() == 'Personal Details'){
+		if($('#business_name').val() == ''){
+			$('.business_name').show();
+			return false;
+		} 
+		if($('#contact_firstname').val() == ''){
+          $('.contact_firstname').show();
+			return false;
+		}
+	}
+	/*if($('.current').html() == 'Additional Information'){
+		if($('#additional_phone').val() == ''){
+			//alert('2nd');
+			return true;
+		}
+	}*/
+
 	if(animating) return false;
 	animating = true;
 	
@@ -12,7 +29,8 @@ $(".next").click(function(){
 	next_fs = $(this).parent().next();
 	
 	//activate next step on progressbar using the index of next_fs
-	$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+	$("#progressbar li").eq($("fieldset").index(current_fs)).addClass("active");
+	$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active current");
 	
 	//show the next fieldset
 	next_fs.show(); 
@@ -51,6 +69,8 @@ $(".previous").click(function(){
 	
 	//de-activate current step on progressbar
 	$("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+	$("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("current");
+	$(".has-error").hide();
 	
 	//show the previous fieldset
 	previous_fs.show(); 
@@ -78,5 +98,11 @@ $(".previous").click(function(){
 });
 
 $(".submit").click(function(){
-	//return false;
-})
+	 var password = $("#pass").val();
+            var confirmPassword = $("#cpass").val();
+            if (password != confirmPassword) {
+                alert("Passwords do not match.");
+                return false;
+            }
+            return true;
+});

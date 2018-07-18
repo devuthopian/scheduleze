@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use App\VerifyUser;
+use App\Business;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -82,7 +83,6 @@ class RegisterController extends Controller
             'user_id' => $user->id,
             'token' => str_random(40)
         ]);
- 
         Mail::to($user->email)->send(new VerifyMail($user));
  
         return $user;
@@ -103,25 +103,61 @@ class RegisterController extends Controller
         }else{
             return redirect('/login')->with('warning', "Sorry your email cannot be identified.");
         }
- 
-        return redirect('/account_info/?token='.$token)->with('status', $status);
+         $check_reg = Business::where('user_id', $verifyUser->user_id)->first();
+          if(isset($check_reg )){
+         if(!$check_reg->registration_completed){
+          return redirect('/account_info/?token='.$token)->with('status', $status);
+         } else {
+          return redirect('/login')->with('warning', "your Registration allready Completed.");
+         }
+         } else{
+          return redirect('/account_info/?token='.$token)->with('status', $status);
+         }
+
     }
 
       public function account_info()
     {
-        return view('auth.account_info');
+          $verifyUser = VerifyUser::where('token',$_GET['token'])->first();
+
+          $check_reg = Business::where('user_id', $verifyUser->user_id)->first();
+          if(isset($check_reg )){
+         if(!$check_reg->registration_completed){
+          return view('auth.account_info');
+         } else {
+          return redirect('/login')->with('warning', "your Registration allready Completed.");
+         }
+         } else{
+                 return view('auth.account_info');
+         }
+
+
     }
         public function account_info_save(Request $request)
     {
-          $user_token = $request->input('user_token'); // option 1
-
-
+        $user_token = $request->input('user_token'); // option 1
         $verifyUser = VerifyUser::where('token', $user_token)->first();
         if(isset($verifyUser) ){
             $user = $verifyUser->user;
             if($user->verified) {
-                $verifyUser->user->name = 'test';
-                $verifyUser->user->password = bcrypt('1234567');
+               Business::create([
+                    'name' => $request->input('business_name'),
+                    'user_id' => $verifyUser->user_id,
+                    'contact_firstname' => $request->input('contact_firstname'),
+                    'contact_lastname' => $request->input('contact_lastname'),
+                    'address' => $request->input('business_address'),
+                    'city' => $request->input('business_city'),
+                    'state' => $request->input('business_state'),
+                    'zip' => $request->input('business_zip'),
+                    'phone' => $request->input('business_phone'),
+                    'public_phone' => $request->input('additional_phone'),
+                    //'timezone' => $request->input('timezone'),
+                    'website' => $request->input('business_website'),
+                    'email2' => $request->input('requested_email'),
+                    'registration_completed' => '1',
+                ]);
+                $verifyUser->user->name = $request->input('Username');
+                $verifyUser->user->password = bcrypt($request->input('pass'));
                 $verifyUser->user->save();
                 $status = "Your Signup process Completed You can login now.";
             }else{
