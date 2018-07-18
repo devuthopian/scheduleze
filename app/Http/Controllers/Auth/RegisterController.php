@@ -72,7 +72,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-     $user = User::create([
+        $user = User::create([
             //'name' => $data['name'],
             'email' => $data['email'],
             //'password' => bcrypt($data['password']),
@@ -96,7 +96,7 @@ class RegisterController extends Controller
             if(!$user->verified) {
                 $verifyUser->user->verified = 1;
                 $verifyUser->user->save();
-                $status = "Your e-mail is verified. You can now Signup Now.";
+                $status = "Your e-mail is verified. You can now login.";
             }else{
                 $status = "Your e-mail is already verified. You can now login.";
             }
@@ -104,32 +104,6 @@ class RegisterController extends Controller
             return redirect('/login')->with('warning', "Sorry your email cannot be identified.");
         }
  
-        return redirect('/account_info/?token='.$token)->with('status', $status);
-    }
-
-      public function account_info()
-    {
-        return view('auth.account_info');
-    }
-        public function account_info_save(Request $request)
-    {
-          $user_token = $request->input('user_token'); // option 1
-
-
-        $verifyUser = VerifyUser::where('token', $user_token)->first();
-        if(isset($verifyUser) ){
-            $user = $verifyUser->user;
-            if($user->verified) {
-                $verifyUser->user->name = 'test';
-                $verifyUser->user->password = bcrypt('1234567');
-                $verifyUser->user->save();
-                $status = "Your Signup process Completed You can login now.";
-            }else{
-                $status = "Your e-mail is already verified. You can now login.";
-            }
-        }else{
-            return redirect('/login')->with('warning', "Sorry your email cannot be identified.");
-        }
         return redirect('/login')->with('status', $status);
     }
 }

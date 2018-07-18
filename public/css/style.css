@@ -268,10 +268,6 @@ a:hover {
 }
 }
 
-.tip {
-    padding: 0px 200px 4px 38px;
-    font-size: 14px;
-}
 /*custom font */
 @import url(https://fonts.googleapis.com/css?family=Montserrat);
 
@@ -454,3 +450,4 @@ a:hover {
     background: #C5C5F1;
     text-decoration: none;
 }
+

@@ -12,9 +12,6 @@
 <link rel="shortcut icon" href="images/logo.png" type="image/x-icon" />
 <link href="{{ asset('css/style.css') }}" rel="stylesheet">
 <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet">
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css
-" rel="stylesheet">
-
 <link href="{{ asset('css/fontawesome.css') }}" rel="stylesheet">
 <link href="{{ asset('css/fontawesome-all.css') }}" rel="stylesheet">
 <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->

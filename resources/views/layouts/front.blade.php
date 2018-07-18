@@ -15,6 +15,5 @@
 
       @include('layouts.includes.front.footer_scripts')
       
-      @yield('page_scripts')
   </body>
 </html>
