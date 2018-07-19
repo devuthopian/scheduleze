@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\User;
 use App\VerifyUser;
 use App\Business;
+use App\UserDetails;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -125,7 +126,7 @@ class RegisterController extends Controller
          if(!$check_reg->registration_completed){
           return view('auth.account_info');
          } else {
-          return redirect('/login')->with('warning', "your Registration allready Completed.");
+          return redirect('/login')->with('warning', "your Registration already Completed.");
          }
          } else{
                  return view('auth.account_info');
@@ -155,6 +156,9 @@ class RegisterController extends Controller
                     'website' => $request->input('business_website'),
                     'email2' => $request->input('requested_email'),
                     'registration_completed' => '1',
+                ]);
+                UserDetails::create([
+                    'user_id' => $verifyUser->user_id,
                 ]);
                 $verifyUser->user->name = $request->input('Username');
                 $verifyUser->user->password = bcrypt($request->input('pass'));

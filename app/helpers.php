@@ -25,3 +25,46 @@ if (! function_exists('show_buffer')) {
 		return $html;
     }
 }
+
+
+if (! function_exists('show_day_padding')) {
+    function show_day_padding($default_option='-1', $max = '20', $increment = '1')
+    {
+    	$html = "\t\t\t\t<select name=\"padding_day\" class=\"small_select\">\n";
+    	$html .= "\t\t\t\t\t<option value=\"0\" selected>pick</option>\n";
+    	$i = 0;
+		while ($i <= $max){
+			if ($default_option == $i){
+				$selected = "selected";
+			} else {
+				$selected = "";
+			}
+			$html .= "\t\t\t\t\t<option value=\"$i\" $selected>$i</option>\n";
+			$i = $i + $increment;
+		}
+		$html .= "</select>";
+		return $html;
+    }
+}
+
+
+
+if (! function_exists('show_day_forward')) {
+    function show_day_forward($default_option='-1', $max = '20', $increment = '1')
+    {
+    	$html = "\t\t\t\t<select name=\"day_forward\" class=\"small_select\">\n";
+    	$html .= "\t\t\t\t\t<option value=\"0\" selected>pick</option>\n";
+    	$i = 0;
+		while ($i <= $max){
+			if ($default_option == $i){
+				$selected = "selected";
+			} else {
+				$selected = "";
+			}
+			$html .= "\t\t\t\t\t<option value=\"$i\" $selected>$i</option>\n";
+			$i = $i + $increment;
+		}
+		$html .= "</select>";
+		return $html;
+    }
+}

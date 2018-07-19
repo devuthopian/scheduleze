@@ -3,13 +3,13 @@
 @section('content')
     <div class="signup_section">
         <div class="signup_cont">
-            <h3>Personal Profile</h3>
-                {!! Form::model($UserData, array('action' => array('ProfileController@updateUserAccount'), 'method' => 'POST','id'=>'Userdata')) !!}
+            <h3>Business Profile</h3>
+                {!! Form::model($UserBusinessData, array('action' => array('ProfileController@updateUserBusinessAccount'), 'method' => 'POST','id'=>'Userdata')) !!}
                 {{ csrf_field() }}
                 <div class="form-group has-feedback {{ $errors->has('firstname') ? ' has-error ' : '' }}">
                 <div class="col-12">
                  {!! Form::label('firstname', trans('profile.firstname') , array('class' => 'col-12 control-label')); !!}
-                {!! Form::text('firstname',$UserData['name'], array('id' => 'firstname', 'class' => 'form-control', 'placeholder' => trans('profile.firstname'))) !!}
+                {!! Form::text('firstname',$UserBusinessData['name'], array('id' => 'firstname', 'class' => 'form-control', 'placeholder' => trans('profile.firstname'))) !!}
                 <span class="glyphicon {{ $errors->has('firstname') ? ' glyphicon-asterisk ' : ' ' }} form-control-feedback" aria-hidden="true"></span>
                 @if ($errors->has('firstname'))
                 <span class="help-block">

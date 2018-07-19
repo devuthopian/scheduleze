@@ -33,11 +33,7 @@ Route::get('/account_info', 'Auth\RegisterController@account_info');
 Route::post('/account_info_save', 'Auth\RegisterController@account_info_save')->name('account_info_save');
 
 Route::get('/profile', 'ProfileController@UserProfile')->name('profile');
+Route::post('/profile_update', 'ProfileController@updateUserAccount')->name('profile_update');
 
- Route::put('profile/{username}/profile', [
-        'as'   => '{username}',
-        'uses' => 'ProfileController@updateUserAccount',
-    ]);
-
-
-
+Route::get('/business_info', 'ProfileController@UserProfile')->name('business_info');
+Route::post('/business_info_update', 'ProfileController@updateUserBusinessAccount')->name('business_info_update');
