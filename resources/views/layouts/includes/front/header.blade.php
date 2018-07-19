@@ -100,6 +100,9 @@
                        <li>
                            <a href="{{ url('/form/BuildingAges') }}">{{ __('nav.buildages') }}</a>
                        </li>
+                       <li>
+                           <a href="{{ url('/form/Addons') }}">{{ __('nav.Addons') }}</a>
+                       </li>
                    </ul>
                </li>
                           <li>

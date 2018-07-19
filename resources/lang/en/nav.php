@@ -17,6 +17,7 @@ return [
     'buildtype' => 'Building Types',
     'buildsizes' => 'Building Sizes',
     'buildages' => 'Building Ages',
+    'Addons' => 'Add-on Services',
     'next' => 'Next &raquo;',
 
 ];
