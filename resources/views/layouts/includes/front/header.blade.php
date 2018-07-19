@@ -92,13 +92,13 @@
                    <a href="{{ route('buildingtypes') }}">{{ __('nav.services') }}</a>
                    <ul class="dropdown-menu">
                        <li>
-                           <a href="{{ route('buildingtypes') }}">{{ __('nav.buildtype') }}</a>
+                           <a href="{{ url('/form/BuildingTypes') }}">{{ __('nav.buildtype') }}</a>
                        </li>
                        <li>
-                           <a href="{{ route('buildingsizes') }}">{{ __('nav.buildsizes') }}</a>
+                           <a href="{{ url('/form/BuildingSizes') }}">{{ __('nav.buildsizes') }}</a>
                        </li>
                        <li>
-                           <a href="{{ route('storebuildtype') }}">{{ __('nav.buildages') }}</a>
+                           <a href="{{ url('/form/BuildingAges') }}">{{ __('nav.buildages') }}</a>
                        </li>
                    </ul>
                </li>
