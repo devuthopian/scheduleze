@@ -7,8 +7,16 @@
         <div class="signup_cont">
             <h3>Business Email Address</h3>
             <span class="input_field">
-                <span class="input_icon"><img src="images/input_icon.png" alt=""></span> 
-                <input id="email" type="text" class="{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" placeholder="Your Email" required>
+                <span class="input_icon"><img src="images/input_icon.png" alt=""></span>
+                @if(!empty($email))
+ 
+                   <input id="email" type="text" class="{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{$email}}" required autofocus>
+
+                @else
+
+                   <input id="email" type="text" class="{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" placeholder="Your Email" required autofocus>
+
+                @endif
             </span>
             @if ($errors->has('email'))
                 <span class="invalid-feedback text-danger" role="alert">

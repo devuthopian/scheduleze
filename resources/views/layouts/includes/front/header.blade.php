@@ -89,7 +89,7 @@
                        </ul>
                     </li>
                        <li>
-                   <a href="{{ route('buildingtypes') }}">{{ __('nav.services') }}</a>
+                   <a href="{{ url('/form/BuildingTypes') }}">{{ __('nav.services') }}</a>
                    <ul class="dropdown-menu">
                        <li>
                            <a href="{{ url('/form/BuildingTypes') }}">{{ __('nav.buildtype') }}</a>

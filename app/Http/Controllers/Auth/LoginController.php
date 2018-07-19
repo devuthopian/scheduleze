@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 
+use Socialite;
 
 class LoginController extends Controller
 {
@@ -46,5 +47,41 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+
+    /**
+     * Redirect the user to the GitHub authentication page.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function redirectToProvider()
+    {
+        return Socialite::driver('facebook')->redirect();
+    }
+
+    /**
+     * Redirect the user to the GitHub authentication page.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function handleProviderCallback($social)
+    {
+        $userSocial = Socialite::driver($social)->user();
+        //$user->token;
+
+        $user = User::where([['email' => $userSocial->getEmail()],['verified' => 1]])->first();
+ 
+        if($user){
+
+            Auth::login($user);
+
+            return redirect()->action('HomeController@index');
+
+        }else{
+
+            return view('auth.register',['name' => $userSocial->getName(), 'email' => $userSocial->getEmail()]);
+
+        }
     }
 }

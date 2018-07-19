@@ -32,10 +32,18 @@ Route::post('/account_info_save', 'Auth\RegisterController@account_info_save')->
 
 Route::get('/profile', 'ProfileController@UserProfile')->name('profile');
 
- Route::put('profile/{username}/profile', [
-        'as'   => '{username}',
-        'uses' => 'ProfileController@updateUserAccount',
-    ]);
+Route::put('profile/{username}/profile', [
+    'as'   => '{username}',
+    'uses' => 'ProfileController@updateUserAccount',
+]);
+
+/*Route::get('login/facebook', 'Auth\LoginController@redirectToProvider');
+Route::get('login/facebook/callback', 'Auth\LoginController@handleProviderCallback');*/
+
+
+Route::get('/login/{social}','Auth\LoginController@socialLogin')->where('social','twitter|facebook|linkedin|google|github|bitbucket');
+ 
+Route::get('/login/{social}/callback','Auth\LoginController@handleProviderCallback')->where('social','twitter|facebook|linkedin|google|github|bitbucket');
 
 
 
