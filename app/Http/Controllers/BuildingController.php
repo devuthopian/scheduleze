@@ -5,10 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Validator;
 use App\Http\Controllers\Controller;
-use App\BuildingType;
-use App\BuildingSizes;
 use Illuminate\Support\Facades\Input;
 use DB;
+/*use Illuminate\Support\Facades\Route;*/
 
 
 class BuildingController extends Controller
@@ -21,7 +20,7 @@ class BuildingController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     /**
@@ -29,21 +28,13 @@ class BuildingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($name)
     {
-        $BuildingType = BuildingType::where([['business', 1],['removed',0]])->get();
-        return view('building.building_types', compact('BuildingType'));
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function buildsizes($value='')
-    {
-        $BuildingSizes = BuildingSizes::where([['business', 1],['removed',0]])->get();
-        return view('building.building_sizes', compact('BuildingSizes'));
+        //$ModelName = Route::currentRouteName();
+        $Model = 'App\\'.$name;
+        $Building = $Model::where([['business', 1],['removed',0]])->get();
+        $BladeName = strtolower($name);
+        return view('building.'.$BladeName, compact('Building','name'));
     }
 
 
@@ -72,7 +63,7 @@ class BuildingController extends Controller
         ]);
 
         if ($validatedData->fails()) {
-            return redirect('buildingtypes')->withErrors($validatedData)->withInput();
+            //return redirect('BuildingTypess')->withErrors($validatedData)->withInput();
         }
 
         $data = Input::get();
@@ -82,7 +73,9 @@ class BuildingController extends Controller
             }else{
                 $selected = 0;
             }
-            $BuildingType = BuildingType::updateOrCreate(
+            $redirecturl = $data['txtform'];
+            $txtForm = 'App\\'.$data['txtform'];
+            $BuildingTypes = $txtForm::updateOrCreate(
                 ['id' => $data['id'][$i],'removed' => '0'],
                 [
                     'name' => $data['desc'][$i], 
@@ -95,53 +88,11 @@ class BuildingController extends Controller
                 ]
             );
         }
+        $txtForm = strtolower($txtForm);
 
-        return redirect('/buildingtypes')->with('Successfully saved!');
-        /*return view('building.building_types', compact('BuildingType'));*/
+        return redirect('/form/'.$redirecturl)->with('Successfully saved!');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function storebuildsizes(Request $request)
-    {
-        $validatedData = Validator::make($request->all(), [
-            'price' => 'bail|required',
-            'rank' => 'bail|required',
-            'forcecall' => 'bail|required',
-        ]);
-
-        if ($validatedData->fails()) {
-            return redirect('buildingsizes')->withErrors($validatedData)->withInput();
-        }
-
-        $data = Input::get();
-        for($i = 0; $i < count($data['desc']); $i++) {
-            if(isset($data['selected'][0])){
-                $selected = $data['selected'][0];
-            }else{
-                $selected = 0;
-            }
-            $BuildingSizes = BuildingSizes::updateOrCreate(
-                ['id' => $data['id'][$i],'removed' => '0'],
-                [
-                    'name' => $data['desc'][$i], 
-                    'buffer' => $data['buffer'][$i], 
-                    'business' => 1,
-                    'price' => str_replace('$', '', $data['price'][$i]),
-                    'status' => $data['forcecall'][$i],
-                    'rank' => $data['rank'][$i],
-                    'selected' => $selected
-                ]
-            );
-        }
-
-        return redirect('/buildingsizes')->with('Successfully saved!');
-        /*return view('building.building_types', compact('BuildingType'));*/
-    }
     /**
      * Display the specified resource.
      *
@@ -180,13 +131,14 @@ class BuildingController extends Controller
     {
         $id = $request->input('id');
         $table = $request->input('table');
-        $BuildingType = DB::table($table)->where('id',$id)->update(['removed'=> 1]);
+        $ModelTable = 'App\\'.$table;
+        $BuildingTypes = $ModelTable::where('id',$id)->update(['removed'=> 1]);
 
         $result = array('msg' => 'Successfully removed!' );
 
         return json_encode($result);
 
-        /*return redirect('/buildingtypes')->with('Successfully removed!');*/
+        /*return redirect('/BuildingTypess')->with('Successfully removed!');*/
     }
 
     /**

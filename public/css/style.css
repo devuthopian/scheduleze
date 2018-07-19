@@ -367,9 +367,13 @@ a:hover {
 }
 
 .signup_section .signup_cont input[type="text"] {
+
   width: 100%;
+
   padding: 0 0 0 50px;
+
   height: 50px;
+
   border: 1px solid #666;
   margin: 10px;
 }
@@ -386,6 +390,8 @@ a:hover {
   height: 50px;
   border: 1px solid #666;
   margin: 10px;
+=======
+
 }
 
 .signup_section .signup_cont input[type="Submit"] {
@@ -907,7 +913,6 @@ a:hover {
   background: #C5C5F1;
 
   text-decoration: none;
-
 }
 
 
@@ -997,7 +1002,91 @@ a.button.button-google:hover{
 /*7-19-2018*/
 
 
+/*7-19-2018*/
+.col-md-8.cls_login {
+  margin: 0 auto;
+  text-align: center;
+  display: block;
+  float: none;
+}
+.card-header {
+  width: 100%;
+  float: left;
+  margin: 50px 0;
+  font-size: 36px;
+  text-align: center;
+}
+.card {
+  width: 40%;
+  margin: 0 auto;
+}
+.form-control {
+  height: 40px
+}
+.btn-primary {
+  color:#444 !important;
+  background-color: #f6f9f9 !important;
+  border: 1px solid #b5bbbb !important;
+  width: auto !important;
+  padding: 15px 50px !important;
+  border-radius: 50px !important;
+  margin: 0px auto !important;
+  text-align: center;
+  float: none !important;
+  display: block !important;
+  box-shadow: 4px 4px 15px 0 rgba(46,61,73,.15);
+
+}
+.btn-primary:hover {
+ box-shadow: 0 1px 4px rgba(0,0,0,.1);
+ border: 1px solid #b5bbbb !important;
+ color: #222 !important;
+}
+
+a.btn.btn-link {
+  text-align: center;
+  float: none;
+  width: 100%;
+  color: #3d9daf;
+  font-size: 12px;
+}
+a.button.button-facebook {
+  color: #3b60ad;
+  background-color: #f6f9f9;
+  border: 1px solid #b5bbbb;
+  width: auto ;
+  padding: 15px 50px;
+  border-radius: 50px;
+  text-align: center;
+  float: none;
+  display: block;
+  box-shadow: 4px 4px 15px 0 rgba(46,61,73,.15);
+}
+a.button.button-facebook:hover {
+  box-shadow: 0 1px 4px rgba(0,0,0,.1);
+  border: 1px solid #b5bbbb !important;
+}
+a.button.button-google{
+  color: #f55555;
+  background-color: #f6f9f9;
+  border: 1px solid #b5bbbb;
+  width: auto ;
+  padding: 15px 50px;
+  border-radius: 50px;
+  text-align: center;
+  float: none;
+  display: block;
+  box-shadow: 4px 4px 15px 0 rgba(46,61,73,.15);
+}
+a.button.button-google:hover{
+  box-shadow: 0 1px 4px rgba(0,0,0,.1);
+  border: 1px solid #b5bbbb !important;
+}
+/*7-19-2018*/
 
 
 
 
+
+
+>>>>>>> c063285b6098da7d17d6f75c482e840df4b9f621

@@ -1,18 +1,19 @@
 @extends('layouts.front')
 
 @section('content')
-	{!! Form::open([ 'route' => ['storebuildtype'],'method' => 'post'] ) !!}
+	{!! Form::open([ 'route' => ['storebuild'],'method' => 'post'] ) !!}
 		<div class="frameadmin">
 			<span class="head">
 				Setting Building Types and Prices<br>
 			</span>
 			<span class="warning_red">Submit actions disabled for demo user</span><br>
-			<span class="note">Order is the order the items appear in the popup menu, use radio button to set menu default.<!--<br>Cap is the total number of this class of service you wish to allow booked in a single calendar day.</span>--><p></p>						
+			<span class="note">Order is the order the items appear in the popup menu, use radio button to set menu default.<!--<br>Cap is the total number of this class of service you wish to allow booked in a single calendar day.</span>--><p></p>
+				<input type="hidden" name="txtform" value="{{$name}}">				
 				<table border="0" cellspacing="0" cellpadding="2">
 					<tbody>
 						<tr>
 							<td>
-								<span class="formlabel">Description</span><br>
+								<span class="formlabel">Service Description</span><br>
 							</td>
 							<td>
 								<span class="formlabel">Time Req'd</span><br>
@@ -31,8 +32,8 @@
 							</td>
 						</tr>
 						<tbody class="txtBuildId">
-							@php $i=0;  @endphp
-							@forelse($BuildingType as $BuildType)
+							@php $i=0; @endphp
+							@forelse($Building as $BuildType)
 								<tr class="trtable_{{ $i }}">
 									<td>
 										<input type="text" name="desc[{{ $i }}]" size="32" value="{{ $BuildType->name }}" required>
@@ -46,7 +47,6 @@
 									</td>
 									<td align="center">
 										<input type="text" name="rank[{{ $i }}]" value="{{ $BuildType->rank }}" size="3" required>
-										<input type="radio" value="{{ $i }}" name="selected[0]" @if($BuildType->selected == 1) checked @endif>
 									</td>
 									<td>
 										<select name="forcecall[{{ $i }}]" size="1">
@@ -57,14 +57,14 @@
 										</select>
 									</td>
 									<td>
-										<a href='#' class='note_link' id="{{ $i }}" data-model="building_types" data-id="{{ $BuildType->id }}">Remove</a>
+										<a href='#' class='note_link' id="{{ $i }}" data-model="{{$name}}" data-id="{{ $BuildType->id }}">Remove</a>
 									</td>
 								</tr>
 								@php $i++; @endphp
 							@empty
 							    <tr class="trtable_0">
-									<td><input type="text" name="desc[0]" size="32" value="" required></td>
-									<input type="hidden" name="id[0]" value="0">
+									<td><input type="text" name="desc[0]" size="32" value="" required>
+									<input type="hidden" name="id[0]" value="0"></td>
 									<td>				
 										{!! show_buffer(0, 10800) !!}
 									</td>
@@ -73,7 +73,6 @@
 									</td>
 									<td align="center">
 										<input type="text" name="rank[0]" value="" size="3" required>
-										<input type="radio" value="0" name="selected[0]">
 									</td>
 									<td>
 										<select name="forcecall[0]" size="1">

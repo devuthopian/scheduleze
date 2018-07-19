@@ -1,13 +1,14 @@
 @extends('layouts.front')
 
 @section('content')
-	{!! Form::open([ 'route' => ['storebuildsizes'],'method' => 'post'] ) !!}
+	{!! Form::open([ 'route' => ['storebuild'],'method' => 'post'] ) !!}
 		<div class="frameadmin">
 			<span class="head">
 				Setting Building Types and Prices<br>
 			</span>
 			<span class="warning_red">Submit actions disabled for demo user</span><br>
-			<span class="note">Order is the order the items appear in the popup menu, use radio button to set menu default.<!--<br>Cap is the total number of this class of service you wish to allow booked in a single calendar day.</span>--><p></p>						
+			<span class="note">Order is the order the items appear in the popup menu, use radio button to set menu default.<!--<br>Cap is the total number of this class of service you wish to allow booked in a single calendar day.</span>--><p></p>
+				<input type="hidden" name="txtform" value="{{$name}}">				
 				<table border="0" cellspacing="0" cellpadding="2">
 					<tbody>
 						<tr>
@@ -31,8 +32,8 @@
 							</td>
 						</tr>
 						<tbody class="txtBuildId">
-							@php $i=0;  @endphp
-							@forelse($BuildingSizes as $BuildType)
+							@php $i=0; @endphp
+							@forelse($Building as $BuildType)
 								<tr class="trtable_{{ $i }}">
 									<td>
 										<input type="text" name="desc[{{ $i }}]" size="32" value="{{ $BuildType->name }}" required>
@@ -57,7 +58,7 @@
 										</select>
 									</td>
 									<td>
-										<a href='#' class='note_link' id="{{ $i }}" data-model="building_sizes" data-id="{{ $BuildType->id }}">Remove</a>
+										<a href='#' class='note_link' id="{{ $i }}" data-model="{{$name}}" data-id="{{ $BuildType->id }}">Remove</a>
 									</td>
 								</tr>
 								@php $i++; @endphp

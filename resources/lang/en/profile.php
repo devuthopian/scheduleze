@@ -38,7 +38,5 @@ return [
     'busines_secondary_email'      => 'Secondary Email',
     'password_confirmation'        => 'Password Confirmation',
     'updateSuccess'                => 'User Profile Sucessfully Updated',
-
-
     'submitButton'   => 'submit',
 ];
