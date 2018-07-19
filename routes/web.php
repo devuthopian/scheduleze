@@ -22,10 +22,8 @@ Route::get('/demo', 'SchedulezeController@demo')->name('demo');
 Route::get('/faq', 'SchedulezeController@faq')->name('faq');
 Route::get('/signup', 'SchedulezeController@signup')->name('signup');
 Route::get('/contact', 'SchedulezeController@contact')->name('contact');
-Route::get('/buildingtypes', 'BuildingController@index')->name('buildingtypes');
-Route::get('/buildingsizes', 'BuildingController@buildsizes')->name('buildingsizes');
-Route::post('/storebuildtype', 'BuildingController@store')->name('storebuildtype');
-Route::post('/storebuildsizes', 'BuildingController@storebuildsizes')->name('storebuildsizes');
+Route::get('/form/{name?}', 'BuildingController@index')->name('Building');
+Route::post('/storebuild', 'BuildingController@store')->name('storebuild');
 Route::post('/ajaxrequest', 'BuildingController@updatebuild');
 Route::get('/user/verify/{token}', 'Auth\RegisterController@verifyUser');
 
@@ -37,3 +35,13 @@ Route::post('/profile_update', 'ProfileController@updateUserAccount')->name('pro
 
 Route::get('/business_info', 'ProfileController@UserProfile')->name('business_info');
 Route::post('/business_info_update', 'ProfileController@updateUserBusinessAccount')->name('business_info_update');
+Route::put('profile/{username}/profile', [
+    'as'   => '{username}',
+    'uses' => 'ProfileController@updateUserAccount',
+]);
+
+/*Route::get('login/facebook', 'Auth\LoginController@redirectToProvider');
+Route::get('login/facebook/callback', 'Auth\LoginController@handleProviderCallback');*/
+Route::get('/login/{social}','Auth\LoginController@socialLogin')->where('social','twitter|facebook|linkedin|google|github|bitbucket');
+ 
+Route::get('/login/{social}/callback','Auth\LoginController@handleProviderCallback')->where('social','twitter|facebook|linkedin|google|github|bitbucket');
