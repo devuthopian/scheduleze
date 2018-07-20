@@ -66,7 +66,7 @@
                                 <a href="{{ url('login/facebook') }}" class="button button-facebook"><span><img src="{{URL::asset('/images/facebook-icon.png')}}">Sign in</span></a>
                             </div>
                             <div class="col-md-6">
-                                <a href="#" class="button button-google"><span><img src="{{URL::asset('/images/google-icon.png')}}">Sign in</span></a>
+                                <a href="{{ url('login/google') }}" class="button button-google"><span><img src="{{URL::asset('/images/google-icon.png')}}">Sign in</span></a>
                             </div>
                         </div>
                     </form>

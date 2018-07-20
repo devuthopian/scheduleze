@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Socialite;
 use App\User;
 
+use Auth;
+
 class LoginController extends Controller
 {
     /*
@@ -80,8 +82,17 @@ class LoginController extends Controller
             return redirect()->action('HomeController@index');
 
         }else{
+            $randpass = rand(1,10000);
+            $user = new User;
+            $user->name = $userSocial->getName();
+            $user->email = $userSocial->getEmail();
+            $user->password = bcrypt($randpass);
+            $user->verified = 1;
+            $user->save();
 
-            return view('auth.register',['name' => $userSocial->getName(), 'email' => $userSocial->getEmail()]);
+            Auth::login($user);
+
+            return redirect('/home')->with('status', 'You Temporary Password is '.$randpass.'. Please change it in profile section!');
 
         }
     }
