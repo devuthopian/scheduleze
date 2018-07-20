@@ -18,14 +18,6 @@
 
                 @endif
             </span>
-            <div class="col-md-12 social_login">
-                <div class="col-md-6">
-                    <a href="{{ url('login/facebook') }}" class="button button-facebook"><span><img src="{{URL::asset('/images/facebook-icon.png')}}">Sign up</span></a>
-                </div>
-                <div class="col-md-6">
-                    <a href="#" class="button button-google"><span><img src="{{URL::asset('/images/google-icon.png')}}">Sign up</span></a>
-                </div>
-            </div>
             @if ($errors->has('email'))
                 <span class="invalid-feedback text-danger" role="alert">
                     <strong>{{ $errors->first('email') }}</strong>

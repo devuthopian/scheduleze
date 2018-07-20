@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Socialite;
 use App\User;
 
+use Auth;
+
 class LoginController extends Controller
 {
     /*
@@ -81,7 +83,17 @@ class LoginController extends Controller
 
         }else{
 
-            return view('auth.register',['name' => $userSocial->getName(), 'email' => $userSocial->getEmail()]);
+            $user = new User;
+            $user->name = $userSocial->getName();
+            $user->email = $userSocial->getEmail();
+            $user->verified = 1;
+            $user->save();
+
+            Auth::login($user);
+
+            return redirect()->action('HomeController@index');
+
+            // /return view('auth.register',['name' => $userSocial->getName(), 'email' => $userSocial->getEmail()]);
 
         }
     }
