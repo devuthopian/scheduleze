@@ -26,8 +26,8 @@ class ProfileController extends Controller
     {
         return Validator::make($data, [
             'firstname'         => 'required',
-            'lastname'         => 'required',
-            'password' => 'confirmed',
+            'lastname'          => 'required',
+            'password'          => 'confirmed',
         ]);
     }
 

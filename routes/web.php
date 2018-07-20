@@ -35,10 +35,6 @@ Route::post('/profile_update', 'ProfileController@updateUserAccount')->name('pro
 
 Route::get('/business_info', 'ProfileController@UserProfile')->name('business_info');
 Route::post('/business_info_update', 'ProfileController@updateUserBusinessAccount')->name('business_info_update');
-Route::put('profile/{username}/profile', [
-    'as'   => '{username}',
-    'uses' => 'ProfileController@updateUserAccount',
-]);
 
 /*Route::get('login/facebook', 'Auth\LoginController@redirectToProvider');
 Route::get('login/facebook/callback', 'Auth\LoginController@handleProviderCallback');*/
