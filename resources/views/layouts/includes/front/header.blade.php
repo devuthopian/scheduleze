@@ -119,7 +119,7 @@
                        <a href="#">Users</a>
                        <ul class="dropdown-menu">
                            <li>
-                               <a href="#">Add Inspector</a>
+                               <a href="{{ url('add_inspector') }}">Add Inspector</a>
                            </li>
                        </ul>
                     </li>

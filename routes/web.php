@@ -36,6 +36,10 @@ Route::post('/profile_update', 'ProfileController@updateUserAccount')->name('pro
 Route::get('/business_info', 'ProfileController@UserBusinessProfile')->name('business_info');
 Route::post('/business_info_update', 'ProfileController@updateUserBusinessAccount')->name('business_info_update');
 
+Route::get('/add_inspector', 'ProfileController@add_inspector')->name('add_inspector');
+Route::post('/save_inspector', 'ProfileController@save_inspector')->name('save_inspector');
+
+
 /*Route::get('login/facebook', 'Auth\LoginController@redirectToProvider');
 Route::get('login/facebook/callback', 'Auth\LoginController@handleProviderCallback');*/
 Route::get('/login/{social}','Auth\LoginController@socialLogin')->where('social','twitter|facebook|linkedin|google|github|bitbucket');
