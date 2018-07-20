@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 
 use Socialite;
+use App\User;
 
 class LoginController extends Controller
 {
@@ -55,9 +56,9 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function socialLogin()
+    public function socialLogin($social)
     {
-        return Socialite::driver('facebook')->redirect();
+        return Socialite::driver($social)->redirect();
     }
 
     /**
