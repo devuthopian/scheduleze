@@ -130,7 +130,7 @@
                                <a href="{{ url('profile') }}">User Profile</a>
                            </li>
                            <li>
-                               <a href="#">Business Profile</a>
+                               <a href="{{ url('business_info') }}">Business Profile</a>
                            </li>
                            <li>
                                <a href="#">Headers/Footers</a>
