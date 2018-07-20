@@ -55,7 +55,7 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function redirectToProvider()
+    public function socialLogin()
     {
         return Socialite::driver('facebook')->redirect();
     }
