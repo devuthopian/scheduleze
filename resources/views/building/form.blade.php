@@ -6,7 +6,6 @@
 			<span class="head">
 				Setting Building Types and Prices<br>
 			</span>
-			<span class="warning_red">Submit actions disabled for demo user</span><br>
 			<span class="note">Order is the order the items appear in the popup menu, use radio button to set menu default.<!--<br>Cap is the total number of this class of service you wish to allow booked in a single calendar day.</span>--><p></p>
 				<input type="hidden" name="txtform" value="{{$name}}">				
 				<table border="0" cellspacing="0" cellpadding="2">
