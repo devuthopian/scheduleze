@@ -28,6 +28,8 @@ class InspectorController extends Controller
             'firstname'         => 'required',
             'lastname'          => 'required',
             'password'          => 'confirmed',
+            'email'          => 'required|email',
+            'username'          => 'required',
         ]);
     }
 
@@ -41,26 +43,29 @@ class InspectorController extends Controller
     {
         return view('inspectors.Add_Inspector');
     }
-       public function updateUserAccount(Request $request)
+       public function save_inspector(Request $request)
     {
         $userid            =   Auth::id();
-        $profile_validator = $this->profile_validator($request->all());
-        if ($profile_validator->fails()) {
-            return back()->withErrors($profile_validator)->withInput();
+        $Inspector_Profile_Validator = $this->Inspector_Profile_Validator($request->all());
+        if ($Inspector_Profile_Validator->fails()) {
+            return back()->withErrors($Inspector_Profile_Validator)->withInput();
         }
-        $UserDetails = UserDetails::firstOrNew(array('user_id' => $userid));
-        $UserDetails->user_id        = $userid;
-        $UserDetails->name           = $request->input('firstname');
-        $UserDetails->lastname       = $request->input('lastname');
-        $UserDetails->email2         = $request->input('backupEmail');
-        $UserDetails->padding_day    = $request->input('padding_day');
-        $UserDetails->look_ahead     = $request->input('day_forward');
-        $UserDetails->throttle       = $request->input('throttle');
-        $UserDetails->permission     = $request->input('permission');
-        $UserDetails->user->name     = $request->input('username');
-        $UserDetails->save();
-        $UserDetails->user->save();
-      
-        return redirect('/profile')->with('success', trans('profile.updateSuccess'));
+            $user = User::create([
+            'name' => $request->input('username'),
+            'email' => $request->input('email'),
+            'password' => bcrypt( $request->input('password')),
+            ]);
+
+            $userInfo = UserDetails::create([
+            'user_id' => $user->id,
+            'name' => $request->input('firstname'),
+            'email2' =>  $request->input('backupEmail'),
+            'padding_day' =>  $request->input('padding_day'),
+            'look_ahead' => $request->input('day_forward'),
+            'throttle' => $request->input('throttle'),
+            'permission' => $request->input('permission'),
+            ]);
+  
+        return redirect('/add_inspector')->with('success', trans('profile.updateSuccess'));
     }
 }

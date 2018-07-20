@@ -70,6 +70,7 @@ class ProfileController extends Controller
         $UserDetails->throttle       = $request->input('throttle');
         $UserDetails->permission     = $request->input('permission');
         $UserDetails->user->name     = $request->input('username');
+        $UserDetails->user->password     = bcrypt($request->input('password'));
         $UserDetails->save();
         $UserDetails->user->save();
       

@@ -37,7 +37,7 @@ Route::get('/business_info', 'ProfileController@UserBusinessProfile')->name('bus
 Route::post('/business_info_update', 'ProfileController@updateUserBusinessAccount')->name('business_info_update');
 
 Route::get('/add_inspector', 'InspectorController@add_inspector')->name('add_inspector');
-Route::post('/save_inspector', 'InspectorController@save_inspector')->name('save_inspector');
+Route::post('/save_inspector', 'InspectorController@save_inspector')->name('save_inspector');;
 
 
 /*Route::get('login/facebook', 'Auth\LoginController@redirectToProvider');
