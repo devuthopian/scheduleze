@@ -36,8 +36,8 @@ return [
     ],
 
     'facebook' => [
-        'client_id' => env('APP_ID'),
-        'client_secret' => env('APP_SECRET'),
-        'redirect' => env('REDIRECT'),
+        'client_id' => env('FACEBOOK_APP_ID'),
+        'client_secret' => env('FACEBOOK_APP_SECRET'),
+        'redirect' => env('FACEBOOK_REDIRECT'),
     ],
 ];
