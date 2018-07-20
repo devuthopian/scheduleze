@@ -1,7 +1,7 @@
-@extends('layouts.front')
 
 @section('content')
 	{!! Form::open([ 'route' => ['storebuild'],'method' => 'post'] ) !!}
+	<div class="container">
 		<div class="frameadmin">
 			<span class="head">
 				Setting Building Types and Prices<br>
@@ -113,12 +113,13 @@
 		</div>
 		<div class="logo">
 			<a href="#">
-				<img src="{{URL::asset('/images/scheduleze-logo.gif')}}" alt="Take command of your day" height="79" width="235" border="0">
+				<img src="{{URL::asset('/images/logo.png')}}" alt="Take command of your day" height="79" width="235" border="0">
 			</a>
 		</div>
 		<div class="frame-closing"><br><br><br><br>
 			<span class="note">Customer Support: <a href="mailto:support@scheduleze.com">support@scheduleze.com</a>
 			</span>
 		</div>
+	</div>
 	{!! Form::close() !!}
 @endsection

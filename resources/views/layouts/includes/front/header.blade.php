@@ -34,7 +34,7 @@
   <div class="container">
       <div class="head_left">
         <a href="{{ url('/') }}">
-          <img src="images/logo.png" alt="">
+          <img src="{{URL::asset('/images/logo.png')}}" alt="">
         </a>
       </div>
       <div class="head_right">
