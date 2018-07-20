@@ -18,7 +18,7 @@
 								<span class="formlabel">Time Req'd</span><br>
 							</td>
 							<td>
-								<span class="formlabel">Price</span><br>
+								<span class="formlabel">Price($)</span><br>
 							</td>
 							<td>
 								<span class="formlabel">Order&nbsp;</span><br>
@@ -42,11 +42,11 @@
 										{!! show_buffer($i, $BuildType->buffer) !!}
 									</td>
 									<td>
-										<input type="text" name="price[{{ $i }}]" value="${{ $BuildType->price }}" size="5" required>
+										<input type="text" name="price[{{ $i }}]" value="{{ $BuildType->price }}" size="5" required>
 									</td>
 									<td align="center">
 										<input type="text" name="rank[{{ $i }}]" value="{{ $BuildType->rank }}" size="3" required>
-										<input type="radio" value="{{ $i }}" name="selected[0]" @if($BuildType->selected == 1) checked @endif>
+										<input type="radio" value="{{ $BuildType->id }}" name="selected[0]" @if($BuildType->selected == 1) checked @endif>
 									</td>
 									<td>
 										<select name="forcecall[{{ $i }}]" size="1">
@@ -69,11 +69,11 @@
 										{!! show_buffer(0, 10800) !!}
 									</td>
 									<td>
-										<input type="text" name="price[0]" value="$" size="5" required>
+										<input type="text" name="price[0]" value="" size="5" required>
 									</td>
 									<td align="center">
 										<input type="text" name="rank[0]" value="" size="3" required>
-										<input type="radio" value="0" name="selected[0]">
+										<input type="radio" value="0" name="selected[0]" required>
 									</td>
 									<td>
 										<select name="forcecall[0]" size="1">
@@ -112,8 +112,8 @@
 			You must have a Building Types menu with at least one type of service, time and cost for Scheduleze to function properly.  Building Size popups and Building Age popups are optional, and can be configured to add additional time and cost to the basic Building Type selected by the client.<br><br>If you are not going to use price modifiers, you may wish to list various service combinations here and provide total prices for each.  This creates the simplest user interface for your clients and increases the likelihood of the client to book immediately on-line (simple forms look easier to complete).<br><br>However, if you are going to setup Building Age and Building Size popups as well, use this menu for basic Building Type only.  Provide the absolute minimum price and time for each service type as the modifier popups will add additional time and costs that you specify to this baseline cost for each Building Type.<br><br>
 		</div>
 		<div class="logo">
-			<a href="index.php">
-				<img src="/images/scheduleze-logo.gif" alt="Take command of your day" height="79" width="235" border="0">
+			<a href="#">
+				<img src="{{URL::asset('/images/scheduleze-logo.gif')}}" alt="Take command of your day" height="79" width="235" border="0">
 			</a>
 		</div>
 		<div class="frame-closing"><br><br><br><br>

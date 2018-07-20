@@ -69,7 +69,11 @@ class BuildingController extends Controller
         $data = Input::get();
         for($i = 0; $i < count($data['desc']); $i++) {
             if(isset($data['selected'][0])){
-                $selected = $data['selected'][0];
+                if($data['id'][$i] == $data['selected'][0]){
+                    $selected = 1;
+                }else{
+                    $selected = 0;
+                }
             }else{
                 $selected = 0;
             }
