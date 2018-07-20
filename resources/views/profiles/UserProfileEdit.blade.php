@@ -104,13 +104,6 @@
                         {{ Form::checkbox('permission',1,$UserData->permission) }}
                     </div>
                     </div>
-
-
-
-
-
-
-
                 </div>
                 <div class="form-group">
                 <div class="col-12 offset-sm-4">
