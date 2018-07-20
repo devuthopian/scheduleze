@@ -33,7 +33,7 @@ Route::post('/account_info_save', 'Auth\RegisterController@account_info_save')->
 Route::get('/profile', 'ProfileController@UserProfile')->name('profile');
 Route::post('/profile_update', 'ProfileController@updateUserAccount')->name('profile_update');
 
-Route::get('/business_info', 'ProfileController@UserProfile')->name('business_info');
+Route::get('/business_info', 'ProfileController@UserBusinessProfile')->name('business_info');
 Route::post('/business_info_update', 'ProfileController@updateUserBusinessAccount')->name('business_info_update');
 
 /*Route::get('login/facebook', 'Auth\LoginController@redirectToProvider');
