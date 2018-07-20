@@ -150,10 +150,10 @@
 
                            <div class="col-md-12 social_login">
                                 <div class="col-md-6">
-                                  <a href="{{ url('login/facebook') }}" class="button button-facebook"><span><img src="https://needsecured.com/developer/scheduleze/public/images/facebook-icon.png">Sign in</span></a>
+                                    <a href="{{ url('login/facebook') }}" class="button button-facebook"><span><img src="{{URL::asset('/images/facebook-icon.png')}}">Sign in</span></a>
                                 </div>
                                 <div class="col-md-6">
-                              <a href="#" class="button button-google"><span><img src="https://needsecured.com/developer/scheduleze/public/images/google-icon.png">Sign in</span></a>
+                                    <a href="#" class="button button-google"><span><img src="{{URL::asset('/images/google-icon.png')}}">Sign in</span></a>
                                 </div>
                             </div>
                        
