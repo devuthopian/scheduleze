@@ -4,7 +4,7 @@
 
     @guest
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Clinet Login') }}</a>
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('Client Login') }}</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('register') }}">{{ __('Signup') }}</a>
