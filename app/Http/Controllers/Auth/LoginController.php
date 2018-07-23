@@ -40,7 +40,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/scheduling_solutions';
 
     /**
      * Create a new controller instance.
@@ -92,7 +92,7 @@ class LoginController extends Controller
 
             Auth::login($user);
 
-            return redirect('/home')->with('status', 'You Temporary Password is '.$randpass.'. Please change it in profile section!');
+            return redirect('/scheduling_solutions')->with('status', 'You Temporary Password is '.$randpass.'. Please change it in profile section!');
 
         }
     }
