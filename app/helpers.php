@@ -3,7 +3,7 @@
 if (! function_exists('show_buffer')) {
     function show_buffer($variable, $default_option='10800', $max = '32400', $increment = '900')
     {
-    	$html = "\t\t\t\t<select name=\"buffer[$variable]\" class=\"small_select\">\n";
+    	$html = "\t\t\t\t<select name=\"buffer[$variable]\" class=\"small_select selectpicker form-control\">\n";
     	$i = 0;
 		while ($i <= $max){
 			if ($default_option == $i){
