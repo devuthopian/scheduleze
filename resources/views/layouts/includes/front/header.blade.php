@@ -4,7 +4,7 @@
 
     @guest
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Clinet Login') }}</a>
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('Client Login') }}</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('register') }}">{{ __('Signup') }}</a>
@@ -33,7 +33,7 @@
 <div class="header_section">
   <div class="container">
       <div class="head_left">
-        <a href="{{ url('/') }}">
+        <a href="{{ url('/scheduling_solutions') }}">
           <img src="{{URL::asset('/images/logo.png')}}" alt="">
         </a>
       </div>

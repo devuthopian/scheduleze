@@ -33,8 +33,14 @@ class BuildingController extends Controller
         //$ModelName = Route::currentRouteName();
         $Model = 'App\\'.$name;
         $Building = $Model::where([['business', 1],['removed',0]])->get();
+        $Buildingdesc = $Model::where([['business', 1],['removed',0]])->pluck('name', 'id');
+
+        $Modelproduct = new $Model;
+        $ColumnName = $Modelproduct->getTableColumns();
+
+        //$Building = $Model::where([['business', 1]])->first();
         $BladeName = strtolower($name);
-        return view('building.'.$BladeName, compact('Building','name'));
+        return view('building.'.$BladeName, compact('Building','name','Buildingdesc','ColumnName'));
     }
 
 
@@ -63,10 +69,23 @@ class BuildingController extends Controller
         ]);
 
         if ($validatedData->fails()) {
-            //return redirect('BuildingTypess')->withErrors($validatedData)->withInput();
+            return redirect('BuildingTypess')->withErrors($validatedData)->withInput();
         }
 
         $data = Input::get();
+        
+        /*
+        $redirecturl = $data['txtform'];
+        $txtForm = 'App\\Dp'.$data['txtform'];
+        $htmldata = array_diff_key($data, ['_token' => "xy", 'txtform' => "xy", 'submit' => "xy", 'id' => '0']);
+        $BuildingTypes = $txtForm::updateOrCreate(
+            ['id' => $data['id'],'business' => 1],
+            [
+                'business' => 1,
+                'form_html' => json_encode($htmldata['htmlFormat']),
+                'builder_area' => json_encode($htmldata['txtBuilderArea'])
+            ]
+        );*/
         for($i = 0; $i < count($data['desc']); $i++) {
             if(isset($data['selected'][0])){
                 if($data['id'][$i] == $data['selected'][0]){

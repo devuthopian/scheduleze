@@ -2,17 +2,18 @@
 
 @section('content')
 	{!! Form::open([ 'route' => ['storebuild'],'method' => 'post'] ) !!}
+<div class="building">
 	<div class="container">
 		<div class="frameadmin">
 			<span class="head">
-				Setting Building Types and Prices<br>
+				<h1>Add-on Service Options</h1>
 			</span>
 			<span class="warning_red">Submit actions disabled for demo user</span><br>
 			<span class="note">Order is the order the items appear in the popup menu, use radio button to set menu default.<!--<br>Cap is the total number of this class of service you wish to allow booked in a single calendar day.</span>--><p></p>
 				<input type="hidden" name="txtform" value="{{$name}}">				
-				<table border="0" cellspacing="0" cellpadding="2">
+				<table border="0" cellspacing="0" cellpadding="2" class="table table-responsive table-bordered">
 					<tbody>
-						<tr>
+						<tr class="thead">
 							<td>
 								<span class="formlabel">Service Description</span><br>
 							</td>
@@ -20,7 +21,7 @@
 								<span class="formlabel">Time Req'd</span><br>
 							</td>
 							<td>
-								<span class="formlabel">Price</span><br>
+								<span class="formlabel">Price($)</span><br>
 							</td>
 							<td>
 								<span class="formlabel">Order&nbsp;</span><br>
@@ -37,20 +38,20 @@
 							@forelse($Building as $BuildType)
 								<tr class="trtable_{{ $i }}">
 									<td>
-										<input type="text" name="desc[{{ $i }}]" size="32" value="{{ $BuildType->name }}" required>
-										<input type="hidden" name="id[{{ $i }}]" value="{{ $BuildType->id }}">
+										<input class="form-control" type="text" name="desc[{{ $i }}]" size="32" value="{{ $BuildType->name }}" required>
+										<input class="form-control" type="hidden" name="id[{{ $i }}]" value="{{ $BuildType->id }}">
 									</td>
 									<td>				
 										{!! show_buffer($i, $BuildType->buffer) !!}
 									</td>
 									<td>
-										<input type="text" name="price[{{ $i }}]" value="${{ $BuildType->price }}" size="5" required>
+										<input type="text" class="form-control" name="price[{{ $i }}]" value="{{ $BuildType->price }}" size="5" required>
 									</td>
 									<td align="center">
-										<input type="text" name="rank[{{ $i }}]" value="{{ $BuildType->rank }}" size="3" required>
+										<input type="text" class="form-control" name="rank[{{ $i }}]" value="{{ $BuildType->rank }}" size="3" required>
 									</td>
 									<td>
-										<select name="forcecall[{{ $i }}]" size="1">
+										<select name="forcecall[{{ $i }}]" size="1" class="form-control">
 											<option value="1" @if($BuildType->status == 1) selected="" @endif>Book using size/age</option>
 											<option value="2" @if($BuildType->status == 2) selected="" @endif>Book as standalone</option>
 											<option value="0" @if($BuildType->status == 0) selected="" @endif>Require phone call</option>
@@ -64,19 +65,19 @@
 								@php $i++; @endphp
 							@empty
 							    <tr class="trtable_0">
-									<td><input type="text" name="desc[0]" size="32" value="" required>
-									<input type="hidden" name="id[0]" value="0"></td>
+									<td><input class="form-control" type="text" name="desc[0]" size="32" value="" required>
+									<input class="form-control" type="hidden" name="id[0]" value="0"></td>
 									<td>				
 										{!! show_buffer(0, 10800) !!}
 									</td>
 									<td>
-										<input type="text" name="price[0]" value="$" size="5" required>
+										<input class="form-control" type="text" name="price[0]" value="" size="5" required>
 									</td>
 									<td align="center">
-										<input type="text" name="rank[0]" value="" size="3" required>
+										<input class="form-control" type="text" name="rank[0]" value="" size="3" required>
 									</td>
 									<td>
-										<select name="forcecall[0]" size="1">
+										<select name="forcecall[0]" size="1" class="form-control">
 											<option value="1" selected="">Book using size/age</option>
 											<option value="2">Book as standalone</option>
 											<option value="0">Require phone call</option>
@@ -91,7 +92,7 @@
 						</tbody>
 						<span id="showtxt"></span>
 						<tr>
-							<td colspan="4"><input type="submit" name="submit" value="Save Building Types" class="submit">
+							<td colspan="4"><input type="submit" name="submit" value="Save Building Types" class="submit btn btn-success bluebtn">
 								<input type="hidden" name="action" value="building_types">
 								<input type="hidden" name="trigger" value="2">&nbsp;&nbsp;
 							</td>
@@ -107,19 +108,20 @@
 		</div>
 		<div class="tip">
 			<span class="subhead">
-				Building Type Strategy<br>
+				Add-on Services<br>
 			</span>
-			You must have a Building Types menu with at least one type of service, time and cost for Scheduleze to function properly.  Building Size popups and Building Age popups are optional, and can be configured to add additional time and cost to the basic Building Type selected by the client.<br><br>If you are not going to use price modifiers, you may wish to list various service combinations here and provide total prices for each.  This creates the simplest user interface for your clients and increases the likelihood of the client to book immediately on-line (simple forms look easier to complete).<br><br>However, if you are going to setup Building Age and Building Size popups as well, use this menu for basic Building Type only.  Provide the absolute minimum price and time for each service type as the modifier popups will add additional time and costs that you specify to this baseline cost for each Building Type.<br><br>
+			Use this page to create a list of services which clients may wish to choose <b>in addition</b> to services they choose from the primary Building Type menu created on the Building Type page.  Do not use this list for services which are standalone, or independent of other services you offer.  Stand alone services belong in <a href="#" class="note">Building Type popup.</a><br><br><br><br>
 		</div>
 		<div class="logo">
 			<a href="#">
 				<img src="{{URL::asset('/images/logo.png')}}" alt="Take command of your day" height="79" width="235" border="0">
 			</a>
 		</div>
-		<div class="frame-closing"><br><br><br><br>
+		<div class="frame-closing"><br><br>
 			<span class="note">Customer Support: <a href="mailto:support@scheduleze.com">support@scheduleze.com</a>
 			</span>
 		</div>
 	</div>
+</div>
 	{!! Form::close() !!}
 @endsection

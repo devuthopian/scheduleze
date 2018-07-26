@@ -8,4 +8,8 @@ class BuildingSizes extends Model
 {
     protected $table = 'building_sizes';
 	protected $guarded = [ 'id' ];
+
+	public function getTableColumns() {
+        return $this->getConnection()->getSchemaBuilder()->getColumnListing($this->getTable());
+    }
 }
