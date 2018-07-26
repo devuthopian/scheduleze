@@ -1,15 +1,30 @@
 
 .navigation {
 	width: 100%;
-  max-width: 730px;
 	float: right;
   position: relative;
+}
+.navigation .try_it_now {
+    margin-left: 5%;
+}
+.navigation .try_it_now a, .navigation .login a {
+    background: #429caf !important;
+    color: #ffffff !important;
+    border-radius: 30px;
+    padding: 8px 30px;
+    margin: 7px 0 5px;
+    border: 1px solid #fff !important;
+    box-shadow: 0px 0px 18px #ccc;
+}
+.navigation .try_it_now a:hover, .navigation .login a:hover {
+    background: #e2a729 !important;
 }
 nav {
   padding: 0;
   margin: 0px auto;
   width: 100%;
-  max-width: 1200px;
+  max-width: 1040px;
+  float: right;
 }
 nav ul {
   margin: 0;
@@ -20,26 +35,33 @@ nav ul > li {
 }
 nav a {
   color: #414141;
-  font-size: 16px;
+  font-size: 14px;
   display: inline-block;
-  padding: 10px 10px;
+  padding: 15px 10px 0;
 }
 nav a:hover {
   color: #e1ac42;
 }
+@media (max-width: 1326px) {
+.navigation .try_it_now {
+    margin-left: 2%;
+}
+nav a {
+    padding: 15px 5px 0;
+}
+}
+@media (max-width: 1210px) {
+.navigation .try_it_now a, .navigation .login a {
+    padding: 8px 20px;
+}
+}
+@media (max-width: 1159px) {
+nav a {
+    padding: 15px 0px 0;
+}
+}
 
-@media (max-width: 991px) {
-nav ul > li {
-    margin-left: 5px;
-}
-nav a {
-    font-size: 14px;
-}
-nav a {
-    padding: 10px 6px;
-}
-}
-@media screen and (min-width: 767px) {
+@media screen and (min-width: 1022px) {
 nav > a { 
   display: none;
 }
@@ -82,7 +104,16 @@ nav ul > li:hover > ul {
 }
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 1022px) {
+.navigation .try_it_now {
+    margin-left: 0;
+}
+.navigation .try_it_now a, .navigation .login a {
+    background: transparent !important;
+    padding: 8px 10px;
+    border: 0px solid #fff !important;
+    box-shadow: 0px 0px 0px #ccc;
+}
 nav > ul li {
   border-bottom: 1px dotted #fff;
   margin: 0px;
@@ -137,7 +168,7 @@ nav > a {
     top: -50px;
 }
 nav > ul {
-    top: 20px;
+    top: 17px;
     width: 100%;
 }
 }

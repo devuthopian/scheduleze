@@ -68,3 +68,9 @@ if (! function_exists('show_day_forward')) {
 		return $html;
     }
 }
+
+if(! function_exists('getallIndustries')){
+	function getallIndustries(){
+		return DB::table('industries')->pluck('page_name', 'id');
+	}
+}
