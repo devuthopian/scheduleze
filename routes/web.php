@@ -17,6 +17,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/', 'SchedulezeController@scheduling_solutions');
 Route::get('/scheduling_solutions', 'SchedulezeController@scheduling_solutions')->name('scheduling_solutions');
+Route::get('/schedulepanel', 'SchedulezeController@scheduling_panel')->name('schedulepanel');
 Route::get('/success_stories', 'SchedulezeController@success_stories')->name('success_stories');
 Route::get('/demo', 'SchedulezeController@demo')->name('demo');
 Route::get('/faq', 'SchedulezeController@faq')->name('faq');

@@ -19,5 +19,6 @@ return [
     'buildages' => 'Building Ages',
     'Addons' => 'Add-on Services',
     'next' => 'Next &raquo;',
+    'SchedulePanel' => 'Scheduling Panel',
 
 ];

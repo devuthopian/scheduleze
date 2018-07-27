@@ -39,6 +39,18 @@ class SchedulezeController extends Controller
         return view('scheduleze.success_stories');
     }
 
+
+     /**
+     * Show the application success stories page.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+    public function scheduling_panel()
+    {
+        return view('building.scheduling_panel');
+    }
+
      /**
      * Show the application demo page.
      *

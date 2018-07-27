@@ -24,7 +24,9 @@ class LoginController extends Controller
     |
     */
 
-    use AuthenticatesUsers;
+    use AuthenticatesUsers {
+        logout as performLogout;
+    }
 
     /**
     * Override the username method used to validate login
@@ -62,9 +64,15 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    public function logout(Request $request)
+    {
+        $this->performLogout($request);
+        return redirect()->route('login');
+    }
+
 
     /**
-     * Redirect the user to the GitHub authentication page.
+     * Redirect the user to the social media authentication page.
      *
      * @return \Illuminate\Http\Response
      */
