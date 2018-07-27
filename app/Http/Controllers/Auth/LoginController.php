@@ -26,6 +26,16 @@ class LoginController extends Controller
 
     use AuthenticatesUsers;
 
+    /**
+    * Override the username method used to validate login
+    *
+    * @return string
+    */
+    public function username()
+    {
+        return 'name';
+    }
+
      public function authenticated(Request $request, $user)
     {
         if (!$user->verified) {
