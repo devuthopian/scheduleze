@@ -15,8 +15,8 @@
 <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet">
 <link href="https://unpkg.com/grapesjs/dist/css/grapes.min.css" rel="stylesheet">
 <link rel="stylesheet" href="{{ URL::asset('dist/grapesjs-preset-webpage.min.css') }}">
-<script src="//feather.aviary.com/imaging/v3/editor.js"></script>
-<script src="https://static.filestackapi.com/v3/filestack-0.1.10.js"></script>
+<script src="{{ URL::asset('js/editor.js') }}"></script>
+<script src="{{ URL::asset('js/filestack-0.1.10.js') }}"></script>
 <script src="https://unpkg.com/grapesjs"></script>
 <script src="{{ URL::asset('dist/grapesjs-preset-webpage.min.js') }}"></script>
 <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css
