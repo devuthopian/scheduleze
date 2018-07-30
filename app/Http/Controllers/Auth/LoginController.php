@@ -44,6 +44,7 @@ class LoginController extends Controller
             auth()->logout();
             return back()->with('warning', 'You need to confirm your account. We have sent you an activation code, please check your email.');
         }
+        session(['id' => $user->id]);
         return redirect()->intended($this->redirectPath());
     }
 
@@ -96,6 +97,7 @@ class LoginController extends Controller
         if($user){
 
             Auth::login($user);
+            session(['id' => $user->id]);
 
             return redirect()->action('HomeController@index');
 
@@ -107,6 +109,7 @@ class LoginController extends Controller
             $user->password = bcrypt($randpass);
             $user->verified = 1;
             $user->save();
+            session(['id' => $user->id]);
 
             Auth::login($user);
 

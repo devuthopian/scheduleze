@@ -28,6 +28,10 @@ Route::post('/storebuild', 'BuildingController@store')->name('storebuild');
 Route::post('/ajaxrequest', 'BuildingController@updatebuild');
 Route::get('/user/verify/{token}', 'Auth\RegisterController@verifyUser');
 
+Route::post('/store-template/{value}', 'BuildingController@storetemplate');
+Route::get('/load-template/{value}', 'BuildingController@gettemplate');
+Route::post('/template/images/{value}', 'BuildingController@saveimagetemplate');
+
 Route::get('/account_info', 'Auth\RegisterController@account_info');
 Route::post('/account_info_save', 'Auth\RegisterController@account_info_save')->name('account_info_save');
 

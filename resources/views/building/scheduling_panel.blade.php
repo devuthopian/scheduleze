@@ -4,7 +4,9 @@
 <script src="{{ URL::asset('js/filestack-0.1.10.js') }}"></script>
 <script src="https://unpkg.com/grapesjs"></script>
 <script src="{{ URL::asset('dist/grapesjs-preset-webpage.min.js') }}"></script>
+<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
 <div class="panel-main">
+    @php $value = session('id'); @endphp
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
@@ -78,19 +80,55 @@
         </div>
     </div>
 </div>
+<button id="btnSave">Save</button>
 <script type="text/javascript">
         //grapejs editor
         var editor = grapesjs.init({
             height: '100%',
             showOffsets: 1,
             noticeOnUnload: 0,
-            storageManager: { autoload: 0 },
             container: '#gjs',
             fromElement: true,
-
             plugins: ['gjs-preset-webpage'],
             pluginsOpts: {
                 'gjs-preset-webpage': {}
+            },
+            storageManager: {
+                type: 'remote',
+                stepsBeforeSave: 0,
+                autosave: false,         // Store data automatically
+                urlStore: '{{ url("/store-template/$value") }}',
+                autoload: true,         // Autoload stored data on init
+                urlLoad: '{{ url("/load-template/$value") }}',
+                // For custom parameters/headers on requests
+                /*params: { _token:  },*/
+                headers: { 'X-CSRF-Token': '{{ csrf_token() }}' },
+                beforeSend: function() {
+                    console.log('before send');
+                },
+                contentTypeJson: true,
+            },
+            assetManager: {
+                // Upload endpoint, set `false` to disable upload, default `false`
+                upload: '{{ url("/template/images/$value") }}',
+
+                // The name used in POST to pass uploaded files, default: `'files'`
+                uploadName: 'files',
+
+                // Custom headers to pass with the upload request
+                headers: { 'X-CSRF-Token': '{{ csrf_token() }}' },
+            },
+        });
+
+        editor.on('storage:end:store', (resultObject) => {
+            if (resultObject.message) {
+              alert(resultObject.message);
             }
         });
+        $('#btnSave').click(function(event) {
+            /* Act on the event */
+            event.preventDefault();
+            editor.store(res => console.log('Store callback'));
+        });
+        
     </script>
