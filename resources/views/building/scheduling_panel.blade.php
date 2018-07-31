@@ -4,6 +4,7 @@
 <script src="{{ URL::asset('js/filestack-0.1.10.js') }}"></script>
 <script src="https://unpkg.com/grapesjs"></script>
 <script src="{{ URL::asset('dist/grapesjs-preset-webpage.min.js') }}"></script>
+<script src="{{ URL::asset('dist/grapesjs-lory-slider.min.js') }}"></script>
 <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
 <link href="{{ asset('css/fontawesome.css') }}" rel="stylesheet">
 <div class="panel-main">
@@ -92,11 +93,17 @@
         noticeOnUnload: 0,
         container: '#gjs',
         fromElement: true,
-        plugins: ['gjs-preset-webpage'],
+        plugins: ['gjs-plugin-forms','gjs-preset-webpage','grapesjs-lory-slider'],
         pluginsOpts: {
+            'gjs-plugin-forms': {
+                labelForm: 'Appointment Form'
+            },
             'gjs-preset-webpage': {
                 btnLabel: 'EXPORT',
                 preHtml: '<!doctype><html><head><link rel="stylesheet" href="./css/style.css"></head><body>'
+            },
+            'grapesjs-lory-slider': {
+              // options
             }
         },
         storageManager: {
@@ -131,8 +138,17 @@
         }
         if(resultObject.sharelink){
             var nos = resultObject.sharelink;
-            prompt("To Copy preview link: Ctrl+C", 'http://127.0.0.1:8000/template/'+nos);
+            var url = window.location.href;
+            var afterWith = url.substr(0, url.lastIndexOf("/") + 1);            
+            prompt("To Copy preview link: Ctrl+C", afterWith+''+nos);
         }
+    });
+
+    editor.StyleManager.addProperty('Decorations', {
+        name: 'Gradient',
+        property: 'background-image',
+        type: 'gradient',
+        defaults: 'none'
     });
 
     editor.on('storage:end:load', (resultObject) => {
@@ -149,6 +165,77 @@
         editor.store(res => console.log('Store callback'));
 
         //editor.runCommand('gjs-export-zip');
+    });
+
+    if($('.gjs-block-label').text() == 'Form'){
+        $('.gjs-block-label').text('Appointment Form');
+    }
+
+
+    // Get DomComponents module
+    var comps = editor.DomComponents;
+
+    // Get the model and the view from the default Component type
+    var defaultType = comps.getType('default');
+    var defaultModel = defaultType.model;
+    var defaultView = defaultType.view;
+
+    var inputTypes = [
+      {value: 'text', name: 'Text'},
+      {value: 'email', name: 'Email'},
+      {value: 'password', name: 'Password'},
+      {value: 'number', name: 'Number'},
+      {value: 'date', name: 'Date'},
+    ];
+
+    // The `input` will be the Component type ID
+    comps.addType('input', {
+      // Define the Model
+      model: defaultModel.extend({
+        // Extend default properties
+        defaults: Object.assign({}, defaultModel.prototype.defaults, {
+          // Can be dropped only inside `form` elements
+          draggable: 'form, form *',
+          // Can't drop other elements inside it
+          droppable: false,
+          // Traits (Settings)
+          traits: ['name', 'placeholder', {
+              // Change the type of the input (text, password, email, etc.)
+              type: 'select',
+              label: 'Type',
+              name: 'type',
+              options: inputTypes,
+            },{
+              // Can make it required for the form
+              type: 'checkbox',
+              label: 'Required',
+              name: 'required',
+          }],
+        }),
+      },
+      // The second argument of .extend are static methods and we'll put inside our
+      // isComponent() method. As you're putting a new Component type on top of the stack,
+      // not declaring isComponent() might probably break stuff, especially if you extend
+      // the default one.
+      {
+        isComponent: function(el) {
+          if(el.tagName == 'INPUT'){
+            return {type: 'input'};
+          }
+        },
+      }),
+
+      // Define the View
+      view: defaultType.view,
+    });
+
+    var blockManager = editor.BlockManager;
+
+    // 'my-first-block' is the ID of the block
+    blockManager.get('form').set({
+        label: '<svg class="gjs-block-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"> <path class="gjs-block-svg-path" d="M22,5.5 C22,5.2 21.5,5 20.75,5 L3.25,5 C2.5,5 2,5.2 2,5.5 L2,8.5 C2,8.8 2.5,9 3.25,9 L20.75,9 C21.5,9 22,8.8 22,8.5 L22,5.5 Z M21,8 L3,8 L3,6 L21,6 L21,8 Z" fill-rule="nonzero"></path> <path class="gjs-block-svg-path" d="M22,10.5 C22,10.2 21.5,10 20.75,10 L3.25,10 C2.5,10 2,10.2 2,10.5 L2,13.5 C2,13.8 2.5,14 3.25,14 L20.75,14 C21.5,14 22,13.8 22,13.5 L22,10.5 Z M21,13 L3,13 L3,11 L21,11 L21,13 Z" fill-rule="nonzero"></path> <rect class="gjs-block-svg-path" x="2" y="15" width="10" height="3" rx="0.5"></rect> </svg><div class="gjs-block-label">Appointment Form</div>',
+        content: '<form class="form" data-gjs-type="form" data-highlightable="1" action="{{ url("/store-form/$value") }}" method="post"><div class="form-group gjs-comp-selected" data-gjs-type="default" data-highlightable="1"><label class="label" data-gjs-type="label" data-highlightable="1">Name</label><input class="input" data-gjs-type="input" placeholder="Type here your name" data-highlightable="1"></div><div class="form-group" data-gjs-type="default" data-highlightable="1"><label class="label" data-gjs-type="label" data-highlightable="1">Email</label><input class="input" data-gjs-type="input" type="email" placeholder="Type here your email" data-highlightable="1"></div><label class="label" data-gjs-type="label" for="Appointment date" data-highlightable="1">Appointment Date</label><input class="input" data-gjs-type="input" type="date" required="true" name="txtDate" data-highlightable="1"><div class="form-group" data-gjs-type="default" data-highlightable="1"><label class="label" data-gjs-type="label" data-highlightable="1">Gender</label><input class="checkbox" data-gjs-type="checkbox" type="checkbox" value="M" data-highlightable="1"><label class="checkbox-label" data-gjs-type="label" data-highlightable="1">M</label><input class="checkbox" data-gjs-type="checkbox" type="checkbox" value="F" data-highlightable="1"><label class="checkbox-label" data-gjs-type="label" data-highlightable="1">F</label></div><div class="form-group" data-gjs-type="default" data-highlightable="1"><label class="label" data-gjs-type="label" data-highlightable="1">Message</label><textarea class="textarea" data-gjs-type="textarea" data-highlightable="1"></textarea></div><div class="form-group" data-gjs-type="default" data-highlightable="1"><button class="button" data-gjs-type="button" type="submit" data-highlightable="1">Send</button></div></form>'
+        /*removable: false,*/ // Once inserted it can't be removed
     });
     
 </script>
