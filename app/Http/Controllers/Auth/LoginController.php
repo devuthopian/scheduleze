@@ -44,7 +44,7 @@ class LoginController extends Controller
             auth()->logout();
             return back()->with('warning', 'You need to confirm your account. We have sent you an activation code, please check your email.');
         }
-        session(['id' => $user->id]);
+        session(['id' => $user->id, 'username' => $user->name]);
         return redirect()->intended($this->redirectPath());
     }
 

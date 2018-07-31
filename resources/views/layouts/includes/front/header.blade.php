@@ -58,7 +58,7 @@
                             <a href="{{ url('/form/BuildingTypes') }}">{{ __('nav.services') }}</a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="{{ url('/schedulepanel') }}">{{ __('nav.SchedulePanel') }}</a>
+                                    <a href="{{ route('schedulepanel') }}">{{ __('nav.SchedulePanel') }}</a>
                                 </li>
                                 <li>
                                     <a href="{{ url('/form/BuildingTypes') }}">{{ __('nav.buildtype') }}</a>

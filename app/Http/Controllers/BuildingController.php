@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use DB;
 use App\PanelTemplate;
+use Session;
+use Illuminate\Support\Facades\Hash;
 /*use Illuminate\Support\Facades\Route;*/
 
 
@@ -44,77 +46,6 @@ class BuildingController extends Controller
         return view('building.'.$BladeName, compact('Building','name','Buildingdesc','ColumnName'));
     }
 
-    public function storetemplate(Request $request, $id)
-    {
-        $data = Input::get();
-        $PanelTemplate = PanelTemplate::updateOrCreate(
-            ['user_id' => $id],
-            [
-                'gjs_assets' => $data['gjs-assets'], 
-                'gjs_css' => $data['gjs-css'], 
-                'gjs_styles' => $data['gjs-styles'],
-                'gjs_html' => $data['gjs-html'],
-                'gjs_components' => $data['gjs-components']
-            ]
-        );
-        if($PanelTemplate->id){
-            $ans = array('message' => 'Successfully Saved!' );
-            return json_encode($ans);
-        }else{
-            $ans = array('message' => 'Soemthing went wrong' );
-            return json_encode($ans);
-        }
-    }
-
-    public function saveimagetemplate(Request $request, $id)
-    {
-        $template = PanelTemplate::where('user_id',$id)->first();
-        $files = $request->file();
-
-        if($template){
-            $dbimages = json_decode($template->gjs_assets, true);
-        }else{
-            $dbimages = '';
-        }
-
-        foreach($files as $key){
-            foreach ($key as $value) {
-                $name = $value->getClientOriginalName();
-                $getFilename = $value->getFilename();
-                $value->move(public_path( 'images/panel/' ), $name );
-                $filename[] = array('type' => 'image','src' => 'images/panel/'.$name, "unitDim" => "px","height" => 0,"width" => 0 );
-            }
-        }
-
-        if(!empty($dbimages)){
-            $result = array_merge($dbimages, $filename);
-        }else{
-            $result = $filename;
-        }
-
-        $PanelTemplate = PanelTemplate::updateOrCreate(
-            ['user_id' => $id],
-            ['gjs_assets' => json_encode($result)]
-        );
-
-        if($PanelTemplate->id){
-            $ans = array('data' => $filename );
-            return json_encode($ans);
-        }
-    }
-
-    public function gettemplate($id)
-    {
-        $template = PanelTemplate::where('user_id',$id)->first();
-        $template = json_encode([
-          'gjs-components'=> $template->gjs_components,
-          'gjs-styles'=> $template->gjs_styles,
-          'gjs-assets'=> $template->gjs_assets,
-          'gjs-css'=> $template->gjs_css,
-          'gjs-html'=> $template->gjs_html,
-        ]);
-        return $template;
-    }
 
     /**
      * Show the form for creating a new resource.

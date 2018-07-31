@@ -5,6 +5,7 @@
 <script src="https://unpkg.com/grapesjs"></script>
 <script src="{{ URL::asset('dist/grapesjs-preset-webpage.min.js') }}"></script>
 <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+<link href="{{ asset('css/fontawesome.css') }}" rel="stylesheet">
 <div class="panel-main">
     @php $value = session('id'); @endphp
     <div class="container">
@@ -80,55 +81,97 @@
         </div>
     </div>
 </div>
-<button id="btnSave">Save</button>
+<div class="button" style="text-align:center;">
+    <button id="btnSave"><i class="fa fa-save" aria-hidden="true"></i> Save</button>
+</div>
 <script type="text/javascript">
-        //grapejs editor
-        var editor = grapesjs.init({
-            height: '100%',
-            showOffsets: 1,
-            noticeOnUnload: 0,
-            container: '#gjs',
-            fromElement: true,
-            plugins: ['gjs-preset-webpage'],
-            pluginsOpts: {
-                'gjs-preset-webpage': {}
-            },
-            storageManager: {
-                type: 'remote',
-                stepsBeforeSave: 0,
-                autosave: false,         // Store data automatically
-                urlStore: '{{ url("/store-template/$value") }}',
-                autoload: true,         // Autoload stored data on init
-                urlLoad: '{{ url("/load-template/$value") }}',
-                // For custom parameters/headers on requests
-                /*params: { _token:  },*/
-                headers: { 'X-CSRF-Token': '{{ csrf_token() }}' },
-                beforeSend: function() {
-                    console.log('before send');
-                },
-                contentTypeJson: true,
-            },
-            assetManager: {
-                // Upload endpoint, set `false` to disable upload, default `false`
-                upload: '{{ url("/template/images/$value") }}',
-
-                // The name used in POST to pass uploaded files, default: `'files'`
-                uploadName: 'files',
-
-                // Custom headers to pass with the upload request
-                headers: { 'X-CSRF-Token': '{{ csrf_token() }}' },
-            },
-        });
-
-        editor.on('storage:end:store', (resultObject) => {
-            if (resultObject.message) {
-              alert(resultObject.message);
+    //grapejs editor
+    var editor = grapesjs.init({
+        height: '100%',
+        showOffsets: 1,
+        noticeOnUnload: 0,
+        container: '#gjs',
+        fromElement: true,
+        plugins: ['gjs-preset-webpage'],
+        pluginsOpts: {
+            'gjs-preset-webpage': {
+                btnLabel: 'EXPORT',
+                preHtml: '<!doctype><html><head><link rel="stylesheet" href="./css/style.css"></head><body>'
             }
-        });
-        $('#btnSave').click(function(event) {
-            /* Act on the event */
-            event.preventDefault();
-            editor.store(res => console.log('Store callback'));
-        });
-        
-    </script>
+        },
+        storageManager: {
+            type: 'remote',
+            stepsBeforeSave: 0,
+            autosave: false,         // Store data automatically
+            urlStore: '{{ url("/store-template/$value") }}',
+            autoload: true,         // Autoload stored data on init
+            urlLoad: '{{ url("/load-template/$value") }}',
+            // For custom parameters/headers on requests
+            headers: { 'X-CSRF-Token': '{{ csrf_token() }}' },
+            beforeSend: function() {
+                console.log('before send');
+            },
+            contentTypeJson: true,
+        },
+        assetManager: {
+            // Upload endpoint, set `false` to disable upload, default `false`
+            upload: '{{ url("/template/images/$value") }}',
+
+            // The name used in POST to pass uploaded files, default: `'files'`
+            uploadName: 'files',
+
+            // Custom headers to pass with the upload request
+            headers: { 'X-CSRF-Token': '{{ csrf_token() }}' },
+        },
+    });
+
+    editor.on('storage:end:store', (resultObject) => {
+        if (resultObject.message) {
+          alert(resultObject.message);
+        }
+        if(resultObject.sharelink){
+            var nos = resultObject.sharelink;
+            prompt("To Copy preview link: Ctrl+C", 'http://127.0.0.1:8000/template/'+nos);
+        }
+    });
+
+    editor.on('storage:end:load', (resultObject) => {
+        if (resultObject.url) {
+            //$('#hash').val(resultObject.url);
+        }
+    });
+
+    //editor.getSelected().addStyle({'background-image': `url(${url})`});
+
+    $('#btnSave').click(function(event) {
+        /* Act on the event */
+        event.preventDefault();
+        editor.store(res => console.log('Store callback'));
+
+        //editor.runCommand('gjs-export-zip');
+    });
+    
+</script>
+<style type="text/css">
+#btnSave {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 18px;
+    padding: 10px 30px;
+    margin: 10px 0px 0px;
+    border:0px;
+    display:inline-block;
+    background-color: #eee;
+    background:#D682A4;
+    border-radius:20px;
+    color: #ffffff;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    &:hover {
+        background:#333333;
+        border-color: #999;
+    }
+    &:active {
+    }
+}
+</style>

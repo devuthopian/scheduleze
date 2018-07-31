@@ -30,39 +30,6 @@
             s1.setAttribute('crossorigin','*');
             s0.parentNode.insertBefore(s1,s0);
         })();
-
-        
-        //grapejs editor
-        var editor = grapesjs.init({
-            height: '100%',
-            showOffsets: 1,
-            noticeOnUnload: 0,
-            
-            container: '#gjs',
-            fromElement: true,
-
-            plugins: ['gjs-preset-webpage'],
-            pluginsOpts: {
-                'gjs-preset-webpage': {}
-            },
-            storageManager: {
-                type: 'remote',
-                stepsBeforeSave: 0,
-                urlStore: '/store-template/{{$value}}',
-                urlLoad: '/load-template/{{$value}}',
-                // For custom parameters/headers on requests
-                /*params: { _token:  },*/
-                headers: { 'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content') },
-                 beforeSend: function() {
-                    console.log('before send');
-                  },
-                autosave: true,         // Store data automatically
-                autoload: true,         // Autoload stored data on init
-                contentTypeJson: true,
-            }
-        });
-
-        editor.store(res => console.log('Store callback'));
     </script>
    
     <div id="scrollToTop" class="scrollToTop mbr-arrow-up"><a style="text-align: center;"><i></i></a></div>
