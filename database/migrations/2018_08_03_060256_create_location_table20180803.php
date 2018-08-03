@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddLocationTable20180720 extends Migration
+class CreateLocationTable20180803 extends Migration
 {
     /**
      * Run the migrations.
@@ -21,7 +21,8 @@ class AddLocationTable20180720 extends Migration
             $table->integer('removed')->unsigned()->default('0');
             $table->timestamps();
 
-            $table->index('business')->nullable();
+            $table->index('name',99)->unsigned()->nullable();
+            $table->index('removed')->unsigned();
             $table->foreign('business')->references('id')->on('business');
         });
     }

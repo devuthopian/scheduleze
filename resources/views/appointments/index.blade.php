@@ -29,6 +29,20 @@
 		</div>
 
 		<p class="subhead">Please check all boxes that apply below:</p>
+		@php $i=0; @endphp
+		@foreach($addons as $addon)
+			<input type="checkbox" name="addon[{{$i}}]" id="{{ $addon->id }}">{{ $addon->name }} - ${{ $addon->price }}
+			@php $i++; @endphp
+		@endforeach
+
+		<p class="subhead">Select Location<br>
+								
+		<select name="location" class="small_select">
+			@foreach ($Location as $id => $name) {
+				<option value="{{ $id }}">{{ $name }}</option>
+			@endforeach
+		</select>
+		<input type="submit" value="Find Appointment »"></p>
 	</div>
 @else
 	<div>You need to add entry! </div>

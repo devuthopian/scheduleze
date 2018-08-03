@@ -3,14 +3,28 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Appointment;
-//use App\AppointmentForm;
 use App\Business;
-use Session;
-use DB;
+use Illuminate\Support\Facades\Input;
 
-class AppointmentController extends Controller
+use App\Location;
+use Session;
+
+class LocationController extends Controller
 {
+
+    /**
+     * @var Upload path
+     */
+    protected $businessid = '';
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    { 
+        // Set the businessid
+        $this->businessid = session('business_id');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -18,15 +32,10 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        $id = session('business_id');
-        $businessinfo = Business::find($id);
-        $ages = $businessinfo->BuildingAges;
-        $sizes = $businessinfo->BuildingSizes;
-        $types = $businessinfo->BuildingTypes;
-        $addons = $businessinfo->Addons;
-        $Location = $businessinfo->Location->pluck('name', 'id');;
+        $businessinfo = Business::find($this->businessid);
+        $locations = $businessinfo->location;
 
-        return view('appointments.index', compact('businessinfo', 'ages', 'sizes', 'types','addons','Location'));
+        return view('location.index', compact('businessinfo', 'locations'));
     }
 
     /**
@@ -47,7 +56,21 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $businessid = $this->businessid;
+        $data = Input::get();
+
+        for($i = 0; $i < count($data['name']); $i++) {
+            $BuildingTypes = Location::updateOrCreate(
+                ['id' => $data['id'][$i],'removed' => '0'],
+                [
+                    'business' => $businessid,
+                    'name' => $data['name'][$i],
+                    'price' => str_replace('$', '', $data['price'][$i])
+                ]
+            );
+        }
+
+        return redirect('/business/Location')->with('Successfully saved!');
     }
 
     /**

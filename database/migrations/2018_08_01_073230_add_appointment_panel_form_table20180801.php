@@ -15,11 +15,13 @@ class AddAppointmentPanelFormTable20180801 extends Migration
     {
         Schema::create('appointment_panel_form', function (Blueprint $table) {
             $table->increments('id')->unique();
+            $table->unsignedInteger('admin_id')->default('0');
             $table->unsignedInteger('user_id')->default('0');
             $table->longText('form_fields_name_value')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('admin_id')->references('id')->on('users');
         });
     }
 

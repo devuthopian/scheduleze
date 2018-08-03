@@ -72,8 +72,11 @@
                             </ul>
                         </li>
                         <li>
-                            <a href="#">Locations</a>
+                            <a href="{{ route('Location') }}">Locations</a>
                             <ul class="dropdown-menu">
+                                <li>
+                                    <a href="{{ route('Location') }}">Add/Remove Location</a>
+                                </li>
                                 <li>
                                     <a href="#">Drivetimes</a>
                                 </li>

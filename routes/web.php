@@ -22,9 +22,6 @@ Route::group(['middleware' => 'web'], function () {
 	Route::get('/faq', 'SchedulezeController@faq')->name('faq');
 	Route::get('/signup', 'SchedulezeController@signup')->name('signup');
 	Route::get('/contact', 'SchedulezeController@contact')->name('contact');
-	Route::get('/form/{name?}', 'BuildingController@index')->name('Building');
-	Route::post('/storebuild', 'BuildingController@store')->name('storebuild');
-	Route::post('/ajaxrequest', 'BuildingController@updatebuild');
 	Route::get('/user/verify/{token}', 'Auth\RegisterController@verifyUser');
 
 	
@@ -46,6 +43,13 @@ Route::group(['middleware' => 'web'], function () {
 		Route::post('/template/images/{value}', 'PanelController@saveimagetemplate');
 		Route::get('/template/{value}', 'PanelController@show');
 
+		Route::get('/form/{name?}', 'BuildingController@index')->name('Building');
+		Route::post('/storebuild', 'BuildingController@store')->name('storebuild');
+		Route::post('/ajaxrequest', 'BuildingController@updatebuild');
+
+		Route::get('/business/Location', 'LocationController@index')->name('Location');
+		Route::post('/store', 'LocationController@store')->name('storelocation');
+
 		Route::get('/account_info', 'Auth\RegisterController@account_info');
 		Route::post('/account_info_save', 'Auth\RegisterController@account_info_save')->name('account_info_save');
 
@@ -56,6 +60,7 @@ Route::group(['middleware' => 'web'], function () {
 		Route::post('/business_info_update', 'ProfileController@updateUserBusinessAccount')->name('business_info_update');
 
 		Route::get('/add_inspector', 'InspectorController@add_inspector')->name('add_inspector');
+		Route::post('/save_inspector', 'InspectorController@save_inspector')->name('save_inspector');
 		Route::post('/save_inspector', 'InspectorController@save_inspector')->name('save_inspector');
 	});
 });

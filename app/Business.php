@@ -15,22 +15,28 @@ class Business extends Model
         return $this->belongsTo('App\User', 'user_id');
     }
 
-    public function ages()
+    public function BuildingAges()
     {
-    	return $this->hasMany('App\BuildingAges', 'business')->orderBy('rank');
+    	return $this->hasMany('App\BuildingAges', 'business')->where('removed', 0)->orderBy('rank');
     }
 
-    public function sizes()
+    public function BuildingSizes()
     {
-    	return $this->hasMany('App\BuildingSizes', 'business')->orderBy('rank');
+    	return $this->hasMany('App\BuildingSizes', 'business')->where('removed', 0)->orderBy('rank');
     }
 
-    public function types()
+    public function BuildingTypes()
     {
-    	return $this->hasMany('App\BuildingTypes', 'business')->orderBy('rank');
+    	return $this->hasMany('App\BuildingTypes', 'business')->where('removed', 0)->orderBy('rank');
     }
-    public function addons()
+
+    public function Addons()
     {
-        return $this->hasMany('App\Addons', 'business')->orderBy('rank');
+        return $this->hasMany('App\Addons', 'business')->where('removed', 0);
+    }
+
+    public function Location()
+    {
+        return $this->hasMany('App\Location', 'business')->where('removed', 0);
     }
 }

@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use DB;
 use App\PanelTemplate;
+use App\Business;
 use Session;
 use Illuminate\Support\Facades\Hash;
 /*use Illuminate\Support\Facades\Route;*/
@@ -17,13 +18,17 @@ class BuildingController extends Controller
 {
 
     /**
-     * Create a new controller instance.
-     *
-     * @return void
+     * @var Upload path
+     */
+    protected $businessid = '';
+    
+    /**
+     * Constructor
      */
     public function __construct()
-    {
-       
+    { 
+        // Set the businessid
+        $this->businessid = session('business_id');
     }
 
     /**
@@ -33,18 +38,17 @@ class BuildingController extends Controller
      */
     public function index($name)
     {
-        $businessid = session('business_id');
-        //$ModelName = Route::currentRouteName();
+        $businessid = $this->businessid;
         $Model = 'App\\'.$name;
-        $Building = $Model::where([['business', $businessid],['removed',0]])->get();
-        $Buildingdesc = $Model::where([['business', $businessid],['removed',0]])->pluck('name', 'id');
+        $Building = Business::find($businessid)->$name;
+        //$Buildingdesc = $Model::where([['business', $businessid],['removed',0]])->pluck('name', 'id');
 
         $Modelproduct = new $Model;
         $ColumnName = $Modelproduct->getTableColumns();
 
         //$Building = $Model::where([['business', $businessid]])->first();
         $BladeName = strtolower($name);
-        return view('building.'.$BladeName, compact('Building','name','Buildingdesc','ColumnName'));
+        return view('building.'.$BladeName, compact('Building','name','ColumnName'));
     }
 
 
@@ -66,7 +70,7 @@ class BuildingController extends Controller
      */
     public function store(Request $request)
     {
-        $businessid = session('business_id');
+        $businessid = $this->businessid;
         $validatedData = Validator::make($request->all(), [
             'price' => 'bail|required',
             'rank' => 'bail|required',
