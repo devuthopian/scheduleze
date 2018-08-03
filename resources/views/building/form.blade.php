@@ -122,7 +122,7 @@
 					</tbody>
 				</table>
 			</span>
-            <span>Preview</span>
+            <!-- <span>Preview</span>
             <div class="preview">
                 <b>Select Building Type Here</b>
                 <div class="row">
@@ -136,7 +136,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
 		</div>
 		<div class="tip">
 			<span class="subhead">

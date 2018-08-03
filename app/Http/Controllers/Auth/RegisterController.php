@@ -147,7 +147,7 @@ class RegisterController extends Controller
         if(isset($verifyUser) ){
             $user = $verifyUser->user;
             if($user->verified) {
-               Business::create([
+                $business = Business::create([
                     'name' => $request->input('business_name'),
                     'user_id' => $verifyUser->user_id,
                     'contact_firstname' => $request->input('contact_firstname'),
@@ -169,6 +169,7 @@ class RegisterController extends Controller
                 $verifyUser->user->name = $request->input('Username');
                 $verifyUser->user->password = bcrypt($request->input('pass'));
                 $verifyUser->user->save();
+                session(['business_id' => $business->id]);
                 $status = "Your Signup process Completed You can login now.";
             }else{
                 $status = "Your e-mail is already verified. You can now login.";

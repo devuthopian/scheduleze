@@ -1,5 +1,5 @@
 <div class="header_section">
-    <div class="head_left"><a href="{{ url('scheduling_solutions') }}"><img src="{{ url('images/logo.png') }}" alt=""></a></div>
+    <div class="head_left"><a href="{{ url('scheduling_solutions') }}"><img src="{{ url('images/logo.png') }}" alt="" class="logohead"></a></div>
     <div class="head_right">
         <div class="navigation">
             @guest
@@ -27,7 +27,7 @@
                             <a href="#">Appointments</a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="#">Add Appointment</a>
+                                    <a href="{{ url('scheduleze/appointments') }}">Add Appointment</a>
                                 </li>
                                 <li>
                                     <a href="#">My Tickets</a>
@@ -57,9 +57,6 @@
                         <li>
                             <a href="{{ url('/form/BuildingTypes') }}">{{ __('nav.services') }}</a>
                             <ul class="dropdown-menu">
-                                <li>
-                                    <a href="{{ route('schedulepanel') }}">{{ __('nav.SchedulePanel') }}</a>
-                                </li>
                                 <li>
                                     <a href="{{ url('/form/BuildingTypes') }}">{{ __('nav.buildtype') }}</a>
                                 </li>
@@ -110,6 +107,9 @@
                                 </li>
                                 <li>
                                     <a href="#">Recurring Payment</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('schedulepanel') }}">{{ __('nav.SchedulePanel') }}</a>
                                 </li>
                             </ul>
                         </li>

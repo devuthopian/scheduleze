@@ -1080,3 +1080,7 @@ button.btn.btn-success.gmailbtn { background: #48aabf; border: 0px; border-radiu
     display: inline-block;
     height: 500px !important;
 }
+.logohead{
+    width: 80%;
+    height: auto;
+}

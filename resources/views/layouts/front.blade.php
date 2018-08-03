@@ -7,6 +7,13 @@
   
   <body>
 
+    @if(Session::has('status'))
+        <div class="alert alert-success">
+            <a class="close" data-dismiss="alert">×</a>
+            <strong>{!!Session::get('status')!!}</strong> 
+        </div>
+    @endif
+
     @include('layouts.includes.front.header')
 
     @yield('content')

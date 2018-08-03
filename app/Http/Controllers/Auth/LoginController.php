@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 use Socialite;
 use App\User;
-
+use App\Business;
 use Auth;
 
 class LoginController extends Controller
@@ -45,6 +45,11 @@ class LoginController extends Controller
             return back()->with('warning', 'You need to confirm your account. We have sent you an activation code, please check your email.');
         }
         session(['id' => $user->id, 'username' => $user->name]);
+        $business = Business::where('user_id', $user->id)->first();
+
+        if($business){
+            session(['business_id' => $business->id]);
+        }
         return redirect()->intended($this->redirectPath());
     }
 
@@ -99,6 +104,12 @@ class LoginController extends Controller
             Auth::login($user);
             session(['id' => $user->id]);
 
+            $business = Business::where('user_id', $user->id)->first();
+
+            if($business){
+                session(['business_id' => $business->id]);
+            }
+
             return redirect()->action('HomeController@index');
 
         }else{
@@ -110,6 +121,11 @@ class LoginController extends Controller
             $user->verified = 1;
             $user->save();
             session(['id' => $user->id]);
+            $business = Business::where('user_id', $user->id)->first();
+
+            if($business){
+                session(['business_id' => $business->id]);
+            }
 
             Auth::login($user);
 

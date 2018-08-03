@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use App\PanelTemplate;
+use App\AppointmentForm;
 use Session;
 use Illuminate\Support\Facades\Hash;
 use DB;
@@ -57,6 +58,7 @@ class PanelController extends Controller
         $data = Input::get();
         if(empty($hashvalue)){
             $hashvalue = str_replace ('/', '', Hash::make($username, ['Saringan'=>'Naruto Uzumaki! Road To Ninja.']));
+            Session::put('hashvalue', $hashvalue);
         }
         $PanelTemplate = PanelTemplate::updateOrCreate(
             ['user_id' => $id],
@@ -73,7 +75,7 @@ class PanelController extends Controller
             $ans = array('message' => 'Successfully Saved!', 'sharelink' => $PanelTemplate->unqiue_url );
             return json_encode($ans);
         }else{
-            $ans = array('message' => 'Soemthing went wrong' );
+            $ans = array('message' => 'Something went wrong' );
             return json_encode($ans);
         }
     }
@@ -92,6 +94,7 @@ class PanelController extends Controller
         $hashvalue = Session::get('hashvalue');
         if(empty($hashvalue)){
             $hashvalue = str_replace ('/', '', Hash::make($username, ['Saringan'=>'Naruto Uzumaki! Road To Ninja.']));
+            Session::put('hashvalue', $hashvalue);
         }
 
         if($template){
@@ -162,7 +165,25 @@ class PanelController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = Input::get();
+
+        foreach ($data as $key => $value) {
+            $fieldname[$key] = $value;
+        }
+        $AppointmentForm = AppointmentForm::updateOrCreate(
+            ['user_id' => $id],
+            [
+                'admin_id' => $data['txtId'],
+                'form_fields_name' => json_encode($fieldname)
+            ]
+        );
+        if($AppointmentForm->id){
+            Session::flash('status', 'Form was successfully Saved!');
+            return redirect('/scheduling_solutions');
+        }else{
+            Session::flash('status', 'Something Went Wrong!');
+            return redirect('/scheduling_solutions');
+        }
     }
 
     /**

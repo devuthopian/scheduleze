@@ -22,9 +22,9 @@ Route::group(['middleware' => 'web'], function () {
 	Route::get('/faq', 'SchedulezeController@faq')->name('faq');
 	Route::get('/signup', 'SchedulezeController@signup')->name('signup');
 	Route::get('/contact', 'SchedulezeController@contact')->name('contact');
-	/*Route::get('/form/{name?}', 'BuildingController@index')->name('Building');
+	Route::get('/form/{name?}', 'BuildingController@index')->name('Building');
 	Route::post('/storebuild', 'BuildingController@store')->name('storebuild');
-	Route::post('/ajaxrequest', 'BuildingController@updatebuild');*/
+	Route::post('/ajaxrequest', 'BuildingController@updatebuild');
 	Route::get('/user/verify/{token}', 'Auth\RegisterController@verifyUser');
 
 	
@@ -38,7 +38,10 @@ Route::group(['middleware' => 'web'], function () {
 		Route::get('/template/schedulepanel', 'SchedulezeController@scheduling_panel')->name('schedulepanel');
 		Route::get('/success_stories', 'SchedulezeController@success_stories')->name('success_stories');
 
+		Route::get('/scheduleze/appointments','AppointmentController@index');
+
 		Route::post('/store-template/{value}', 'PanelController@store');
+		Route::post('/template/store/{value}', 'PanelController@update');
 		Route::get('/load-template/{value}', 'PanelController@index');
 		Route::post('/template/images/{value}', 'PanelController@saveimagetemplate');
 		Route::get('/template/{value}', 'PanelController@show');
