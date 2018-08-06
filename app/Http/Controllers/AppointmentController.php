@@ -24,7 +24,7 @@ class AppointmentController extends Controller
         $sizes = $businessinfo->BuildingSizes;
         $types = $businessinfo->BuildingTypes;
         $addons = $businessinfo->Addons;
-        $Location = $businessinfo->Location->pluck('name', 'id');;
+        $Location = $businessinfo->Location->pluck('name', 'id');
 
         return view('appointments.index', compact('businessinfo', 'ages', 'sizes', 'types','addons','Location'));
     }

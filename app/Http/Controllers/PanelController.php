@@ -22,7 +22,7 @@ class PanelController extends Controller
         $template = PanelTemplate::where('user_id',$id)->first();
         Session::put('hashvalue', $template->unqiue_url);
 
-        $template = json_encode([
+        $data = json_encode([
           'gjs-components'=> $template->gjs_components,
           'gjs-styles'=> $template->gjs_styles,
           'gjs-assets'=> $template->gjs_assets,
@@ -32,7 +32,7 @@ class PanelController extends Controller
         ]);        
         
 
-        return $template;
+        return $data;
     }
 
     /**
@@ -43,6 +43,48 @@ class PanelController extends Controller
     public function create()
     {
         //
+    }
+
+    public function storeAppointment(Request $request)
+    {
+        $id = Session::get('id');
+        $hashvalue = Session::get('hashvalue');
+        $data = Input::get();
+
+        if(empty($hashvalue)){
+            $hashvalue = str_replace ('/', '', Hash::make($username, ['Saringan'=>'Naruto Uzumaki! Road To Ninja.']));
+            Session::put('hashvalue', $hashvalue);
+        }
+        $paneltemp = PanelTemplate::where('user_id',$id)->first();
+        if($paneltemp){
+            $gjs_html = $paneltemp->gjs_html;
+            if(!empty($gjs_html)){
+                $new_html = $data['gjs_html'];
+                $divid = "dontbreakdiv";
+                $gjs_html = preg_replace("#<div[^>]*id=\"{$divid}\".*?</div>#si",$new_html,$gjs_html);
+                $gjs_css = $paneltemp->gjs_css;
+            }else{
+                $gjs_html = $data['gjs_html'];
+                $gjs_css = $data['gjs_css'];
+            }
+        }else{
+            $gjs_html = $data['gjs_html'];
+            $gjs_css = $data['gjs_css'];
+        }
+
+        $PanelTemplate = PanelTemplate::updateOrCreate(
+            ['user_id' => $id],
+            [   
+                'user_id' => $id,
+                'gjs_html' => $gjs_html,
+                'unqiue_url' => $hashvalue,
+                'gjs_css' => $gjs_css
+            ]
+        );
+        if($PanelTemplate->id){
+            $ans = array('message' => 'Successfully Saved!' );
+            return json_encode($ans);
+        }
     }
 
     /**

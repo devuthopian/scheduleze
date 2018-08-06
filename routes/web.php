@@ -35,6 +35,8 @@ Route::group(['middleware' => 'web'], function () {
 		Route::get('/template/schedulepanel', 'SchedulezeController@scheduling_panel')->name('schedulepanel');
 		Route::get('/success_stories', 'SchedulezeController@success_stories')->name('success_stories');
 
+		Route::post('ajaxappointment', 'PanelController@storeAppointment');
+
 		Route::get('/scheduleze/appointments','AppointmentController@index');
 
 		Route::post('/store-template/{value}', 'PanelController@store');

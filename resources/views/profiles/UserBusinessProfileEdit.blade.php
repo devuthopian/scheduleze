@@ -4,7 +4,7 @@
     <div class="signup_section">
         <div class="signup_cont">
             <h3>Business Profile</h3>
-                {!! Form::model($UserBusinessData, array('action' => array('ProfileController@updateUserBusinessAccount'), 'method' => 'POST','id'=>'Userdata')) !!}
+                {!! Form::model($UserBusinessData, array('action' => array('ProfileController@updateUserBusinessAccount'), 'method' => 'POST','id'=>'UserBusinessData')) !!}
                 {{ csrf_field() }}
                 <div class="form-group has-feedback {{ $errors->has('firstname') ? ' has-error ' : '' }}">
                 <div class="col-12">
@@ -20,7 +20,7 @@
 
                  <div class="col-12">
                  {!! Form::label('lastname', trans('profile.lastname') , array('class' => 'col-12 control-label')); !!}
-                {!! Form::text('lastname',$UserData['lastname'], array('id' => 'lastname', 'class' => 'form-control', 'placeholder' => trans('profile.lastname'))) !!}
+                {!! Form::text('lastname',$UserBusinessData['lastname'], array('id' => 'lastname', 'class' => 'form-control', 'placeholder' => trans('profile.lastname'))) !!}
                 <span class="glyphicon {{ $errors->has('lastname') ? ' glyphicon-asterisk ' : ' ' }} form-control-feedback" aria-hidden="true"></span>
                 @if ($errors->has('lastname'))
                 <span class="help-block">
@@ -31,7 +31,7 @@
 
                  <div class="col-12">
                 {!! Form::label('backupEmail', trans('profile.backupEmail') , array('class' => 'col-12 control-label')); !!}
-                {!! Form::text('backupEmail',$UserData['email2'], array('id' => 'backupEmail', 'class' => 'form-control', 'placeholder' => trans('profile.backupEmail'))) !!}
+                {!! Form::text('backupEmail',$UserBusinessData['email2'], array('id' => 'backupEmail', 'class' => 'form-control', 'placeholder' => trans('profile.backupEmail'))) !!}
                 <span class="glyphicon {{ $errors->has('backupEmail') ? ' glyphicon-asterisk ' : ' ' }} form-control-feedback" aria-hidden="true"></span>
                 @if ($errors->has('backupEmail'))
                 <span class="help-block">
@@ -43,7 +43,7 @@
 
                  <div class="col-12">
                  {!! Form::label('username', trans('profile.username') , array('class' => 'col-12 control-label')); !!}
-                {!! Form::text('username',$UserData->user->name, array('id' => 'username', 'class' => 'form-control', 'placeholder' => trans('profile.username'))) !!}
+                {!! Form::text('username',$UserBusinessData->user->name, array('id' => 'username', 'class' => 'form-control', 'placeholder' => trans('profile.username'))) !!}
                 <span class="glyphicon {{ $errors->has('username') ? ' glyphicon-asterisk ' : ' ' }} form-control-feedback" aria-hidden="true"></span>
                 @if ($errors->has('username'))
                 <span class="help-block">
@@ -69,7 +69,7 @@
                         {!! Form::Label('Days in Advance Padding', 'Days in Advance Padding') !!}
                         <br>
                        <span>How many days should the scheduler skip before offering your first appointment?</span>
-                        {!! show_day_padding($UserData->padding_day) !!}
+                        {!! show_day_padding($UserBusinessData->padding_day) !!}
                     </div>
                     </div>
                      <div class="col-12">
@@ -77,7 +77,7 @@
                         {!! Form::Label('Days Forward', 'Days Forward') !!}
                         <br>
                          <span>Specify the total number of days to look forward for available appointment times.</span>
-                        {!! show_day_forward($UserData->look_ahead) !!}
+                        {!! show_day_forward($UserBusinessData->look_ahead) !!}
                     </div>
                     </div>
                     <div class="col-12">
@@ -85,7 +85,7 @@
                         {!! Form::Label('Trim Day List', 'Trim Day List') !!}
                         <br>
                         <span>Throttle Schedule Openings (only show some available times after 10 days out).</span>
-                        {{ Form::checkbox('throttle',1,$UserData->throttle) }}
+                        {{ Form::checkbox('throttle',1,$UserBusinessData->throttle) }}
                     </div>
                     </div>
                        <div class="col-12">
@@ -93,7 +93,7 @@
                         {!! Form::Label('Inspector Masking', 'Inspector Masking') !!}
                         <br>
                         <span>Hide this Inspector from public booking view..</span>
-                        {{ Form::checkbox('throttle',1,$UserData->last_login) }}
+                        {{ Form::checkbox('throttle',1,$UserBusinessData->last_login) }}
                     </div>
                     </div>
                        <div class="col-12">
@@ -101,7 +101,7 @@
                         {!! Form::Label('User Privileges', 'User Privileges') !!}
                         <br>
                         <span>Is company administrator (can manage Inspectors for SV Inspection Service).</span>
-                        {{ Form::checkbox('permission',1,$UserData->permission) }}
+                        {{ Form::checkbox('permission',1,$UserBusinessData->permission) }}
                     </div>
                     </div>
 

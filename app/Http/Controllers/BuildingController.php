@@ -122,7 +122,7 @@ class BuildingController extends Controller
         }
         $txtForm = strtolower($txtForm);
 
-        return redirect('/form/'.$redirecturl)->with('Successfully saved!');
+        return redirect('/scheduleze/appointments')->with('Successfully saved!');
     }
 
     /**

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Business;
+use App\PanelTemplate;
 
 class SchedulezeController extends Controller
 {
@@ -48,7 +50,15 @@ class SchedulezeController extends Controller
 
     public function scheduling_panel()
     {
-        return view('building.scheduling_panel');
+        $id = session('id');
+        $businessinfo = PanelTemplate::where('user_id',$id)->first();
+        $html = $businessinfo->gjs_html;
+       /* $sizes = $businessinfo->BuildingSizes;
+        $types = $businessinfo->BuildingTypes;
+        $addons = $businessinfo->Addons;
+        $Location = $businessinfo->Location->pluck('name', 'id');*/
+        
+        return view('building.scheduling_panel', compact('html'));
     }
 
      /**
