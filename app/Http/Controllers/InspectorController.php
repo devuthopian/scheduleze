@@ -54,6 +54,7 @@ class InspectorController extends Controller
             'name' => $request->input('username'),
             'email' => $request->input('email'),
             'password' => bcrypt( $request->input('password')),
+            'verified' => 1,
             ]);
 
             $userInfo = UserDetails::create([
