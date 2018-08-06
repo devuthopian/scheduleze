@@ -100,7 +100,7 @@
 							<td></td>
 						</tr>
 						<tr>
-							<a href="#" class="add_column" id="add_column">Add Column</a>
+							<a href="#" class="add_column columnaddons" id="add_column">Add Column</a>
 						</tr>
 					</tbody>
 				</table>

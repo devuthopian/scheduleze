@@ -7,6 +7,10 @@ use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use DB;
+use App\PanelTemplate;
+use App\Business;
+use Session;
+use Illuminate\Support\Facades\Hash;
 /*use Illuminate\Support\Facades\Route;*/
 
 
@@ -14,13 +18,17 @@ class BuildingController extends Controller
 {
 
     /**
-     * Create a new controller instance.
-     *
-     * @return void
+     * @var Upload path
+     */
+    protected $businessid = '';
+    
+    /**
+     * Constructor
      */
     public function __construct()
-    {
-        //$this->middleware('auth');
+    { 
+        // Set the businessid
+        $this->businessid = session('business_id');
     }
 
     /**
@@ -30,17 +38,17 @@ class BuildingController extends Controller
      */
     public function index($name)
     {
-        //$ModelName = Route::currentRouteName();
+        $businessid = $this->businessid;
         $Model = 'App\\'.$name;
-        $Building = $Model::where([['business', 1],['removed',0]])->get();
-        $Buildingdesc = $Model::where([['business', 1],['removed',0]])->pluck('name', 'id');
+        $Building = Business::find($businessid)->$name;
+        //$Buildingdesc = $Model::where([['business', $businessid],['removed',0]])->pluck('name', 'id');
 
         $Modelproduct = new $Model;
         $ColumnName = $Modelproduct->getTableColumns();
 
-        //$Building = $Model::where([['business', 1]])->first();
+        //$Building = $Model::where([['business', $businessid]])->first();
         $BladeName = strtolower($name);
-        return view('building.'.$BladeName, compact('Building','name','Buildingdesc','ColumnName'));
+        return view('building.'.$BladeName, compact('Building','name','ColumnName'));
     }
 
 
@@ -62,6 +70,7 @@ class BuildingController extends Controller
      */
     public function store(Request $request)
     {
+        $businessid = $this->businessid;
         $validatedData = Validator::make($request->all(), [
             'price' => 'bail|required',
             'rank' => 'bail|required',
@@ -79,9 +88,9 @@ class BuildingController extends Controller
         $txtForm = 'App\\Dp'.$data['txtform'];
         $htmldata = array_diff_key($data, ['_token' => "xy", 'txtform' => "xy", 'submit' => "xy", 'id' => '0']);
         $BuildingTypes = $txtForm::updateOrCreate(
-            ['id' => $data['id'],'business' => 1],
+            ['id' => $data['id'],'business' => $businessid],
             [
-                'business' => 1,
+                'business' => $businessid,
                 'form_html' => json_encode($htmldata['htmlFormat']),
                 'builder_area' => json_encode($htmldata['txtBuilderArea'])
             ]
@@ -103,7 +112,7 @@ class BuildingController extends Controller
                 [
                     'name' => $data['desc'][$i], 
                     'buffer' => $data['buffer'][$i], 
-                    'business' => 1,
+                    'business' => $businessid,
                     'price' => str_replace('$', '', $data['price'][$i]),
                     'status' => $data['forcecall'][$i],
                     'rank' => $data['rank'][$i],

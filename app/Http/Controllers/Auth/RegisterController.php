@@ -84,6 +84,12 @@ class RegisterController extends Controller
             'user_id' => $user->id,
             'token' => str_random(40)
         ]);
+
+        UserDetails::create([
+            'user_id' => $user->id,
+            'indus_id' => $data['txtIndustries']
+        ]);
+        
         Mail::to($user->email)->send(new VerifyMail($user));
  
         return $user;
@@ -104,16 +110,16 @@ class RegisterController extends Controller
         }else{
             return redirect('/login')->with('warning', "Sorry your email cannot be identified.");
         }
-         $check_reg = Business::where('user_id', $verifyUser->user_id)->first();
-          if(isset($check_reg )){
-         if(!$check_reg->registration_completed){
-          return redirect('/account_info/?token='.$token)->with('status', $status);
-         } else {
-          return redirect('/login')->with('warning', "your Registration allready Completed.");
-         }
-         } else{
-          return redirect('/account_info/?token='.$token)->with('status', $status);
-         }
+        $check_reg = Business::where('user_id', $verifyUser->user_id)->first();
+        if(isset($check_reg )){
+            if(!$check_reg->registration_completed){
+            return redirect('/account_info/?token='.$token)->with('status', $status);
+            } else {
+            return redirect('/login')->with('warning', "your Registration allready Completed.");
+            }
+        } else{
+            return redirect('/account_info/?token='.$token)->with('status', $status);
+        }
 
     }
 
@@ -141,7 +147,7 @@ class RegisterController extends Controller
         if(isset($verifyUser) ){
             $user = $verifyUser->user;
             if($user->verified) {
-               Business::create([
+                $business = Business::create([
                     'name' => $request->input('business_name'),
                     'user_id' => $verifyUser->user_id,
                     'contact_firstname' => $request->input('contact_firstname'),
@@ -157,12 +163,13 @@ class RegisterController extends Controller
                     'email2' => $request->input('requested_email'),
                     'registration_completed' => '1',
                 ]);
-                UserDetails::create([
+                /*UserDetails::create([
                     'user_id' => $verifyUser->user_id,
-                ]);
+                ]);*/
                 $verifyUser->user->name = $request->input('Username');
                 $verifyUser->user->password = bcrypt($request->input('pass'));
                 $verifyUser->user->save();
+                session(['business_id' => $business->id]);
                 $status = "Your Signup process Completed You can login now.";
             }else{
                 $status = "Your e-mail is already verified. You can now login.";

@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 use Socialite;
 use App\User;
-
+use App\Business;
 use Auth;
 
 class LoginController extends Controller
@@ -24,13 +24,31 @@ class LoginController extends Controller
     |
     */
 
-    use AuthenticatesUsers;
+    use AuthenticatesUsers {
+        logout as performLogout;
+    }
+
+    /**
+    * Override the username method used to validate login
+    *
+    * @return string
+    */
+    public function username()
+    {
+        return 'name';
+    }
 
      public function authenticated(Request $request, $user)
     {
         if (!$user->verified) {
             auth()->logout();
             return back()->with('warning', 'You need to confirm your account. We have sent you an activation code, please check your email.');
+        }
+        session(['id' => $user->id, 'username' => $user->name]);
+        $business = Business::where('user_id', $user->id)->first();
+
+        if($business){
+            session(['business_id' => $business->id]);
         }
         return redirect()->intended($this->redirectPath());
     }
@@ -52,9 +70,15 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    public function logout(Request $request)
+    {
+        $this->performLogout($request);
+        return redirect()->route('login');
+    }
+
 
     /**
-     * Redirect the user to the GitHub authentication page.
+     * Redirect the user to the social media authentication page.
      *
      * @return \Illuminate\Http\Response
      */
@@ -78,6 +102,13 @@ class LoginController extends Controller
         if($user){
 
             Auth::login($user);
+            session(['id' => $user->id]);
+
+            $business = Business::where('user_id', $user->id)->first();
+
+            if($business){
+                session(['business_id' => $business->id]);
+            }
 
             return redirect()->action('HomeController@index');
 
@@ -89,6 +120,12 @@ class LoginController extends Controller
             $user->password = bcrypt($randpass);
             $user->verified = 1;
             $user->save();
+            session(['id' => $user->id]);
+            $business = Business::where('user_id', $user->id)->first();
+
+            if($business){
+                session(['business_id' => $business->id]);
+            }
 
             Auth::login($user);
 

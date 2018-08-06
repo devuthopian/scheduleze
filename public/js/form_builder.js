@@ -79,7 +79,7 @@ $(document).ready(function () {
     }
     function getTextFieldHTML() {
         var field = generateField();
-        var html = '<div class="all_div"><div class="row li_row"><div class="col-md-12"><button type="button" class="btn btn-primary btn-sm remove_bal_field pull-right" data-field="' + field + '"><i class="fa fa-times"></i></button></div></div></div><hr/><div class="row li_row form_output" data-type="text" data-field="' + field + '"><div class="col-md-12"><div class="form-group"><input type="text" name="label_' + field + '" class="form-control form_input_label" value="Label" data-field="' + field + '"/></div></div><div class="col-md-12"><div class="form-group"><input type="text" name="placeholder_' + field + '" data-field="' + field + '" class="form-control form_input_placeholder" placeholder="Placeholder"/></div></div><div class="col-md-12"><div class="form-group"><input type="text" name="text_' + field + '" class="form-control form_input_name" placeholder="Name"/></div></div><div class="col-md-12"><div class="form-check"><label class="form-check-label"><input data-field="' + field + '" type="checkbox" class="form-check-input form_input_req">Required</label></div></div></div>';
+        var html = '<div class="all_div"><div class="row li_row"><div class="col-md-12"><button type="button" class="btn btn-primary btn-sm remove_bal_field pull-right" data-field="' + field + '"><i class="fa fa-times"></i></button></div></div></div><hr/><div class="row li_row form_output" data-type="text" data-field="' + field + '"><div class="col-md-12"><div class="form-group"><input type="text" name="label_' + field + '" class="form-control form_input_label" value="Label" data-field="' + field + '"/></div></div><div class="col-md-12"><div class="form-group"><input type="text" name="value_' + field + '" data-field="' + field + '" class="form-control form_input_value" placeholder="Value"/></div></div><div class="col-md-12"><div class="form-group"><input type="text" name="placeholder_' + field + '" data-field="' + field + '" class="form-control form_input_placeholder" placeholder="Placeholder"/></div></div><div class="col-md-12"><div class="form-group"><input type="text" name="text_' + field + '" class="form-control form_input_name" placeholder="Name"/></div></div><div class="col-md-12"><div class="form-check"><label class="form-check-label"><input data-field="' + field + '" type="checkbox" class="form-check-input form_input_req">Required</label></div></div></div>';
         return $('<div>').addClass('li_' + field + ' form_builder_field').html(html);
     }
     function getNumberFieldHTML() {
@@ -89,7 +89,7 @@ $(document).ready(function () {
     }
     function getEmailFieldHTML() {
         var field = generateField();
-        var html = '<div class="all_div"><div class="row li_row"><div class="col-md-12"><button type="button" class="btn btn-primary btn-sm remove_bal_field pull-right" data-field="' + field + '"><i class="fa fa-times"></i></button></div></div></div><hr/><div class="row li_row form_output" data-type="email" data-field="' + field + '"><div class="col-md-12"><div class="form-group"><input type="text" name="label_' + field + '" class="form-control form_input_label" value="Label" data-field="' + field + '"/></div></div><div class="col-md-12"><div class="form-group"><input type="text" name="placeholder_' + field + '" data-field="' + field + '" class="form-control form_input_placeholder" placeholder="Placeholder"/></div></div><div class="col-md-12"><div class="form-group"><input type="text" name="text_' + field + '" class="form-control form_input_name" placeholder="Name"/></div></div><div class="col-md-12"><div class="form-check"><label class="form-check-label"><input data-field="' + field + '" type="checkbox" class="form-check-input form_input_req">Required</label></div></div></div>';
+        var html = '<div class="all_div"><div class="row li_row"><div class="col-md-12"><button type="button" class="btn btn-primary btn-sm remove_bal_field pull-right" data-field="' + field + '"><i class="fa fa-times"></i></button></div></div></div><hr/><div class="row li_row form_output" data-type="email" data-field="' + field + '"><div class="col-md-12"><div class="form-group"><input type="text" name="label_' + field + '" class="form-control form_input_label" value="Label" data-field="' + field + '"/></div></div><div class="col-md-12"><div class="form-group"><input type="text" name="value_' + field + '" data-field="' + field + '" class="form-control form_input_value" placeholder="Value"/></div></div><div class="col-md-12"><div class="form-group"><input type="text" name="placeholder_' + field + '" data-field="' + field + '" class="form-control form_input_placeholder" placeholder="Placeholder"/></div></div><div class="col-md-12"><div class="form-group"><input type="text" name="text_' + field + '" class="form-control form_input_name" placeholder="Name"/></div></div><div class="col-md-12"><div class="form-check"><label class="form-check-label"><input data-field="' + field + '" type="checkbox" class="form-check-input form_input_req">Required</label></div></div></div>';
         return $('<div>').addClass('li_' + field + ' form_builder_field').html(html);
     }
     function getPasswordFieldHTML() {
@@ -104,7 +104,7 @@ $(document).ready(function () {
     }
     function getTextAreaFieldHTML() {
         var field = generateField();
-        var html = '<div class="all_div"><div class="row li_row"><div class="col-md-12"><button type="button" class="btn btn-primary btn-sm remove_bal_field pull-right" data-field="' + field + '"><i class="fa fa-times"></i></button></div></div></div><hr/><div class="row li_row form_output" data-type="textarea" data-field="' + field + '"><div class="col-md-12"><div class="form-group"><input type="text" name="label_' + field + '" class="form-control form_input_label" value="Label" data-field="' + field + '"/></div></div><div class="col-md-12"><div class="form-group"><input type="text" name="placeholder_' + field + '" data-field="' + field + '" class="form-control form_input_placeholder" placeholder="Placeholder"/></div></div><div class="col-md-12"><div class="form-group"><input type="text" name="text_' + field + '" class="form-control form_input_name" placeholder="Name"/></div></div><div class="col-md-12"><div class="form-check"><label class="form-check-label"><input data-field="' + field + '" type="checkbox" class="form-check-input form_input_req">Required</label></div></div></div>';
+        var html = '<div class="all_div"><div class="row li_row"><div class="col-md-12"><button type="button" class="btn btn-primary btn-sm remove_bal_field pull-right" data-field="' + field + '"><i class="fa fa-times"></i></button></div></div></div><hr/><div class="row li_row form_output" data-type="textarea" data-field="' + field + '"><div class="col-md-12"><div class="form-group"><input type="text" name="label_' + field + '" class="form-control form_input_label" value="Label" data-field="' + field + '"/></div></div><div class="col-md-12"><div class="form-group"><input type="text" name="value_' + field + '" data-field="' + field + '" class="form-control form_input_value" placeholder="Value"/></div></div><div class="col-md-12"><div class="form-group"><input type="text" name="placeholder_' + field + '" data-field="' + field + '" class="form-control form_input_placeholder" placeholder="Placeholder"/></div></div><div class="col-md-12"><div class="form-group"><input type="text" name="text_' + field + '" class="form-control form_input_name" placeholder="Name"/></div></div><div class="col-md-12"><div class="form-check"><label class="form-check-label"><input data-field="' + field + '" type="checkbox" class="form-check-input form_input_req">Required</label></div></div></div>';
         return $('<div>').addClass('li_' + field + ' form_builder_field').html(html);
     }
     function getSelectFieldHTML() {
@@ -224,7 +224,7 @@ $(document).ready(function () {
         var field = $(this).attr('data-field');
         $(this).closest('.li_' + field).hide('400', function () {
             $(this).remove();
-            getPreview();
+            getPreview($('.pre_data').html());
         });
     });
     $(document).on('click', '.remove_more_select', function () {
@@ -284,6 +284,9 @@ $(document).ready(function () {
     $(document).on('keyup', '.form_input_placeholder', function () {
         getPreview();
     });
+    $(document).on('keyup', '.form_input_value', function () {
+        getPreview();
+    });
     $(document).on('keyup', '.form_input_label', function () {
         getPreview();
     });
@@ -304,11 +307,12 @@ $(document).ready(function () {
             if (data_type === 'text') {
                 var placeholder = $(this).find('.form_input_placeholder').val();
                 var checkbox = $(this).find('.form-check-input');
+                var value = $(this).find('.form_input_value').val();
                 var required = '';
                 if (checkbox.is(':checked')) {
                     required = 'required';
                 }
-                html += '<div class="form-group"><label class="control-label">' + label + '</label><input type="text" name="' + name + '" placeholder="' + placeholder + '" class="form-control" ' + required + '/></div>';
+                html += '<div class="form-group"><label class="control-label">' + label + '</label><input type="text" name="' + name + '" placeholder="' + placeholder + '" class="form-control" value="'+ value +'" ' + required + '/></div>';
             }
             if (data_type === 'number') {
                 var placeholder = $(this).find('.form_input_placeholder').val();
@@ -322,11 +326,12 @@ $(document).ready(function () {
             if (data_type === 'email') {
                 var placeholder = $(this).find('.form_input_placeholder').val();
                 var checkbox = $(this).find('.form-check-input');
+                var value = $(this).find('.form_input_value').val();
                 var required = '';
                 if (checkbox.is(':checked')) {
                     required = 'required';
                 }
-                html += '<div class="form-group"><label class="control-label">' + label + '</label><input type="email" name="' + name + '" placeholder="' + placeholder + '" class="form-control" ' + required + '/></div>';
+                html += '<div class="form-group"><label class="control-label">' + label + '</label><input type="email" name="' + name + '" placeholder="' + placeholder + '" class="form-control" value="'+ value +'" ' + required + '/></div>';
             }
             if (data_type === 'password') {
                 var placeholder = $(this).find('.form_input_placeholder').val();
@@ -340,11 +345,12 @@ $(document).ready(function () {
             if (data_type === 'textarea') {
                 var placeholder = $(this).find('.form_input_placeholder').val();
                 var checkbox = $(this).find('.form-check-input');
+                var value = $(this).find('.form_input_value').val();
                 var required = '';
                 if (checkbox.is(':checked')) {
                     required = 'required';
                 }
-                html += '<div class="form-group"><label class="control-label">' + label + '</label><textarea rows="5" name="' + name + '" placeholder="' + placeholder + '" class="form-control" ' + required + '/></div>';
+                html += '<div class="form-group"><label class="control-label">' + label + '</label><textarea rows="5" name="' + name + '" placeholder="' + placeholder + '" class="form-control" ' + required + '>'+ value +'</textarea></div>';
             }
             if (data_type === 'date') {
                 var checkbox = $(this).find('.form-check-input');
@@ -389,17 +395,25 @@ $(document).ready(function () {
         });
         if (html.length) {
             $('.export_html').show();
-            $('.plain_html').show().find('textarea').val(html);
+            $('.plain_html').show().find('textarea').val($('.pre_data').html() + html);
+            $('#txtBuildArea').val($('.form_builder_area').html());
         } else {
             $('.export_html').hide();
+            $('.plain_html').hide().find('textarea').val($('.pre_data').html() + html);
+            $('#txtBuildArea').val('');
         }
         if (plain_html === 'html') {
             $('.preview').hide();
-            $('.plain_html').show().find('textarea').val(html);
+            $('.plain_html').show().find('textarea').val($('.pre_data').html() + html);
         } else {
+            if($('.pre_data').html() == undefined){
+                $pre_data = '';
+            }else{
+                $pre_data = $('.pre_data').html();
+            }
             $('.plain_html').hide();
-            $('.preview').html(html).show();
-    }
+            $('.preview').html($pre_data + html).show();
+        }
     }
     $(document).on('click', '.export_html', function () {
         getPreview('html');

@@ -122,21 +122,6 @@
 					</tbody>
 				</table>
 			</span>
-            <span>Preview</span>
-            <div class="preview">
-                <b>Select Building Type Here</b>
-                <div class="row">
-                    <div class="col-xs-3">
-                        <div class="form-group">
-                            <select class="selectpicker form-control">
-                                @foreach($Buildingdesc as $key => $value)
-                                    <option value="{{ $key }}">{{ $value }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
 		</div>
 		<div class="tip">
 			<span class="subhead">

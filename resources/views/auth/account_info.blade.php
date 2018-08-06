@@ -123,7 +123,7 @@
                 </select>
                 <br>
                 <input type="text" name="business_website" placeholder="Business Website"/>
-                <input type="text" name="requested_email" placeholder="Requested email"/>
+                <input type="email" name="requested_email" placeholder="Requested email" required />
                 <input type="button" name="previous" class="previous action-button-previous" value="Previous"/>
                 <input type="button" name="next" class="next action-button" value="Next"/>
             </fieldset>
