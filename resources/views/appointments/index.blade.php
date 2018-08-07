@@ -61,7 +61,7 @@
 	$(document).ready(function() {
 		var wholehtml = $('.takehtml').html();
 		$.ajax({
-            url : '/ajaxappointment',
+            url : '{{ url("ajaxappointment") }}',
             method : "POST",
             data : {_token: '{{ csrf_token() }}', gjs_html: wholehtml, gjs_css: htmlcss },
             dataType : "JSON",

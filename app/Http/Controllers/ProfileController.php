@@ -77,7 +77,7 @@ class ProfileController extends Controller
         return redirect('/profile')->with('success', trans('profile.updateSuccess'));
     }
 
-      public function UserBusinessProfile()
+    public function UserBusinessProfile()
     {
         $userid           =   Auth::id();
         $UserBusinessData =   Business::where('user_id', $userid)->first();
@@ -86,7 +86,7 @@ class ProfileController extends Controller
         ];
         return view('profiles.UserBusinessProfileEdit')->with($data);
     }
-       public function updateUserBusinessAccount(Request $request)
+    public function updateUserBusinessAccount(Request $request)
     {
         $userid            =   Auth::id();
         $business_profile_validator = $this->business_profile_validator($request->all());
@@ -108,7 +108,7 @@ class ProfileController extends Controller
         $UserBusinessDetails->email             = $request->input('business_email');
         $UserBusinessDetails->website           = $request->input('business_website');
         $UserBusinessDetails->paypal            = $request->input('offer_paypal_account');
-    $UserBusinessDetails->paypal_email          = $request->input('business_paypal_email');
+        $UserBusinessDetails->paypal_email          = $request->input('business_paypal_email');
         $UserBusinessDetails->public_email      = $request->input('business_public_email');
         $UserBusinessDetails->email2            = $request->input('business_secondary_email');
         $UserBusinessDetails->offer_cancellation = $request->input('offer_cancellation');

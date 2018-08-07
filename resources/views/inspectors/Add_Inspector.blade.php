@@ -4,12 +4,12 @@
     <div class="signup_section">
         <div class="signup_cont">
             <h3>New Inspector</h3>
-            <form role="form" method="post" action="{{action('InspectorController@save_inspector')}}">
+            {!! Form::open([ 'route' => ['StoreInspector'],'method' => 'post'] ) !!}
                 {{ csrf_field() }}
                 <div class="form-group has-feedback {{ $errors->has('firstname') ? ' has-error ' : '' }}">
                 <div class="col-12">
-                 {!! Form::label('firstname', trans('profile.firstname') , array('class' => 'col-12 control-label')); !!}
-                {!! Form::text('firstname',NULL, array('id' => 'firstname', 'class' => 'form-control', 'placeholder' => trans('profile.firstname'))) !!}
+                {!! Form::label('firstname', trans('profile.firstname') , array('class' => 'col-12 control-label')); !!}
+                {!! Form::text('firstname',NULL, array('id' => 'firstname', 'class' => 'form-control', 'placeholder' => trans('profile.firstname'), 'required' => 'required')) !!}
                 <span class="glyphicon {{ $errors->has('firstname') ? ' glyphicon-asterisk ' : ' ' }} form-control-feedback" aria-hidden="true"></span>
                 @if ($errors->has('firstname'))
                 <span class="help-block">
@@ -20,7 +20,7 @@
 
                  <div class="col-12">
                  {!! Form::label('lastname', trans('profile.lastname') , array('class' => 'col-12 control-label')); !!}
-                {!! Form::text('lastname',NULL, array('id' => 'lastname', 'class' => 'form-control', 'placeholder' => trans('profile.lastname'))) !!}
+                {!! Form::text('lastname',NULL, array('id' => 'lastname', 'class' => 'form-control', 'placeholder' => trans('profile.lastname'),  'required' => 'required')) !!}
                 <span class="glyphicon {{ $errors->has('lastname') ? ' glyphicon-asterisk ' : ' ' }} form-control-feedback" aria-hidden="true"></span>
                 @if ($errors->has('lastname'))
                 <span class="help-block">
@@ -32,7 +32,7 @@
 
                     <div class="col-12">
                
-                {!! Form::text('email',NULL, array('id' => 'email', 'class' => 'form-control', 'placeholder' => 'Email')) !!}
+                {!! Form::email('email',NULL, array('id' => 'txtemail', 'class' => 'form-control', 'placeholder' => 'Email', 'required' => 'required')) !!}
                 <span class="glyphicon {{ $errors->has('email') ? ' glyphicon-asterisk ' : ' ' }} form-control-feedback" aria-hidden="true"></span>
                 @if ($errors->has('email'))
                 <span class="help-block">
@@ -44,7 +44,7 @@
 
                  <div class="col-12">
                 {!! Form::label('backupEmail', trans('profile.backupEmail') , array('class' => 'col-12 control-label')); !!}
-                {!! Form::text('backupEmail',NULL, array('id' => 'backupEmail', 'class' => 'form-control', 'placeholder' => trans('profile.backupEmail'))) !!}
+                {!! Form::email('backupEmail',NULL, array('id' => 'backupEmail', 'class' => 'form-control', 'placeholder' => trans('profile.backupEmail'))) !!}
                 <span class="glyphicon {{ $errors->has('backupEmail') ? ' glyphicon-asterisk ' : ' ' }} form-control-feedback" aria-hidden="true"></span>
                 @if ($errors->has('backupEmail'))
                 <span class="help-block">
@@ -55,8 +55,8 @@
 
 
                  <div class="col-12">
-                 {!! Form::label('username', trans('profile.username') , array('class' => 'col-12 control-label')); !!}
-                {!! Form::text('username',NULL, array('id' => 'username', 'class' => 'form-control', 'placeholder' => trans('profile.username'))) !!}
+                {!! Form::label('username', trans('profile.username') , array('class' => 'col-12 control-label')); !!}
+                {!! Form::text('username',NULL, array('id' => 'username', 'class' => 'form-control', 'placeholder' => trans('profile.username'),  'required' => 'required')) !!}
                 <span class="glyphicon {{ $errors->has('username') ? ' glyphicon-asterisk ' : ' ' }} form-control-feedback" aria-hidden="true"></span>
                 @if ($errors->has('username'))
                 <span class="help-block">
@@ -68,11 +68,11 @@
                   <div class="col-12">
                     <input name="password" id="password" type="password" class="{{ $errors->has('password') ? ' is-invalid' : '' }} form-control" placeholder="Password"  autofocus>
 
-                   @if ($errors->has('password'))
+                    @if ($errors->has('password'))
                        <span class="invalid-feedback">
                            <strong>{{ $errors->first('password') }}</strong>
                        </span>
-                   @endif
+                    @endif
                    
                    <!-- Confirm Password -->
                    <input name="password_confirmation" id="password-confirm" type="password" placeholder="Confirm Password" class="form-control"  autofocus>
@@ -106,7 +106,7 @@
                         {!! Form::Label('Inspector Masking', 'Inspector Masking') !!}
                         <br>
                         <span>Hide this Inspector from public booking view..</span>
-                        {{ Form::checkbox('throttle',1,null) }}
+                        {{ Form::checkbox('masking',1,null) }}
                     </div>
                     </div>
                        <div class="col-12">

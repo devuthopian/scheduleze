@@ -50,6 +50,7 @@ class PanelController extends Controller
         $id = Session::get('id');
         $hashvalue = Session::get('hashvalue');
         $data = Input::get();
+        $username = session('username');
 
         if(empty($hashvalue)){
             $hashvalue = str_replace ('/', '', Hash::make($username, ['Saringan'=>'Naruto Uzumaki! Road To Ninja.']));
@@ -95,21 +96,33 @@ class PanelController extends Controller
      */
     public function store(Request $request, $id)
     {
-        $username = Session::get('username');
+        //$username = Session::get('username');
+        $username = session('username');
         $hashvalue = Session::get('hashvalue');
         $data = Input::get();
         if(empty($hashvalue)){
             $hashvalue = str_replace ('/', '', Hash::make($username, ['Saringan'=>'Naruto Uzumaki! Road To Ninja.']));
             Session::put('hashvalue', $hashvalue);
         }
+
+        if(empty($data['gjs-styles'])){
+            $gjs_styles = '';
+        }else{
+            $gjs_components = $data['gjs-styles'];
+        }
+        if(empty($data['gjs-components'])){
+            $gjs_components = '';
+        }else{
+            $gjs_components = $data['gjs-components'];
+        }
         $PanelTemplate = PanelTemplate::updateOrCreate(
             ['user_id' => $id],
             [
                 'gjs_assets' => $data['gjs-assets'], 
                 'gjs_css' => $data['gjs-css'], 
-                'gjs_styles' => $data['gjs-styles'],
+                'gjs_styles' => $gjs_styles,
                 'gjs_html' => $data['gjs-html'],
-                'gjs_components' => $data['gjs-components'],
+                'gjs_components' => $gjs_components,
                 'unqiue_url' => $hashvalue
             ]
         );

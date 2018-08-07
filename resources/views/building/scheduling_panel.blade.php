@@ -2,10 +2,10 @@
 <link rel="stylesheet" href="{{ URL::asset('dist/grapesjs-preset-webpage.min.css') }}">
 <script src="{{ URL::asset('js/editor.js') }}"></script>
 <script src="{{ URL::asset('js/filestack-0.1.10.js') }}"></script>
-<script src="https://unpkg.com/grapesjs"></script>
+<script src="{{ URL::asset('dist/grapes.js') }}"></script>
 <script src="{{ URL::asset('dist/grapesjs-preset-webpage.min.js') }}"></script>
 <script src="{{ URL::asset('dist/grapesjs-lory-slider.min.js') }}"></script>
-<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="{{ URL::asset('js/jquery-3.2.1.min.js') }}"></script>
 <link href="{{ asset('css/fontawesome.css') }}" rel="stylesheet">
 <link rel="stylesheet" href="{{ URL::asset('css/style.css') }}">
 @include('layouts.includes.front.header')
@@ -36,13 +36,14 @@
     <button id="btnSave"><i class="fa fa-save" aria-hidden="true"></i> Save</button>
 </div>
 <script type="text/javascript">
+
     //grapejs editor
     var editor = grapesjs.init({
         height: '100%',
         showOffsets: 1,
         noticeOnUnload: 0,
         container: '#gjs',
-        fromElement: true,
+        fromElement: false,
         plugins: [/*'gjs-plugin-forms',*/'gjs-preset-webpage'],
         pluginsOpts: {
             /*'gjs-plugin-forms': {
@@ -66,6 +67,8 @@
                 console.log('before send');
             },
             contentTypeJson: true,
+            storeComponents: false,
+            storeStyles: false,
         },
         assetManager: {
             // Upload endpoint, set `false` to disable upload, default `false`
@@ -78,6 +81,8 @@
             headers: { 'X-CSRF-Token': '{{ csrf_token() }}' },
         },
     });
+
+    
 
     editor.on('storage:end:store', (resultObject) => {
         if (resultObject.message) {
@@ -98,21 +103,40 @@
         defaults: 'none'
     });
 
+
     editor.on('storage:end:load', (resultObject) => {
         if (resultObject.url) {
-            console.log(resultObject.gjs-html);
+            const html = resultObject.html;
+            const components = resultObject.components;
+            const css = resultObject.css;
+            const style = resultObject.style;
+
+            editor.CssComposer.getAll().reset();
+            editor.setComponents(html);
+            //editor.setHtml(html);
+            //editor.setCss(css);
+            editor.setStyle(css);
+
+            const LandingPage = {
+                html: resultObject.html,
+                css: resultObject.css,
+                components: resultObject.components,
+                style: resultObject.style,
+            };
+            console.log('Response is always good.');
         }
     });
-
     //editor.getSelected().addStyle({'background-image': `url(${url})`});
 
     $('#btnSave').click(function(event) {
         /* Act on the event */
         event.preventDefault();
+        //editor.load(res => console.log('Load callback'));
         editor.store(res => console.log('Store callback'));
 
         //editor.runCommand('gjs-export-zip');
     });
+
 
 /*
     // Get DomComponents module

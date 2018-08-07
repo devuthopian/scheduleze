@@ -7,19 +7,26 @@ use App\User;
 use App\Business;
 use App\UserDetails;
 use Auth;
+use App\Inspector;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Input;
 
 
 class InspectorController extends Controller
 {
+    
     /**
-     * Create a new controller instance.
-     *
-     * @return void
+     * @var Upload path
+     */
+    protected $businessid = '';
+    
+    /**
+     * Constructor
      */
     public function __construct()
     {
         $this->middleware('auth');
+        $this->businessid = session('business_id');
     }
 
     public function Inspector_Profile_Validator(array $data)
@@ -43,30 +50,39 @@ class InspectorController extends Controller
     {
         return view('inspectors.Add_Inspector');
     }
-       public function save_inspector(Request $request)
-    {
-        $userid            =   Auth::id();
-        $Inspector_Profile_Validator = $this->Inspector_Profile_Validator($request->all());
-        if ($Inspector_Profile_Validator->fails()) {
-            return back()->withErrors($Inspector_Profile_Validator)->withInput();
-        }
-            $user = User::create([
-            'name' => $request->input('username'),
-            'email' => $request->input('email'),
-            'password' => bcrypt( $request->input('password')),
-            'verified' => 1,
-            ]);
+    public function store(Request $request)
+    {        
+        $businessid = $this->businessid;
+        $data = Input::get();
 
-            $userInfo = UserDetails::create([
-            'user_id' => $user->id,
-            'name' => $request->input('firstname'),
-            'email2' =>  $request->input('backupEmail'),
-            'padding_day' =>  $request->input('padding_day'),
-            'look_ahead' => $request->input('day_forward'),
-            'throttle' => $request->input('throttle'),
-            'permission' => $request->input('permission'),
-            ]);
+        $validatedData = Validator::make($request->all(), [
+            'username' => 'required|string|unique:inspectors,username',
+            'email' => 'required|string|unique:inspectors,email',
+            'password' => 'required|confirmed',
+        ]);
+
+        if ($validatedData->fails()) {
+            return redirect('/add_inspector')->withErrors($validatedData)->withInput();
+        }
+
+        $Inspector = Inspector::updateOrCreate(
+            ['business' => $businessid, 'removed' => '0'],
+            [
+                'business' => $businessid,
+                'hidden' => $data['masking'],
+                'name' => $data['firstname'],
+                'lastname' => $data['lastname'],
+                'username' => $data['username'],
+                'email' => $data['email'],
+                'email2' => $data['backupEmail'],
+                'password' => bcrypt($data['password']),
+                'padding_day' => $data['padding_day'],
+                'look_ahead' => $data['day_forward'],
+                'throttle' => $data['throttle'],
+                'permission' => $data['permission']
+            ]
+        );
   
-        return redirect('/add_inspector')->with('success', trans('profile.updateSuccess'));
+        return redirect('/scheduling_solutions')->with('success', 'Successfully Saved!');
     }
 }
