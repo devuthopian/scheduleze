@@ -15,7 +15,7 @@ Auth::routes();
 
 
 
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web']], function () {
 	Route::get('/home', 'HomeController@index')->name('home');
 	Route::get('/', 'SchedulezeController@scheduling_solutions');
 	Route::get('/demo', 'SchedulezeController@demo')->name('demo');
@@ -30,7 +30,7 @@ Route::group(['middleware' => 'web'], function () {
  
 	Route::get('/login/{social}/callback','Auth\LoginController@handleProviderCallback')->where('social','twitter|facebook|linkedin|google|github|bitbucket');
 
-	Route::group(['middleware' => 'auth'], function() {
+	Route::group(['middleware' => ['auth']], function() {
 		Route::get('/scheduling_solutions', 'SchedulezeController@scheduling_solutions')->name('scheduling_solutions');
 		Route::get('/template/schedulepanel', 'SchedulezeController@scheduling_panel')->name('schedulepanel');
 		Route::get('/success_stories', 'SchedulezeController@success_stories')->name('success_stories');
@@ -61,7 +61,7 @@ Route::group(['middleware' => 'web'], function () {
 		Route::get('/business_info', 'ProfileController@UserBusinessProfile')->name('business_info');
 		Route::post('/business_info_update', 'ProfileController@updateUserBusinessAccount')->name('business_info_update');
 
-		Route::get('/add_inspector', 'InspectorController@add_inspector')->name('AddInspector');
+		Route::get('/scheduleze/add_inspector', 'InspectorController@add_inspector')->name('AddInspector');
 		Route::post('/inspector/save', 'InspectorController@store')->name('StoreInspector');
 	});
 });
