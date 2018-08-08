@@ -65,6 +65,7 @@ class SchedulezeController extends Controller
         $id = session('id');
         $businessinfo = PanelTemplate::where('user_id',$id)->first();
         $html = $businessinfo->gjs_html;
+
        /* $sizes = $businessinfo->BuildingSizes;
         $types = $businessinfo->BuildingTypes;
         $addons = $businessinfo->Addons;

@@ -24,7 +24,7 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('/contact', 'SchedulezeController@contact')->name('contact');
 	Route::get('/user/verify/{token}', 'Auth\RegisterController@verifyUser');
 
-	Route::get('/template/{value}', 'PanelController@show');
+	//Route::get('/template/{value}', 'PanelController@show');
     Route::post('login/{inspector?}', 'Auth\InspectorAuthController@login');
 
 	Route::get('/login/{social}','Auth\LoginController@socialLogin')->where('social','twitter|facebook|linkedin|google|github|bitbucket');
