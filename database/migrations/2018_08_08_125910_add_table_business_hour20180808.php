@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddBusinessHoursTable20180806 extends Migration
+class AddTableBusinessHour20180808 extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,7 @@ class AddBusinessHoursTable20180806 extends Migration
     {
         Schema::create('bushour', function (Blueprint $table) {
             $table->increments('id')->unique();
-            $table->unsignedInteger('inspector')->nullable()->default('0');
+            $table->unsignedInteger('user_id')->nullable()->default('0');
             $table->unsignedInteger('business')->default('0');
             $table->integer('starttime')->nullable();
             $table->integer('endtime')->nullable();
@@ -26,6 +26,7 @@ class AddBusinessHoursTable20180806 extends Migration
             $table->index('day')->unsigned()->nullable();
             $table->index('removed')->unsigned()->nullable();
             $table->foreign('business')->references('id')->on('business');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

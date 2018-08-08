@@ -76,8 +76,8 @@ if(! function_exists('getallIndustries')){
 }
 
 if(! function_exists('hour_popup')){
-	function hour_popup ($hour, $designate) {
-		$popup ="\t\t\t\t<select name=\"hour[".$designate."]\" class=\"smallselect\" required>\n";
+	function hour_popup ($hour, $designate, $session) {
+		$popup ="\t\t\t\t<select name=\"hour".$session."[".$designate."]\" class=\"smallselect\" required>\n";
 			$popup .="\t\t\t\t<option value=\"\" selected></option>\n";
 			$popup .="\t\t\t\t<option value=\"12\">12</option>\n";
 			$popup .="\t\t\t\t<option value=\"1\">1</option>\n";
@@ -97,8 +97,8 @@ if(! function_exists('hour_popup')){
 }
 
 if(! function_exists('minute_popup')){
-	function minute_popup ($minute, $designate) {
-		$popup ="\t\t\t\t<select name=\"minute".$designate."\" class=\"smallselect\">\n";
+	function minute_popup ($minute, $designate, $session) {
+		$popup ="\t\t\t\t<select name=\"minute".$session."[".$designate."]\" class=\"smallselect\">\n";
 		$popup .="\t\t\t\t	<option value=\"$minute\" selected>$minute</option>\n";
 		$popup .="\t\t\t\t	<option value=\"00\">00</option>\n";
 		$popup .="\t\t\t\t	<option value=\"15\">15</option>\n";
@@ -131,8 +131,8 @@ if(! function_exists('get_day_name')){
 }
 
 if(! function_exists('am_popup')){
-	function am_popup($am, $designate) {
-		$popup ="\t\t\t\t<select name=\"am".$designate."\" class=\"smallselect\">\n";
+	function am_popup($am, $designate, $session) {
+		$popup ="\t\t\t\t<select name=\"am".$session."[".$designate."]\" class=\"smallselect\">\n";
 		$popup .="\t\t\t\t	<option value=\"$am\" selected>$am</option>\n";
 		$popup .="\t\t\t\t	<option value=\"AM\">AM</option>\n";
 		$popup .="\t\t\t\t	<option value=\"PM\">PM</option>\n";

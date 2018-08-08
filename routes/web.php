@@ -40,6 +40,7 @@ Route::group(['middleware' => ['web']], function () {
 
 		Route::get('/scheduleze/appointments','AppointmentController@index');
 		Route::get('/scheduleze/BusinessHours', 'SchedulezeController@BusinessHours');
+		Route::post('/scheduleze/storebusinesshours', 'SchedulezeController@BusinessHours')->name('BusinessHours');
 
 		Route::post('/store-template/{value}', 'PanelController@store');
 		Route::post('/template/store/{value}', 'PanelController@update');

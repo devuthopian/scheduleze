@@ -14,7 +14,7 @@
                             <input type="submit" name="Submit" class="submit" value="Switch">
                             <input type="hidden" name="action" value="business_hours">
                         </form>
-                        <form action="#" method="post">
+                        <form action="{{ route('BusinessHours') }}" method="post">
                             Please select your normal working hours for each day
                             <br><span class="note">Specify reoccurring blockouts, like the second Tuesday of each month on your <a href="#" class="note_link">Reoccurring Blockouts</a> page.</span>
                             <br>
@@ -32,8 +32,8 @@
                                    	 	@for($i=0;$i<7;$i++)
                                    	 		<tr>
 	                                    		<td>{!! get_day_name($i) !!}</td>
-	                                    		<td>{!! hour_popup('',$i).''.minute_popup('',$i).''.am_popup('',$i) !!}</td>
-	                                    		<td>{!! hour_popup('',$i).''.minute_popup('',$i).''.am_popup('',$i) !!}</td>
+	                                    		<td>{!! hour_popup('',$i, 'open').''.minute_popup('',$i, 'open').''.am_popup('',$i, 'open') !!}</td>
+	                                    		<td>{!! hour_popup('',$i, 'close').''.minute_popup('',$i, 'close').''.am_popup('',$i, 'close') !!}</td>
 	                                    		<td><input type="checkbox" name="txtclosedday">Close All day</td>
 	                                    	</tr>
                                     	@endfor
