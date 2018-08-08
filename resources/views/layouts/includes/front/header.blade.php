@@ -17,6 +17,7 @@
                     </ul>
                 </nav>
                 @else
+                @php $hashvalue = session('hashvalue'); @endphp
                 <nav>
                     <a href="#" class="n_toggle"><i class="fa fa-bars fa-2x"></i></a>
                     <ul>
@@ -27,7 +28,11 @@
                             <a href="#">Appointments</a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="{{ url('scheduleze/appointments') }}">Add Appointment</a>
+                                    @if(!empty($hashvalue))
+                                        <a href="{{ url('template/') }}/{{$hashvalue}}">Add Appointment</a>
+                                    @else
+                                        <a href="{{ url('scheduleze/appointments') }}">Add Appointment</a>
+                                    @endif
                                 </li>
                                 <li>
                                     <a href="#">My Tickets</a>
@@ -50,7 +55,7 @@
                                     <a href="#">Recurring</a>
                                 </li>
                                 <li>
-                                    <a href="#">Business Hours</a>
+                                    <a href="{{ url('scheduleze/BusinessHours') }}">Business Hours</a>
                                 </li>
                             </ul>
                         </li>

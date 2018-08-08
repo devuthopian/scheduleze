@@ -31,6 +31,18 @@ class SchedulezeController extends Controller
     }
 
      /**
+     * Show the application business hours.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+    public function BusinessHours()
+    {
+        return view('appointments.business_hours');
+    }
+
+
+     /**
      * Show the application success stories page.
      *
      * @return \Illuminate\Http\Response

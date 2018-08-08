@@ -12,4 +12,9 @@ class PanelTemplate extends Model
 	public function getTableColumns() {
         return $this->getConnection()->getSchemaBuilder()->getColumnListing($this->getTable());
     }
+
+    /*public function user()
+    {
+        return $this->belongsTo('App\User', 'user_id');
+    }*/
 }

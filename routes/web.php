@@ -24,7 +24,8 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('/contact', 'SchedulezeController@contact')->name('contact');
 	Route::get('/user/verify/{token}', 'Auth\RegisterController@verifyUser');
 
-	
+	Route::get('/template/{value}', 'PanelController@show');
+    Route::post('login/{inspector?}', 'Auth\InspectorAuthController@login');
 
 	Route::get('/login/{social}','Auth\LoginController@socialLogin')->where('social','twitter|facebook|linkedin|google|github|bitbucket');
  
@@ -38,13 +39,13 @@ Route::group(['middleware' => ['web']], function () {
 		Route::post('ajaxappointment', 'PanelController@storeAppointment');
 
 		Route::get('/scheduleze/appointments','AppointmentController@index');
+		Route::get('/scheduleze/BusinessHours', 'SchedulezeController@BusinessHours');
 
 		Route::post('/store-template/{value}', 'PanelController@store');
 		Route::post('/template/store/{value}', 'PanelController@update');
 		Route::get('/load-template/{value}', 'PanelController@index');
 		Route::post('/template/images/{value}', 'PanelController@saveimagetemplate');
-		Route::get('/template/{value}', 'PanelController@show');
-
+		
 		Route::get('/form/{name?}', 'BuildingController@index')->name('Building');
 		Route::post('/storebuild', 'BuildingController@store')->name('storebuild');
 		Route::post('/ajaxrequest', 'BuildingController@updatebuild');

@@ -29,14 +29,18 @@ class User extends Authenticatable
 
     public function verifyUser()
     {
-    return $this->hasOne('App\VerifyUser');
+        return $this->hasOne('App\VerifyUser');
     }
-     public function business()
+    public function business()
     {
-    return $this->hasOne('App\Business');
+        return $this->hasOne('App\Business');
     }
-     public function user_details()
+    public function user_details()
     {
-    return $this->hasOne('App\UserDetails');
+        return $this->hasOne('App\UserDetails');
     }
+    /*public function Panel($id)
+    {
+        return $this->hasOne('App\PanelTemplate','user_id='.$id);
+    }*/
 }

@@ -18,13 +18,18 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        $id = session('business_id');
-        $businessinfo = Business::find($id);
-        $ages = $businessinfo->BuildingAges;
-        $sizes = $businessinfo->BuildingSizes;
-        $types = $businessinfo->BuildingTypes;
-        $addons = $businessinfo->Addons;
-        $Location = $businessinfo->Location->pluck('name', 'id');
+        $id = session('id');
+        $businessinfo = Business::where('user_id',$id)->first();
+        $ages = !empty($businessinfo->BuildingAges) ? $businessinfo->BuildingAges : '';
+        $sizes = !empty($businessinfo->BuildingSizes) ? $businessinfo->BuildingSizes : '';
+        $types = !empty($businessinfo->BuildingTypes) ? $businessinfo->BuildingTypes : '';
+        $addons = !empty($businessinfo->Addons) ? $businessinfo->Addons : '';
+
+        if($businessinfo){
+            $Location = $businessinfo->Location->pluck('name', 'id');
+        }else{
+            $Location = '';
+        }
 
         return view('appointments.index', compact('businessinfo', 'ages', 'sizes', 'types','addons','Location'));
     }

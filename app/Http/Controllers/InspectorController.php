@@ -7,7 +7,10 @@ use App\User;
 use App\Business;
 use App\UserDetails;
 use Auth;
-use App\Inspector;
+use App\Users;
+use Mail;
+use App\VerifyUser;
+use App\Mail\VerifyMail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
 
@@ -62,27 +65,37 @@ class InspectorController extends Controller
         ]);
 
         if ($validatedData->fails()) {
-            return redirect('/add_inspector')->withErrors($validatedData)->withInput();
+            return redirect('/scheduleze/add_inspector')->withErrors($validatedData)->withInput();
         }
 
-        $Inspector = Inspector::updateOrCreate(
-            ['business' => $businessid, 'removed' => '0'],
-            [
-                'business' => $businessid,
-                'hidden' => $data['masking'],
-                'name' => $data['firstname'],
-                'lastname' => $data['lastname'],
-                'username' => $data['username'],
-                'email' => $data['email'],
-                'email2' => $data['backupEmail'],
-                'password' => bcrypt($data['password']),
-                'padding_day' => $data['padding_day'],
-                'look_ahead' => $data['day_forward'],
-                'throttle' => $data['throttle'],
-                'permission' => $data['permission']
-            ]
-        );
-  
-        return redirect('/scheduling_solutions')->with('success', 'Successfully Saved!');
+        $user = User::create([
+            //'name' => $data['name'],
+            'email' => $data['email'],
+            'name' => $data['username'],
+            'password' => bcrypt($data['password'])            
+        ]);
+ 
+        $verifyUser = VerifyUser::create([
+            'user_id' => $user->id,
+            'token' => str_random(40)
+        ]);
+
+        UserDetails::create([
+            'user_id' => $user->id,
+            'indus_id' => 0,
+            'business' => $businessid,
+            'hidden' => $data['masking'],
+            'lastname' => $data['lastname'],
+            'name' => $data['firstname'],
+            'email2' => $data['backupEmail'],
+            'padding_day' => $data['padding_day'],
+            'look_ahead' => $data['day_forward'],
+            'throttle' => $data['throttle'],
+            'permission' => $data['permission']
+        ]);
+        
+        Mail::to($user->email)->send(new VerifyMail($user));
+
+        return redirect('/scheduling_solutions')->with('status', 'We sent '.$data["username"].' an activation code.');
     }
 }

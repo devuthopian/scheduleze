@@ -8,8 +8,11 @@ use Illuminate\Http\Request;
 
 use Socialite;
 use App\User;
+use Illuminate\Validation\ValidationException;
 use App\Business;
+use App\PanelTemplate;
 use Auth;
+use App\Http\Controllers\Auth\InspectorAuthController;
 
 class LoginController extends Controller
 {
@@ -24,9 +27,46 @@ class LoginController extends Controller
     |
     */
 
+    /**
+     * Where to redirect users after login.
+     *
+     * @var string
+     */
+    protected $redirectTo = '/scheduling_solutions';
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('guest')->except('logout');
+    }
+    use InspectorAuthController;
     use AuthenticatesUsers {
         logout as performLogout;
     }
+
+    /**
+    * Get the failed login response instance.
+    *
+    * @param  \Illuminate\Http\Request  $request
+    * @return \Symfony\Component\HttpFoundation\Response
+    *
+    * @throws \Illuminate\Validation\ValidationException
+    */
+    /*protected function sendFailedLoginResponse(Request $request)
+    {
+        $data = $this->loginInspector($request);
+        if($data == true){
+            return redirect('/scheduling_solutions')->with('warning', 'You logged in as Inspector');
+        }else{
+            throw ValidationException::withMessages([
+                $this->username() => [trans('auth.failed')],
+            ]);
+        }
+    }*/
 
     /**
     * Override the username method used to validate login
@@ -44,30 +84,20 @@ class LoginController extends Controller
             auth()->logout();
             return back()->with('warning', 'You need to confirm your account. We have sent you an activation code, please check your email.');
         }
-        session(['id' => $user->id, 'username' => $user->name]);
+        //$PanelTemplate = $user->Panel($user->id);
+        $PanelTemplate = PanelTemplate::where('user_id',$user->id)->first();
+        session(['id' => $user->id, 'username' => $user->name, 'hashvalue' => $PanelTemplate->unqiue_url]);
         $business = Business::where('user_id', $user->id)->first();
 
         if($business){
             session(['business_id' => $business->id]);
         }
+        if(!empty($PanelTemplate->unqiue_url)){
+            return redirect('/template/'.$PanelTemplate->unqiue_url);
+        }
+
         return redirect()->intended($this->redirectPath());
-    }
-
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/scheduling_solutions';
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('guest')->except('logout');
+        
     }
 
     public function logout(Request $request)
@@ -129,7 +159,13 @@ class LoginController extends Controller
 
             Auth::login($user);
 
-            return redirect('/scheduling_solutions')->with('status', 'You Temporary Password is '.$randpass.'. Please change it in profile section!');
+            $hashvalue = session('hashvalue');
+            if(!empty($hashvalue)){
+                $return = '/template'.$hashvalue;
+            }else{
+                $return = $this->redirectPath();
+            }
+            return redirect($return)->with('status', 'You Temporary Password is '.$randpass.'. Please change it in profile section!');
 
         }
     }

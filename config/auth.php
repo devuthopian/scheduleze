@@ -41,6 +41,11 @@ return [
             'provider' => 'users',
         ],
 
+        'inspector'  => [
+            'driver'  => 'session',
+            'provider' => 'inspectors',
+        ],
+
         'api' => [
             'driver' => 'token',
             'provider' => 'users',
@@ -74,6 +79,11 @@ return [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
+
+        'inspectors' => [
+            'driver' => 'eloquent',
+            'model' => App\InspectorAuth::class,
+        ],
     ],
 
     /*
@@ -94,6 +104,11 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
+            'table' => 'password_resets',
+            'expire' => 60,
+        ],
+        'inspectors' => [
+            'provider' => 'inspectors',
             'table' => 'password_resets',
             'expire' => 60,
         ],

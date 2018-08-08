@@ -98,6 +98,7 @@
                         {!! Form::Label('Trim Day List', 'Trim Day List') !!}
                         <br>
                         <span>Throttle Schedule Openings (only show some available times after 10 days out).</span>
+                        <input type="hidden" name="throttle" value="0">
                         {{ Form::checkbox('throttle',1,NULL) }}
                     </div>
                     </div>
@@ -106,6 +107,7 @@
                         {!! Form::Label('Inspector Masking', 'Inspector Masking') !!}
                         <br>
                         <span>Hide this Inspector from public booking view..</span>
+                        <input type="hidden" name="masking" value="0">
                         {{ Form::checkbox('masking',1,null) }}
                     </div>
                     </div>
@@ -114,6 +116,7 @@
                         {!! Form::Label('User Privileges', 'User Privileges') !!}
                         <br>
                         <span>Is company administrator (can manage Inspectors for SV Inspection Service).</span>
+                        <input type="hidden" name="permission" value="0">
                         {{ Form::checkbox('permission',1,NULL) }}
                     </div>
                     </div>
