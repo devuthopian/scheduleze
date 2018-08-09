@@ -52,7 +52,7 @@
                                     <a href="#">Add Blockout</a>
                                 </li>
                                 <li>
-                                    <a href="#">Recurring</a>
+                                    <a href="{{ route('Reoccurrence') }}">Recurring</a>
                                 </li>
                                 <li>
                                     <a href="{{ url('scheduleze/BusinessHours') }}">Business Hours</a>

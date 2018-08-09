@@ -26,6 +26,16 @@ if (! function_exists('show_buffer')) {
     }
 }
 
+if (! function_exists('state')) {
+    function state()
+    {
+    	$html = "\t\t\t\t<select name=\"state\" size=\"1\" class=\"smallselect\">\n";
+    	$html .= "\t\t\t\t\t<option value=\"AK\">AK</option> <option value=\"AL\">AL</option> <option value=\"AR\">AR</option> <option value=\"AZ\">AZ</option> <option value=\"CA\">CA</option> <option value=\"CO\">CO</option> <option value=\"CT\">CT</option> <option value=\"DC\">DC</option> <option value=\"DE\">DE</option> <option value=\"FL\">FL</option> <option value=\"GA\">GA</option> <option value=\"HI\">HI</option> <option value=\"IA\">IA</option> <option value=\"ID\">ID</option> <option value=\"IL\">IL</option> <option value=\"IN\">IN</option> <option value=\"KS\">KS</option> <option value=\"KY\">KY</option> <option value=\"LA\">LA</option> <option value=\"MA\">MA</option> <option value=\"MD\">MD</option> <option value=\"ME\">ME</option> <option value=\"MI\">MI</option> <option value=\"MN\">MN</option> <option value=\"MO\">MO</option> <option value=\"MS\">MS</option> <option value=\"MT\">MT</option> <option value=\"NC\">NC</option> <option value=\"ND\">ND</option> <option value=\"NE\">NE</option> <option value=\"NH\">NH</option> <option value=\"NJ\">NJ</option> <option value=\"NM\">NM</option> <option value=\"NV\">NV</option> <option value=\"NY\">NY</option> <option value=\"OH\">OH</option> <option value=\"OK\">OK</option> <option value=\"OR\">OR</option> <option value=\"PA\">PA</option> <option value=\"RI\">RI</option> <option value=\"SC\">SC</option> <option value=\"SD\">SD</option> <option value=\"TN\">TN</option> <option value=\"TX\">TX</option> <option value=\"UT\">UT</option> <option value=\"VA\">VA</option> <option value=\"VT\">VT</option> <option value=\"WA\">WA</option> <option value=\"WI\">WI</option> <option value=\"WV\">WV</option> <option value=\"WY\">WY</option> <option value=\"\">--</option> <option value=\"AB\">AB</option> <option value=\"BC\">BC</option> <option value=\"MB\">MB</option> <option value=\"NB\">NB</option> <option value=\"NL\">NL</option> <option value=\"NT\">NT</option> <option value=\"NS\">NS</option> <option value=\"NU\">NU</option> <option value=\"ON\">ON</option> <option value=\"PE\">PE</option> <option value=\"QC\">QC</option> <option value=\"SK\">SK</option> <option value=\"YT\">YT</option>\n";
+		$html .= "</select>";
+		return $html;
+    }
+}
+
 
 if (! function_exists('show_day_padding')) {
     function show_day_padding($default_option='-1', $max = '20', $increment = '1')
@@ -46,8 +56,6 @@ if (! function_exists('show_day_padding')) {
 		return $html;
     }
 }
-
-
 
 if (! function_exists('show_day_forward')) {
     function show_day_forward($default_option='-1', $max = '20', $increment = '1')
@@ -72,6 +80,54 @@ if (! function_exists('show_day_forward')) {
 if(! function_exists('getallIndustries')){
 	function getallIndustries(){
 		return DB::table('industries')->pluck('page_name', 'id');
+	}
+}
+
+if(! function_exists('buildType')){
+	function buildType($id){
+		array_shift($id);
+		foreach ($id as $key => $value) {
+			if($key != 'reference_id'){
+				$getformdata = DB::table($key.'s')->select('name','price')->where('id',$id)->get();
+				if($getformdata->count()){
+					$getall[] = $getformdata[0]->name.' $'.$getformdata[0]->price;
+				}
+			}
+		}
+		return $getall;
+	}
+}
+
+if(! function_exists('username')){
+	function username($id){
+		
+		$getformdata = DB::table('users')->select('name')->where('id',$id)->get();
+		return $getformdata[0]->name;
+	}
+}
+
+if(! function_exists('getlocation')){
+	function getlocation($id){
+		
+		$getformdata = DB::table('locations')->select('name','price')->where('id',$id)->get();
+		return $getformdata[0]->name.' + $'.$getformdata[0]->price;;
+	}
+}
+
+if(! function_exists('CountAppFormCost')){
+	function CountAppFormCost($id){
+		array_shift($id);
+		$count = 0;
+		foreach ($id as $key => $value) {
+			if($key != 'reference_id'){
+				$getformdata = DB::table($key.'s')->select('price')->where('id',$value)->get();
+				if($getformdata->count()){
+					$price = $getformdata[0]->price;
+					$count = $price + $count;
+				}
+			}
+		}
+		return $count;
 	}
 }
 

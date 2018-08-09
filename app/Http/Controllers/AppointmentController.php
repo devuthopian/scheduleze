@@ -7,6 +7,7 @@ use App\Appointment;
 //use App\AppointmentForm;
 use App\Business;
 use App\BusinessHours;
+use App\PanelForm;
 use Illuminate\Support\Facades\Input;
 use Session;
 use DB;
@@ -33,7 +34,7 @@ class AppointmentController extends Controller
             $Location = '';
         }
 
-        return view('appointments.index', compact('businessinfo', 'ages', 'sizes', 'types','addons','Location'));
+        return view('appointments.index', compact('businessinfo', 'ages', 'sizes', 'types','addons','Location','id'));
     }
 
     /**
@@ -115,6 +116,27 @@ class AppointmentController extends Controller
     public function show($id)
     {
         //
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function bookingform(Request $request)
+    {
+        //$id = Session::get('id');
+        //$hashvalue = Session::get('hashvalue');
+        $data = Input::get();
+
+        //session(['appointments' => $data]);
+        //$username = session('username');
+        $panel_id = session('panel_id');
+
+        $PanelForm = PanelForm::where('panel_id',$panel_id)->first();
+
+        return view('appointments.appointment_form', compact('PanelForm','data'));
     }
 
     /**

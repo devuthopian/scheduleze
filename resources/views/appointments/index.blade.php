@@ -5,7 +5,7 @@
 	<div id="dontbreakdiv">
 		<div class="panel">
 			@if(!empty($businessinfo))
-			<form action="#" method="post">
+			{!! Form::open([ 'route' => ['BookingForm'],'method' => 'post'] ) !!}
 				Book your inspection now with <br>
 				@if(!empty($businessinfo))
 					{{ $businessinfo->name }} <br>
@@ -14,6 +14,7 @@
 				@endif
 
 				<br>
+				<input type="hidden" name="reference_id" value="{{ $id }}">
 				<span>Select Building Type Here</span>
 				<br>
 				<select name="building_type" class="" required>
@@ -51,7 +52,7 @@
 					@endforeach
 				</select>
 				<input type="submit" value="Find Appointment »"></p>
-			</form>
+			{!! Form::close() !!}
 			@endif
 		</div>
 	</div>
@@ -63,8 +64,9 @@
 <script type="text/javascript">
 	var htmlcss = '.gjs-cv-canvas{top:0;width:100%;height:100%}.panel{width:90%;max-width:700px;border-radius:3px;padding:30px 20px;margin:150px auto 0;background-color:#d983a6;box-shadow:0 3px 10px 0 rgba(0,0,0,0.25);color:rgba(255,255,255,0.75);font:caption;font-weight:100}.welcome{text-align:center;font-weight:100;margin:0}.logo{width:70px;height:70px;vertical-align:middle}.logo path{pointer-events:none;fill:none;stroke-linecap:round;stroke-width:7;stroke:#fff}.big-title{text-align:center;font-size:3.5rem;margin:15px 0}.description{text-align:justify;font-size:1rem;line-height:1.5rem}';
 	$(document).ready(function() {
-		@if(!empty($businessinfo)) 
+		@if(!empty($businessinfo))
 			var wholehtml = $('.takehtml').html();
+
 			$.ajax({
 	            url : '{{ url("ajaxappointment") }}',
 	            method : "POST",
@@ -72,7 +74,7 @@
 	            dataType : "JSON",
 	            success:function(data){
 	                console.log(data.message);
-	                $('.alert-info').html('<strong>Successfully saved!</strong> Click  <a href="{{ url("/template/schedulepanel") }}"><strong>here</strong></a> to change the look of your form.');
+	                $('.alert-info').html('<strong>Successfully saved!</strong> Click  <a href="{{ route("schedulepanel") }}"><strong>here</strong></a> to change the look of your form.');
 	            }
 	        });
 	    @else

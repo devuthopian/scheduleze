@@ -31,11 +31,11 @@ class SchedulezeController extends Controller
         return view('scheduleze.scheduling_solutions');
     }
 
-     /**
-     * Show the application business hours.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    /**
+    * Show the application business hours.
+    *
+    * @return \Illuminate\Http\Response
+    */
 
     public function BusinessHours()
     {
@@ -44,6 +44,19 @@ class SchedulezeController extends Controller
         return view('appointments.business_hours', compact('businesshours'));
     }
 
+    /**
+    * Show the application Blockouts hours.
+    *
+    * @return \Illuminate\Http\Response
+    */
+
+    public function blockouts_occurance()
+    {
+        $id = session('id');
+        //$businesshours = BusinessHours::where([['user_id','=',$id],['removed','=',0]])->get();
+        //return view('appointments.business_hours', compact('businesshours'));
+        return view('appointments.reoccurrence');
+    }
 
      /**
      * Show the application success stories page.

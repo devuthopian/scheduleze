@@ -92,9 +92,9 @@ class LoginController extends Controller
         if($business){
             session(['business_id' => $business->id]);
         }
-        if(!empty($PanelTemplate->unqiue_url)){
-            return redirect('/template/'.$PanelTemplate->unqiue_url);
-        }
+        //if(!empty($PanelTemplate->unqiue_url)){
+            //return redirect('/template/'.$PanelTemplate->unqiue_url);
+        //}
 
         return redirect()->intended($this->redirectPath());
         
@@ -160,11 +160,11 @@ class LoginController extends Controller
             Auth::login($user);
 
             $hashvalue = session('hashvalue');
-            if(!empty($hashvalue)){
-                $return = '/template'.$hashvalue;
-            }else{
+            //if(!empty($hashvalue)){
+                //$return = '/template'.$hashvalue;
+            //}else{
                 $return = $this->redirectPath();
-            }
+            //}
             return redirect($return)->with('status', 'You Temporary Password is '.$randpass.'. Please change it in profile section!');
 
         }

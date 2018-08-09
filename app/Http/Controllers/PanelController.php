@@ -61,6 +61,7 @@ class PanelController extends Controller
             $gjs_html = $paneltemp->gjs_html;
             if(!empty($gjs_html)){
                 $new_html = $data['gjs_html'];
+                $new_html = str_replace("$","\\$",$new_html);
                 $divid = "dontbreakdiv";
                 $gjs_html = preg_replace("#<div[^>]*id=\"{$divid}\".*?</div>#si",$new_html,$gjs_html);
                 $gjs_css = $paneltemp->gjs_css;
@@ -72,7 +73,6 @@ class PanelController extends Controller
             $gjs_html = $data['gjs_html'];
             $gjs_css = $data['gjs_css'];
         }
-
         $PanelTemplate = PanelTemplate::updateOrCreate(
             ['user_id' => $id],
             [   
@@ -127,6 +127,7 @@ class PanelController extends Controller
             ]
         );
         if($PanelTemplate->id){
+            session(['panel_id'=>$PanelTemplate->id]);
             $ans = array('message' => 'Successfully Saved!', 'sharelink' => $PanelTemplate->unqiue_url );
             return json_encode($ans);
         }else{
@@ -183,6 +184,7 @@ class PanelController extends Controller
         );
 
         if($PanelTemplate->id){
+            session(['panel_id'=>$PanelTemplate->id]);
             $ans = array('data' => $viewfile );
             return json_encode($ans);
         }
@@ -197,6 +199,7 @@ class PanelController extends Controller
     public function show($id)
     {
         $template = PanelTemplate::where('unqiue_url',$id)->orWhere('id', $id)->first();
+        session(['panel_id' => $template->id]);
         return view('building.template', compact('template'));
     }
 

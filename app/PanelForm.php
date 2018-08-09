@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Location extends Model
+class PanelForm extends Model
 {
-    protected $table = 'locations';
+    protected $table = 'appointment_form';
 	protected $guarded = [ 'id' ];
 
 	public function getTableColumns() {
