@@ -58,44 +58,40 @@ class AppointmentController extends Controller
         $business_id = session('business_id');
 
         $data = Input::get();
-
-        for($i = 0; $i < count($data['hour']); $i++) {
-            //$totalstart = $data['houropen'][$i] + $data['minuteopen'][$i];
-
-            $totalstart = $data['houropen'][$c].$data['minuteopen'][$c]
+        //dd(count($data['houropen']));
+        for($i = 0; $i < count($data['houropen']); $i++) {
+            $totalstart = $data['houropen'][$i].$data['minuteopen'][$i];
             if ($data['amopen'][$i]=="PM") {
                 if ($data['houropen'][$i]!="12") {
                     $totalstart = ($totalstart + 1200);
                 }
             } else { //AM case
-                if ($data['houropen'][$c]=="12") {
-                    $totalstart= "00".$data['minuteopen'][$c];
+                if ($data['houropen'][$i]=="12") {
+                    $totalstart= "00".$data['minuteopen'][$i];
                 }
             }
 
-            $totalend = $data['hourclose'][$c].$data['minuteclose'][$c]
+            $totalend = $data['hourclose'][$i].$data['minuteclose'][$i];
             if ($data['amclose'][$i]=="PM") {
                 if ($data['hourclose'][$i]!="12") {
                     $totalend = ($totalend + 1200);
                 }
             } else { //AM case
-                if ($data['hourclose'][$c]=="12") {
-                    $totalend= "00".$data['minuteclose'][$c];
+                if ($data['hourclose'][$i]=="12") {
+                    $totalend= "00".$data['minuteclose'][$i];
                 }
             }
-            
             $BuildingTypes = BusinessHours::updateOrCreate(
-                ['user_id' => $id,'removed' => '0'],
+                ['user_id' => $id,'day' => $i],
                 [
                     'user_id' => $id,
                     'business' => $business_id, 
-                    'starttime' => $totalstart[$i], 
-                    'endtime' => $totalend[$i],
+                    'starttime' => $totalstart, 
+                    'endtime' => $totalend,
                     'day' => $i
                 ]
             );
         }
-
         return redirect('/scheduleze/BusinessHours')->with('Successfully saved!');
     }
 

@@ -24,7 +24,7 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('/contact', 'SchedulezeController@contact')->name('contact');
 	Route::get('/user/verify/{token}', 'Auth\RegisterController@verifyUser');
 
-	//Route::get('/template/{value}', 'PanelController@show');
+	Route::get('/template/{value}', 'PanelController@show');
     Route::post('login/{inspector?}', 'Auth\InspectorAuthController@login');
 
 	Route::get('/login/{social}','Auth\LoginController@socialLogin')->where('social','twitter|facebook|linkedin|google|github|bitbucket');
@@ -33,14 +33,15 @@ Route::group(['middleware' => ['web']], function () {
 
 	Route::group(['middleware' => ['auth']], function() {
 		Route::get('/scheduling_solutions', 'SchedulezeController@scheduling_solutions')->name('scheduling_solutions');
-		Route::get('/template/schedulepanel', 'SchedulezeController@scheduling_panel')->name('schedulepanel');
+		Route::get('/scheduling/schedulepanel', 'SchedulezeController@scheduling_panel')->name('schedulepanel');
 		Route::get('/success_stories', 'SchedulezeController@success_stories')->name('success_stories');
+		Route::get('/scheduleze/BusinessHours', 'SchedulezeController@BusinessHours');
+
 
 		Route::post('ajaxappointment', 'PanelController@storeAppointment');
 
 		Route::get('/scheduleze/appointments','AppointmentController@index');
-		Route::get('/scheduleze/BusinessHours', 'SchedulezeController@BusinessHours');
-		Route::post('/scheduleze/storebusinesshours', 'SchedulezeController@BusinessHours')->name('BusinessHours');
+		Route::post('/scheduleze/storebusinesshours', 'AppointmentController@storebusinesshours')->name('StoreBusinessHours');
 
 		Route::post('/store-template/{value}', 'PanelController@store');
 		Route::post('/template/store/{value}', 'PanelController@update');

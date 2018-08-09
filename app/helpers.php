@@ -78,19 +78,16 @@ if(! function_exists('getallIndustries')){
 if(! function_exists('hour_popup')){
 	function hour_popup ($hour, $designate, $session) {
 		$popup ="\t\t\t\t<select name=\"hour".$session."[".$designate."]\" class=\"smallselect\" required>\n";
-			$popup .="\t\t\t\t<option value=\"\" selected></option>\n";
-			$popup .="\t\t\t\t<option value=\"12\">12</option>\n";
-			$popup .="\t\t\t\t<option value=\"1\">1</option>\n";
-			$popup .="\t\t\t\t<option value=\"2\">2</option>\n";
-			$popup .="\t\t\t\t<option value=\"3\">3</option>\n";
-			$popup .="\t\t\t\t<option value=\"4\">4</option>\n";
-			$popup .="\t\t\t\t<option value=\"5\">5</option>\n";
-			$popup .="\t\t\t\t<option value=\"6\">6</option>\n";
-			$popup .="\t\t\t\t<option value=\"7\">7</option>\n";
-			$popup .="\t\t\t\t<option value=\"8\">8</option>\n";
-			$popup .="\t\t\t\t<option value=\"9\">9</option>\n";
-			$popup .="\t\t\t\t<option value=\"10\">10</option>\n";
-			$popup .="\t\t\t\t<option value=\"11\">11</option>\n";
+		$popup .="\t\t\t\t<option value=\"\" selected></option>\n";
+		for ($i=1; $i <= 12; $i++) {
+			if($hour == $i || $hour == ''){
+				$selected  = 'selected';
+			}else{
+				$selected  = '';
+			}
+			
+			$popup .="\t\t\t\t<option value=\"$i\" $selected>$i</option>\n";
+		}
 		$popup .="\t\t\t\t</select>\n";
 		return $popup;
 	}

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Business;
+use App\BusinessHours;
 use App\PanelTemplate;
 
 class SchedulezeController extends Controller
@@ -38,7 +39,9 @@ class SchedulezeController extends Controller
 
     public function BusinessHours()
     {
-        return view('appointments.business_hours');
+        $id = session('id');
+        $businesshours = BusinessHours::where([['user_id','=',$id],['removed','=',0]])->get();
+        return view('appointments.business_hours', compact('businesshours'));
     }
 
 
