@@ -129,7 +129,6 @@ class AppointmentController extends Controller
         //$id = Session::get('id');
         //$hashvalue = Session::get('hashvalue');
         $data = Input::get();
-
         //session(['appointments' => $data]);
         //$username = session('username');
         $panel_id = session('panel_id');
