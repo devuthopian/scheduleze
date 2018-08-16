@@ -4,8 +4,20 @@
 <div class="takehtml">
 	<div id="dontbreakdiv">
 		<div class="panel">
+			@if(!empty($Inspector))
+				@php 
+					$countInspector = count($Inspector);
+					if($countInspector > 1){
+						$form = 'BookingAvailable';
+					}else{
+						$form = 'BookingForm';
+					}
+
+				@endphp
+
+			@endif
 			@if(!empty($businessinfo))
-			{!! Form::open([ 'route' => ['BookingForm'],'method' => 'post'] ) !!}
+			{!! Form::open([ 'route' => [$form],'method' => 'post', 'id' => 'txtForm'] ) !!}
 				Book your inspection now with <br>
 				@if(!empty($businessinfo))
 					{{ $businessinfo->name }} <br>
@@ -15,6 +27,7 @@
 
 				<br>
 				<input type="hidden" name="reference_id" value="{{ $id }}">
+				<input type="hidden" name="businessId" value="{{ $businessid }}">
 				<span>Select Building Type Here</span>
 				<br>
 				<select name="building_type" class="" required>
@@ -40,7 +53,7 @@
 				<p class="subhead">Please check all boxes that apply below:</p>
 				@php $i=0; @endphp
 				@foreach($addons as $addon)
-					<input type="checkbox" name="addon[{{$i}}]" id="{{ $addon->id }}">{{ $addon->name }} - ${{ $addon->price }}
+					<input type="checkbox" name="addon[{{$i}}]" id="{{ $addon->id }}" value="{{ $addon->id }}">{{ $addon->name }} - ${{ $addon->price }}
 					@php $i++; @endphp
 				@endforeach
 

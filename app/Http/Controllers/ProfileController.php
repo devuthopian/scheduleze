@@ -122,6 +122,11 @@ class ProfileController extends Controller
         $UserBusinessDetails->include_event_ics       = $request->input('include_event_ics');
 
         $UserBusinessDetails->save();
+
+        $UserDetails = UserDetails::firstOrNew(array('user_id' => $userid));
+        $UserDetails->business = $UserBusinessDetails->id;
+        $UserDetails->save();
+        
         return redirect('/business_info')->with('success', trans('profile.updateSuccess'));
     }
 

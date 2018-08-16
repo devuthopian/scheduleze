@@ -2,737 +2,199 @@
 
 @section('content')
 <div class="container">
-	<table width="960" border="0" cellspacing="0" cellpadding="0">
+	<table width="960" border="0" cellspacing="0" cellpadding="0" style="margin: 0 auto;">
     <tbody>
         <tr>
             <td bgcolor="white" valign="top">
                 <div class="frameadmin">
-                    <form action="index.php" method="post">
-                        <input type="hidden" name="action" value="reoccurrence">
-                        <span class="head">Set Recurring Blockouts</span>
-                        <br> Please specify any reoccurring time off for
-                        <select name="inspector" class="smallselect">
-                            <option value="60" selected="">Richard</option>
-                        </select>
-                        <input type="submit" name="Submit" class="submit" value="Switch">
-                        <br><span class="note">(For example, Sundays, every week, or the second Tuesday of each month)</span>
-                        <br>
-                        <br>
+                    <form class="recurring-form" action="#" method="post">
+                        <div class="col-md-5">
+                            <input type="hidden" name="action" value="reoccurrence">
+                            <span class="head">Set Recurring Blockouts</span>
+                            <br> Please specify any reoccurring time off for
+                        </div>
+                        <div class="col-md-5">
+                            <select name="inspector" class="smallselect">
+                                <option value="60" selected="">Richard</option>
+                            </select>
+                            <input type="submit" name="Submit" class="submit" value="Switch">
+                            <br><span class="note">(For example, Sundays, every week, or the second Tuesday of each month)</span>
+                        </div>
                     </form>
-                    <form action="index.php" method="post">
-                        Day:
-                        <select name="weekday[0reoc]" class="smallselect">
-                            <option value="nothing" selected="">None</option>
-                            <option value="0">Sunday</option>
-                            <option value="1">Monday</option>
-                            <option value="2">Tuesday</option>
-                            <option value="3">Wednesday</option>
-                            <option value="4">Thursday</option>
-                            <option value="5">Friday</option>
-                            <option value="6">Saturday</option>
-                        </select>
-                        Start
-                        <select name="hourstart[0]" class="smallselect">
-                            <option value="12" selected="">12</option>
-                            <option value="12">12</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                        </select>
-                        <select name="minutestart[0]" class="smallselect">
-                            <option value="00" selected="">00</option>
-                            <option value="00">00</option>
-                            <option value="15">15</option>
-                            <option value="30">30</option>
-                            <option value="45">45</option>
-                        </select>
-                        <select name="amstart[0]" class="smallselect">
-                            <option value="PM" selected="">PM</option>
-                            <option value="AM">AM</option>
-                            <option value="PM">PM</option>
-                        </select>
-                        End
-                        <select name="hourend[0]" class="smallselect">
-                            <option value="12" selected="">12</option>
-                            <option value="12">12</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                        </select>
-                        <select name="minuteend[0]" class="smallselect">
-                            <option value="00" selected="">00</option>
-                            <option value="00">00</option>
-                            <option value="15">15</option>
-                            <option value="30">30</option>
-                            <option value="45">45</option>
-                        </select>
-                        <select name="amend[0]" class="smallselect">
-                            <option value="PM" selected="">PM</option>
-                            <option value="AM">AM</option>
-                            <option value="PM">PM</option>
-                        </select>
-                        <span class="note">&nbsp;&nbsp;<input type="checkbox" name="weeks[0][1]" checked="">1st&nbsp;
-                  <input type="checkbox" name="weeks[0][2]" checked="">2nd&nbsp;
-                  <input type="checkbox" name="weeks[0][3]" checked="">3rd&nbsp;
-                  <input type="checkbox" name="weeks[0][4]" checked="">4rd&nbsp;
-                  <input type="checkbox" name="weeks[0][5]" checked="">5th&nbsp;week(s)<br><br></span> Day:
-                        <select name="weekday[1reoc]" class="smallselect">
-                            <option value="nothing" selected="">None</option>
-                            <option value="0">Sunday</option>
-                            <option value="1">Monday</option>
-                            <option value="2">Tuesday</option>
-                            <option value="3">Wednesday</option>
-                            <option value="4">Thursday</option>
-                            <option value="5">Friday</option>
-                            <option value="6">Saturday</option>
-                        </select>
-                        Start
-                        <select name="hourstart[1]" class="smallselect">
-                            <option value="12" selected="">12</option>
-                            <option value="12">12</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                        </select>
-                        <select name="minutestart[1]" class="smallselect">
-                            <option value="00" selected="">00</option>
-                            <option value="00">00</option>
-                            <option value="15">15</option>
-                            <option value="30">30</option>
-                            <option value="45">45</option>
-                        </select>
-                        <select name="amstart[1]" class="smallselect">
-                            <option value="PM" selected="">PM</option>
-                            <option value="AM">AM</option>
-                            <option value="PM">PM</option>
-                        </select>
-                        End
-                        <select name="hourend[1]" class="smallselect">
-                            <option value="12" selected="">12</option>
-                            <option value="12">12</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                        </select>
-                        <select name="minuteend[1]" class="smallselect">
-                            <option value="00" selected="">00</option>
-                            <option value="00">00</option>
-                            <option value="15">15</option>
-                            <option value="30">30</option>
-                            <option value="45">45</option>
-                        </select>
-                        <select name="amend[1]" class="smallselect">
-                            <option value="PM" selected="">PM</option>
-                            <option value="AM">AM</option>
-                            <option value="PM">PM</option>
-                        </select>
-                        <span class="note">&nbsp;&nbsp;<input type="checkbox" name="weeks[1][1]" checked="">1st&nbsp;
-                  <input type="checkbox" name="weeks[1][2]" checked="">2nd&nbsp;
-                  <input type="checkbox" name="weeks[1][3]" checked="">3rd&nbsp;
-                  <input type="checkbox" name="weeks[1][4]" checked="">4rd&nbsp;
-                  <input type="checkbox" name="weeks[1][5]" checked="">5th&nbsp;week(s)<br><br></span> Day:
-                        <select name="weekday[2reoc]" class="smallselect">
-                            <option value="nothing" selected="">None</option>
-                            <option value="0">Sunday</option>
-                            <option value="1">Monday</option>
-                            <option value="2">Tuesday</option>
-                            <option value="3">Wednesday</option>
-                            <option value="4">Thursday</option>
-                            <option value="5">Friday</option>
-                            <option value="6">Saturday</option>
-                        </select>
-                        Start
-                        <select name="hourstart[2]" class="smallselect">
-                            <option value="12" selected="">12</option>
-                            <option value="12">12</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                        </select>
-                        <select name="minutestart[2]" class="smallselect">
-                            <option value="00" selected="">00</option>
-                            <option value="00">00</option>
-                            <option value="15">15</option>
-                            <option value="30">30</option>
-                            <option value="45">45</option>
-                        </select>
-                        <select name="amstart[2]" class="smallselect">
-                            <option value="PM" selected="">PM</option>
-                            <option value="AM">AM</option>
-                            <option value="PM">PM</option>
-                        </select>
-                        End
-                        <select name="hourend[2]" class="smallselect">
-                            <option value="12" selected="">12</option>
-                            <option value="12">12</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                        </select>
-                        <select name="minuteend[2]" class="smallselect">
-                            <option value="00" selected="">00</option>
-                            <option value="00">00</option>
-                            <option value="15">15</option>
-                            <option value="30">30</option>
-                            <option value="45">45</option>
-                        </select>
-                        <select name="amend[2]" class="smallselect">
-                            <option value="PM" selected="">PM</option>
-                            <option value="AM">AM</option>
-                            <option value="PM">PM</option>
-                        </select>
-                        <span class="note">&nbsp;&nbsp;<input type="checkbox" name="weeks[2][1]" checked="">1st&nbsp;
-                  <input type="checkbox" name="weeks[2][2]" checked="">2nd&nbsp;
-                  <input type="checkbox" name="weeks[2][3]" checked="">3rd&nbsp;
-                  <input type="checkbox" name="weeks[2][4]" checked="">4rd&nbsp;
-                  <input type="checkbox" name="weeks[2][5]" checked="">5th&nbsp;week(s)<br><br></span> Day:
-                        <select name="weekday[3reoc]" class="smallselect">
-                            <option value="nothing" selected="">None</option>
-                            <option value="0">Sunday</option>
-                            <option value="1">Monday</option>
-                            <option value="2">Tuesday</option>
-                            <option value="3">Wednesday</option>
-                            <option value="4">Thursday</option>
-                            <option value="5">Friday</option>
-                            <option value="6">Saturday</option>
-                        </select>
-                        Start
-                        <select name="hourstart[3]" class="smallselect">
-                            <option value="12" selected="">12</option>
-                            <option value="12">12</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                        </select>
-                        <select name="minutestart[3]" class="smallselect">
-                            <option value="00" selected="">00</option>
-                            <option value="00">00</option>
-                            <option value="15">15</option>
-                            <option value="30">30</option>
-                            <option value="45">45</option>
-                        </select>
-                        <select name="amstart[3]" class="smallselect">
-                            <option value="PM" selected="">PM</option>
-                            <option value="AM">AM</option>
-                            <option value="PM">PM</option>
-                        </select>
-                        End
-                        <select name="hourend[3]" class="smallselect">
-                            <option value="12" selected="">12</option>
-                            <option value="12">12</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                        </select>
-                        <select name="minuteend[3]" class="smallselect">
-                            <option value="00" selected="">00</option>
-                            <option value="00">00</option>
-                            <option value="15">15</option>
-                            <option value="30">30</option>
-                            <option value="45">45</option>
-                        </select>
-                        <select name="amend[3]" class="smallselect">
-                            <option value="PM" selected="">PM</option>
-                            <option value="AM">AM</option>
-                            <option value="PM">PM</option>
-                        </select>
-                        <span class="note">&nbsp;&nbsp;<input type="checkbox" name="weeks[3][1]" checked="">1st&nbsp;
-                  <input type="checkbox" name="weeks[3][2]" checked="">2nd&nbsp;
-                  <input type="checkbox" name="weeks[3][3]" checked="">3rd&nbsp;
-                  <input type="checkbox" name="weeks[3][4]" checked="">4rd&nbsp;
-                  <input type="checkbox" name="weeks[3][5]" checked="">5th&nbsp;week(s)<br><br></span> Day:
-                        <select name="weekday[4reoc]" class="smallselect">
-                            <option value="nothing" selected="">None</option>
-                            <option value="0">Sunday</option>
-                            <option value="1">Monday</option>
-                            <option value="2">Tuesday</option>
-                            <option value="3">Wednesday</option>
-                            <option value="4">Thursday</option>
-                            <option value="5">Friday</option>
-                            <option value="6">Saturday</option>
-                        </select>
-                        Start
-                        <select name="hourstart[4]" class="smallselect">
-                            <option value="12" selected="">12</option>
-                            <option value="12">12</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                        </select>
-                        <select name="minutestart[4]" class="smallselect">
-                            <option value="00" selected="">00</option>
-                            <option value="00">00</option>
-                            <option value="15">15</option>
-                            <option value="30">30</option>
-                            <option value="45">45</option>
-                        </select>
-                        <select name="amstart[4]" class="smallselect">
-                            <option value="PM" selected="">PM</option>
-                            <option value="AM">AM</option>
-                            <option value="PM">PM</option>
-                        </select>
-                        End
-                        <select name="hourend[4]" class="smallselect">
-                            <option value="12" selected="">12</option>
-                            <option value="12">12</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                        </select>
-                        <select name="minuteend[4]" class="smallselect">
-                            <option value="00" selected="">00</option>
-                            <option value="00">00</option>
-                            <option value="15">15</option>
-                            <option value="30">30</option>
-                            <option value="45">45</option>
-                        </select>
-                        <select name="amend[4]" class="smallselect">
-                            <option value="PM" selected="">PM</option>
-                            <option value="AM">AM</option>
-                            <option value="PM">PM</option>
-                        </select>
-                        <span class="note">&nbsp;&nbsp;<input type="checkbox" name="weeks[4][1]" checked="">1st&nbsp;
-                  <input type="checkbox" name="weeks[4][2]" checked="">2nd&nbsp;
-                  <input type="checkbox" name="weeks[4][3]" checked="">3rd&nbsp;
-                  <input type="checkbox" name="weeks[4][4]" checked="">4rd&nbsp;
-                  <input type="checkbox" name="weeks[4][5]" checked="">5th&nbsp;week(s)<br><br></span> Day:
-                        <select name="weekday[5reoc]" class="smallselect">
-                            <option value="nothing" selected="">None</option>
-                            <option value="0">Sunday</option>
-                            <option value="1">Monday</option>
-                            <option value="2">Tuesday</option>
-                            <option value="3">Wednesday</option>
-                            <option value="4">Thursday</option>
-                            <option value="5">Friday</option>
-                            <option value="6">Saturday</option>
-                        </select>
-                        Start
-                        <select name="hourstart[5]" class="smallselect">
-                            <option value="12" selected="">12</option>
-                            <option value="12">12</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                        </select>
-                        <select name="minutestart[5]" class="smallselect">
-                            <option value="00" selected="">00</option>
-                            <option value="00">00</option>
-                            <option value="15">15</option>
-                            <option value="30">30</option>
-                            <option value="45">45</option>
-                        </select>
-                        <select name="amstart[5]" class="smallselect">
-                            <option value="PM" selected="">PM</option>
-                            <option value="AM">AM</option>
-                            <option value="PM">PM</option>
-                        </select>
-                        End
-                        <select name="hourend[5]" class="smallselect">
-                            <option value="12" selected="">12</option>
-                            <option value="12">12</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                        </select>
-                        <select name="minuteend[5]" class="smallselect">
-                            <option value="00" selected="">00</option>
-                            <option value="00">00</option>
-                            <option value="15">15</option>
-                            <option value="30">30</option>
-                            <option value="45">45</option>
-                        </select>
-                        <select name="amend[5]" class="smallselect">
-                            <option value="PM" selected="">PM</option>
-                            <option value="AM">AM</option>
-                            <option value="PM">PM</option>
-                        </select>
-                        <span class="note">&nbsp;&nbsp;<input type="checkbox" name="weeks[5][1]" checked="">1st&nbsp;
-                  <input type="checkbox" name="weeks[5][2]" checked="">2nd&nbsp;
-                  <input type="checkbox" name="weeks[5][3]" checked="">3rd&nbsp;
-                  <input type="checkbox" name="weeks[5][4]" checked="">4rd&nbsp;
-                  <input type="checkbox" name="weeks[5][5]" checked="">5th&nbsp;week(s)<br><br></span> Day:
-                        <select name="weekday[6reoc]" class="smallselect">
-                            <option value="nothing" selected="">None</option>
-                            <option value="0">Sunday</option>
-                            <option value="1">Monday</option>
-                            <option value="2">Tuesday</option>
-                            <option value="3">Wednesday</option>
-                            <option value="4">Thursday</option>
-                            <option value="5">Friday</option>
-                            <option value="6">Saturday</option>
-                        </select>
-                        Start
-                        <select name="hourstart[6]" class="smallselect">
-                            <option value="12" selected="">12</option>
-                            <option value="12">12</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                        </select>
-                        <select name="minutestart[6]" class="smallselect">
-                            <option value="00" selected="">00</option>
-                            <option value="00">00</option>
-                            <option value="15">15</option>
-                            <option value="30">30</option>
-                            <option value="45">45</option>
-                        </select>
-                        <select name="amstart[6]" class="smallselect">
-                            <option value="PM" selected="">PM</option>
-                            <option value="AM">AM</option>
-                            <option value="PM">PM</option>
-                        </select>
-                        End
-                        <select name="hourend[6]" class="smallselect">
-                            <option value="12" selected="">12</option>
-                            <option value="12">12</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                        </select>
-                        <select name="minuteend[6]" class="smallselect">
-                            <option value="00" selected="">00</option>
-                            <option value="00">00</option>
-                            <option value="15">15</option>
-                            <option value="30">30</option>
-                            <option value="45">45</option>
-                        </select>
-                        <select name="amend[6]" class="smallselect">
-                            <option value="PM" selected="">PM</option>
-                            <option value="AM">AM</option>
-                            <option value="PM">PM</option>
-                        </select>
-                        <span class="note">&nbsp;&nbsp;<input type="checkbox" name="weeks[6][1]" checked="">1st&nbsp;
-                  <input type="checkbox" name="weeks[6][2]" checked="">2nd&nbsp;
-                  <input type="checkbox" name="weeks[6][3]" checked="">3rd&nbsp;
-                  <input type="checkbox" name="weeks[6][4]" checked="">4rd&nbsp;
-                  <input type="checkbox" name="weeks[6][5]" checked="">5th&nbsp;week(s)<br><br></span> Day:
-                        <select name="weekday[7reoc]" class="smallselect">
-                            <option value="nothing" selected="">None</option>
-                            <option value="0">Sunday</option>
-                            <option value="1">Monday</option>
-                            <option value="2">Tuesday</option>
-                            <option value="3">Wednesday</option>
-                            <option value="4">Thursday</option>
-                            <option value="5">Friday</option>
-                            <option value="6">Saturday</option>
-                        </select>
-                        Start
-                        <select name="hourstart[7]" class="smallselect">
-                            <option value="12" selected="">12</option>
-                            <option value="12">12</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                        </select>
-                        <select name="minutestart[7]" class="smallselect">
-                            <option value="00" selected="">00</option>
-                            <option value="00">00</option>
-                            <option value="15">15</option>
-                            <option value="30">30</option>
-                            <option value="45">45</option>
-                        </select>
-                        <select name="amstart[7]" class="smallselect">
-                            <option value="PM" selected="">PM</option>
-                            <option value="AM">AM</option>
-                            <option value="PM">PM</option>
-                        </select>
-                        End
-                        <select name="hourend[7]" class="smallselect">
-                            <option value="12" selected="">12</option>
-                            <option value="12">12</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                        </select>
-                        <select name="minuteend[7]" class="smallselect">
-                            <option value="00" selected="">00</option>
-                            <option value="00">00</option>
-                            <option value="15">15</option>
-                            <option value="30">30</option>
-                            <option value="45">45</option>
-                        </select>
-                        <select name="amend[7]" class="smallselect">
-                            <option value="PM" selected="">PM</option>
-                            <option value="AM">AM</option>
-                            <option value="PM">PM</option>
-                        </select>
-                        <span class="note">&nbsp;&nbsp;<input type="checkbox" name="weeks[7][1]" checked="">1st&nbsp;
-                  <input type="checkbox" name="weeks[7][2]" checked="">2nd&nbsp;
-                  <input type="checkbox" name="weeks[7][3]" checked="">3rd&nbsp;
-                  <input type="checkbox" name="weeks[7][4]" checked="">4rd&nbsp;
-                  <input type="checkbox" name="weeks[7][5]" checked="">5th&nbsp;week(s)<br><br></span> Day:
-                        <select name="weekday[8reoc]" class="smallselect">
-                            <option value="nothing" selected="">None</option>
-                            <option value="0">Sunday</option>
-                            <option value="1">Monday</option>
-                            <option value="2">Tuesday</option>
-                            <option value="3">Wednesday</option>
-                            <option value="4">Thursday</option>
-                            <option value="5">Friday</option>
-                            <option value="6">Saturday</option>
-                        </select>
-                        Start
-                        <select name="hourstart[8]" class="smallselect">
-                            <option value="12" selected="">12</option>
-                            <option value="12">12</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                        </select>
-                        <select name="minutestart[8]" class="smallselect">
-                            <option value="00" selected="">00</option>
-                            <option value="00">00</option>
-                            <option value="15">15</option>
-                            <option value="30">30</option>
-                            <option value="45">45</option>
-                        </select>
-                        <select name="amstart[8]" class="smallselect">
-                            <option value="PM" selected="">PM</option>
-                            <option value="AM">AM</option>
-                            <option value="PM">PM</option>
-                        </select>
-                        End
-                        <select name="hourend[8]" class="smallselect">
-                            <option value="12" selected="">12</option>
-                            <option value="12">12</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                        </select>
-                        <select name="minuteend[8]" class="smallselect">
-                            <option value="00" selected="">00</option>
-                            <option value="00">00</option>
-                            <option value="15">15</option>
-                            <option value="30">30</option>
-                            <option value="45">45</option>
-                        </select>
-                        <select name="amend[8]" class="smallselect">
-                            <option value="PM" selected="">PM</option>
-                            <option value="AM">AM</option>
-                            <option value="PM">PM</option>
-                        </select>
-                        <span class="note">&nbsp;&nbsp;<input type="checkbox" name="weeks[8][1]" checked="">1st&nbsp;
-                  <input type="checkbox" name="weeks[8][2]" checked="">2nd&nbsp;
-                  <input type="checkbox" name="weeks[8][3]" checked="">3rd&nbsp;
-                  <input type="checkbox" name="weeks[8][4]" checked="">4rd&nbsp;
-                  <input type="checkbox" name="weeks[8][5]" checked="">5th&nbsp;week(s)<br><br></span> Day:
-                        <select name="weekday[9reoc]" class="smallselect">
-                            <option value="nothing" selected="">None</option>
-                            <option value="0">Sunday</option>
-                            <option value="1">Monday</option>
-                            <option value="2">Tuesday</option>
-                            <option value="3">Wednesday</option>
-                            <option value="4">Thursday</option>
-                            <option value="5">Friday</option>
-                            <option value="6">Saturday</option>
-                        </select>
-                        Start
-                        <select name="hourstart[9]" class="smallselect">
-                            <option value="12" selected="">12</option>
-                            <option value="12">12</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                        </select>
-                        <select name="minutestart[9]" class="smallselect">
-                            <option value="00" selected="">00</option>
-                            <option value="00">00</option>
-                            <option value="15">15</option>
-                            <option value="30">30</option>
-                            <option value="45">45</option>
-                        </select>
-                        <select name="amstart[9]" class="smallselect">
-                            <option value="PM" selected="">PM</option>
-                            <option value="AM">AM</option>
-                            <option value="PM">PM</option>
-                        </select>
-                        End
-                        <select name="hourend[9]" class="smallselect">
-                            <option value="12" selected="">12</option>
-                            <option value="12">12</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                        </select>
-                        <select name="minuteend[9]" class="smallselect">
-                            <option value="00" selected="">00</option>
-                            <option value="00">00</option>
-                            <option value="15">15</option>
-                            <option value="30">30</option>
-                            <option value="45">45</option>
-                        </select>
-                        <select name="amend[9]" class="smallselect">
-                            <option value="PM" selected="">PM</option>
-                            <option value="AM">AM</option>
-                            <option value="PM">PM</option>
-                        </select>
-                        <span class="note">&nbsp;&nbsp;<input type="checkbox" name="weeks[9][1]" checked="">1st&nbsp;
-                  <input type="checkbox" name="weeks[9][2]" checked="">2nd&nbsp;
-                  <input type="checkbox" name="weeks[9][3]" checked="">3rd&nbsp;
-                  <input type="checkbox" name="weeks[9][4]" checked="">4rd&nbsp;
-                  <input type="checkbox" name="weeks[9][5]" checked="">5th&nbsp;week(s)<br><br></span>
+                    <form action="{{ route('occurrenceoff') }}" method="post">
+                        @csrf
+                        @forelse($Daysoff as $key => $off)
+                            <?php 
+                                $j = strlen($off['weeks']);
+                                while ($j>0) {
+                                    $j--;
+                                    $g = $off['weeks'][$j];
+                                    if ($g>0) {
+                                        $ch[$g]="checked";
+                                    }
+                                }
+
+                                $starttime = $off['starttime'];
+                                if ($starttime == "0"){
+                                    $starttime = "0000";
+                                }
+                                if (strlen($starttime) == 4){
+                                    $hour = $starttime[0].$starttime[1];
+                                    $minute = $starttime[2].$starttime[3];
+                                } else {
+                                    $hour = $starttime[0];
+                                    $minute = $starttime[1].$starttime[2];
+                                }
+                                
+                                $default_start_time = mktime("$hour", "$minute", "0");
+
+                                $endtime = $off['endtime'];
+                                if ($endtime == "0"){
+                                    $endtime = "0000";
+                                }
+                                if (strlen($endtime) == 4){ 
+                                    $hour = $endtime[0].$endtime[1];
+                                    $minute = $endtime[2].$endtime[3];
+                                } else {
+                                    $hour = $endtime[0];
+                                    $minute = $endtime[1].$endtime[2];
+                                }
+
+                                if ($minute == "59"){
+                                    $minute = "00";
+                                    $hour = $hour+1;
+                                }
+                                $default_end_time = mktime("$hour", "$minute", "0");
+                            ?>
+                            <table class="content-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Day:</th>
+                                            <th>Start</th>
+                                            <th>End:</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{!! day_of_week_popup($off['day'],$key.'reoc') !!}</td>
+                                            <td class="start">
+                                                @php $default_time = mktime("12", "0", "0"); @endphp
+                                                {!! get_time_popup($default_time, $key, 0, 0, 0, 1, 1, 1, 'start') !!}
+                                            </td>
+                                            <td class="end">
+                                                {!! get_time_popup($default_time, $key, 0, 0, 0, 1, 1, 1, 'end') !!}
+                                            </td>
+                                            <td>
+                                                <span class="note">&nbsp;&nbsp;
+                                                    <div>
+                                                        <input type="checkbox" name="weeks[{{$key}}][1]" checked="">
+                                                        <label>1st&nbsp;</label>
+                                                    </div>
+                                                    <div>
+                                                        <input type="checkbox" name="weeks[{{$key}}][2]" checked=""><label>2nd&nbsp;</label>
+                                                    </div>
+                                                    <div>
+                                                        <input type="checkbox" name="weeks[{{$key}}][3]" checked=""><label>3rd&nbsp;</label>
+                                                    </div>
+                                                    <div>
+                                                        <input type="checkbox" name="weeks[{{$key}}][4]" checked=""><label>4rd&nbsp;</label>
+                                                    </div>
+                                                    <div>
+                                                        <input type="checkbox" name="weeks[{{$key}}][5]" checked=""><label>5th&nbsp;week(s)</label>
+                                                    </div>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                            </table>
+                        @empty
+                            @for($i=0;$i<10;$i++)
+                                <table class="content-table">
+                                <thead>
+                                        <tr>
+                                            <th>Day:</th>
+                                            <th>Start</th>
+                                            <th>End</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{!! day_of_week_popup('-1',$i.'reoc') !!}</td>                     
+                                            <td class="start">
+                                                @php $default_time = mktime("12", "0", "0"); @endphp
+                                                {!! get_time_popup($default_time, $i, 0, 0, 0, 1, 1, 1, 'start') !!}
+                                            </td>
+                                            <td class="end">
+                                                {!! get_time_popup($default_time, $i, 0, 0, 0, 1, 1, 1, 'end') !!}
+                                            </td>
+                                            <td>
+                                                <span class="note">
+                                                    <div>
+                                                        <input type="checkbox" name="weeks[{{$i}}][1]" checked=""><label>1st&nbsp;</label>
+                                                    </div>
+                                                    <div>
+                                                        <input type="checkbox" name="weeks[{{$i}}][2]" checked=""><label>2st&nbsp;</label>
+                                                    </div>
+                                                    <div>
+                                                        <input type="checkbox" name="weeks[{{$i}}][3]" checked=""><label>3st&nbsp;</label>
+                                                    </div>
+                                                    <div>
+                                                        <input type="checkbox" name="weeks[{{$i}}][4]" checked=""><label>4st&nbsp;</label>
+                                                    </div>
+                                                    <div>
+                                                        <input type="checkbox" name="weeks[{{$i}}][5]" checked=""><label>5th&nbsp;week(s)</label>
+                                                    </div>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            @endfor
+                        @endforelse
+                        @if(empty($key) || $key == '')
+                            <?php $key = 7; ?>
+                        @endif
+                        @if($key != 7)
+                            @for($i=$key;$i<7;$i++)
+                                <table class="content-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Day:</th>
+                                            <th>Start</th>
+                                            <th>End</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{!! day_of_week_popup('-1',$i.'reoc') !!}</td>                     
+                                            <td class="start">@php $default_time = mktime("12", "0", "0"); @endphp
+                                                {!! get_time_popup($default_time, $i, 0, 0, 0, 1, 1, 1, 'start') !!}
+                                            </td>
+                                            <td class="end">
+                                                {!! get_time_popup($default_time, $i, 0, 0, 0, 1, 1, 1, 'end') !!}
+                                            </td>
+                                            <td>
+                                                <span class="note">
+                                                    <div>
+                                                        <input type="checkbox" name="weeks[{{$i}}][1]" checked=""><label>1st&nbsp;</label>
+                                                        <input type="checkbox" name="weeks[{{$i}}][2]" checked=""><label>2st&nbsp;</label>
+                                                        <input type="checkbox" name="weeks[{{$i}}][3]" checked=""><label>3st&nbsp;</label>
+                                                        <input type="checkbox" name="weeks[{{$i}}][4]" checked=""><label>4st&nbsp;</label>
+                                                        <input type="checkbox" name="weeks[{{$i}}][5]" checked=""><label>5st&nbsp;week(s)</label>
+                                                    </div>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </span>
+                            @endfor
+                        @endif
                         <input type="hidden" name="reoccur" value="1">
-                        <input type="hidden" name="inspector" value="60">
+                        <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
                         <input type="hidden" name="action" value="reoccurrence">
                         <input type="submit" name="Submit" class="submit" value="Set Time off for Richard »">
                     </form>

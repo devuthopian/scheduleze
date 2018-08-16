@@ -15,6 +15,12 @@
 	$(document).ready(function() {
 		/* Act on the event */
 		$("input[name*='_token']").val('{{ csrf_token() }}');
+
+		@if(count($inspectors) > 1)
+			$('#txtForm').attr('action', '{{ url("/scheduleze/bookingavailable") }}');
+		@else
+			$('#txtForm').attr('action', '{{ url("/scheduleze/bookingform") }}');
+		@endif
 	});
 	
 </script>

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use App\PanelTemplate;
 use App\AppointmentForm;
+use App\UserDetails;
 use Session;
 use Illuminate\Support\Facades\Hash;
 use DB;
@@ -127,7 +128,7 @@ class PanelController extends Controller
             ]
         );
         if($PanelTemplate->id){
-            session(['panel_id'=>$PanelTemplate->id]);
+            session(['panel_id' => $PanelTemplate->id]);
             $ans = array('message' => 'Successfully Saved!', 'sharelink' => $PanelTemplate->unqiue_url );
             return json_encode($ans);
         }else{
@@ -142,7 +143,7 @@ class PanelController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-     public function saveimagetemplate(Request $request, $id)
+    public function saveimagetemplate(Request $request, $id)
     {
         $template = PanelTemplate::where('user_id',$id)->first();
         $files = $request->file();
@@ -198,9 +199,11 @@ class PanelController extends Controller
      */
     public function show($id)
     {
+        $business_id = session('business_id');
+        $inspectors = UserDetails::where([['business', '=', $business_id],['removed', '=', '0']])->get();
         $template = PanelTemplate::where('unqiue_url',$id)->orWhere('id', $id)->first();
         session(['panel_id' => $template->id]);
-        return view('building.template', compact('template'));
+        return view('building.template', compact('template','inspectors'));
     }
 
     /**

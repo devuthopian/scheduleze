@@ -39,4 +39,9 @@ class Business extends Model
     {
         return $this->hasMany('App\Location', 'business')->where('removed', 0);
     }
+
+    public function Inspector()
+    {
+        return $this->hasMany('App\UserDetails', 'business')->where('removed', 0);
+    }
 }

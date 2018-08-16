@@ -28,6 +28,9 @@
                             <a href="#">Appointments</a>
                             <ul class="dropdown-menu">
                                 <li>
+                                    <a href="{{ route('Bookings') }}">Bookings</a>
+                                </li>
+                                <li>
                                     @if(!empty($hashvalue))
                                         <a href="{{ url('template/') }}/{{$hashvalue}}">Add Appointment</a>
                                     @else
@@ -83,7 +86,7 @@
                                     <a href="{{ route('Location') }}">Add/Remove Location</a>
                                 </li>
                                 <li>
-                                    <a href="#">Drivetimes</a>
+                                    <a href="{{ route('Drivetime') }}">Drivetimes</a>
                                 </li>
                             </ul>
                         </li>

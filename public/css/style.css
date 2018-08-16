@@ -1084,3 +1084,126 @@ button.btn.btn-success.gmailbtn { background: #48aabf; border: 0px; border-radiu
     width: 80%;
     height: auto;
 }
+.take-command{ text-align:center; margin-top:20px; }
+.take-command .logo{ display: inline-block; }
+.smallselect{ width:70%; }
+.adminsubmitbar select{ width:69%; border-radius:20px; padding:5px 20px; height:inherit; }
+.adminsubmitbar input.btn-default[type="submit"]{ background: #ff6600;  padding:7px 15px; color:#ffffff; border-radius: 20px; border:0px; }
+.adminsubmitbar input[type="submit"]{ width:29%; }
+.adminsubmitbar input[type="submit"], .adminsubmitbar select{ display:inline-block; vertical-align: top; }
+tr.dark-table-heading{ border:1px solid #555555; }
+.dark-table-heading td{ background: #444444; border:1px solid #555555; color:#dddddd; }
+.select-default td select{ width:32% !important; padding: 0px 10px; }
+.select-default td:last-child input[type="checkbox"]{ margin-right:10px; }
+
+
+/*styling*/
+
+
+form.recurring-form {
+    font-size: 15px;
+    margin: 40px 0 40px 0;
+    display: block;
+    float: left;
+    width: 100%;
+    line-height: 25px;
+}
+
+form.recurring-form select.smallselect {
+    background: #fff;
+    height: 38px;
+    margin: 0 0 10px 0;
+}
+
+
+form.recurring-form input.submit {
+    background: #ff6600;
+    border: none;
+    color: #fff;
+    border-radius: 5px;
+    padding: 6px 20px;
+}
+
+table.content-table {
+    width: 100%;
+    margin: 0 0 25px 0;
+    border: 1px solid #ccc;
+}
+table.content-table th {
+    background: #444444;
+    color: #fff;
+    padding: 10px 10px;
+    font-weight: 200;
+}
+
+
+table.content-table td span.note {
+    text-align: left;
+}
+
+table.content-table td {
+    background: #fdfdfd;
+    padding: 10px 10px;
+    border-left: 1px solid #ccc;
+    width: 420px;
+    text-align: center;
+    vertical-align: top;
+}
+
+table.content-table td select {
+    border-radius: 0;
+    border: 1px solid #ccc;
+    background: #fff;
+    padding: 3px 10px;
+    font-size: 13px;
+    height: 33px;
+    width: 100%;
+}
+
+table.content-table td.start select, 
+table.content-table td.end select {
+    width: 31%;
+}
+
+table.content-table div {
+    position: relative;
+    width: 50%;
+    display: block;
+    float: left;
+}
+
+table.content-table input[type="checkbox"] {
+    position: absolute;
+    width: 100%;
+    margin: 0;
+    height: 100%;
+    z-index: 9;
+    top: 0;
+    opacity: 0;
+}
+
+table.content-table label {
+    font-weight: normal;
+    position: relative;
+    padding: 0 0 0 20px;
+}
+
+table.content-table label:before {
+    content: "";
+    background: #d8d8d8;
+    width: 14px;
+    height: 14px;
+    position: absolute;
+    left: 0;
+    top: 4px;
+}
+table.content-table input[type="checkbox"]:checked + label:after {
+    content: "\f00c";
+    position: absolute;
+    left: 1px;
+    top: 3px;
+    -webkit-text-stroke-width: 0px;
+    font-family: fontawesome;
+    font-size: 12px;
+    color: #444444;
+}

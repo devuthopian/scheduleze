@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Business;
 use App\BusinessHours;
+use App\Daysoff;
+use App\LocationTime;
 use App\PanelTemplate;
+use App\Location;
 
 class SchedulezeController extends Controller
 {
@@ -45,6 +48,33 @@ class SchedulezeController extends Controller
     }
 
     /**
+    * Show the application business appointments.
+    *
+    * @return \Illuminate\Http\Response
+    */
+    public function Bookings()
+    {
+        $id = session('id');
+        /*$businesshours = BusinessHours::where([['user_id','=',$id],['removed','=',0]])->get();*/
+        return view('appointments.bookings', compact('id'));
+    }
+
+    /**
+    * Show the application drivetime.
+    *
+    * @return \Illuminate\Http\Response
+    */
+
+    public function drivetime()
+    {
+        $business_id = session('business_id');
+        $LocationTime = LocationTime::where([['business','=',$business_id],['removed','=',0]])->get()->toArray();
+        $Location = Location::where([['business','=',$business_id],['removed','=',0]])->get()->toArray();
+        $locs2 = $Location;
+        return view('appointments.drivetimes',['LocationTime' => $LocationTime, 'locs2' => $locs2, 'Location' => $Location]);
+    }
+
+    /**
     * Show the application Blockouts hours.
     *
     * @return \Illuminate\Http\Response
@@ -53,9 +83,8 @@ class SchedulezeController extends Controller
     public function blockouts_occurance()
     {
         $id = session('id');
-        //$businesshours = BusinessHours::where([['user_id','=',$id],['removed','=',0]])->get();
-        //return view('appointments.business_hours', compact('businesshours'));
-        return view('appointments.reoccurrence');
+        $Daysoff = Daysoff::where([['user_id','=',$id],['removed','=',0]])->get();
+        return view('appointments.reoccurrence', compact('Daysoff'));
     }
 
      /**

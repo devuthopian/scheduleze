@@ -72,7 +72,8 @@ class InspectorController extends Controller
             //'name' => $data['name'],
             'email' => $data['email'],
             'name' => $data['username'],
-            'password' => bcrypt($data['password'])            
+            'password' => bcrypt($data['password']),
+            'verified' => 1           
         ]);
  
         $verifyUser = VerifyUser::create([
