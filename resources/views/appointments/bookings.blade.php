@@ -1,12 +1,18 @@
 @extends('layouts.front')
 
 @section('content')
+
+@php
+	$i_name = get_field('users_details', 'name', $id);
+	$i_last_name = get_field('users_details', 'lastname', $id);
+@endphp
+
 <div class="container">
 	<table width="960" border="0" cellspacing="0" cellpadding="0" style="margin: 0 auto;">
 		<tr>
 			<td bgcolor="white">
 				<div class="frameadmin">
-					<span class="head"><br></span>
+					<span class="head">Appointments for {{ $i_name }} {{ $i_last_name }}<br></span>
 					<table cellpadding="3" cellspacing="0" border="0">
 						<form action="#" method="post" name="FormName">
 							@php

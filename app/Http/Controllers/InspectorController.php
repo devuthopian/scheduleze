@@ -92,7 +92,7 @@ class InspectorController extends Controller
             'padding_day' => $data['padding_day'],
             'look_ahead' => $data['day_forward'],
             'throttle' => $data['throttle'],
-            'permission' => $data['permission']
+            'permission' => 1
         ]);
         
         Mail::to($user->email)->send(new VerifyMail($user));

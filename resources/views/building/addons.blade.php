@@ -1,6 +1,9 @@
 @extends('layouts.front')
 
 @section('content')
+<script src="{{ URL::asset('js/jquery-3.3.1.min.js') }}"></script>
+<script src="{{ URL::asset('js/materialize.js') }}"></script>
+<link href="{{ asset('css/materialize.css') }}" rel="stylesheet">
 	{!! Form::open([ 'route' => ['storebuild'],'method' => 'post'] ) !!}
 <div class="building">
 	<div class="container">
@@ -28,6 +31,9 @@
 							</td>
 							<td>
 								<span class="formlabel">Status</span><br>
+							</td>
+							<td>
+								Available Users
 							</td>
 							<td>
 								
@@ -59,9 +65,23 @@
 										</select>
 									</td>
 									<td>
+										{!! get_subs_users($BuildType->id) !!}
+									</td>
+									<td>
 										<a href='#' class='note_link' id="{{ $i }}" data-model="{{$name}}" data-id="{{ $BuildType->id }}">Remove</a>
 									</td>
 								</tr>
+								<script type="text/javascript">
+								    jQuery(document).ready(function($) {
+								        $('.my_select_{{ $BuildType->id }}').formSelect();
+								        $('.my_select_{{ $BuildType->id }} option:not(:disabled)').not(':selected').prop('selected', true);
+									    $('.dropdown-content.multiple-select-dropdown input[type="checkbox"]:not(:checked)').not(':disabled').prop('checked', 'checked');
+									    var values = $('.dropdown-content.multiple-select-dropdown input[type="checkbox"]:checked').not(':disabled').parent().map(function() {
+									        return $(this).text();
+									    }).get();
+									    $('input.select-dropdown').val(values.join(', '));
+								    });
+								</script>	
 								@php $i++; @endphp
 							@empty
 							    <tr class="trtable_0">
@@ -83,6 +103,9 @@
 											<option value="0">Require phone call</option>
 											<option value="3">Use as Label</option>
 										</select>
+									</td>
+									<td>
+										{!! get_subs_users(0) !!}
 									</td>
 									<td>
 										<a href='#' class='note_link' id="0" data-id="">Remove</a>
@@ -123,5 +146,44 @@
 		</div>
 	</div>
 </div>
+	<script type="text/javascript">
+		jQuery(document).ready(function($) {
+
+			$('.dropdown-content.multiple-select-dropdown input[type="checkbox"]:not(:checked)').not(':disabled').prop('checked', 'checked');
+
+	        @foreach($exception as $excep)
+	        	$('.my_select_{{ $excep->exception }} option[value="{{ $excep->user_id }}"]').prop('selected', false);
+	        	$('.my_select_{{ $excep->exception }}').formSelect();
+	        @endforeach
+
+			$('.selectedbs').change(function() {
+				var exception = $(this).attr('data-main-id');
+				var user_id = [];
+		        $.each($(".my_select_"+exception+" option:not(:selected)"), function(){     
+		            user_id.push($(this).val());
+		        });
+
+		        var user_id = user_id.filter(function(v){return v!==''});
+				var type = '{{$name}}';
+
+				$.ajax({
+	                url : '{{ url("/storeException") }}',
+	                method : "POST",
+	                async: false,
+	                data : {user_id: user_id, _token: $('meta[name="csrf-token"]').attr('content'), exception: exception, type: type},
+	                dataType : "JSON",
+	                success:function(data){
+	                	if(data.success == 'true'){
+	                    	//alert('Saved successfully');
+	                	}
+	                },
+	                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+				        alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+				    }
+	            });
+			});
+
+		});
+	</script>
 	{!! Form::close() !!}
 @endsection

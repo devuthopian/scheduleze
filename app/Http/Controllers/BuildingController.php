@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Input;
 use DB;
 use App\PanelTemplate;
 use App\Business;
+use App\Exceptions;
 use Session;
 use Illuminate\Support\Facades\Hash;
 /*use Illuminate\Support\Facades\Route;*/
@@ -48,7 +49,20 @@ class BuildingController extends Controller
 
         //$Building = $Model::where([['business', $businessid]])->first();
         $BladeName = strtolower($name);
-        return view('building.'.$BladeName, compact('Building','name','ColumnName'));
+
+        if ($name == 'BuildingTypes'){
+            $type = 1;
+        }elseif ($name == 'BuildingSizes') {
+            $type = 2;
+        }elseif ($name == 'BuildingAges') {
+            $type = 3;
+        }else{
+            $type = 4;
+        }
+
+        $exception = Exceptions::select('exception','user_id')->where('type', $type)->get();
+
+        return view('building.'.$BladeName, compact('Building','name','ColumnName','exception'));
     }
 
 
@@ -82,7 +96,6 @@ class BuildingController extends Controller
         }
 
         $data = Input::get();
-        
         /*
         $redirecturl = $data['txtform'];
         $txtForm = 'App\\Dp'.$data['txtform'];
@@ -121,9 +134,83 @@ class BuildingController extends Controller
                 ]
             );
         }
+        /*$collection = get_bus_users();
+        
+        $datselc = $data['selectedusers'];
+        foreach ($datselc as $key => $value) {
+            foreach ($value as $ky) {
+                foreach ($collection as $k => $vue) {
+                    $kith[] = $vue->user_id;
+                    if($ky == $vue->user_id){
+                        $kin[] = $vue->user_id;
+                        $kbuildtype[] = $key;
+                    }
+                }
+            }
+        }
+
+        $kithkin = array_unique($kin);
+        $kithar = array_diff($kith, $kithkin);
+
+        $type = $data['txtform'];
+        dd($kbuildtype);
+        if ($type == 'BuildingTypes'){
+            $type = 1;
+        }elseif ($type == 'BuildingSizes') {
+            $type = 2;
+        }elseif ($type == 'BuildingSizes') {
+            $type = 3;
+        }else{
+            $type = 4;
+        }
+        for ($i=0; $i < count($kithar); $i++) { 
+            Exceptions::create([
+                'user_id' => $kithar[$i],
+                'exception' => $kbuildtype[$i],
+                'type' => $type
+            ]);
+        }*/
+
         $txtForm = strtolower($txtForm);
 
         return redirect('/scheduleze/appointments')->with('Successfully saved!');
+    }
+
+    public function storeException(Request $request)
+    {
+        $data = Input::get();
+
+        if ($data['type'] == 'BuildingTypes'){
+            $type = 1;
+        }elseif ($data['type'] == 'BuildingSizes') {
+            $type = 2;
+        }elseif ($data['type'] == 'BuildingAges') {
+            $type = 3;
+        }else{
+            $type = 4;
+        }
+
+        if(isset($data['user_id'])){
+            for ($i=0; $i < count($data['user_id']); $i++) {
+            
+                $exception = Exceptions::updateOrCreate(
+                    ['exception' => $data['exception'], 'type' => $type, 'user_id' => $data['user_id'][$i]],
+                    [
+                        'user_id' => $data['user_id'][$i],
+                        'exception' => $data['exception'],
+                        'type' => $type
+                    ]
+                );
+            }
+        }else{
+            $exception = Exceptions::where([['exception', '=', $data['exception']],['type','=',$type]])->delete();
+        }
+
+        $Success = array(
+            'success' => 'true' 
+        );
+
+        return json_encode($Success);
     }
 
     /**

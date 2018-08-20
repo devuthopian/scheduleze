@@ -39,7 +39,7 @@
                 $building_age = '';
             }
 
-            //$authorized_inspectors = get_inspector_exceptions($businessId, $BuildType, $building_size, $building_age, $addons, session('total_price'));
+            $authorized_inspectors = get_inspector_exceptions($businessId, $BuildType, $building_size, $building_age, $addons, session('total_price'));
 
             $increment = 900;
         @endphp
@@ -50,12 +50,12 @@
 						<span class="grayhead"><b>Scheduling an inspection in {!! getlocation($data['location']) !!}</b></span><br>
 						<span class="head"><h3>{{ Auth::user()->name }}</h3></span>
 						<div class="small_indent"><span class="address"></span></div>
-						@foreach($Inspectors as $insp)
+						@foreach($authorized_inspectors as $qualified_inspector)
 						{!! Form::open([ 'route' => ['BookingForm'],'method' => 'post'] ) !!}
-							<input type="hidden" name="inspector" value="{{ $insp->user_id }}"><br>
-							<span class="subhead">Openings for {{ $insp->name }}</span><br>
-							@php print_r(get_available_times_popup2($location, $total_time, 1, 12, $increment, 0, 0)); @endphp
-							<input type="submit" value="Reserve {{ $insp->name }}"><br>
+							<input type="hidden" name="inspector" value="{{ $qualified_inspector->user_id }}"><br>
+							<span class="subhead">Openings for {{ $qualified_inspector->name }}</span><br>
+							@php print_r(get_available_times_popup2($location, $total_time, $qualified_inspector->user_id, $qualified_inspector->look_ahead, $increment, 0, 0)); @endphp
+							<input type="submit" value="Reserve {{ $qualified_inspector->name }}"><br>
 						{!! Form::close() !!}
 						@endforeach
 					</td>

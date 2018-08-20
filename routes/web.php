@@ -57,6 +57,7 @@ Route::group(['middleware' => ['web']], function () {
 		
 		Route::get('/form/{name?}', 'BuildingController@index')->name('Building');
 		Route::post('/storebuild', 'BuildingController@store')->name('storebuild');
+		Route::post('/storeException', 'BuildingController@storeException');
 
 		Route::post('/scheduleze/bookingform', 'AppointmentController@bookingform')->name('BookingForm'); //		
 		Route::post('/scheduleze/bookingavailable', 'AppointmentController@bookingavailable')->name('BookingAvailable'); //

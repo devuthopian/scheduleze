@@ -343,7 +343,12 @@ if(! function_exists('get_proposed_inspection_information')){
 
 if(! function_exists('get_field')){
 	function get_field($table, $field, $id) {
-		$get = DB::table($table)->select($field)->where('id', $id)->first();
+		if($table == 'users_details'){
+			$get = DB::table($table)->select($field)->where('user_id', $id)->first();
+		}else{
+			$get = DB::table($table)->select($field)->where('id', $id)->first();
+		}
+		/*$field = str_replace('"', '', $field);*/
 		$return = stripslashes($get->$field);
 		return $return;
 	}
@@ -368,12 +373,12 @@ if(! function_exists('get_inspector_exceptions')){
 		}
 		
 		foreach ($working_inspectors as $a_inspector){
-			$addons_information = DB::select("select count(*) from exceptions where inspector = '$a_inspector->id' and ($skk)");
 
-			//DB::table('exceptions')->where([['inspector', '=', $a_inspector->id],['removed', '=', '0'],$skk])->first();
+			$addons_information = DB::select('select count(*) as cexcp from exceptions where user_id = '.$a_inspector->user_id.' AND '.$skk.'');
+			//$addons_information = DB::table('exceptions')->where([['user_id', '=', $a_inspector->id],$skk])->get();
 
-			//$addons_information = $this->pull_array($sql);
-			if ($addons_information[0] == "0"){
+			//dd($addons_information[0]->cexcp);
+			if ($addons_information[0]->cexcp == 0){
 				//if (($a_inspector[max_price] > 0) and ($a_inspector[max_price] > $price)){  //if there is a reasonable price cap, and that cap is over the actual price
 					$qualified_inspector[] = $a_inspector;
 				//}
@@ -702,7 +707,7 @@ if(! function_exists('find_prev')){
 		if (count($array)!=0) {
 			foreach ($array as $ar) {
 				//if ($endtime > $ar[starttime]) {  //untested
-				if ($starttime>$ar['starttime']) {
+				if ($starttime > $ar->starttime) {
 					$prev=$ar;
 					/*if ($_SESSION[business] == 8){
 						echo "<!-- $ar[id] starttime is less than the proposed starttime-->\n\n";
@@ -1123,5 +1128,27 @@ if(! function_exists('get_todays_starttime')){
 		$day_of_day = date("j", $time);
 		$start_of_day = mktime(0, 0, 0, $month_of_day, $day_of_day, $year_of_day);
 		return $start_of_day;
+	}
+}
+if(! function_exists('get_bus_users')){
+	function get_bus_users(){
+		$buisnesshours = session('business_id');
+		$users_details = DB::table('users_details')->select('user_id')->where('business', $buisnesshours)->get();
+		return $users_details;
+	}
+}
+
+if(! function_exists('get_subs_users')){
+	function get_subs_users($i = 0){
+		$buisnesshours = session('business_id');
+		$users_details = DB::table('users_details')->select('name','user_id')->where('business', $buisnesshours)->get();
+
+		$form = "<select name=\"selectedusers[$i][]\" class=\"form-control my_select_$i selectedbs\" size=\"1\" multiple style=\"display:none;\" data-main-id=\"$i\">";
+		$form .="<option value=\"\" disabled></option>";
+		foreach ($users_details as $value) {
+			$form .= "<option value=\"$value->user_id\">$value->name</option>";
+		}
+		$form .= "</select>";
+		return $form;
 	}
 }
