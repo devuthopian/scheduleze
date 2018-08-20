@@ -1132,17 +1132,16 @@ if(! function_exists('get_todays_starttime')){
 }
 if(! function_exists('get_bus_users')){
 	function get_bus_users(){
-		$buisnesshours = session('business_id');
-		$users_details = DB::table('users_details')->select('user_id')->where('business', $buisnesshours)->get();
+		$buisnessid = session('business_id');
+		$users_details = DB::table('users_details')->select('user_id')->where('business', $buisnessid)->get();
 		return $users_details;
 	}
 }
 
 if(! function_exists('get_subs_users')){
 	function get_subs_users($i = 0){
-		$buisnesshours = session('business_id');
-		$users_details = DB::table('users_details')->select('name','user_id')->where('business', $buisnesshours)->get();
-
+		$buisnessid = session('business_id');
+		$users_details = DB::table('users_details')->select('name','user_id')->where('business', $buisnessid)->get();
 		$form = "<select name=\"selectedusers[$i][]\" class=\"form-control my_select_$i selectedbs\" size=\"1\" multiple style=\"display:none;\" data-main-id=\"$i\">";
 		$form .="<option value=\"\" disabled></option>";
 		foreach ($users_details as $value) {

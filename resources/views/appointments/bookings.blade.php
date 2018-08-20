@@ -8,12 +8,12 @@
 @endphp
 
 <div class="container">
-	<table width="960" border="0" cellspacing="0" cellpadding="0" style="margin: 0 auto;">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="bookclass">
 		<tr>
 			<td bgcolor="white">
 				<div class="frameadmin">
 					<span class="head">Appointments for {{ $i_name }} {{ $i_last_name }}<br></span>
-					<table cellpadding="3" cellspacing="0" border="0">
+					<table cellpadding="3" cellspacing="0" border="0" width="100%">
 						<form action="#" method="post" name="FormName">
 							@php
 								$first = time();

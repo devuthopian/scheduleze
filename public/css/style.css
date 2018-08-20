@@ -1207,3 +1207,7 @@ table.content-table input[type="checkbox"]:checked + label:after {
     font-size: 12px;
     color: #444444;
 }
+
+.bookclass td {
+    padding: 9px;
+}
