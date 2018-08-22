@@ -10,6 +10,7 @@ use App\LocationTime;
 use App\PanelTemplate;
 use App\Location;
 use Illuminate\Support\Facades\Input;
+use PDF;
 
 class SchedulezeController extends Controller
 {
@@ -33,6 +34,14 @@ class SchedulezeController extends Controller
     public function scheduling_solutions()
     {
         return view('scheduleze.scheduling_solutions');
+    }
+
+    public function dayticket($userid, $days, $start)
+    {
+        $pdf = PDF::loadView('appointments.dayticket', compact('userid','days','start'));
+        return $pdf->stream();
+        //return $pdf->download('invoice.pdf');
+        //return view('appointments.dayticket', compact('userid', 'days', 'start'));
     }
 
     /**

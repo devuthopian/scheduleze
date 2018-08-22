@@ -1144,16 +1144,17 @@ if(! function_exists('display_for_edit')){
 					$start_of_day = get_todays_starttime($row->endtime);
 					$html .= "
 					<tr>
-						<td colspan = \"7\" bgcolor=\"#FFCD49\"><b>$full_day_label</b>&nbsp;&nbsp;<a href=\"dayticket.php?inspector=$row->user_id&days=1&start=$start_of_day\" target=\"_blank\" class=\"note\">Print Day Ticket &#187;</a></td>
-					</tr>";
+						<td colspan = \"7\" bgcolor=\"#FFCD49\"><b>".$full_day_label."</b>&nbsp;&nbsp;";
+					$html .= '<a href="/scheduleze/dayticket/'.$row->user_id.'/1/'.$start_of_day.'" target="_blank" class="note">Print Day Ticket &#187;</a></td>
+					</tr>';
 					
 				}
 
 				
-				if ("$end_day"=="$start_day") {
-					$hora = "<br><nobr>$start-$end</nobr><br>$start_day<br><br>";
+				if ($end_day == $start_day) {
+					$hora = "<br><nobr>".$start." - ".$end."</nobr><br>".$start_day."<br><br>";
 				} else {
-					$hora = "<br><nobr>$start$start_day</nobr><br>$end$end_day<br><br>";
+					$hora = "<br><nobr>".$start."".$start_day."</nobr><br>".$end." ".$end_day."<br><br>";
 				}
 				
 				if ($row->type !=1){
@@ -1220,6 +1221,420 @@ if(! function_exists('display_for_edit')){
 		}
 		
 		return $html;
+	}
+}
+
+if(! function_exists('make_day_blocks')){
+	function make_day_blocks ($start, $stop){
+		$beginning = get_todays_starttime($start);
+		$nextday = $beginning;
+		while ($beginning < $stop){
+			$end = $beginning + 86400;
+			$day_edges[$beginning] = $end;
+			$beginning = $beginning + 86400;
+			if ($c > 60){
+				break;
+			}
+			$c++;
+		}
+		return $day_edges;
+	}
+}
+
+if(! function_exists('check_permission')){
+	function check_permission($id) {  //assess inspector id relationships, NOT bookings or block ids etc.
+		if (!is_numeric($id)){
+			return true;
+		}
+		if($id == session('id')) {
+			return true;
+		} elseif(session('permission') != '1') { //everyone who passes this point is a master, now just check which business
+			session(['warning' => "You do not have permission for this right now."]);
+			/*$this->logout_user();
+			header("Location: index.php");
+			exit();*/
+		}
+		$business_id = get_field("users_details", "business", $id);//get business of person in questio
+		$my_business_id = get_field("users_details", "business", session('id'));
+		if(($business_id == $my_business_id) && (session('permission') == 1)) {
+			return true;
+		} else {
+			session(['warning' => "You do not have permission for this right now."]);
+			/*$this->logout_user();
+			header("Location: index.php");
+			exit();*/
+		}
+	}
+}
+
+if(! function_exists('display_dayticket')){
+	function display_dayticket ($userid, $first='', $days='') {
+			
+		if (session('permission') != "1"){
+			auth()->logout();
+		}
+		
+		if (!is_numeric($userid)){
+			if (is_numeric(session('affected_inspector'))){
+				$userid = session('affected_inspector');
+			} else {
+				$userid = session('id');
+			}
+		}
+		
+		check_permission($userid);
+		
+		$this_business = get_field("users_details", "business", $userid);
+		
+		$show_email = get_field("business", "print_ticket_email", $this_business);
+		
+		//get current time
+		/*if ($order == "type"){
+			$order = "type";
+			$incdec = "asc";
+		} else {
+			$order = "";
+			$incdec = "desc";
+		}
+		
+		if ($inc=="block") {
+			$inc = " and type='1'";
+		} elseif ($inc=="book") {
+			$inc = " and type='0'";
+		} else {
+			$inc="";
+		}*/
+		
+		$now = time();
+		
+		if ($first=="" || (!is_numeric($first))) {
+			if (is_numeric(session('first_time'))){
+				$first = session('first_time'); //use the value from the popup
+			} else {
+				$first = get_todays_starttime($now);
+				session(['first_time' => $first]);
+			}
+		}
+		
+		if ($days == "" || (!is_numeric($days))){
+			if (is_numeric(session('last_time'))){
+				$last = session('last_time'); //use the value from the popup
+			} else {
+				$last = ($now + (7 * 86400));
+				session(['last_time' => $last]);
+			}
+		} else {
+			$last = ($first + ($days * 86400));
+		}
+		
+		$first = $first - 1;
+		$tt = DB::table('bookings')->where([['starttime', '>', $first],['starttime', '<', $last],['user_id', '=', $userid],['removed', '=', 0]])->orderBy('type', 'ASC')->orderBy('starttime', 'ASC')->get();
+			
+		//$sql = "select * from bookings where starttime > '$first' and starttime < '$last' and inspector = '$inspector'".$inc." and removed = '0' order by $order starttime asc";
+		
+		//echo $sql;
+		
+		//$this->peek_array($_SESSION);
+		
+		//$tt = $this->pull_multi($sql);
+		
+		//loop to create the display
+		if (count($tt)>0) {  //ok, we have a real array
+		$html = "<table width=\"100%\" border=\"1\" cellspacing=\"0\" cellpadding=\"4\">\n";
+		//$inspector_name = $this->get_field("users_details", "name", "$row[inspector]");
+		$bgcolor = "FFFFFF";
+			foreach ($tt as $row) {
+				//$h++;
+				$city = get_field("locationS", "name", $row->location);
+				// format the building type:
+				//format the times
+				$start = date("g:ia", $row->starttime - 1);
+				$start_day = date(" D, M j", $row->starttime - 1);
+				$end = date("g:ia", $row->endtime + 1);
+				$end_day = date(" D, M j", $row->endtime + 1);
+				$this_end_day = date("j", $row->endtime + 1);
+				$last_end_day = '';
+				if ($last_end_day != $this_end_day){
+					if ($start_day != $this_end_day){
+						$add_end_time = date("l, F jS", $row->starttime + 1)." - ";
+					} else {
+						$add_end_time = "";
+					}
+					$full_day_label = $add_end_time.date("l, F jS", $row->endtime);
+					$inspector_name = get_field('users_details', 'name', $userid);
+					$inspector_lastname = get_field('users_details', 'lastname', $userid);
+					$html .= "
+					<tr>
+						<td colspan=\"4\" bgcolor=\"black\"><span class=\"whitehead\">$full_day_label</span></td>
+						<td bgcolor=\"black\"><span class=\"whitehead\">$inspector_name $inspector_lastname</span></td>
+					</tr>\n";
+				}
+	
+				
+				//if ("$end_day"=="$start_day") {
+					$hora = "<nobr><b>$start</b> - $end</nobr><span class=\"note\"><br>Appointment #$row->id</span>";
+				//}
+				$bookings_total_count = 0;
+				$total_earnings = 0;
+				if ($row->type == "1"){
+					$html .= "
+					<tr>
+						<td colspan=\"2\" valign=\"top\" bgcolor=\"#cccccc\"><nobr><b>$start</b> - $end</nobr></td>
+						<td valign=\"top\" bgcolor=\"#cccccc\">Blockout</td>
+						<td colspan=\"2\" valign=\"top\" bgcolor=\"#cccccc\"><span class=\"note\">$row->notes</span></td>
+					</tr>\n";
+				} else {
+					if ($show_email == "1"){
+						$agent_email = $row->agent_email;
+						$client_email = $row->email;
+					}else{
+						$agent_email = '';
+						$client_email = '';
+					}
+					$bookings_total_count ++;
+					if ($row->price != ""){ $price = "$".$row->price.""; $total_earnings = ($total_earnings + $row->price); }
+					if ($row->user_notes !=""){ $row->user_notes = "<b>Note:</b> ".$row->user_notes."<br>"; }
+					if ($row->notes !=""){ $row->notes = "<b>Memo:</b> ".$row->notes.""; }
+					if ($row->entry_method !=""){ $row->entry_method = "<b>Entry:</b> ".$row->entry_method."<br>"; }
+					if ($row->mls !=""){ $row->mls = "<br>MLS: ".$row->mls.""; }
+					if ($row->agent_name!=""){ $agent_info = "<br><b>Agent: ".$row->agent_name."</b>";} else { $agent_info = ""; }
+					if ($row->agent_phone!=""){ $agent_info .= "<br>".$row->agent_phone."";}
+					if ($agent_email != "") { $agent_info .= " ".$agent_email; }
+					if($row->listing_agent!=""){ $agent_info .= "<br><b>Listing: ".$row->listing_agent."</b>";}
+					if($row->listing_phone!=""){ $agent_info .= "<br>".$row->listing_phone;}
+					if($row->firstname != "" || $row->lastname != ""){ $client_info = "<b>".$row->firstname." ".$row->lastname."</b>"; } else { $client_info = ""; }
+					if($row->dayphone != ""  || $row->homephone != ""){ $email_addon = "<br>"; $client_info .= "<br>".$row->dayphone." ".$row->homephone.""; }
+					if ($client_email != "") { $client_info .= $email_addon.$client_email; }
+					$siz = get_full_description($row->building_type, $row->building_size, $row->building_age);
+					$addons = get_addon_information($row->id);
+
+					//create html
+					$html .= "<tr>\n";
+					$html .= "<td bgcolor=\"#$bgcolor\" valign=\"top\">$hora</td>\n";
+					$html .= "<td bgcolor=\"#$bgcolor\" align=\"right\" valign=\"top\">$price</td>\n";
+					$html .= "<td bgcolor=\"#$bgcolor\" valign=\"top\">$row->inspection_address, $city<br>$siz<span class=\"note\">".$addons['services']."</span></td>\n";
+					$html .= "<td bgcolor=\"#$bgcolor\" valign=\"top\"><span class=\"note\">$row->entry_method $row->user_notes $row->notes</span></td>\n";
+					$html .= "<td bgcolor=\"#$bgcolor\" valign=\"top\"><span class=\"note\"><nobr>$client_info</nobr>$agent_info $row->mls</span></td>\n";
+					$html .= "</tr>\n";
+				}
+				$last_end_day = date("j", $row->endtime + 1);
+			}
+			$timezone = get_field('business', 'timezone', $row->business);
+			$generated_date = date ("g:ia l, F jS",($now + $timezone));
+			$total_earnings = number_format($total_earnings);
+			$bookings_name = '';
+			if ($bookings_total_count > 1){
+				//$bookings_name = "Bookings";
+			} else {
+				//$bookings_name = "Booking";
+			}
+			$html .= "
+			<tr>
+				<td valign=\"top\" bgcolor=\"$bgcolor\">$bookings_total_count $bookings_name Total</td>
+				<td valign=\"top\" align=\"right\" bgcolor=\"$bgcolor\">$".$total_earnings."</td>
+				<td colspan=\"3\" align=\"right\" valign=\"bottom\" bgcolor=\"$bgcolor\"><span class=\"note\">Generated at $generated_date by Scheduleze.com</span></td>
+			</tr>\n";
+			$html .= " ";
+		}
+		
+		return $html;
+	}
+}
+
+if(! function_exists('display_master_ticket')){
+	function display_master_ticket ($first='', $days='') {
+				
+			if (session('permission') != "1"){
+				auth()->logout();
+			}
+			
+			/* this isn't currently being used, but might be useful // controls whether blockouts show on the ticket or not -- for now they show because the master inspector probably wants to know his people are doing in that day
+			if ($inc=="block") {
+				$inc = " and type='1'";
+			} elseif ($inc=="book") {
+				$inc = " and type='0'";
+			} else {
+				$inc="";
+			}
+			*/
+			
+			$now = time();
+			
+			if ($first=="" || (!is_numeric($first))) {
+				if (is_numeric(session('first_time'))){
+					$first = session('first_time'); //use the value from the popup
+				} else {
+					$tomorrow = $now + (8 * 3600);  //fast forward the starttime 8 hours so that a check at the end of the day yields tomorrows tickets, not today's (which are old hat)
+					$first = get_todays_starttime($tomorrow);
+					session(['first_time' => $first]);
+				}
+			}
+			
+			
+			if ($days == "" || (!is_numeric($days))){
+				if (is_numeric(session('last_time'))){
+					$last = session('last_time'); //use the value from the popup
+				} else {
+					$last = ($now + (7 * 86400));
+				}
+			} else {
+				$last = ($first + ($days * 86400));
+				session(['last_time' => $last]);
+			}
+	
+			$days_as_blocks = make_day_blocks($first, $last);
+	
+			$show_email = get_field("business", "print_ticket_email", session('business_id'));
+	
+			foreach ($days_as_blocks as $day_start => $day_end){
+				
+				$first = $day_start;
+				$last = $day_end;
+			
+				$first = $first - 1;
+				$tt = DB::table('bookings')->where([['starttime', '>', $first],['starttime', '<', $last],['business', '=', session('business_id')],['removed','=',0]])->orderBy('inspector','ASC')->orderBy('starttime','ASC')->get();
+				//$sql = "select * from bookings where starttime > '$first' and starttime < '$last' and business = '$_SESSION[business]'".$inc." and removed = '0' order by inspector asc, starttime asc";
+			
+				//echo $sql;
+				
+				//$tt = $this->pull_multi($sql);
+				
+				//loop to create the display
+				if (count($tt)>0) {  //ok, we have a real array
+				$html = "\t<table width=\"720\" border=\"1\" cellspacing=\"0\" cellpadding=\"4\">\n";
+				//$inspector_name = get_field("users_details", "name", $row->user_id);
+				$bgcolor = "FFFFFF";
+					foreach ($tt as $row) {
+						$h++;
+						$city = get_field("location", "name", "$row->location");
+						// format the building type:
+						//format the times
+						$start = date("g:ia", $row->starttime - 1);
+						$start_day = date(" D, M j", $row->starttime - 1);
+						$end = date("g:ia", $row->endtime + 1);
+						$end_day = date(" D, M j", $row->endtime + 1);
+						$this_end_day = date("j", $row->endtime + 1);
+						if ($last_end_day != "$this_end_day" || $this_inspector != $row->user_id){
+							if ($start_day != $this_end_day){
+								$add_end_time = " - ".date("l, F jS", $row->endtime + 1);
+							} else {
+								$add_end_time = "";
+							}
+							$full_day_label = date("l, F jS", $row->starttime ).$add_end_time;
+							$inspector_name = get_field('users_details', 'name', $row->user_id);
+							$inspector_lastname = get_field('users_details', 'lastname', $row->user_id);
+							$this_inspector = $row->user_id;
+							$html .= "
+							<tr>
+								<td colspan=\"3\" bgcolor=\"black\"><span class=\"whitehead\">".$inspector_name." ".$inspector_lastname."</span></td>
+								<td colspan=\"2\" bgcolor=\"black\"><span class=\"whitehead\">".$full_day_label."</span></td>
+							</tr>\n";
+						}
+
+						//if ("$end_day"=="$start_day") {
+							$hora = "<nobr><b>".$start."</b> -". $end."</nobr><span class=\"note\"><br>Appointment #".$row->id."</span>";
+						//}
+						
+						if ($row->type == "1"){
+							$html .= "
+						<tr>
+							<td colspan=\"2\" valign=\"top\" bgcolor=\"#cccccc\"><nobr><b>".$start."</b> - ".$end."</nobr></td>
+							<td valign=\"top\" bgcolor=\"#cccccc\">Blockout</td>
+							<td colspan=\"2\" valign=\"top\" bgcolor=\"#cccccc\"><span class=\"note\">".$row->notes."</span></td>
+						</tr>\n";
+						} else {
+							if ($show_email == "1"){
+								$agent_email = $row->agent_email;
+								$client_email = $row->email;
+							}
+							$bookings_total_count ++;
+							if ($row->price != ""){ $price = "$".$row->price.""; $total_earnings = ($total_earnings + "$".$row->price); }
+							if ($row->user_notes != ""){ $row->user_notes = "<b>Note:</b> ".$row->user_notes."<br>"; }
+							if ($row->notes != ""){ $row->notes = "<b>Memo:</b> ".$row->notes.""; }
+							if ($row->entry_method != ""){ $row->entry_method = "<b>Entry:</b> ".$row->entry_method."<br>"; }
+							if ($row->mls != ""){ $row->mls = "<br>MLS: ".$row->mls.""; }
+							if($row->agent_name != ""){ $agent_info = "<br><b>Agent: ".$row->agent_name."</b>";} else { $agent_info = ""; }
+							if($row->agent_phone != ""){ $agent_info .= "<br>".$row->agent_phone."";}
+							if ($agent_email != "") { $agent_info .= " ".$agent_email; }
+							if($row->listing_agent != ""){ $agent_info .= "<br><b>Listing: ".$row->listing_agent."</b>";}
+							if($row->listing_phone!= ""){ $agent_info .= "<br>".$row->listing_phone."";}
+							if($row->firstname != "" || $row->lastname != ""){ $client_info = "<b>".$row->firstname." ".$row->lastname."</b>"; } else { $client_info = ""; }
+							if($row->dayphone != ""  || $row->homephone != ""){ $email_addon = "<br>"; $client_info .= "<br>".$row->dayphone." ".$row->homephone.""; }
+							if ($client_email != "") { $client_info .= $email_addon.$client_email; }
+							$siz = get_full_description($row->building_type, $row->building_size,$row->building_age);
+							$addons = get_addon_information($row->id);
+						
+							//create html
+							$html .= "\t\t\t\t\t<tr>\n";
+							$html .= "\t\t\t\t\t\t<td bgcolor=\"#".$bgcolor."\" valign=\"top\">".$hora."</td>\n";
+							$html .= "\t\t\t\t\t\t<td bgcolor=\"#".$bgcolor."\" align=\"right\" valign=\"top\">".$price."</td>\n";
+							$html .= "\t\t\t\t\t\t<td bgcolor=\"#".$bgcolor."\" valign=\"top\">".$row->inspection_address.", ".$city."<br>".$siz."<span class=\"note\">".$addons->services."</span></td>\n";
+							$html .= "\t\t\t\t\t\t<td bgcolor=\"#".$bgcolor."\" valign=\"top\"><span class=\"note\">".$row->entry_method." ".$row->user_notes." ".$row->notes."</span></td>\n";
+							$html .= "\t\t\t\t\t\t<td bgcolor=\"#".$bgcolor."\" valign=\"top\"><span class=\"note\"><nobr>".$client_info."</nobr>".$agent_info." ".$row->mls."</span></td>\n";
+							$html .= "\t\t\t\t\t</tr>\n";
+						}
+						if ($row->type == 1){  //long blockouts would spawn a new day black divider unless we did this
+							$last_end_day = date("j", $row->starttime + 1);
+						} else {
+							$last_end_day = date("j", $row->endtime + 1);
+						}
+					}
+					$timezone = get_field('business', 'timezone', $row->business);
+					$generated_date = date ("g:ia l, F jS",($now + $timezone));
+					$total_earnings = number_format($total_earnings);
+					if ($bookings_total_count > 1){
+						//$bookings_name = "Bookings";
+					} else {
+						//$bookings_name = "Booking";
+					}
+					$html .= "
+					<tr>
+						<td valign=\"top\" bgcolor=\"".$bgcolor."\">".$bookings_total_count." ".$bookings_name." Total</td>
+						<td valign=\"top\" align=\"right\" bgcolor=\"".$bgcolor."\">$".$total_earnings."</td>
+						<td colspan=\"3\" align=\"right\" valign=\"bottom\" bgcolor=\"".$bgcolor."\"><span class=\"note\">Generated at ".$generated_date." by Scheduleze.com</span></td>
+					</tr>\n";
+					$html .= "<br><br>\n";
+				}
+				unset($bookings_total_count);
+				unset($total_earnings);
+			}
+		return $html;
+	}
+}
+
+if(! function_exists('get_addon_information')){
+	function get_addon_information($booking){
+		$addons = DB::table('addons_bookings')->where('booking', $booking)->get();
+		$ads = format_addons($addons);
+		return $ads;
+	}
+}
+
+if(! function_exists('format_addons')){
+	function format_addons($addons, $verbose = 'yes'){
+		$adns = array();
+		$adns['price'] = '';
+		$adns['services'] = '';
+		if (is_array($addons)){
+			foreach ($addons as $addon) {
+				$c++;
+				if ($c > 1){
+					$also_includes = " and ";
+				} else {
+					if ($verbose == "yes"){
+						$also_includes = "<br>Includes ";
+					}
+				}
+				if (is_array($addon)){
+					$adns['price'] = ($adns['price'] + (get_field('addons', 'price', $addon->id)));  //depreciated
+					$adns['services'] .= (($also_includes).(get_field('addons', 'name', $addon->id)));
+				} else {
+					$adns['price'] = ($adns['price'] + (get_field('addons', 'price', $addon)));  //depreciated
+					$adns['services'] .= (($also_includes).(get_field('addons', 'name', $addon)));
+				}
+			}
+		}
+		return $adns;
 	}
 }
 

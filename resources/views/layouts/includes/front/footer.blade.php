@@ -1,7 +1,7 @@
 <div class="footer_section">
     <div class="container">
         <div class="footer_top">
-            <div class="footer_top_cont">
+            <!-- <div class="footer_top_cont">
                 <img src="{{ url('images/footer_icon1.png') }}" alt="">
                 <p>Snailmail Address:<br>
                     Scheduleze ,PO Box 670382<br>
@@ -15,7 +15,7 @@
             <div class="footer_top_cont">
                 <img src="{{ url('images/footer_icon1.png') }}" alt="">
                 <p>Email:<br> General Email:<br> info@scheduleze.com </p>
-            </div>
+            </div> -->
         </div>
         <div class="footer_bottom">
             <div class="col-sm-4">
