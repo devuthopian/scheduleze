@@ -1248,7 +1248,7 @@ table.content-table input[type="checkbox"]:checked + label:after {
     float: left;
 }
 .bookingmain .bookingcontainer {
-    max-width: 1112px;
+    max-width: 1140px;
     padding: 30px 15px;
     margin: 50px auto;
     background: #f5f5f5;
@@ -1268,18 +1268,18 @@ table.content-table input[type="checkbox"]:checked + label:after {
     width: 100%;
 }
 .bookingmain .bookingcontainer .labelInsp, .bookingmain .bookingcontainer .labelstart, .bookingmain .bookingcontainer .labelend {
-    width: 33%;
+    width: 29%;
     float: left;
 }
 .bookingmain .bookingcontainer input[type="submit"] {
-    padding: 10px 63px;
+    padding: 10px 50px;
     border-radius: 30px;
     border: 1px solid #fff;
     background: #429caf;
     text-align: center;
     color: #fff;
     box-shadow: 0px 0px 18px #ccc;
-    margin: 20px 0px 0;
+    margin: 12px 0px 0;
 }
 .bookingmain .bookingcontainer input[type="submit"]:hover { 
     background: #e2a729 !important;
@@ -1297,6 +1297,30 @@ table.content-table input[type="checkbox"]:checked + label:after {
     text-transform: uppercase;
     color: #429caf;
     margin: 40px 0 20px;
+}
+.frameadmin {
+  overflow: auto;
+  width: 100%;
+}
+.frameadmin .col-sm-12 {
+  padding: 0px;
+}
+.frameadmin .table .table {
+    margin-top: 20px;
+}
+.frameadmin .table > thead > tr > th, .frameadmin .table > tbody > tr > th, .frameadmin .table > tfoot > tr > th, .frameadmin .table > thead > tr > td, .frameadmin .table > tbody > tr > td, .frameadmin .table > tfoot > tr > td {
+    padding: 15px 8px;
+}
+@media (max-width: 1024px) {
+.bookingmain .bookingcontainer .labelInsp, .bookingmain .bookingcontainer .labelstart, .bookingmain .bookingcontainer .labelend {
+    width: 33%;
+}
+.bookingmain .bookingcontainer select {
+    width: 90%;
+}
+.bookingmain .bookingcontainer .labelstart select, .bookingmain .bookingcontainer .labelend select {
+    width: 30.3333%;
+}
 } 
 @media (max-width: 767px) {
 .nsignup_cont .col-12 {

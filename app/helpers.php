@@ -292,7 +292,9 @@ if(! function_exists('get_inspector_popup')){
 		if ($bus=="") {
 			$bus = session('business_id');
 		}
-		$id = session('id');
+		if(empty($id)){
+			$id = session('id');
+		}
 		$permission = session('permission');
 		if ($permission == 1) {
 			$where = " where business = '".$bus."' and removed = '0'";
@@ -308,7 +310,7 @@ if(! function_exists('get_inspector_popup')){
 			} else {
 				$select = "";
 			}
-			$html .= "\n\t\t\t\t<option value=\"".$row->id."\" $select>".$row->$column."</option>";
+			$html .= "\n\t\t\t\t<option value=\"".$row->user_id."\" $select>".$row->$column."</option>";
 			
 		}
 		$html .= "\n\t\t\t</select></div>";
@@ -1001,7 +1003,7 @@ if(! function_exists('year_popup')){
 
 if(! function_exists('day_num_popup')){
 	function day_num_popup ($day_num, $designate, $session) {
-		$popup = "<select name=\"month".$session."[".$designate."]\" class=\"smallselect\">\n";
+		$popup = "<select name=\"day".$session."[".$designate."]\" class=\"smallselect\">\n";
 		for ($i=0; $i < 31; $i++) {
 			if($i == $day_num){
 				$selected = 'selected';
@@ -1077,7 +1079,7 @@ if(! function_exists('array_flatten')){
 }
 
 if(! function_exists('display_for_edit')){
-	function display_for_edit($id, $first, $last, $order='', $inc='') {
+	function display_for_edit($id, $first, $last, $order='type', $inc='all') {
 		//get current time
 		$last_end_day = '';
 		$now = time();
@@ -1098,12 +1100,12 @@ if(! function_exists('display_for_edit')){
 		}
 
 		if (($first=="")) {
-			$tt = DB::table('bookings')->where([['endtime', '>', $now],['user_id', '=', '11'.$inc],['removed', '=', 0]])->orderBy($order, $incdec)->get();
+			$tt = DB::table('bookings')->where([['endtime', '>', $now],['user_id', '=', $id.$inc],['removed', '=', 0]])->orderBy($order, $incdec)->get();
 
 			//$sql = "select * from bookings where endtime > $now and inspector = '$id'".$inc." and removed=0 order by $order starttime asc";
 		} else {
-			$tt = DB::table('bookings')->where([['endtime', '>', $first],['starttime', '<', $last],['user_id', '=', '11'.$inc],['removed', '=', 0]])->orderBy('starttime', 'asc')->get();
-			
+			$tt = DB::table('bookings')->where([['endtime', '>', $first],['starttime', '<', $last],['user_id', '=', $id.$inc],['removed', '=', 0]])->orderBy('starttime', 'asc')->get();
+
 			//$sql = "select * from bookings where endtime > $first and starttime < $last and inspector = '$inspector'".$inc." and removed=0 order by $order starttime asc";
 		}
 		
@@ -1213,6 +1215,8 @@ if(! function_exists('display_for_edit')){
 				$last_end_day = date("j", $row->endtime);
 				
 			}
+		}else{
+			$html = '<tr><td class="display" style="text-align: center;">No Results Found</td>';
 		}
 		
 		return $html;

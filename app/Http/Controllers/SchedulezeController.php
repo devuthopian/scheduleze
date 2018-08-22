@@ -9,6 +9,7 @@ use App\Daysoff;
 use App\LocationTime;
 use App\PanelTemplate;
 use App\Location;
+use Illuminate\Support\Facades\Input;
 
 class SchedulezeController extends Controller
 {
@@ -47,6 +48,51 @@ class SchedulezeController extends Controller
         return view('appointments.business_hours', compact('businesshours'));
     }
 
+    public function BookingFilter(Request $request)
+    {
+        $data = Input::get();
+
+        if(empty($data['users_details'])){
+            $id = session('id');
+        }else{
+            $id = $data['users_details'];
+        }
+
+        if (isset($data['daystart']) != "" && isset($_POST['dayend']) != "") {
+
+            $first = "12:00 AM ".$data['monthstart'][0]."/".$data['daystart'][0]."/".$data['yearstart'][0];
+            $first = strtotime($first);
+            $last = "11:59 PM ".$data['monthend'][1]."/".$data['dayend'][1]."/".$data['yearend'][1];
+            $last = strtotime($last);
+            //$vars = "&first=$first&last=$last&inspector=$_POST[inspector]";
+
+        } elseif ($data['first']!="") {
+
+            $first = $data['first'];
+            $last = $data['last'];
+
+        } elseif (session('first_time') != "") {
+
+            $first = session('first_time');
+            $last = session('last_time');
+
+        } elseif ($first=="") {
+
+            $first = time();
+            $last = $first + 1209500;
+
+        } elseif (strlen($first) > 9) {
+
+            //$vars = "&first=$first&last=$last&inspector=$_POST[inspector]";
+
+        }
+
+        session(['first_time' => $first]);
+        session(['last_time' => $last]);
+
+        return view('appointments.bookings', compact('id','first','last','order', 'inc'));
+    }
+
     /**
     * Show the application business appointments.
     *
@@ -55,8 +101,10 @@ class SchedulezeController extends Controller
     public function Bookings()
     {
         $id = session('id');
+        $first = time();
+        $last = $first + 1209500;
         /*$businesshours = BusinessHours::where([['user_id','=',$id],['removed','=',0]])->get();*/
-        return view('appointments.bookings', compact('id'));
+        return view('appointments.bookings', compact('id', 'first', 'last'));
     }
 
     /**

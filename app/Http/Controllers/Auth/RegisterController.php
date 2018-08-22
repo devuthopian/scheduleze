@@ -87,7 +87,8 @@ class RegisterController extends Controller
 
         UserDetails::create([
             'user_id' => $user->id,
-            'indus_id' => $data['txtIndustries']
+            'indus_id' => $data['txtIndustries'],
+            'permission' => 1
         ]);
         
         Mail::to($user->email)->send(new VerifyMail($user));
