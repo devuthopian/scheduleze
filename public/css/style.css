@@ -1211,3 +1211,118 @@ table.content-table input[type="checkbox"]:checked + label:after {
 .bookclass td {
     padding: 9px;
 }
+
+.head{
+    color: #000000;
+    font: bold 20px/20px Arial, Tahoma, Verdana, Sans Serif;
+}
+.nsignup_cont {
+    width: 100%;
+    float: left;
+}
+.nsignup_cont h3 {
+    font-size: 36px;
+    text-transform: uppercase;
+    color: #429caf;
+    margin: 50px 0 30px;
+}
+.nsignup_cont .col-12 {
+    width: 50%; 
+    float: left;
+    padding-right: 20px;
+    min-height: 80px;
+}
+.nsignup_cont input[type="text"], .nsignup_cont input[type="email"], .nsignup_cont input[type="password"] {
+    width: 100%;
+    padding: 22px 25px;
+    border-radius: 30px;
+    border: 0px;
+    background: #d8d8d8;
+    margin: 5px 0 30px;
+}
+.nsignup_cont .gmailbtn:hover { 
+    background: #e2a729 !important;
+}
+.bookingmain {
+    width: 100%;
+    float: left;
+}
+.bookingmain .bookingcontainer {
+    max-width: 1112px;
+    padding: 30px 15px;
+    margin: 50px auto;
+    background: #f5f5f5;
+}
+.bookingmain .bookingcontainer select {
+    width: 86%;
+    padding: 8px 20px;
+    border-radius: 30px;
+    border: 0px;
+    background: #d8d8d8;
+    margin: 10px 0;
+}
+.bookingmain .bookingcontainer .labelstart select, .bookingmain .bookingcontainer .labelend select {
+    width: 28.3333%;
+}
+.bookingmain .bookingcontainer label {
+    width: 100%;
+}
+.bookingmain .bookingcontainer .labelInsp, .bookingmain .bookingcontainer .labelstart, .bookingmain .bookingcontainer .labelend {
+    width: 33%;
+    float: left;
+}
+.bookingmain .bookingcontainer input[type="submit"] {
+    padding: 10px 63px;
+    border-radius: 30px;
+    border: 1px solid #fff;
+    background: #429caf;
+    text-align: center;
+    color: #fff;
+    box-shadow: 0px 0px 18px #ccc;
+    margin: 20px 0px 0;
+}
+.bookingmain .bookingcontainer input[type="submit"]:hover { 
+    background: #e2a729 !important;
+}
+.building {
+    width: 100%;
+    float: left;
+}
+.building .container, .footer_section .container {
+    width: 100%;
+    max-width: 1170px;
+}
+.building .frameadmin .head h1 {
+    font-size: 36px;
+    text-transform: uppercase;
+    color: #429caf;
+    margin: 40px 0 20px;
+} 
+@media (max-width: 767px) {
+.nsignup_cont .col-12 {
+    width: 100%;
+    padding-right: 0px;
+    min-height: 100%;
+}
+.nsignup_cont h3 {
+    font-size: 30px;
+}
+.bookingmain .bookingcontainer .labelInsp, .bookingmain .bookingcontainer .labelstart, .bookingmain .bookingcontainer .labelend {
+    width: 100%;
+    margin-bottom: 20px;
+}
+.bookingmain .bookingcontainer select {
+    width: 100%;
+}
+.bookingmain .bookingcontainer .labelstart select, .bookingmain .bookingcontainer .labelend select {
+    width: 33%;
+}
+.bookingmain .bookingcontainer input[type="submit"] {
+    margin: 0px 0px 0;
+}
+}
+@media (max-width: 480px) {
+.bookingmain .bookingcontainer .labelstart select, .bookingmain .bookingcontainer .labelend select {
+    width: 32%;
+}
+}

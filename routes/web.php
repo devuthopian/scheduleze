@@ -41,6 +41,7 @@ Route::group(['middleware' => ['web']], function () {
 		Route::get('/scheduleze/Reoccurrence','SchedulezeController@blockouts_occurance')->name('Reoccurrence');
 		Route::get('/scheduleze/DriveTime','SchedulezeController@drivetime')->name('Drivetime');
 		Route::get('/scheduleze/bookings','SchedulezeController@Bookings')->name('Bookings');
+		Route::post('/scheduleze/bookings','SchedulezeController@Bookings')->name('BookingFilter');
 
 		Route::post('ajaxappointment', 'PanelController@storeAppointment');
 		//Route::post('ajaxAppointmentForm', 'PanelController@storeAppointmentForm');

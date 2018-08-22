@@ -86,7 +86,8 @@ class LoginController extends Controller
         }
         //$PanelTemplate = $user->Panel($user->id);
         $PanelTemplate = PanelTemplate::where('user_id',$user->id)->first();
-        session(['id' => $user->id, 'username' => $user->name, 'hashvalue' => $PanelTemplate->unqiue_url]);
+        $permission = get_field("users_details", "permission", $user->id);
+        session(['id' => $user->id, 'username' => $user->name, 'hashvalue' => $PanelTemplate->unqiue_url, 'permission' => $permission]);
         $business = Business::where('user_id', $user->id)->first();
 
         if($business){
@@ -132,7 +133,8 @@ class LoginController extends Controller
         if($user){
 
             Auth::login($user);
-            session(['id' => $user->id]);
+            $permission = get_field("users_details", "permission", $user->id);
+            session(['id' => $user->id, 'permission' => $permission]);
 
             $business = Business::where('user_id', $user->id)->first();
 
@@ -150,7 +152,8 @@ class LoginController extends Controller
             $user->password = bcrypt($randpass);
             $user->verified = 1;
             $user->save();
-            session(['id' => $user->id]);
+            $permission = get_field("users_details", "permission", $user->id);
+            session(['id' => $user->id, 'permission' => $permission]);
             $business = Business::where('user_id', $user->id)->first();
 
             if($business){

@@ -31,7 +31,7 @@
 		                <input type="hidden" name="trigger" value="1">
 		                <input type="hidden" name="action" value="business_hours">
 	                <br>
-	                <table border="0" cellspacing="4" cellpadding="0" class=" table border table-responsive table-borderd table-striped select-default">
+	                <table border="0" cellspacing="4" cellpadding="0" class="table border table-responsive table-borderd table-striped select-default">
 	                    <tbody>
 	                        <tr class="dark-table-heading">
 	                            <td>&nbsp;</td>

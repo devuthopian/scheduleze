@@ -260,12 +260,70 @@ if(! function_exists('get_drivetime_popup')){
 	}
 }
 
-function get_modifer_information($table, $modifer_id, $business){
+if(! function_exists('edit_filter')){
+	function edit_filter ($first, $id, $name, $last='0') {
+		//inspectors popup
+		$html = "<td class=\"display\"><div class=\"labelInsp\"><label>Inspector</label>";
+		/*$html .= "<option value =\"$id\">$name</option>
+		";
+		$sql = "select * from inspectors where id != $id order by name";
+		$result = $this->query($sql);
+		while ($row=$this->pull_array($result)) {
+			$html .= "<option value =\"$row[id]\">$row[name]</option>
+			";
+		}
+		$html .= "</select></td>
+		";*/
+		$html .= get_inspector_popup("name", $id);
+		//time popups
+		$html .= "<td class=\"display\"><div class=\"labelstart\"><label>Start time</label>".get_time_popup ($first, $designate="", 1, 1, 1, 0, 0, 0, 'start');
+		$html .="</div></td>";
+		$html .="<td class=\"display\"><div class=\"labelend\"><label>End time</label>".get_time_popup ($last, $designate="1", 1, 1, 1, 0, 0, 0, 'end');
+		$html .="</div></td>";
+		$html .="<td class=\"display\"><br><input type=\"submit\" value=\"Filter\">";
+		$html .="</td>";
+		
+		return $html;
+	}
+}
 
-	$modifer_info = DB::table($table)->select('name', 'buffer', 'price', 'status')->where([['id', '=', $modifer_id],['business', '=', $business],['removed', '=', '0']])->first();
-	/*$sql = "select name, buffer, price, status from $table where id = '$modifer_id' and business='$business' and removed = '0'";
-	$modifer_info = $this->pull_assoc($sql);*/
-	return $modifer_info;
+if(! function_exists('get_inspector_popup')){
+	function get_inspector_popup($column='name', $id='', $bus='') {
+		if ($bus=="") {
+			$bus = session('business_id');
+		}
+		$id = session('id');
+		$permission = session('permission');
+		if ($permission == 1) {
+			$where = " where business = '".$bus."' and removed = '0'";
+		} else {
+			$where = " where business = '".$bus."' and removed = '0' and id = '".$id."'";
+		}
+
+		$rows = DB::select('select * from users_details '.$where.' order by permission DESC');
+		$html = "\n\t\t\t<select name=\"users_details\" class=\"smallselect\">";
+		foreach ($rows as $row) {
+			if($row->user_id == $id){
+				$select = "selected";
+			} else {
+				$select = "";
+			}
+			$html .= "\n\t\t\t\t<option value=\"".$row->id."\" $select>".$row->$column."</option>";
+			
+		}
+		$html .= "\n\t\t\t</select></div>";
+		return ($html);
+	}
+}
+
+if(! function_exists('get_modifer_information')){
+	function get_modifer_information($table, $modifer_id, $business){
+
+		$modifer_info = DB::table($table)->select('name', 'buffer', 'price', 'status')->where([['id', '=', $modifer_id],['business', '=', $business],['removed', '=', '0']])->first();
+		/*$sql = "select name, buffer, price, status from $table where id = '$modifer_id' and business='$business' and removed = '0'";
+		$modifer_info = $this->pull_assoc($sql);*/
+		return $modifer_info;
+	}
 }
 
 if(! function_exists('get_proposed_inspection_information')){
@@ -878,6 +936,7 @@ if(! function_exists('get_time_popup')){
 			//$time = ($time + $GLOBALS[timezone]);
 			// apply GLOBAL timezone on the output side, not the input side
 		}
+		$popups = '';
 		if ($hour==1) {
 			if ($time!=0) {
 				$hr = date("g",$time);
@@ -901,21 +960,83 @@ if(! function_exists('get_time_popup')){
 				$month_num=date("m",$time);
 				$month_name=date("M",$time);
 			}
-			$popups .= month_popup($month_num, $month_name, $designate);
+			$popups .= month_popup($month_num, $month_name, $designate, $session);
 		}	
 		if ($day==1) {
 			if ($time!=0) {
 				$day_num = date("j",$time);
 			}
-			$popups .= day_num_popup($day_num, $designate);
+			$popups .= day_num_popup($day_num, $designate, $session);
 		}
 		if ($year==1) {
 			if ($time!=0) {
 				$year_num = date("y",$time);
 			}
-			$popups .= year_popup($year_num, $designate);
+			$popups .= year_popup($year_num, $designate, $session);
 		}
 		return $popups;
+	}
+}
+
+if(! function_exists('year_popup')){
+	function year_popup($year_num, $designate, $session){
+		$popup ="\t\t\t\t<select name=\"year".$session."[".$designate."]\" class=\"smallselect\">\n";
+		$start_year = (date("Y") - 10);
+		$c = 0;
+		while ($c <= 11){
+			$this_year = $start_year + $c;
+			$lean_date = substr($this_year, -2, 2);
+			if ($year_num == $lean_date){
+				$selected = " selected";
+			} else {
+				$selected = "";
+			}
+			$popup .="\t\t\t\t	<option value=\"$lean_date\"$selected>$lean_date</option>\n";
+			$c++;
+		}
+		$popup .="\t\t\t\t</select>\n";
+		return $popup;
+	}
+}
+
+if(! function_exists('day_num_popup')){
+	function day_num_popup ($day_num, $designate, $session) {
+		$popup = "<select name=\"month".$session."[".$designate."]\" class=\"smallselect\">\n";
+		for ($i=0; $i < 31; $i++) {
+			if($i == $day_num){
+				$selected = 'selected';
+			}else{
+				$selected = '';
+			}
+			$popup .= "<option value=\"$i\" $selected>$i</option>\n";
+		}
+		$popup .= "</select>\n"; 
+		return $popup;		
+	}
+}
+
+if(! function_exists('month_popup')){
+	function month_popup ($month_num, $month_name, $designate, $session) {
+			if (strlen($month_name)<2){
+				$month_name = "Pick";
+			}
+		$popup = '';
+		$popup .="\t\t\t\t<select name=\"month".$session."[".$designate."]\" class=\"smallselect\">\n";
+		$popup .="\t\t\t\t	<option value=\"$month_num\" selected>$month_name</option>\n";
+		$popup .="\t\t\t\t	<option value=\"01\">Jan</option>\n";
+		$popup .="\t\t\t\t	<option value=\"02\">Feb</option>\n";
+		$popup .="\t\t\t\t	<option value=\"03\">Mar</option>\n";
+		$popup .="\t\t\t\t	<option value=\"04\">Apr</option>\n";
+		$popup .="\t\t\t\t	<option value=\"05\">May</option>\n";
+		$popup .="\t\t\t\t	<option value=\"06\">June</option>\n";
+		$popup .="\t\t\t\t	<option value=\"07\">July</option>\n";
+		$popup .="\t\t\t\t	<option value=\"08\">Aug</option>\n";
+		$popup .="\t\t\t\t	<option value=\"09\">Sep</option>\n";
+		$popup .="\t\t\t\t	<option value=\"10\">Oct</option>\n";
+		$popup .="\t\t\t\t	<option value=\"11\">Nov</option>\n";
+		$popup .="\t\t\t\t	<option value=\"12\">Dec</option>\n";
+		$popup .="\t\t\t\t</select>\n";
+		return $popup;
 	}
 }
 
@@ -961,9 +1082,11 @@ if(! function_exists('display_for_edit')){
 		$last_end_day = '';
 		$now = time();
 		if ($order == "type"){
-			$order = "type asc,";
+			$order = "type";
+			$incdec = "asc";
 		} else {
 			$order = "";
+			$incdec = "desc";
 		}
 		
 		if ($inc=="block") {
@@ -973,17 +1096,20 @@ if(! function_exists('display_for_edit')){
 		} else {
 			$inc="";
 		}
+
 		if (($first=="")) {
-			$tt = DB::table('bookings')->where([['endtime', '>', $now],['user_id', '=', '11'.$inc],['removed', '=', 0]])->orderBy('starttime', 'asc')->get();			
+			$tt = DB::table('bookings')->where([['endtime', '>', $now],['user_id', '=', '11'.$inc],['removed', '=', 0]])->orderBy($order, $incdec)->get();
+
 			//$sql = "select * from bookings where endtime > $now and inspector = '$id'".$inc." and removed=0 order by $order starttime asc";
 		} else {
 			$tt = DB::table('bookings')->where([['endtime', '>', $first],['starttime', '<', $last],['user_id', '=', '11'.$inc],['removed', '=', 0]])->orderBy('starttime', 'asc')->get();
+			
 			//$sql = "select * from bookings where endtime > $first and starttime < $last and inspector = '$inspector'".$inc." and removed=0 order by $order starttime asc";
 		}
 		
 		//
 		/*$tt = $this->pull_multi($sql);*/
-		$html = "<tr><td bgcolor=\"F0F0F0\" class=\"display\"><b>Start &amp; End</b></td>\n
+		$html = "<tr class=\"dark-table-heading\"><td bgcolor=\"F0F0F0\" class=\"display\"><b>Start &amp; End</b></td>\n
 		<td bgcolor=\"F0F0F0\" class=\"display\"><b><!--<a href=\"index.php?action=blockouts&track=2&order=type&first=$first&last=$last&inspector=$id\"> Inspection-->Address</b></td>\n
 		<td bgcolor=\"F0F0F0\" class=\"display\"><b>Agent/Notes</b></td>\n
 		<td bgcolor=\"F0F0F0\" class=\"display\"><b>Price</b></td>\n
@@ -1103,13 +1229,18 @@ if(! function_exists('get_full_description')){
 			$full_dec = $type_name->name;
 			if ($building_size > 0){
 				$size_name = DB::table('building_sizes')->select('name')->where([['id', '=', $building_size],['removed', '=', 0]])->first();
-				//$size_name = $this->get_field("building_sizes", name, $building_size);
-				$full_dec .=", ".$size_name->name."";
+				if(isset($size_name)){
+					//$size_name = $this->get_field("building_sizes", name, $building_size);
+					$full_dec .=", ".$size_name->name."";
+				}
 			}
 			if ($building_age > 0){
 				$age_name = DB::table('building_ages')->select('name')->where([['id', '=', $building_age],['removed', '=', 0]])->first();
 				//$age_name = $this->get_field("building_ages", name, $building_age);
-				$full_dec .= ", ".$age_name->name."";
+				if(isset($age_name)){
+					//$size_name = $this->get_field("building_sizes", name, $building_size);
+					$full_dec .= ", ".$age_name->name."";
+				}
 			}
 		}else{
 			$full_dec = '---';
