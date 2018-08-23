@@ -28,11 +28,11 @@
                             <a href="#">Appointments</a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="{{ route('Bookings') }}">Bookings</a>
+                                    <a href="{{ url('/scheduleze/bookings') }}">Bookings</a>
                                 </li>
                                 <li>
                                     @if(!empty($hashvalue))
-                                        <a href="{{ url('template/') }}/{{$hashvalue}}">Add Appointment</a>
+                                        <a href="{{ url('template/'.$hashvalue) }}">Add Appointment</a>
                                     @else
                                         <a href="{{ url('scheduleze/appointments') }}">Add Appointment</a>
                                     @endif
@@ -52,7 +52,10 @@
                             <a href="#">Blockouts</a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="#">Add Blockout</a>
+                                    <a href="{{ url('/scheduleze/blockouts') }}">Blockouts</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('/scheduleze/blockout/AddBlockout') }}">Add Blockout</a>
                                 </li>
                                 <li>
                                     <a href="{{ route('Reoccurrence') }}">Recurring</a>

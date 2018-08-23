@@ -1078,8 +1078,18 @@ if(! function_exists('array_flatten')){
 	}
 }
 
+if(! function_exists('get_timezone')){
+	function get_timezone($business = '0'){
+		if ($business == 0){
+			$business = session('business_id');
+		}
+		$timezone = get_field("business", "timezone", $business);
+		return $timezone;
+	}
+}
+
 if(! function_exists('display_for_edit')){
-	function display_for_edit($id, $first, $last, $order='type', $inc='all') {
+	function display_for_edit($id, $first, $last, $order='type', $inc='') {
 		//get current time
 		$last_end_day = '';
 		$now = time();
@@ -1087,27 +1097,55 @@ if(! function_exists('display_for_edit')){
 			$order = "type";
 			$incdec = "asc";
 		} else {
-			$order = "";
+			$order = "id";
 			$incdec = "desc";
 		}
-		
-		if ($inc=="block") {
-			$inc = " and type='1'";
-		} elseif ($inc=="book") {
-			$inc = " and type='0'";
-		} else {
-			$inc="";
+
+		$whereArr = array();
+
+		if ( $inc == "block" && $first == "") {
+
+			$whereArr = [['endtime', '>', $now], ['user_id', '=', $id], ['type', '=', 1], ['removed', '=', 0]];
+
+		} 
+		elseif($inc == "block" && !empty($first))
+		{
+
+			$whereArr = [['endtime', '>', $first], ['starttime', '<', $last], ['user_id', '=', $id], ['type', '=', 1], ['removed', '=', 0]];
+
+		}
+		elseif ( $inc=="book" && $first == "" ) {
+			
+			$whereArr = [['endtime', '>', $now], ['user_id', '=', $id], ['type', '=', 0], ['removed', '=', 0]];
+
+		}
+		elseif($inc == "book" && !empty($first))
+		{
+
+			$whereArr = [['endtime', '>', $first], ['starttime', '<', $last], ['user_id', '=', $id], ['type', '=', 0], ['removed', '=', 0]];
+
+		} 
+		elseif($inc == "" && !empty($first))
+		{
+
+			$whereArr = [['endtime', '>', $first], ['starttime', '<', $last], ['user_id', '=', $id], ['removed', '=', 0]];
+
+		}
+		else {
+			
+			$whereArr = [['endtime', '>', $now], ['user_id', '=', $id], ['removed', '=', 0]];
+
 		}
 
-		if (($first=="")) {
-			$tt = DB::table('bookings')->where([['endtime', '>', $now],['user_id', '=', $id.$inc],['removed', '=', 0]])->orderBy($order, $incdec)->get();
+		$tt = DB::table('bookings')->where($whereArr)->orderBy($order, $incdec)->get();
 
-			//$sql = "select * from bookings where endtime > $now and inspector = '$id'".$inc." and removed=0 order by $order starttime asc";
+		/*if (($first=="")) {
+			
+			$tt = DB::table('bookings')->where($whereArr)->orderBy($order, $incdec)->get();
 		} else {
-			$tt = DB::table('bookings')->where([['endtime', '>', $first],['starttime', '<', $last],['user_id', '=', $id.$inc],['removed', '=', 0]])->orderBy('starttime', 'asc')->get();
 
-			//$sql = "select * from bookings where endtime > $first and starttime < $last and inspector = '$inspector'".$inc." and removed=0 order by $order starttime asc";
-		}
+			$tt = DB::table('bookings')->where([['endtime', '>', $first],['starttime', '<', $last],['user_id', '=', $id],$inc,['removed', '=', 0]])->orderBy('starttime', 'asc')->get();
+		}*/
 		
 		//
 		/*$tt = $this->pull_multi($sql);*/

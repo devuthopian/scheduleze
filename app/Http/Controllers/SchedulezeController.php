@@ -36,6 +36,15 @@ class SchedulezeController extends Controller
         return view('scheduleze.scheduling_solutions');
     }
 
+    /*public function ListBlockout()
+    {
+        $id = session('id');
+        $first = time();
+        $last = $first + 1209500;
+
+        return view('appointments.blockouts', compact('id', 'first', 'last'));
+    }*/
+
     public function dayticket($userid, $days, $start)
     {
         $pdf = PDF::loadView('appointments.dayticket', compact('userid','days','start'));
@@ -57,7 +66,7 @@ class SchedulezeController extends Controller
         return view('appointments.business_hours', compact('businesshours'));
     }
 
-    public function BookingFilter(Request $request)
+    public function BookingFilter(Request $request, $form)
     {
         $data = Input::get();
 
@@ -99,7 +108,7 @@ class SchedulezeController extends Controller
         session(['first_time' => $first]);
         session(['last_time' => $last]);
 
-        return view('appointments.bookings', compact('id','first','last','order', 'inc'));
+        return view('appointments.bookings', compact('id','first','last','order', 'inc', 'form'));
     }
 
     /**
@@ -107,13 +116,23 @@ class SchedulezeController extends Controller
     *
     * @return \Illuminate\Http\Response
     */
-    public function Bookings()
+    public function Bookings($form)
     {
         $id = session('id');
         $first = time();
         $last = $first + 1209500;
+
         /*$businesshours = BusinessHours::where([['user_id','=',$id],['removed','=',0]])->get();*/
-        return view('appointments.bookings', compact('id', 'first', 'last'));
+        return view('appointments.bookings', compact('id', 'first', 'last','form'));
+    }
+
+    public function Blockout($form)
+    {
+        $id = session('id');
+        $first = time();
+        $last = $first + 1209500;
+
+        return view('appointments.arrangeblockouts', compact('id', 'first', 'last','form'));
     }
 
     /**
