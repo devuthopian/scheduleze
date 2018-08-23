@@ -28,7 +28,7 @@
                             <a href="#">Appointments</a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="{{ url('/scheduleze/bookings') }}">Bookings</a>
+                                    <a href="{{ url('/scheduleze/booking/appointment') }}">Bookings</a>
                                 </li>
                                 <li>
                                     @if(!empty($hashvalue))
@@ -52,7 +52,7 @@
                             <a href="#">Blockouts</a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="{{ url('/scheduleze/blockouts') }}">Blockouts</a>
+                                    <a href="{{ url('/scheduleze/booking/blockouts') }}">Blockouts</a>
                                 </li>
                                 <li>
                                     <a href="{{ url('/scheduleze/blockout/AddBlockout') }}">Add Blockout</a>

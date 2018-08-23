@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Business;
+use App\Booking;
 use App\BusinessHours;
 use App\Daysoff;
 use App\LocationTime;
@@ -109,6 +110,55 @@ class SchedulezeController extends Controller
         session(['last_time' => $last]);
 
         return view('appointments.bookings', compact('id','first','last','order', 'inc', 'form'));
+    }
+
+    public function storeBlockout(Request $request, $form)
+    {
+        $data = Input::get();        
+        check_permission($data['users_details']);
+
+        $starttime = $data['hourstarttime'][0].":".$data['minutestarttime'][0]." ".$data['amstarttime'][0]." ".$data['monthstarttime'][0]."/".$data['daystarttime'][0]."/".$data['yearstarttime'][0];
+
+        $starttime = strtotime($starttime) + 1;
+
+        if ($data['sameday'] == 1) {
+            $endtime = $data['hourendtime'][1].":".$data['minuteendtime'][1]." ".$data['amendtime'][1]." ".$data['monthstarttime'][0]."/".$data['daystarttime'][0]."/".$data['yearstarttime'][0];
+        } else {
+            $endtime = $data['hourendtime'][1].":".$data['minuteendtime'][1]." ".$data['amendtime'][1]." ".$data['monthendtime'][1]."/".$data['dayendtime'][1]."/".$data['yearendtime'][1];
+        }
+
+        $endtime = strtotime($endtime);
+        
+        if ($starttime > $endtime){
+            //$_SESSION[warning] = "Start time occurs after the specified endtime.  End time set to 1 hour after start time.  Edit to correct.";
+            $starttime = $starttime;
+            $endtime = $starttime + 3600;
+        } else {
+            $starttime = $starttime;
+            $endtime = $endtime;
+        }
+
+        $notes = $data['notes'];
+        $users_details = $data['users_details'];
+        $business = session('business_id');
+        $type = 1; //this is a blockout afterall
+
+        $added = time();
+
+        $Booking = Booking::updateOrCreate(
+        ['id' => $data['target']],
+        [
+            'user_id' => $users_details,
+            'business' => $business,
+            'starttime' => $starttime,
+            'endtime' => $endtime,
+            'notes' => $notes,
+            'type' => $type
+        ]);
+
+        $blockId = $Booking->id;
+
+        return redirect('/scheduleze/booking/blockouts')->with('success', 'blockout added');
     }
 
     /**

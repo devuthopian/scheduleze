@@ -432,6 +432,7 @@ if(! function_exists('get_inspector_exceptions')){
 			}
 		}
 		
+		$qualified_inspector = array();
 		foreach ($working_inspectors as $a_inspector){
 
 			$addons_information = DB::select('select count(*) as cexcp from exceptions where user_id = '.$a_inspector->user_id.' AND '.$skk.'');
@@ -622,10 +623,12 @@ if(!function_exists('get_available_times_popup2')){
 					}
 				}
 				
-				if (($conflict!="yes") && is_array($blockouts)) {
+				if (($conflict!="yes") && isset($blockouts)) {
+
 					foreach ($blockouts as $block) {
+
 						if (($block->starttime <= $endtime and $block->endtime >= ($starttime+1)) or ($block->starttime>=$starttime and $block->endtime<=$endtime)) {
-							$conflict = "yes";
+							$conflict = "yes";							
 							//$status = "Blockout kill";
 							//$start_hour_minute = date ("Gi", $starttime);
 							//$end_hour_minute = (date ("Gi", $endtime))+$buffer;
@@ -1151,12 +1154,16 @@ if(! function_exists('display_for_edit')){
 		/*$tt = $this->pull_multi($sql);*/
 		$html = "<tr class=\"dark-table-heading\"><td bgcolor=\"F0F0F0\" class=\"display\"><b>Start &amp; End</b></td>\n
 		<td bgcolor=\"F0F0F0\" class=\"display\"><b><!--<a href=\"index.php?action=blockouts&track=2&order=type&first=$first&last=$last&inspector=$id\"> Inspection-->Address</b></td>\n
-		<td bgcolor=\"F0F0F0\" class=\"display\"><b>Agent/Notes</b></td>\n
-		<td bgcolor=\"F0F0F0\" class=\"display\"><b>Price</b></td>\n
-		<td bgcolor=\"F0F0F0\" class=\"display\"><b>Client/Type</b></td>\n
-		<td bgcolor=\"F0F0F0\" class=\"display\"><b>Numbers</b></td>\n
-		<td bgcolor=\"F0F0F0\" class=\"display\"><b>&nbsp;</b></td>\n
-		";
+		<td bgcolor=\"F0F0F0\" class=\"display\"><b>Agent/Notes</b></td>\n";
+		
+		if (count($tt)>0) {
+			if($tt[0]->type != 1){
+				$html .= "<td bgcolor=\"F0F0F0\" class=\"display\"><b>Price</b></td>\n";
+				$html .= "<td bgcolor=\"F0F0F0\" class=\"display\"><b>Client/Type</b></td>\n
+				<td bgcolor=\"F0F0F0\" class=\"display\"><b>Numbers</b></td>\n";
+			}
+		}
+		$html .= "<td bgcolor=\"F0F0F0\" class=\"display\"><b>&nbsp;</b></td>\n";
 
 		$h=0;
 		//loop to create the display
@@ -1207,6 +1214,10 @@ if(! function_exists('display_for_edit')){
 					$notes = $row->notes;
 					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\">Blockout</td>\n";
 					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\">$notes</td>\n";
+					$client_name = '';
+					$dayphone = '';
+					$homephone = '';
+					$user_id = $row->user_id;
 				} else {
 					$location = $row->location;
 					$inspection_address = $row->inspection_address;
@@ -1236,15 +1247,18 @@ if(! function_exists('display_for_edit')){
 					}
 					
 					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\">$agent_name  $agent_phone $user_notes</td>\n";
+				
+					if(isset($email)){
+						$client_name = "<a href=\"mailto:$email\" class=\"note_link\">$firstname $lastname</a>";
+					} else {
+						$client_name = $firstname." ".$lastname;
+					}
+
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\">$price</td>\n";
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\"><nobr>$client_name</nobr><br>$siz</td>\n";
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\"><nobr>$dayphone</nobr><br><nobr>$homephone</nobr></td>\n";
 				}
-				if($email!=""){
-					$client_name = "<a href=\"mailto:$email\" class=\"note_link\">$firstname $lastname</a>";
-				} else {
-					$client_name = $firstname." ".$lastname;
-				}
-				$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\">$price</td>\n";
-				$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\"><nobr>$client_name</nobr><br>$siz</td>\n";
-				$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\"><nobr>$dayphone</nobr><br><nobr>$homephone</nobr></td>\n";
+
 				if ($row->type == "1"){
 					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\"><nobr><a href=\"index.php?action=set_blockout&edit=$id\" class=\"note_link\">Edit</a><span class\"note\">  </span><a href=\"index.php?action=remove&id=$id&user_id=$user_id\"  class=\"note_link\">Remove</a></nobr></td>\n";
 				} else {

@@ -68,27 +68,35 @@ class AppointmentController extends Controller
         $data = Input::get();
         //dd(count($data['houropen']));
         for($i = 0; $i < count($data['houropen']); $i++) {
-            $totalstart = $data['houropen'][$i].$data['minuteopen'][$i];
-            if ($data['amopen'][$i]=="PM") {
-                if ($data['houropen'][$i]!="12") {
-                    $totalstart = ($totalstart + 1200);
+            if(isset($data['closed'][$i])){
+                if ($data['closed'][$i] != 1) {
+                    $totalstart=000;
+                    $totalend=000;
                 }
-            } else { //AM case
-                if ($data['houropen'][$i]=="12") {
-                    $totalstart= "00".$data['minuteopen'][$i];
+            }else {
+                $totalstart = $data['houropen'][$i].$data['minuteopen'][$i];
+                if ($data['amopen'][$i]=="PM") {
+                    if ($data['houropen'][$i]!="12") {
+                        $totalstart = ($totalstart + 1200);
+                    }
+                } else { //AM case
+                    if ($data['houropen'][$i]=="12") {
+                        $totalstart= "00".$data['minuteopen'][$i];
+                    }
+                }
+
+                $totalend = $data['hourclose'][$i].$data['minuteclose'][$i];
+                if ($data['amclose'][$i]=="PM") {
+                    if ($data['hourclose'][$i]!="12") {
+                        $totalend = ($totalend + 1200);
+                    }
+                } else { //AM case
+                    if ($data['hourclose'][$i]=="12") {
+                        $totalend= "00".$data['minuteclose'][$i];
+                    }
                 }
             }
 
-            $totalend = $data['hourclose'][$i].$data['minuteclose'][$i];
-            if ($data['amclose'][$i]=="PM") {
-                if ($data['hourclose'][$i]!="12") {
-                    $totalend = ($totalend + 1200);
-                }
-            } else { //AM case
-                if ($data['hourclose'][$i]=="12") {
-                    $totalend= "00".$data['minuteclose'][$i];
-                }
-            }
             $BuildingTypes = BusinessHours::updateOrCreate(
                 ['user_id' => $id,'day' => $i],
                 [

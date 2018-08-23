@@ -13,11 +13,11 @@
 @endphp
 <div class="bookingmain">
 	<div class="bookingcontainer">
-		<form action="{{ url('/scheduleze/'.$form.'') }}" method="post">
+		<form action="{{ url('/scheduleze/booking/'.$form.'') }}" method="post">
 			@csrf
 			<input type="hidden" name="action" value="{{$form}}">
 			{!! edit_filter($first, $id, $i_name, $last) !!}
-			@if($form == 'bookings')
+			@if($form == 'appointment')
 				@php $inc='book'; @endphp
 				<input type="hidden" name="inc" value="book">
 			@else
@@ -37,7 +37,7 @@
 						<tr>
 							<td bgcolor="white">
 								<div class="frameadmin">
-									<span class="head">{{$form}} for {{ $i_name }} {{ $i_last_name }}<br></span>
+									<span class="head">{{ucfirst($form)}} for {{ $i_name }} {{ $i_last_name }}<br></span>
 									<div>
 										Review, modify or remove your appointments
 										<a href="#" target="_blank" class="note">Print Tickets »</a>

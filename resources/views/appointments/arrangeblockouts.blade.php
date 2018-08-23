@@ -47,7 +47,7 @@
 	}
 
 @endphp
-<div class="bookingmain">
+<!-- <div class="bookingmain">
 	<div class="bookingcontainer">
 		<form action="{{ url('/scheduleze/'.$form.'') }}" method="post">
 			@csrf
@@ -63,40 +63,49 @@
 			<input type="hidden" name="order" value="type">
 		</form>
 	</div>
-</div>
+</div> -->
 <div class="container">
 	<div class="framecell">
 		<div class="frameadmin">
 			<div class="clearfix"></div>
-            	<div class="col-sm-12">
-					<table width="960" border="0" cellspacing="0" cellpadding="0">
-						<tr>
-							<td bgcolor="white">
-								<div class="frameadmin">
-									<span class="head">
-										{{ $do }}<br>
-									</span>{{ $message }}<br>
-									<?php //echo "$filter"; ?>
-									<table cellpadding="3" cellspacing="0" border="0">
-										<form action="index.php" method="post" name="FormName">
-										<input type="hidden" name="trigger" value="1">
-										<input type="hidden" name="action" value="set_blockout">
-										<!-- <input type="hidden" name="target" value="<?php //echo $_GET[edit]?>"> -->
-										<tr><td class="display2">Inspector:&nbsp;<br><?php echo $inspector_popup?></td></tr>
-										<tr><td class="display2">Start:<br>
-										<?php echo $start_popup?> <input type="checkbox" name="sameday" value="1" <?php echo $checked;?>>&nbsp;Same day</td></tr>
-										<tr><td class="display2">End:<br>
-										<?php echo $end_popup?> </td></tr>
-										<tr><td class="display2">Notes:<br><textarea name="notes"  rows="3" cols="68">@if(isset($row)) {{$row->notes}} @endif</textarea></td></tr>
-										<tr><td class="display2"><input type="submit" value="<?php echo $submit_label?> &raquo;">&nbsp;&nbsp;<input type="checkbox" value="1" name="send_email"><span class="note">Send Email Notice to <?php echo $inspector_name?></span>
-										</form>
-									</table>
-									<span class="note"><a href="index.php" class="note_link">&laquo; Return to Admin Home</a></span>
-								</div>
-								
-							</td>
-						</tr>
-					</table>
+        	<div class="col-sm-12">
+				<div class="frameadmin">
+					<span class="head">
+						{{ $do }}<br>
+					</span>{{ $message }}<br>
+					<?php //echo "$filter"; ?>					
+						<form action="{{ url('/scheduleze/blockout/store') }}" method="post" name="FormName">
+							@csrf
+							<input type="hidden" name="trigger" value="1">
+							<input type="hidden" name="action" value="set_blockout">
+							<input type="hidden" name="target" value="@if(isset($blockId)) {{ $blockId }} @endif">
+							
+							<div>
+								<label>Inspector:&nbsp;</label>
+								{!! $inspector_popup !!}
+							</div>
+							<div>
+								<label>Start:&nbsp;</label>
+									{!! $start_popup !!}
+								<input type="checkbox" name="sameday" value="1" {{ $checked }}>&nbsp;Same day
+							</div>
+							<div>
+								<label>End:&nbsp;</label>
+								{!! $end_popup !!}
+							</div>
+							<div>
+								<label>Notes:</label>
+								<textarea name="notes"  rows="3" cols="68">
+									@if(isset($row)) {{ $row->notes }} @endif
+								</textarea>
+							</div>
+							<div>								
+								<input type="submit" value="<?php echo $submit_label?> &raquo;">&nbsp;&nbsp;
+								<input type="checkbox" value="1" name="send_email">
+								<span class="note">Send Email Notice to <?php echo $inspector_name?></span>
+							</div>
+						</form>
+					<span class="note"><a href="index.php" class="note_link">&laquo; Return to Admin Home</a></span>
 				</div>
 			</div>
 		</div>

@@ -104,17 +104,17 @@
 	                                    <td>{!! get_day_name($key) !!}</td>
 	                                    <td>{!! hour_popup($start, $key, 'open').''.minute_popup($minute_start, $key, 'open').''.am_popup($ams, $key, 'open') !!}</td>
 	                                    <td>{!! hour_popup($end, $key, 'close').''.minute_popup($minute_end, $key, 'close').''.am_popup($ame, $key, 'close') !!}</td>
-	                                    <td class="text-right"><input type="checkbox" name="closed[$loop->iteration]" {{$ch}}>Close All day</td>
+	                                    <td class="text-right"><input type="checkbox" name="closed[{{$key}}]" {{$ch}}>Close All day</td>
 	                                </tr>
 	                            @empty
-	                            @for($i=0;$i<7;$i++)
-	                                <tr>
-	                                    <td>{!! get_day_name($i) !!}</td>
-	                                    <td>{!! hour_popup('',$i, 'open').''.minute_popup('',$i, 'open').''.am_popup('',$i, 'open') !!}</td>
-	                                    <td>{!! hour_popup('',$i, 'close').''.minute_popup('',$i, 'close').''.am_popup('',$i, 'close') !!}</td>
-	                                    <td class="text-right"><input type="checkbox" name="closed[$i]">Close All day</td>
-	                                </tr>
-	                            @endfor
+		                            @for($i=0;$i<7;$i++)
+		                                <tr>
+		                                    <td>{!! get_day_name($i) !!}</td>
+		                                    <td>{!! hour_popup('',$i, 'open').''.minute_popup('',$i, 'open').''.am_popup('',$i, 'open') !!}</td>
+		                                    <td>{!! hour_popup('',$i, 'close').''.minute_popup('',$i, 'close').''.am_popup('',$i, 'close') !!}</td>
+		                                    <td class="text-right"><input type="checkbox" name="closed[{{$i}}]">Close All day</td>
+		                                </tr>
+		                            @endfor
 	                            @endforelse
 	                        </tr>
 	                    </tbody>
