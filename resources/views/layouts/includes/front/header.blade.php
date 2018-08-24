@@ -17,16 +17,23 @@
                     </ul>
                 </nav>
                 @else
-                @php $hashvalue = session('hashvalue'); @endphp
+                @php 
+                    $hashvalue = session('hashvalue');
+                    $id = Auth::user()->id;
+                    $now = time();
+                    $tomorrow = time() + 86400;
+                    $tomorrow = get_todays_starttime($tomorrow);
+                    $first = get_todays_starttime($now);
+                @endphp
                 <nav>
                     <a href="#" class="n_toggle"><i class="fa fa-bars fa-2x"></i></a>
                     <ul>
                         <li>
                             <a href="{{ url('scheduling_solutions') }}">Home</a>
                         </li>
-                        <li>
+                        <li class="arrowicon">
                             <a href="#">Appointments</a>
-                            <ul class="dropdown-menu">
+                            <ul >
                                 <li>
                                     <a href="{{ url('/scheduleze/booking/appointment') }}">Bookings</a>
                                 </li>
@@ -38,19 +45,19 @@
                                     @endif
                                 </li>
                                 <li>
-                                    <a href="#">My Tickets</a>
+                                    <a href="{{ url('/scheduleze/dayticket/'.$id) }}">My Tickets</a>
                                 </li>
                                 <li>
-                                    <a href="#">My Today</a>
+                                    <a href="{{ url('/scheduleze/dayticket/'.$id.'/'.$first) }}">My Today</a>
                                 </li>
                                 <li>
-                                    <a href="#">My Tomorrow </a>
+                                    <a href="{{ url('/scheduleze/dayticket/'.$id.'/'.$tomorrow) }}">My Tomorrow </a>
                                 </li>
                             </ul>
                         </li>
-                        <li>
+                        <li class="arrowicon">
                             <a href="#">Blockouts</a>
-                            <ul class="dropdown-menu">
+                            <ul >
                                 <li>
                                     <a href="{{ url('/scheduleze/booking/blockouts') }}">Blockouts</a>
                                 </li>
@@ -65,9 +72,9 @@
                                 </li>
                             </ul>
                         </li>
-                        <li>
+                        <li class="arrowicon">
                             <a href="{{ url('/form/BuildingTypes') }}">{{ __('nav.services') }}</a>
-                            <ul class="dropdown-menu">
+                            <ul >
                                 <li>
                                     <a href="{{ url('/form/BuildingTypes') }}">{{ __('nav.buildtype') }}</a>
                                 </li>
@@ -82,9 +89,9 @@
                                 </li>
                             </ul>
                         </li>
-                        <li>
+                        <li class="arrowicon">
                             <a href="{{ route('Location') }}">Locations</a>
-                            <ul class="dropdown-menu">
+                            <ul >
                                 <li>
                                     <a href="{{ route('Location') }}">Add/Remove Location</a>
                                 </li>
@@ -96,17 +103,17 @@
                         <li>
                             <a href="#">ZigZag</a>
                         </li>
-                        <li>
+                        <li class="arrowicon">
                             <a href="#">Users</a>
-                            <ul class="dropdown-menu">
+                            <ul >
                                 <li>
                                     <a href="{{ route('AddInspector') }}">Add Inspector</a>
                                 </li>
                             </ul>
                         </li>
-                        <li>
+                        <li class="arrowicon">
                             <a href="{{ url('profile') }}">Profile</a>
-                            <ul class="dropdown-menu">
+                            <ul>
                                 <li>
                                     <a href="{{ url('profile') }}">User Profile</a>
                                 </li>
@@ -127,7 +134,15 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="nav-item dropdown">
+                        <li class="arrowicon">
+                            <a href="{{ url('profile') }}">{{ ucfirst(Auth::user()->name) }}</a>
+                            <ul>
+                                <li>
+                                    <a href="{{ route('logout') }}">Logout</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- <li class="nav-item dropdown">
                             <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                 {{ __('Logout') }}
                             </a>
@@ -137,7 +152,7 @@
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 @csrf
                             </form>
-                        </li>
+                        </li> -->
                     </ul>
                 </nav>
                 @endguest

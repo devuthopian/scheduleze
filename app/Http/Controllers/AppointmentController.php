@@ -287,7 +287,13 @@ class AppointmentController extends Controller
     {
         //$id = Session::get('id');
         //$hashvalue = Session::get('hashvalue');
+
         $data = session('data');
+        if(!isset($data)){
+            $data = Input::get();
+            session([ 'data' => $data]);
+        }
+        
         array_splice($data, 0, 1);
         $formdata = Input::get();
 

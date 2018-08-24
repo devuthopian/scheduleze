@@ -41,6 +41,8 @@ Route::group(['middleware' => ['web']], function () {
 		Route::get('/scheduleze/Reoccurrence','SchedulezeController@blockouts_occurance')->name('Reoccurrence');
 		Route::get('/scheduleze/DriveTime','SchedulezeController@drivetime')->name('Drivetime');
 		Route::get('/scheduleze/booking/{form?}','SchedulezeController@Bookings');
+		Route::get('/scheduleze/booking/edit/{id?}','SchedulezeController@EditBooking');
+		Route::post('/scheduleze/booking/update/{id?}','SchedulezeController@UpdateBooking');
 		Route::get('/scheduleze/dayticket/{inspector?}/{days?}/{start?}', 'SchedulezeController@dayticket');
 		Route::post('/scheduleze/booking/{form?}','SchedulezeController@BookingFilter');
 		Route::get('/scheduleze/blockout/{form?}','SchedulezeController@Blockout');

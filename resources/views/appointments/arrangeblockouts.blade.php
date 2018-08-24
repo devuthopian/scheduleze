@@ -47,66 +47,49 @@
 	}
 
 @endphp
-<!-- <div class="bookingmain">
-	<div class="bookingcontainer">
-		<form action="{{ url('/scheduleze/'.$form.'') }}" method="post">
-			@csrf
-			<input type="hidden" name="action" value="{{$form}}">
-			{!! edit_filter($first, $id, $i_name, $last) !!}
-			@if($form == 'bookings')
-				@php $inc='book'; @endphp
-				<input type="hidden" name="inc" value="book">
-			@else
-				@php $inc='block'; @endphp
-				<input type="hidden" name="inc" value="block">
-			@endif
-			<input type="hidden" name="order" value="type">
-		</form>
-	</div>
-</div> -->
 <div class="container">
 	<div class="framecell">
-		<div class="frameadmin">
+		<div class="frameadmin adding_blockout_cont">
 			<div class="clearfix"></div>
-        	<div class="col-sm-12">
-				<div class="frameadmin">
+        	<div class="head_admin">
 					<span class="head">
 						{{ $do }}<br>
 					</span>{{ $message }}<br>
-					<?php //echo "$filter"; ?>					
-						<form action="{{ url('/scheduleze/blockout/store') }}" method="post" name="FormName">
-							@csrf
-							<input type="hidden" name="trigger" value="1">
-							<input type="hidden" name="action" value="set_blockout">
-							<input type="hidden" name="target" value="@if(isset($blockId)) {{ $blockId }} @endif">
+					<?php //echo "$filter"; ?>
+					<form action="{{ url('/scheduleze/blockout/store') }}" method="post" name="FormName">
+						@csrf
+						<input type="hidden" name="trigger" value="1">
+						<input type="hidden" name="action" value="set_blockout">
+						<input type="hidden" name="target" value="@if(isset($blockId)) {{ $blockId }} @endif">
+						
+						<div class="inspector_admin">
+							<label>Inspector:&nbsp;</label>
+							{!! $inspector_popup !!}
+						</div>
+						<div class="start_admin">
+							<label>Start:&nbsp; </label>
+								{!! $start_popup !!}
+								<span class="same_day"><input type="checkbox" name="sameday" value="1" {{ $checked }}>&nbsp;Same day</span>
 							
-							<div>
-								<label>Inspector:&nbsp;</label>
-								{!! $inspector_popup !!}
-							</div>
-							<div>
-								<label>Start:&nbsp;</label>
-									{!! $start_popup !!}
-								<input type="checkbox" name="sameday" value="1" {{ $checked }}>&nbsp;Same day
-							</div>
-							<div>
-								<label>End:&nbsp;</label>
-								{!! $end_popup !!}
-							</div>
-							<div>
-								<label>Notes:</label>
-								<textarea name="notes"  rows="3" cols="68">
-									@if(isset($row)) {{ $row->notes }} @endif
-								</textarea>
-							</div>
-							<div>								
-								<input type="submit" value="<?php echo $submit_label?> &raquo;">&nbsp;&nbsp;
-								<input type="checkbox" value="1" name="send_email">
-								<span class="note">Send Email Notice to <?php echo $inspector_name?></span>
-							</div>
-						</form>
-					<span class="note"><a href="index.php" class="note_link">&laquo; Return to Admin Home</a></span>
-				</div>
+						</div>
+						<div class="end_admin">
+							<label>End:&nbsp;</label>
+							{!! $end_popup !!}							
+						</div>
+
+						<div class="notes_admin">
+							<label>Notes:</label>
+							<textarea name="notes">
+								@if(isset($row)) {{ $row->notes }} @endif
+							</textarea>
+						</div>
+						<div>								
+							<input type="submit" value="<?php echo $submit_label?> &raquo;">&nbsp;&nbsp;
+							<input type="checkbox" value="1" name="send_email">
+							<span class="note">Send Email Notice to <?php echo $inspector_name?></span>
+						</div>
+					</form>
+					<!-- <span class="note"><a href="index.php" class="note_link">&laquo; Return to Admin Home</a></span> -->
 			</div>
 		</div>
 	</div>

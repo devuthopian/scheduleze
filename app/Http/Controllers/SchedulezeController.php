@@ -12,6 +12,7 @@ use App\PanelTemplate;
 use App\Location;
 use Illuminate\Support\Facades\Input;
 use PDF;
+use DB;
 
 class SchedulezeController extends Controller
 {
@@ -46,7 +47,7 @@ class SchedulezeController extends Controller
         return view('appointments.blockouts', compact('id', 'first', 'last'));
     }*/
 
-    public function dayticket($userid, $days, $start)
+    public function dayticket($userid = null, $days = null, $start = null)
     {
         $pdf = PDF::loadView('appointments.dayticket', compact('userid','days','start'));
         return $pdf->stream();
@@ -176,6 +177,149 @@ class SchedulezeController extends Controller
         return view('appointments.bookings', compact('id', 'first', 'last','form'));
     }
 
+    public function UpdateBooking(Request $request, $id)
+    {
+        $data = Input::get();
+
+        if (isset($data['quote_override'])){
+            if($data['quote_override'] != "1"){
+                $this_total_price = get_total_price($data['building_type'],$data['building_size'],$data['building_age'], $data['location'], $data['addon']);
+            }
+        } else {
+            $this_total_price = str_replace("$", "", $data['price']);
+        }
+
+        $starttime = $data['hourstarttime'][0].":".$data['minutestarttime'][0]." ".$data['amstarttime'][0]." ".$data['monthstarttime'][0]."/".$data['daystarttime'][0]."/".$data['yearstarttime'][0];
+
+        $temp_start = strtotime($starttime) + 1;
+
+        $endtime = $data['hourendtime'][1].":".$data['minuteendtime'][1]." ".$data['amendtime'][1]." ".$data['monthendtime'][1]."/".$data['dayendtime'][1]."/".$data['yearendtime'][1];
+
+        $temp_end = (strtotime($endtime) - 1);
+        
+        
+        if ($temp_start > $temp_end){
+            //$_SESSION[warning] = "Start time occurs after the specified endtime.  No change made to start or end times, other edits executed successfully";
+        } else {
+            $starttime = $temp_start;
+            $endtime = $temp_end;
+        }        
+        $inspection_address = $data['Inspection_Address'];
+        $firstname = $data['Firstname'];
+        $lastname = $data['Lastname'];
+        $address = $data['Current_Address'];
+        $state = $data['State'];
+        $dayphone = $data['Phone'];
+        $homephone = $data['phone2'];
+        $city = $data['City'];
+        $zip = $data['ZIP'];
+        $email = $data['Email'];
+        $agent_name = $data['agent_name'];
+        $agent_phone = $data['agent_phone'];
+        $agent_email = $data['agent_email'];
+        $listing_agent = $data['Listing_Agent'];
+        $listing_office = $data['Listing_Office'];
+        $listing_phone = $data['Listing_Phone'];
+        $location = $data['location'];
+        $mls = $data['mls'];
+        $entry_method = $data['other_entry_method'];
+        $price = $this_total_price;
+        //$inspector = $data['inspector'];
+        $business = session('business_id');
+
+        $building_type = $data['building_type'];
+        if ($data['building_size'] > 0){
+            $building_size = $data['building_size'];
+        } else {
+            $building_size = 0;
+        }
+        if ($data['building_age'] > 0){
+            $building_age = $data['building_age'];
+        } else {
+            $building_age = 0;
+        }
+        $notes = $data['notes'];
+        $user_notes = $data['user_notes'];
+        $type = 0;
+
+        $inpector_attempt_hit = get_field("bookings", "user_id", $data['target']);
+
+        if (check_permission($inpector_attempt_hit)){
+            $edited = time();
+        }
+
+        //$sql = make_sql($sq, "bookings", "update", "id", "$_POST[target]");
+
+        $Booking = Booking::updateOrCreate(
+            ['id' => $data['target']],
+            [
+                'inspection_address' => $inspection_address,
+                'business' => $business,
+                'firstname' => $firstname,
+                'lastname' => $lastname,
+                'address' => $address,
+                'homephone' => $homephone,
+                'dayphone' => $dayphone,
+                'email' => $email,
+                'city' => $city,
+                'state' => $state,
+                'zip' => $zip,
+                'agent_name' => $agent_name,
+                'agent_phone' => $agent_phone,
+                'agent_email' => $agent_email,
+                'listing_agent' => $listing_agent,
+                'listing_office' => $listing_office,
+                'listing_phone' => $listing_phone,
+                'entry_method' => $entry_method,
+                'mls' => $mls,
+                'user_notes' => $user_notes,
+                'starttime' => $starttime,
+                'endtime' => $endtime,
+                'location' => $location,
+                'building_type' => $building_type,
+                'building_size' => $building_size,
+                'building_age' => $building_age,
+                'price' => $price,
+                'type' => $type,
+                'notes' => $notes,
+            ]
+        );
+
+        return redirect('/scheduleze/booking/appointment')->with('success', 'success');
+    }
+
+    public function EditBooking(Request $request, $id)
+    {
+        $userid = session('id');
+        $booking = Booking::where('id', $id)->first();
+
+        $location_popup = get_location_popup($booking->location);
+
+        $business = session('business_id'); //get business id from session
+        $type_pop = get_pricing_popup($business, "building_types", "building_type", "smallselect", $booking->building_type);
+        $size_pop = get_pricing_popup($business, "building_sizes", "building_size",  "smallselect", $booking->building_size);
+        $age_pop = get_pricing_popup($business, "building_ages", "building_age", "smallselect", $booking->building_age);
+
+        $inspector_popup = get_inspector_popup('name', $userid);
+
+        $start_popup = get_time_popup ($booking->starttime, $designate = "", 1, 1, 1, 1, 1, 1, 'starttime');
+        $end_popup = get_time_popup (($booking->endtime + 2), $designate = "1", 1, 1, 1, 1, 1, 1, 'endtime');
+
+
+        //$ss = "select addon from addons_bookings where booking = '$row[id]'";
+        $addons_edit = DB::table('addons_bookings')->select('addon')->where('booking', $booking->id)->get()->toArray();
+        //$addons_edit = $l->pull_flat_multi($ss);
+        if(!isset($addons_edit)){
+            $addons_edit = '';
+        }
+
+        $add_on_checkboxes = get_addon_checkboxes("addons", "id", "name", "addon", "", "rank", "ASC", "40", $addons_edit, 3);
+
+        $groupdata = array('userid' => $userid, 'booking' => $booking, 'location_popup' => $location_popup, 'type_pop' => $type_pop, 'size_pop' => $size_pop, 'age_pop' => $age_pop, 'inspector_popup' => $inspector_popup, 'start_popup' => $start_popup, 'end_popup' => $end_popup, 'add_on_checkboxes' => $add_on_checkboxes, 'id' => $id);
+
+        
+        return view('appointments.editbooking', compact('groupdata'));
+    }
     public function Blockout($form)
     {
         $id = session('id');

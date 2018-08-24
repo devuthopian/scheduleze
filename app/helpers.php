@@ -318,6 +318,110 @@ if(! function_exists('get_inspector_popup')){
 	}
 }
 
+if(! function_exists('get_addon_checkboxes')){
+	function get_addon_checkboxes($table, $returns='id', $label='name', $variable='addon', $insert='', $order='rank', $direction='ASC', $truncate_label='48', $default_id='', $columns='2', $cellpadding='2') {
+		//if (strlen($insert)>4){
+			//$insert .= " and ";
+			$businessId = session('business_id');
+			$whereArr = [['business', '=', $businessId], ['removed', '=', 0]];
+		//}
+		
+		$rows = DB::table($table)->where($whereArr)->orderBy($order, $direction)->get()->toArray();
+		//$sql = "select * from $table where ".$insert."business='$_SESSION[business]' and removed='0' order by $order $direction";
+		//$rows = $this->pull_multi($sql);
+		if (count($rows)>0){
+			if ($columns != "0"){
+				$count = count($rows);
+				$per_column = ceil($count/$columns);
+				$html = "<table cellpadding=\"$cellpadding\" cellspacing=\"0\" border=\"0\"><tr><td valign=\"top\">";
+				$c = 0;
+			}
+			foreach ($rows as $row) {
+				if(is_array($default_id) || isset($default_id)){
+
+					if (in_array(parse_str($row->id), $default_id)){
+						$selected = "checked"; 
+					} else {
+						$selected = ""; 
+					}
+
+				} else {
+					if ($row->id == $default_id){ $selected = "checked"; } else { $selected = ""; }
+				}
+				if ($row->price > 0){
+					$price = " - $".$row->price;
+				} else {
+					$price = "";
+				}
+				//$label_length = ($label_length + strlen($row[name]) + strlen($row[price]));
+				//if ($label_length > 40){
+				//	$br = "<br>";
+				//	$label_length = 0;
+				//} else {
+					//$br = "";
+				//	$br = "<br>";  //for new row, let's see if that looks better
+				//}
+				$c++;
+				if ($per_column < $c){
+					$c = 1;
+					if ($columns != "0"){
+						$html .="</td><td valign=\"top\">";
+					}
+				}
+				$row->$label = truncate_string($row->$label, $truncate_label);
+				$html .= ("\n\t\t\t\t\t\t<input type=\"checkbox\" name=\"$variable"."[]\" value=\"".$row->$returns."\" $selected><span class=\"note\">".$row->$label." ".$price."</span><br>");
+			}
+			if ($columns != "0"){
+				$html .= "</td></tr></table>";
+			}
+			return ($html);
+		} else {
+			return false;
+		}
+	}
+}
+
+if(! function_exists('get_total_price')){
+	function get_total_price($building_type, $building_size, $building_age, $location='', $addons=''){
+		$prices = get_field("building_types", 'price', $building_type);
+		if ($building_size > 0){
+			$size_price = get_field("building_sizes", 'price', $building_size);
+			$prices = $prices + $size_price;
+		}
+		if ($building_age > 0){
+			$age_price = get_field("building_ages", 'price', $building_age);
+			$prices = $prices + $age_price;
+		}
+		if ($location > 0){
+			$location_price = get_field("locations", 'price', $location);
+			$prices = $prices + $location_price;
+		}
+		if (is_array($addons) || isset($addons)){
+			$adds = format_addons($addons);
+			$prices = $prices + $adds['price'];
+		}
+		
+		return $prices;
+	}
+}
+
+if(! function_exists('truncate_string')){
+	function truncate_string($string, $length){
+		if (strlen($string) > $length){
+			$headparts = explode(" ",$string);
+			foreach($headparts as $headpart){
+				$chr = ($chr+(strlen($headpart)));
+				if($chr<$length){
+					$shorthead .= ($headpart." ");
+				}
+			}
+			$string = trim($shorthead);
+			$string = ($string."...");
+		}
+		return $string;
+	}
+}
+
 if(! function_exists('get_modifer_information')){
 	function get_modifer_information($table, $modifer_id, $business){
 
@@ -339,18 +443,20 @@ if(! function_exists('get_proposed_inspection_information')){
 
 		if ($building_info->status != "2"){ //2 means to disregard additional popup selections for size and age
 			$building_info = get_modifer_information("building_sizes", $building_size, $business);
-			$more_price[] = $building_info->price;
-			$more_time[] = $building_info->buffer;
-			$more_status[] = $building_info->status;
-			$more_name .= ", $building_info->name";
+			if(isset($building_info)){
+				$more_price[] = $building_info->price;
+				$more_time[] = $building_info->buffer;
+				$more_status[] = $building_info->status;
+				$more_name .= ", $building_info->name";
 
-			if ($building_info->status != "2"){ //2 means to disregard additional popup selections for size and age
-				$building_info = get_modifer_information("building_ages", $building_age, $business);
-				if($building_info != null){
-					$more_price[] = $building_info->price;
-					$more_time[] = $building_info->buffer;
-					$more_status[] = $building_info->status;
-					$more_name .= ", $building_info->name";
+				if ($building_info->status != "2"){ //2 means to disregard additional popup selections for size and age
+					$building_info = get_modifer_information("building_ages", $building_age, $business);
+					if($building_info != null){
+						$more_price[] = $building_info->price;
+						$more_time[] = $building_info->buffer;
+						$more_status[] = $building_info->status;
+						$more_name .= ", $building_info->name";
+					}
 				}
 			}
 		}
@@ -546,6 +652,7 @@ if(!function_exists('get_available_times_popup2')){
 		$conflict="";
 		$day ='';
 		$i = 0;  //APPROVED loop counter, used for array index
+		$s = array();
 		foreach ($incray as $starttime){
 			
 			$endtime = $starttime + $proposed_size_duration;
@@ -679,6 +786,8 @@ if(!function_exists('get_available_times_popup2')){
 		
 		$html = "\n\t\t<select name=\"starttime\">";
 		if (is_array($s)){
+			$previous_proposed_start = "";
+			$proposed_appointment_start = "";
 			//print "<!--$proposed_size_duration-->";
 			foreach ($s as $proposed_appointment_start){  // for every potential valid time
 				// we don't want to show every hour of the day, just 9, 12, 3, 6 etc -- so once we have printed a time out, we need to not check for the next 3 hours
@@ -1154,16 +1263,11 @@ if(! function_exists('display_for_edit')){
 		/*$tt = $this->pull_multi($sql);*/
 		$html = "<tr class=\"dark-table-heading\"><td bgcolor=\"F0F0F0\" class=\"display\"><b>Start &amp; End</b></td>\n
 		<td bgcolor=\"F0F0F0\" class=\"display\"><b><!--<a href=\"index.php?action=blockouts&track=2&order=type&first=$first&last=$last&inspector=$id\"> Inspection-->Address</b></td>\n
-		<td bgcolor=\"F0F0F0\" class=\"display\"><b>Agent/Notes</b></td>\n";
-		
-		if (count($tt)>0) {
-			if($tt[0]->type != 1){
-				$html .= "<td bgcolor=\"F0F0F0\" class=\"display\"><b>Price</b></td>\n";
-				$html .= "<td bgcolor=\"F0F0F0\" class=\"display\"><b>Client/Type</b></td>\n
-				<td bgcolor=\"F0F0F0\" class=\"display\"><b>Numbers</b></td>\n";
-			}
-		}
-		$html .= "<td bgcolor=\"F0F0F0\" class=\"display\"><b>&nbsp;</b></td>\n";
+			<td bgcolor=\"F0F0F0\" class=\"display\"><b>Agent/Notes</b></td>\n
+			<td bgcolor=\"F0F0F0\" class=\"display\"><b>Price</b></td>\n
+			<td bgcolor=\"F0F0F0\" class=\"display\"><b>Client/Type</b></td>\n
+			<td bgcolor=\"F0F0F0\" class=\"display\"><b>Numbers</b></td>\n
+			<td bgcolor=\"F0F0F0\" class=\"display\"><b>&nbsp;</b></td>\n";
 
 		$h=0;
 		//loop to create the display
@@ -1197,9 +1301,9 @@ if(! function_exists('display_for_edit')){
 
 				
 				if ($end_day == $start_day) {
-					$hora = "<br><nobr>".$start." - ".$end."</nobr><br>".$start_day."<br><br>";
+					$hora = "<nobr>".$start." - ".$end."</nobr><br>".$start_day."<br><br>";
 				} else {
-					$hora = "<br><nobr>".$start."".$start_day."</nobr><br>".$end." ".$end_day."<br><br>";
+					$hora = "<nobr>".$start."".$start_day."</nobr><br>".$end." ".$end_day."<br><br>";
 				}
 				
 				if ($row->type !=1){
@@ -1214,6 +1318,11 @@ if(! function_exists('display_for_edit')){
 					$notes = $row->notes;
 					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\">Blockout</td>\n";
 					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\">$notes</td>\n";
+
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\">--</td>\n";
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\"><nobr>--</nobr><br></td>\n";
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\"><nobr>--</nobr><br><nobr></nobr></td>\n";
+
 					$client_name = '';
 					$dayphone = '';
 					$homephone = '';
@@ -1262,7 +1371,7 @@ if(! function_exists('display_for_edit')){
 				if ($row->type == "1"){
 					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\"><nobr><a href=\"index.php?action=set_blockout&edit=$id\" class=\"note_link\">Edit</a><span class\"note\">  </span><a href=\"index.php?action=remove&id=$id&user_id=$user_id\"  class=\"note_link\">Remove</a></nobr></td>\n";
 				} else {
-					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\"><nobr><a href=\"index.php?action=edit_booking&edit=$id\" class=\"note_link\">Edit</a><span class\"note\">  </span><a href=\"index.php?action=remove&id=$id&user_id=$user_id\"  class=\"note_link\">Remove</a></nobr></td>\n";
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\"><nobr><a href=\"/scheduleze/booking/edit/$id\" class=\"note_link\">Edit</a><span class\"note\">  </span><a href=\"index.php?action=remove&id=$id&user_id=$user_id\"  class=\"note_link\">Remove</a></nobr></td>\n";
 				}
 				$html .= "</tr>\n";
 				$last_end_day = date("j", $row->endtime);
@@ -1290,6 +1399,64 @@ if(! function_exists('make_day_blocks')){
 			$c++;
 		}
 		return $day_edges;
+	}
+}
+
+if(! function_exists('get_pricing_popup')){
+	function get_pricing_popup($business, $table, $variable='', $class='', $default_override='') {
+		if ($variable == ""){
+			$variable = $table;
+		}
+		//$sql = "select * from $table where business = '$business' and removed = '0' order by rank ASC";
+
+		$temp = DB::table($table)->where([['business', '=', $business],['removed', '=', 0]])->orderBy('rank','ASC')->get();
+		//$temp = $this->pull_multi($sql);
+		if (count($temp) > 0){
+			if (count($temp) == "1") {
+				session([$variable => $temp[0]->id]);
+			}
+			$html_parts = '';
+
+			foreach ($temp as $row) {
+				//$arrayName[] = $row->name;
+				if (!is_numeric($default_override)){
+					if ($row->selected == 1){ $selected = " selected"; } else { $selected = ""; }
+				} else {
+					if ($default_override == $row->id){ $selected = " selected"; } else { $selected = ""; }
+				}
+				
+				$html_parts .= "\n\t\t\t\t<option value=\"\"$selected>$row->name</option>";
+			}
+			//return $arrayName;
+			$html = "\n\t\t\t<select name=\"$variable\" class=\"$class\" required>";
+			$html .= "\n\t\t\t<option value=\"0\">--Select--</option>";
+			$html .= $html_parts;
+			$html .= "\n\t\t\t</select>";
+			return ($html);
+		} else {
+			return false;
+		}
+	}
+}
+
+if(! function_exists('get_location_popup')){
+	function get_location_popup($default_id='', $class='small_select') {
+		$rows = DB::table('locations')->where([['business', '=', session('business_id')],['removed', '=', 0]])->orderBy('name','ASC')->get();
+		if (count($rows) > 0) {
+			if (count($rows) == "1") {
+				session(['location' => $rows[0]->id]);
+				//$_SESSION[location] = $rows[0][id];
+			}
+			$html = "\n\t\t\t<select name=\"location\" class=\"$class\">";
+				foreach ($rows as $row) {
+					if ($row->id == $default_id){ $selected = "selected"; } else { $selected = ""; }
+					$html .= "\n\t\t\t\t<option value=\"$row->id\"$selected>$row->name</option>";
+				}
+			$html .= "\n\t\t\t</select>";
+			return ($html);
+		} else {
+			return false;
+		}
 	}
 }
 
@@ -1395,9 +1562,14 @@ if(! function_exists('display_dayticket')){
 		$html = "<table width=\"100%\" border=\"1\" cellspacing=\"0\" cellpadding=\"4\">\n";
 		//$inspector_name = $this->get_field("users_details", "name", "$row[inspector]");
 		$bgcolor = "FFFFFF";
+			$bookings_total_count = 0;
+			$total_earnings = 0;
 			foreach ($tt as $row) {
 				//$h++;
-				$city = get_field("locationS", "name", $row->location);
+
+				if($row->location != 0)
+					$city = get_field("locations", "name", $row->location);
+
 				// format the building type:
 				//format the times
 				$start = date("g:ia", $row->starttime - 1);
@@ -1426,8 +1598,7 @@ if(! function_exists('display_dayticket')){
 				//if ("$end_day"=="$start_day") {
 					$hora = "<nobr><b>$start</b> - $end</nobr><span class=\"note\"><br>Appointment #$row->id</span>";
 				//}
-				$bookings_total_count = 0;
-				$total_earnings = 0;
+				
 				if ($row->type == "1"){
 					$html .= "
 					<tr>

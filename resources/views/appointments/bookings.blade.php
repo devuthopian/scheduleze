@@ -18,10 +18,26 @@
 			<input type="hidden" name="action" value="{{$form}}">
 			{!! edit_filter($first, $id, $i_name, $last) !!}
 			@if($form == 'appointment')
-				@php $inc='book'; @endphp
+				@php 
+					$inc='book'; 
+					$include = 'include blockouts';
+					$url = url('/scheduleze/booking/all');
+				@endphp
 				<input type="hidden" name="inc" value="book">
+			@elseif($form == 'all')
+				@php 
+					$form = 'Appointments & Blockouts';
+					$inc = 'all';
+					$include = 'only bookings';
+					$url = url('/scheduleze/booking/appointment');
+				@endphp
+				<input type="hidden" name="inc" value="all">
 			@else
-				@php $inc='block'; @endphp
+				@php 
+				$inc='block'; 
+				$include = 'include bookings';
+				$url = url('/scheduleze/booking/appointment');
+				@endphp
 				<input type="hidden" name="inc" value="block">
 			@endif
 			<input type="hidden" name="order" value="type">
@@ -40,9 +56,9 @@
 									<span class="head">{{ucfirst($form)}} for {{ $i_name }} {{ $i_last_name }}<br></span>
 									<div>
 										Review, modify or remove your appointments
-										<a href="#" target="_blank" class="note">Print Tickets »</a>
+										<a href="{{ url('/scheduleze/dayticket/'.$id) }}" target="_blank" class="note">Print Tickets »</a>
 									</div>
-									<a href="index.php?action=bookings&amp;track=2&amp;inc=all" class="note"><nobr>include blockouts</nobr></a>
+									<a href="{{ $url }}" class="note"><nobr>{{ $include }}</nobr></a>
 									<table cellpadding="3" cellspacing="0" border="0" width="100%" class="table border table-responsive table-borderd table-striped select-default">
 										<form action="#" method="post" name="FormName">
 											{!! display_for_edit($id, $first, $last, $order='', $inc) !!}

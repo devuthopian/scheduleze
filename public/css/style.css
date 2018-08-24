@@ -360,7 +360,7 @@ a:hover {
   padding: 0px 0 0px;
   float: left;
   background: #f5f5f5;
-  margin: 170px 0 0;
+  margin: 30px 0 0;
 }
 .footer_section .footer_top_cont {
   background: #e2a729;
@@ -1240,6 +1240,18 @@ table.content-table input[type="checkbox"]:checked + label:after {
     background: #d8d8d8;
     margin: 5px 0 30px;
 }
+.signup_select [class*="col-"] select.form-control {
+    width: 100%;
+    padding: 11px 25px !important;
+    border-radius: 30px;
+    border: 0px;
+    background: #d8d8d8;
+    margin: 5px 0 30px;
+    border-bottom: 0px !important;
+}
+.signup_select .col-12 {
+    min-height: 100%;
+}
 .nsignup_cont .gmailbtn:hover { 
     background: #e2a729 !important;
 }
@@ -1311,6 +1323,64 @@ table.content-table input[type="checkbox"]:checked + label:after {
 .frameadmin .table > thead > tr > th, .frameadmin .table > tbody > tr > th, .frameadmin .table > tfoot > tr > th, .frameadmin .table > thead > tr > td, .frameadmin .table > tbody > tr > td, .frameadmin .table > tfoot > tr > td {
     padding: 15px 8px;
 }
+.frameadmin .bluebtn {
+    background: #48aabf;
+    border-radius: 30px;
+}
+.frameadmin .bluebtn:hover {
+    background: #e2a729 !important;
+}
+.adding_blockout_cont {
+  padding: 50px 0;
+}
+.adding_blockout_cont .head {
+    font-size: 36px;
+    text-transform: uppercase;
+    color: #429caf;
+    margin: 0px 0 20px;
+    display: inline-block;
+    width: 100%;
+}
+.adding_blockout_cont label {
+    width: 100%;
+}
+.adding_blockout_cont .inspector_admin, .adding_blockout_cont .start_admin, .adding_blockout_cont .end_admin, .adding_blockout_cont .notes_admin {
+    margin: 20px 0 0;
+    display: inline-block;
+    width: 100%;
+}
+.adding_blockout_cont select, .adding_blockout_cont textarea {
+    width: 100%;
+    max-width: 250px;
+    padding: 10px 15px;
+    border-radius: 30px;
+    border: 0px;
+    background: #d8d8d8;
+    margin: 5px 0 10px;
+}
+.adding_blockout_cont input[type="submit"] {
+    padding: 10px 20px;
+    border-radius: 30px;
+    border: 1px solid #fff;
+    background: #429caf;
+    text-align: center;
+    color: #fff;
+    box-shadow: 0px 0px 18px #ccc;
+    margin-top: 15px;
+}
+.adding_blockout_cont input[type="submit"]:hover {
+    background: #e2a729 !important;
+}
+.adding_blockout_cont .start_admin select, .adding_blockout_cont .end_admin select {
+    width: 10%;
+    max-width: 80px;
+    float: left;
+    margin-right: 1%;
+}
+.adding_blockout_cont .same_day {
+    position: relative;
+    top: 10px;
+}
 @media (max-width: 1024px) {
 .bookingmain .bookingcontainer .labelInsp, .bookingmain .bookingcontainer .labelstart, .bookingmain .bookingcontainer .labelend {
     width: 33%;
@@ -1331,6 +1401,9 @@ table.content-table input[type="checkbox"]:checked + label:after {
 .nsignup_cont h3 {
     font-size: 30px;
 }
+.building .frameadmin .head h1 {
+    font-size: 30px;
+}
 .bookingmain .bookingcontainer .labelInsp, .bookingmain .bookingcontainer .labelstart, .bookingmain .bookingcontainer .labelend {
     width: 100%;
     margin-bottom: 20px;
@@ -1344,9 +1417,30 @@ table.content-table input[type="checkbox"]:checked + label:after {
 .bookingmain .bookingcontainer input[type="submit"] {
     margin: 0px 0px 0;
 }
+.adding_blockout_cont .start_admin select, .adding_blockout_cont .end_admin select {
+    width: 15%;
+}
 }
 @media (max-width: 480px) {
 .bookingmain .bookingcontainer .labelstart select, .bookingmain .bookingcontainer .labelend select {
     width: 32%;
+}
+.adding_blockout_cont .head {
+    font-size: 30px;
+    line-height: 30px;
+}
+.adding_blockout_cont select, .adding_blockout_cont textarea {
+    max-width: 100%;
+}
+.adding_blockout_cont .start_admin select, .adding_blockout_cont .end_admin select {
+    width: 32%;
+    max-width: 100%;
+}
+.adding_blockout_cont .same_day {
+    top: 0;
+}
+.adding_blockout_cont input[type="submit"] {
+    width: 100%;
+    margin-bottom: 20px;
 }
 }

@@ -9,7 +9,7 @@
 <meta http-equiv="Bulletin-Text" content="Scheduleze | Customer Scheduling Solutions"/>
 <meta name="page-topic" content="Scheduleze | Customer Scheduling Solutions"/>
 <meta http-equiv="Content-Style-Type" content="text/css"/>
-<link rel="shortcut icon" href="images/logo.png" type="image/x-icon" />
+<link rel="shortcut icon" href="{{ asset('images/favicon_icon.png') }}" type="image/x-icon" />
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <link href="{{ asset('css/style.css') }}" rel="stylesheet">
 <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet">
