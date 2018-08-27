@@ -17,13 +17,11 @@
 	} else {
 		$do = "Editing Blockout";
 		$submit_label = "Edit Blockout";
+		$checked = "";
 		$message = "Check &quot;same day&quot; to disregard second month/day/year menus";
-		$sql = "select starttime, endtime, notes, user_id from bookings where id = '$_GET[edit]'";
-		$row = $l->pull_assoc($sql);
-		session(['affected_inspector' => $row->user_id]);
-		check_permission($row->user_id);
-		$default_time = $row[starttime];
-		$default_endtime = $row[endtime];
+
+		$default_time = $row->starttime;
+        $default_endtime = $row->endtime;
 	}
 
 	if (is_numeric(session('affected_inspector'))){
@@ -60,7 +58,7 @@
 						@csrf
 						<input type="hidden" name="trigger" value="1">
 						<input type="hidden" name="action" value="set_blockout">
-						<input type="hidden" name="target" value="@if(isset($blockId)) {{ $blockId }} @endif">
+						<input type="hidden" name="target" value="@if(isset($blockId)){{ $blockId }}@endif">
 						
 						<div class="inspector_admin">
 							<label>Inspector:&nbsp;</label>
@@ -80,7 +78,7 @@
 						<div class="notes_admin">
 							<label>Notes:</label>
 							<textarea name="notes">
-								@if(isset($row)) {{ $row->notes }} @endif
+								@if(isset($row) && !empty($row)) {{ $row->notes }} @endif
 							</textarea>
 						</div>
 						<div>								

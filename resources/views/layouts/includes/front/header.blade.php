@@ -101,7 +101,7 @@
                             </ul>
                         </li>
                         <li>
-                            <a href="#">ZigZag</a>
+                            <a href="{{ route('ZigZag') }}">ZigZag</a>
                         </li>
                         <li class="arrowicon">
                             <a href="#">Users</a>
@@ -158,4 +158,12 @@
                 @endguest
         </div>
     </div>
+</div>
+
+<div class="col-sm-10">
+    @if(session()->has('message'))
+        <div class="alert alert-success">
+            {{ session()->get('message') }}
+        </div>
+    @endif
 </div>

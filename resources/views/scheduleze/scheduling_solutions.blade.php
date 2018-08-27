@@ -1,6 +1,13 @@
 @extends('layouts.front')
 
 @section('content')
+@if(!empty($errors->first()))
+    <div class="row col-lg-12">
+        <div class="alert alert-warning">
+            <span>{{ $errors->first() }}</span>
+        </div>
+    </div>
+@endif
 <div class="banner_section">
     <div class="container">
         <div id="myCarousel" class="carousel slide" data-ride="carousel">

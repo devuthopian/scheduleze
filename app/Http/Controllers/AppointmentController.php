@@ -108,7 +108,7 @@ class AppointmentController extends Controller
                 ]
             );
         }
-        return redirect('/scheduleze/BusinessHours')->with('Successfully saved!');
+        return redirect('/scheduleze/BusinessHours')->with('message','Successfully saved!');
     }
 
     /**
@@ -162,7 +162,7 @@ class AppointmentController extends Controller
             }
 
         }
-        return redirect('/scheduleze/DriveTime')->with('Successfully saved!');
+        return redirect('/scheduleze/DriveTime')->with('message','Successfully saved!');
     }
 
 
@@ -251,7 +251,7 @@ class AppointmentController extends Controller
                 $i++;
             }
 
-            return redirect('/scheduleze/Reoccurrence')->with('Successfully saved!');
+            return redirect('/scheduleze/Reoccurrence')->with('message','Successfully saved!');
         }
     }
 
@@ -362,7 +362,7 @@ class AppointmentController extends Controller
             }
         }
 
-        return redirect('/scheduling_solutions')->with('Successfully saved!');
+        return redirect('/scheduling_solutions')->with('message','Successfully saved!');
     }
 
     /**

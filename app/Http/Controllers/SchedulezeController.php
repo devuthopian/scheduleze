@@ -10,6 +10,7 @@ use App\Daysoff;
 use App\LocationTime;
 use App\PanelTemplate;
 use App\Location;
+use App\UserDetails;
 use Illuminate\Support\Facades\Input;
 use PDF;
 use DB;
@@ -36,6 +37,55 @@ class SchedulezeController extends Controller
     public function scheduling_solutions()
     {
         return view('scheduleze.scheduling_solutions');
+    }
+
+    public function ZigZag()
+    {
+        $id = session('id');
+        $businesshours = BusinessHours::where([['user_id','=',$id],['removed','=',0]])->get();
+
+        //zigzag stuff
+        $z = get_field('users_details', 'zigzag', $id);
+        $zigpop = get_field('users_details', 'zzamount', $id);
+        $zigpop = get_zigpop($zigpop);
+
+        if ($z==1) {
+            $z = "checked";
+        } else {
+            $z = "";
+        }
+
+        return view('zigzag.zigzag', compact('businesshours', 'zigpop', 'z'));
+    }
+
+    public function storeZigZag(Request $request)
+    {
+        $data = Input::get();
+        $id = session('id');
+
+        if ($data['trigger'] == 1) {
+            if ($data['zigzag'] == 1) {
+                $act = "Enabled";
+                $zigzag = $data['zigzag'];
+                $zzamount = $data['zigpop'];
+            } else {
+                $act = "Disabled";
+                $zigzag = 0;
+                $zzamount = 0;
+            }
+
+            $UserDetails = UserDetails::updateOrCreate(
+                ['user_id' => $id],
+                [
+                    'zigzag' => $zigzag,
+                    'zzamount' => $zzamount
+                ]
+            );
+
+            //$message = 'Zigzag Control'.$act;
+        }
+
+        return redirect('/scheduleze/zigzag')->with('message', 'ZigZag changes saved');
     }
 
     /*public function ListBlockout()
@@ -122,9 +172,12 @@ class SchedulezeController extends Controller
 
         $starttime = strtotime($starttime) + 1;
 
-        if ($data['sameday'] == 1) {
-            $endtime = $data['hourendtime'][1].":".$data['minuteendtime'][1]." ".$data['amendtime'][1]." ".$data['monthstarttime'][0]."/".$data['daystarttime'][0]."/".$data['yearstarttime'][0];
-        } else {
+        if(isset($data['sameday'])){
+            if ($data['sameday'] == 1) {
+                $endtime = $data['hourendtime'][1].":".$data['minuteendtime'][1]." ".$data['amendtime'][1]." ".$data['monthstarttime'][0]."/".$data['daystarttime'][0]."/".$data['yearstarttime'][0];
+            }
+        }
+        else {
             $endtime = $data['hourendtime'][1].":".$data['minuteendtime'][1]." ".$data['amendtime'][1]." ".$data['monthendtime'][1]."/".$data['dayendtime'][1]."/".$data['yearendtime'][1];
         }
 
@@ -159,7 +212,7 @@ class SchedulezeController extends Controller
 
         $blockId = $Booking->id;
 
-        return redirect('/scheduleze/booking/blockouts')->with('success', 'blockout added');
+        return redirect('/scheduleze/booking/blockouts')->with('message', 'blockout changes saved');
     }
 
     /**
@@ -181,6 +234,10 @@ class SchedulezeController extends Controller
     {
         $data = Input::get();
 
+        dd($data);
+
+        $getstend = DB::table('bookings')->select('starttime', 'endtime')->where('id', $id)->first();
+
         if (isset($data['quote_override'])){
             if($data['quote_override'] != "1"){
                 $this_total_price = get_total_price($data['building_type'],$data['building_size'],$data['building_age'], $data['location'], $data['addon']);
@@ -197,8 +254,12 @@ class SchedulezeController extends Controller
 
         $temp_end = (strtotime($endtime) - 1);
         
-        
+        $flash = 0;
         if ($temp_start > $temp_end){
+            $flash = 1;
+
+            $starttime = $getstend->starttime;
+            $endtime = $getstend->endtime;
             //$_SESSION[warning] = "Start time occurs after the specified endtime.  No change made to start or end times, other edits executed successfully";
         } else {
             $starttime = $temp_start;
@@ -282,10 +343,26 @@ class SchedulezeController extends Controller
                 'price' => $price,
                 'type' => $type,
                 'notes' => $notes,
+                'edited' => $edited
             ]
         );
 
-        return redirect('/scheduleze/booking/appointment')->with('success', 'success');
+        if (is_array($data['addon'])){
+
+            $delete = DB::table('addons_bookings')->where('booings', $data['target'])->delete();
+
+            foreach ($data['addon'] as $addn){
+                DB::table('addons_bookings')->insert(
+                    ['addon' => $addn, 'booking' => $data['target']]
+                );
+            }
+        }
+
+        if($flash == 1){
+            return redirect('/scheduleze/booking/edit/'.$id)->withErrors('Start time occurs after the specified endtime.  No change made to start or end times, other edits executed successfully');
+        }
+
+        return redirect('/scheduleze/booking/appointment')->with('message', 'success');
     }
 
     public function EditBooking(Request $request, $id)
@@ -320,13 +397,42 @@ class SchedulezeController extends Controller
         
         return view('appointments.editbooking', compact('groupdata'));
     }
-    public function Blockout($form)
+
+    public function DeleteBooking($id)
+    {
+        $type = get_field('bookings', 'type', $id);
+        $affected_inspector = get_field('bookings', 'user_id', $id);
+        check_permission($affected_inspector);
+
+        if ($type == "1"){
+            $appoint = "blockout";
+        } else {
+            $appoint = "booking";
+        }       
+
+        $update = Booking::where('id', $id)->update(['removed' => 1]);
+
+        if($update == 1){
+            return back()->with('message', $appoint.' Removed!');
+        }
+
+        return back()->with('message', 'Process Failed! Please try again');
+
+    }
+    public function Blockout($form, $blockId = null)
     {
         $id = session('id');
         $first = time();
         $last = $first + 1209500;
 
-        return view('appointments.arrangeblockouts', compact('id', 'first', 'last','form'));
+        $row = '';
+        if(!empty($blockId)){
+            $row = Booking::select('starttime', 'endtime' ,'notes', 'user_id')->where('id', $blockId)->first();
+            session(['affected_inspector' => $row->user_id]);
+            check_permission($row->user_id);
+        }
+
+        return view('appointments.arrangeblockouts', compact('id', 'first', 'last', 'form', 'row', 'blockId'));
     }
 
     /**

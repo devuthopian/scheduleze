@@ -25,8 +25,8 @@ class CreateUsersDetailsTable extends Migration
             $table->string('public_name',255)->nullable();
             $table->string('email2',255)->nullable();
             $table->tinyInteger('permission')->default('0');
-            $table->tinyInteger('zigzag')->default('0');
-            $table->tinyInteger('zzamount')->default('0');
+            $table->integer('zigzag')->default('0');
+            $table->integer('zzamount')->default('0');
             $table->integer('increment')->default('900');
             $table->integer('look_ahead')->default('12');
             $table->integer('allow_conflict')->default('0');

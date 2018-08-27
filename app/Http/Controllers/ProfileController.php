@@ -74,7 +74,7 @@ class ProfileController extends Controller
         $UserDetails->save();
         $UserDetails->user->save();
       
-        return redirect('/profile')->with('success', trans('profile.updateSuccess'));
+        return redirect('/profile')->with('message', trans('profile.updateSuccess'));
     }
 
     public function UserBusinessProfile()
@@ -127,7 +127,7 @@ class ProfileController extends Controller
         $UserDetails->business = $UserBusinessDetails->id;
         $UserDetails->save();
         
-        return redirect('/business_info')->with('success', trans('profile.updateSuccess'));
+        return redirect('/business_info')->with('message', trans('profile.updateSuccess'));
     }
 
 }

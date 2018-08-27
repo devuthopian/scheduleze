@@ -506,6 +506,32 @@ if(! function_exists('get_proposed_inspection_information')){
 	}
 }
 
+if(! function_exists('get_zigpop')){
+	function get_zigpop ($time='0') {
+		$do = "selected";
+		$select = "<select name=\"zigpop\" size=\"1\" class=\"select_drivetime\">\n";
+		if (strlen($time)>1) {
+			$min=$time/60;
+			$select .= "<option value=\"$time\" $do>$min min</option>\n";
+			$do="";
+		}
+		$select .= "
+					<option value=\"900\">15 min</option>
+					<option value=\"1800\" $do>30 min</option>
+					<option value=\"2700\">45 min</option>
+					<option value=\"3600\">60 min</option>
+					<option value=\"4500\">1:15</option>
+					<option value=\"5400\">1:30</option>
+					<option value=\"6300\">1:45</option>
+					<option value=\"7200\">2 hours</option>
+					<option value=\"8100\">2:15 hours</option>
+					<option value=\"9000\">2:30 hours</option>
+					<option value=\"9900\">2:45 hours</option>
+					<option value=\"10800\">3 hours</option>
+				</select>";
+		return $select;
+	}
+}
 
 if(! function_exists('get_field')){
 	function get_field($table, $field, $id) {
@@ -1294,7 +1320,8 @@ if(! function_exists('display_for_edit')){
 					$html .= "
 					<tr>
 						<td colspan = \"7\" bgcolor=\"#FFCD49\"><b>".$full_day_label."</b>&nbsp;&nbsp;";
-					$html .= '<a href="/scheduleze/dayticket/'.$row->user_id.'/1/'.$start_of_day.'" target="_blank" class="note">Print Day Ticket &#187;</a></td>
+					$url = "https://needsecured.com/developer/scheduleze/public/scheduleze/dayticket/$row->user_id/1/$start_of_day";
+					$html .= '<a href="'.$url.'" target="_blank" class="note">Print Day Ticket &#187;</a></td>
 					</tr>';
 					
 				}
@@ -1327,6 +1354,7 @@ if(! function_exists('display_for_edit')){
 					$dayphone = '';
 					$homephone = '';
 					$user_id = $row->user_id;
+					$blockout_id = $row->id;
 				} else {
 					$location = $row->location;
 					$inspection_address = $row->inspection_address;
@@ -1369,9 +1397,12 @@ if(! function_exists('display_for_edit')){
 				}
 
 				if ($row->type == "1"){
-					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\"><nobr><a href=\"index.php?action=set_blockout&edit=$id\" class=\"note_link\">Edit</a><span class\"note\">  </span><a href=\"index.php?action=remove&id=$id&user_id=$user_id\"  class=\"note_link\">Remove</a></nobr></td>\n";
+					//$url ='/scheduleze/blockout/EditBlockout/'.$blockout_id;
+					$url ='/developer/scheduleze/public/scheduleze/blockout/EditBlockout/'.$blockout_id;
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\"><nobr><a href=\"$url\" class=\"note_link\">Edit</a><span class\"note\">  </span><a href=\"delete/$blockout_id\"  class=\"note_link\">Remove</a></nobr></td>\n";
 				} else {
-					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\"><nobr><a href=\"/scheduleze/booking/edit/$id\" class=\"note_link\">Edit</a><span class\"note\">  </span><a href=\"index.php?action=remove&id=$id&user_id=$user_id\"  class=\"note_link\">Remove</a></nobr></td>\n";
+					//$url = "https://needsecured.com/developer/scheduleze/public/scheduleze/booking/edit/$id";
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\"><nobr><a href=\"edit/$id\" class=\"note_link\">Edit</a><span class\"note\">  </span><a href=\"delete/$id\"  class=\"note_link\">Remove</a></nobr></td>\n";
 				}
 				$html .= "</tr>\n";
 				$last_end_day = date("j", $row->endtime);
@@ -1469,6 +1500,7 @@ if(! function_exists('check_permission')){
 			return true;
 		} elseif(session('permission') != '1') { //everyone who passes this point is a master, now just check which business
 			session(['warning' => "You do not have permission for this right now."]);
+			auth()->logout();
 			/*$this->logout_user();
 			header("Location: index.php");
 			exit();*/
@@ -1479,6 +1511,7 @@ if(! function_exists('check_permission')){
 			return true;
 		} else {
 			session(['warning' => "You do not have permission for this right now."]);
+			auth()->logout();
 			/*$this->logout_user();
 			header("Location: index.php");
 			exit();*/

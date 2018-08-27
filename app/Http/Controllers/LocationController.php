@@ -70,7 +70,7 @@ class LocationController extends Controller
             );
         }
 
-        return redirect('/business/Location')->with('Successfully saved!');
+        return redirect('/business/Location')->with('message','Successfully saved!');
     }
 
     /**

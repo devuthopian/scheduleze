@@ -11,6 +11,13 @@
 		$last = $first + 1209500;
 	}
 @endphp
+@if(!empty($errors->first()))
+    <div class="row col-lg-12">
+        <div class="alert alert-warning">
+            <span>{{ $errors->first() }}</span>
+        </div>
+    </div>
+@endif
 <div class="bookingmain">
 	<div class="bookingcontainer">
 		<form action="{{ url('/scheduleze/booking/'.$form.'') }}" method="post">
@@ -18,14 +25,14 @@
 			<input type="hidden" name="action" value="{{$form}}">
 			{!! edit_filter($first, $id, $i_name, $last) !!}
 			@if($form == 'appointment')
-				@php 
+				@php
 					$inc='book'; 
 					$include = 'include blockouts';
 					$url = url('/scheduleze/booking/all');
 				@endphp
 				<input type="hidden" name="inc" value="book">
 			@elseif($form == 'all')
-				@php 
+				@php
 					$form = 'Appointments & Blockouts';
 					$inc = 'all';
 					$include = 'only bookings';

@@ -1,6 +1,13 @@
 @extends('layouts.front')
 
 @section('content')
+@if(!empty($errors->first()))
+    <div class="row col-lg-12">
+        <div class="alert alert-warning">
+            <span>{{ $errors->first() }}</span>
+        </div>
+    </div>
+@endif
 <div class="container">
     <table width="960" border="0" cellspacing="0" cellpadding="0">
         <tr>
@@ -20,7 +27,6 @@
                                 {!! $groupdata['location_popup'] !!}</span>
                             </td>
                         </tr>
-                        <?}?>
                         <tr>
                             <td colspan="3">
                                 <span class="signuplabel">

@@ -42,11 +42,16 @@ Route::group(['middleware' => ['web']], function () {
 		Route::get('/scheduleze/DriveTime','SchedulezeController@drivetime')->name('Drivetime');
 		Route::get('/scheduleze/booking/{form?}','SchedulezeController@Bookings');
 		Route::get('/scheduleze/booking/edit/{id?}','SchedulezeController@EditBooking');
+		Route::get('/scheduleze/booking/delete/{id?}','SchedulezeController@DeleteBooking');
 		Route::post('/scheduleze/booking/update/{id?}','SchedulezeController@UpdateBooking');
 		Route::get('/scheduleze/dayticket/{inspector?}/{days?}/{start?}', 'SchedulezeController@dayticket');
 		Route::post('/scheduleze/booking/{form?}','SchedulezeController@BookingFilter');
-		Route::get('/scheduleze/blockout/{form?}','SchedulezeController@Blockout');
+		Route::get('/scheduleze/blockout/{form?}/{id?}','SchedulezeController@Blockout');
 		Route::post('/scheduleze/blockout/{form?}','SchedulezeController@storeBlockout');
+
+		Route::get('/scheduleze/zigzag','SchedulezeController@ZigZag')->name('ZigZag');
+		Route::post('/scheduleze/zigzag','SchedulezeController@storeZigZag');
+
 		//Route::get('/scheduleze/blockouts','SchedulezeController@ListBlockout')->name('ListBlockout');
 
 		Route::post('ajaxappointment', 'PanelController@storeAppointment');

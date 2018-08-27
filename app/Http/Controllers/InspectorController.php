@@ -97,6 +97,6 @@ class InspectorController extends Controller
         
         Mail::to($user->email)->send(new VerifyMail($user));
 
-        return redirect('/scheduling_solutions')->with('status', 'We sent '.$data["username"].' an activation code.');
+        return redirect('/scheduling_solutions')->with('message', 'We sent '.$data["username"].' an activation code.');
     }
 }

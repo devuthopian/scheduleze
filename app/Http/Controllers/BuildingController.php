@@ -173,7 +173,7 @@ class BuildingController extends Controller
 
         $txtForm = strtolower($txtForm);
 
-        return redirect('/scheduleze/appointments')->with('Successfully saved!');
+        return redirect('/scheduleze/appointments')->with('message','Successfully saved!');
     }
 
     public function storeException(Request $request)
