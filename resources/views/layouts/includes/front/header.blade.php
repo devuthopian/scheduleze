@@ -73,6 +73,9 @@
                             </ul>
                         </li>
                         <li class="arrowicon">
+                            <a href="{{ route('Document') }}">Document</a>
+                        </li>
+                        <li class="arrowicon">
                             <a href="{{ url('/form/BuildingTypes') }}">{{ __('nav.services') }}</a>
                             <ul >
                                 <li>
@@ -141,10 +144,15 @@
                             <a href="{{ url('profile') }}">{{ ucfirst(Auth::user()->name) }}</a>
                             <ul>
                                 <li>
-                                    <a href="{{ route('logout') }}">Logout</a>
+                                    <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
+                                    </a>
                                 </li>
                             </ul>
                         </li>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
                         <!-- <li class="nav-item dropdown">
                             <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                 {{ __('Logout') }}

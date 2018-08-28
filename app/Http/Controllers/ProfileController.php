@@ -52,7 +52,7 @@ class ProfileController extends Controller
         }else{
             $userid           =   $id;
         }
-        
+
         $UserData         =   UserDetails::where('user_id', $userid)->first();
 
         $data = [
@@ -60,9 +60,14 @@ class ProfileController extends Controller
         ];
         return view('profiles.UserProfileEdit')->with($data);
     }
-       public function updateUserAccount(Request $request)
+    public function updateUserAccount(Request $request)
     {
-        $userid            =   Auth::id();
+        $userid = $request->input('userid');
+        
+        if(empty($userid)){
+            $userid            =   Auth::id();
+        }
+
         $profile_validator = $this->profile_validator($request->all());
         if ($profile_validator->fails()) {
             return back()->withErrors($profile_validator)->withInput();

@@ -37,22 +37,24 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-sm-4" id="signup">
-                <h3>Try it now free for <br>30 days</h3>
-                @php $allindustries = getallIndustries() @endphp
-                <form method="POST" action="{{ route('register') }}" aria-label="{{ __('Register') }}">
-                    @csrf
-                    <select name="txtIndustries" required>
-                        <option value="-1">Select Industrial</option>
-                        @foreach($allindustries as $key => $industries)
-                            <option  value="{{ $key }}">{{ $industries }}</option>
-                        @endforeach
-                    </select>
-                    <input id="email" type="email" class="{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" placeholder="Business Email" required>
-                    <!-- <input type="text" placeholder="Business Email"> -->
-                    <input type="submit" value="TRY IT NOW" name="">
-                </form>
-            </div>
+            @guest
+                <div class="col-sm-4" id="signup">
+                    <h3>Try it now free for <br>30 days</h3>
+                    @php $allindustries = getallIndustries() @endphp
+                    <form method="POST" action="{{ route('register') }}" aria-label="{{ __('Register') }}">
+                        @csrf
+                        <select name="txtIndustries" required>
+                            <option value="-1">Select Industrial</option>
+                            @foreach($allindustries as $key => $industries)
+                                <option  value="{{ $key }}">{{ $industries }}</option>
+                            @endforeach
+                        </select>
+                        <input id="email" type="email" class="{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" placeholder="Business Email" required>
+                        <!-- <input type="text" placeholder="Business Email"> -->
+                        <input type="submit" value="TRY IT NOW" name="">
+                    </form>
+                </div>
+            @endguest
         </div>
     </div>
     <div class="copyright_section">

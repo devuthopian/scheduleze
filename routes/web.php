@@ -41,7 +41,7 @@ Route::group(['middleware' => ['web']], function () {
 		Route::get('/scheduleze/Reoccurrence','SchedulezeController@blockouts_occurance')->name('Reoccurrence');
 		Route::get('/scheduleze/DriveTime','SchedulezeController@drivetime')->name('Drivetime');
 		Route::get('/scheduleze/booking/{form?}/{userid?}','SchedulezeController@Bookings');
-		Route::get('/scheduleze/booking/edit/{id?}','SchedulezeController@EditBooking');
+		Route::get('/scheduleze/booking/form/edit/{id?}','SchedulezeController@EditBooking');
 		Route::get('/scheduleze/booking/delete/{id?}','SchedulezeController@DeleteBooking');
 		Route::post('/scheduleze/booking/update/{id?}','SchedulezeController@UpdateBooking');
 		Route::get('/scheduleze/dayticket/{inspector?}/{days?}/{start?}', 'SchedulezeController@dayticket');
@@ -51,6 +51,11 @@ Route::group(['middleware' => ['web']], function () {
 
 		Route::get('/scheduleze/zigzag','SchedulezeController@ZigZag')->name('ZigZag');
 		Route::post('/scheduleze/zigzag','SchedulezeController@storeZigZag');
+
+		Route::get('/scheduleze/documents','SchedulezeController@Documents')->name('Document');
+		Route::post('/scheduleze/documents', 'SchedulezeController@DocumnetFilter');
+		Route::get('/scheduleze/documents/viewreport/{booking?}', 'SchedulezeController@DocumnetReport');
+		Route::post('/scheduleze/save/report', 'SchedulezeController@SaveReport');
 
 		//Route::get('/scheduleze/blockouts','SchedulezeController@ListBlockout')->name('ListBlockout');
 

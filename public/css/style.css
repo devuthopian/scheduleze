@@ -1379,7 +1379,7 @@ table.content-table input[type="checkbox"]:checked + label:after {
 }
 .adding_blockout_cont .same_day {
     position: relative;
-    top: 10px;
+    top: 12px;
 }
 @media (max-width: 1024px) {
 .bookingmain .bookingcontainer .labelInsp, .bookingmain .bookingcontainer .labelstart, .bookingmain .bookingcontainer .labelend {

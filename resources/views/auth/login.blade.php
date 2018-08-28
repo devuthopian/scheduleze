@@ -15,9 +15,9 @@
                     @endif
                 <div class="login_section">
                     <div class="container">
-                        <div class="login_left_cont">
+                        <!-- <div class="login_left_cont">
                             <img src="images/login_img.png" alt="">
-                        </div>
+                        </div> -->
                         <div class="login_right_cont">
                             <div class="card-header">{{ __('Login') }}</div>
                             <div class="card-body">

@@ -369,7 +369,7 @@ if(! function_exists('get_addon_checkboxes')){
 					}
 				}
 				$row->$label = truncate_string($row->$label, $truncate_label);
-				$html .= ("\n\t\t\t\t\t\t<input type=\"checkbox\" name=\"$variable"."[]\" value=\"".$row->$returns."\" $selected><span class=\"note\">".$row->$label." ".$price."</span><br>");
+				$html .= ("\n\t\t\t\t\t\t<input type=\"checkbox\" name=\"$variable"."[]\" value=\"".$row->$returns."\" $selected><span class=\"note\"> ".$row->$label." ".$price." </span><br>");
 			}
 			if ($columns != "0"){
 				$html .= "</td></tr></table>";
@@ -540,7 +540,6 @@ if(! function_exists('get_field')){
 		}else{
 			$get = DB::table($table)->select($field)->where('id', $id)->first();
 		}
-		/*$field = str_replace('"', '', $field);*/
 		$return = stripslashes($get->$field);
 		return $return;
 	}
@@ -1402,7 +1401,7 @@ if(! function_exists('display_for_edit')){
 					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\"><nobr><a href=\"$url\" class=\"note_link\">Edit</a><span class\"note\">  </span><a href=\"delete/$blockout_id\"  class=\"note_link\">Remove</a></nobr></td>\n";
 				} else {
 					//$url = "https://needsecured.com/developer/scheduleze/public/scheduleze/booking/edit/$id";
-					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\"><nobr><a href=\"edit/$id\" class=\"note_link\">Edit</a><span class\"note\">  </span><a href=\"delete/$id\"  class=\"note_link\">Remove</a></nobr></td>\n";
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\"><nobr><a href=\"form/edit/$id\" class=\"note_link\">Edit</a><span class\"note\">  </span><a href=\"delete/$id\"  class=\"note_link\">Remove</a></nobr></td>\n";
 				}
 				$html .= "</tr>\n";
 				$last_end_day = date("j", $row->endtime);
@@ -1589,7 +1588,7 @@ if(! function_exists('display_dayticket')){
 		//$this->peek_array($_SESSION);
 		
 		//$tt = $this->pull_multi($sql);
-		
+		$html = '';
 		//loop to create the display
 		if (count($tt)>0) {  //ok, we have a real array
 		$html = "<table width=\"100%\" border=\"1\" cellspacing=\"0\" cellpadding=\"4\">\n";
@@ -1955,5 +1954,130 @@ if(! function_exists('get_subs_users')){
 		}
 		$form .= "</select>";
 		return $form;
+	}
+}
+
+if(! function_exists('view_for_reports')){
+	function view_for_reports($userid, $first, $last, $order='') {
+			
+		if (session('permission') != 1){
+			$userid = session('id');
+		}
+			
+		//get current time
+		$now = time();
+
+		if ($order == "type"){
+			$order = "type";
+			$incdec = "asc";
+		} else {
+			$order = "id";
+			$incdec = "desc";
+		}
+
+		if ( $first == "" ) {
+			$whereArr = [['starttime', '>', $now], ['user_id', '=', $userid], ['type', '=', 0], ['removed', '=', 0]];
+		} 
+		else
+		{
+			$whereArr = [['starttime', '>', $first], ['starttime', '<', $last], ['user_id', '=', $userid], ['type', '=', 0], ['removed', '=', 0]];
+		}
+
+		$tt = DB::table('bookings')->where($whereArr)->orderBy($order, $incdec)->orderBy('starttime', 'asc')->get();		
+		/*if (($first=="")) {
+			$sql = "select * from bookings where starttime > $now and inspector = '$inspector' and removed = '0' and type ='0' order by $order starttime asc";
+		} else {
+			$sql = "select * from bookings where starttime > $first and starttime < $last and inspector = '$inspector' and type ='0' and removed = '0' order by $order starttime asc";
+		}
+
+		$tt = $this->pull_multi($sql);*/
+
+		$html = "<tr><td bgcolor=\"FFCD49\" class=\"display\"><b>Start &amp; End</b></td>\n
+		<td bgcolor=\"FFCD49\" class=\"display\"><b><!--<a href=\"admin_form.php?action=2&order=type&first=$first&last=$last&userid=$userid\">-->Address<!--</a>--></b></td>\n
+		<td bgcolor=\"FFCD49\" class=\"display\"><b>Agent/Notes</b></td>\n
+		<td bgcolor=\"FFCD49\" class=\"display\"><b>Price</b></td>\n
+		<td bgcolor=\"FFCD49\" class=\"display\"><b>Client Name</b></td>\n
+		<td bgcolor=\"FFCD49\" class=\"display\"><b>Numbers</b></td>\n
+		<td bgcolor=\"FFCD49\" class=\"display\"><b>Action</b></td>\n
+		<td bgcolor=\"FFCD49\" class=\"display\"><b>Viewed</b></td>\n
+		";
+
+		$h = 0;
+		//loop to create the display
+		if (count($tt)>0) {
+			foreach ($tt as $row) {
+				$h++;
+				if (($h%2)==0){
+					$bgcolor="F0F0F0";
+				} else {
+					$bgcolor="FAFAFA";
+				}
+				
+				//format the times
+				$start = date("g:ia", $row->starttime - 1);
+				$start_day = date(" D, M j", $row->starttime - 1);
+				$end = date("g:ia", $row->endtime);
+				$end_day = date(" D, M j", $row->endtime);
+				if ("$end_day"=="$start_day") {
+					$hora = "$start-$end<br>$start_day";
+				} else {
+					$hora = "$start$start_day-<br>$end$end_day";
+				}
+				
+				if ($row->type != 1){
+					/*if (($row->military == 1) and ($row->size == 3)) {
+						$price = "$".(get_field('sizes', 'price', $row->size))*9/10;
+						
+					} else {*/
+						//$price = "$".get_field('sizes', 'price', $row->size);
+					//}
+						$price = "";
+				} else {
+					$price = "";
+				}
+			
+				//create html
+				$html .= "<tr>\n";
+				$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\">$hora</td>\n";
+				if ($row->type == 1) {
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\">Blockout</td>\n";
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\">$row->notes</td>\n";
+				} else {
+					$city = get_field("locations", "name", $row->location);
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\">$row->inspection_address<br>$city</td>\n";
+					if ($row->user_notes != ""){ $row->user_notes = "<br>$row->user_notes"; }
+					if ($row->notes != ""){ $row->user_notes .= "<br><b>$row->notes</b>"; }
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\">$row->agent_name  $row->agent_phone $row->user_notes</td>\n";
+				}
+				if($row->email!=""){
+					$client_name = "<a href=\"mailto:$row->email\">$row->firstname $row->lastname</a>";
+				} else {
+					$client_name = "$row->firstname $row->lastname";
+				}
+				$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\">$price</td>\n";
+				$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\">$client_name</td>\n";
+				$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\"><nobr>$row->dayphone</nobr><br><nobr>$row->homephone</nobr></td>\n";
+				
+				//does the booking have a report?
+				/*$sql = "select * from reports where booking='$row[id]' and removed=0";
+				$report = $this->pull_array($sql);*/
+
+				$report = DB::table("reports")->where([['booking', '=', $row->id],['removed', '=', 0]])->first();
+
+				if (isset($report)) {
+					//access reports table and give view link
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\"><a target=\"_blank\" href=\"../viewreports.php?id=".$report->id."&ac=".$report->code."\"><nobr>View Report</nobr></a></td>\n
+					<td bgcolor=\"#$bgcolor\" class=\"display\" align=\"center\">$report->views</td>\n";
+				} else {
+					//give post link
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\"><a href=\"documents/viewreport/".$row->id."\"><nobr>Post Report</nobr></a></td>\n
+					<td bgcolor=\"#$bgcolor\" class=\"display\">&nbsp;</td>\n";
+				}
+				
+				$html .= "</tr>\n";
+				
+			}
+		}
+		return $html;
 	}
 }

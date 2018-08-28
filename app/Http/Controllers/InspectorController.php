@@ -45,8 +45,14 @@ class InspectorController extends Controller
 
     public function Inspectors()
     {
-        $business_id = session('business_id');
-        $userdetails = UserDetails::where('business', $business_id)->get();
+        $permission = session('permission');
+        $userid = Auth::id();
+        
+        if($permission == 1){
+            $userdetails = UserDetails::where('business', $this->businessid)->get();
+        }else{
+            $userdetails = UserDetails::where('user_id', $userid)->get();
+        }
 
         return view('inspectors.inspectors', compact('userdetails'));
     }

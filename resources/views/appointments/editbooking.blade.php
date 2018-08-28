@@ -8,54 +8,50 @@
         </div>
     </div>
 @endif
+<div class="nsignup_cont">
 <div class="container">
-    <table width="960" border="0" cellspacing="0" cellpadding="0">
-        <tr>
-            <td bgcolor="white">
-                <div class="frameadmin">
-                <form action="{{ url('/scheduleze/booking/update/'.$groupdata['id']) }}" method="post" name="appointment">
+           <form action="{{ url('/scheduleze/booking/update/'.$groupdata['id']) }}" method="post" name="appointment">
                     @csrf
-                    <span class="head">Edit Appointment Details<br>
-                    </span>
-                    <table border="0" cellspacing="0" cellpadding="5">
-                        <tr>
-                            <td colspan="2"><span class="formlabel">Appointment Street Address</span><br>
+                    <h3>Edit Appointment Details</h3>
+                            <div class="textfield_left">
+                                <span class="formlabel">Appointment Street Address</span><br>
                                 <input type="text" name="Inspection_Address" size="40" value="{{ $groupdata['booking']->inspection_address }}" required>
-                            </td>
-                            <td>
+                            </div>
+                            <div class="textfield_right">
                                 <span class="signuplabel">Location:<br>
                                 {!! $groupdata['location_popup'] !!}</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="3">
+                            </div>
+                            <div class="textfield_full">
                                 <span class="signuplabel">
                                     Type of appointment:<br>
                                     {!! $groupdata['type_pop'] !!} {!! $groupdata['size_pop'] !!} {!! $groupdata['age_pop'] !!}
                                 </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td width="33%"><span class="signuplabel">First name</span><br>
+                            </div>
+                            <div class="textfield_left">
+                                <span class="signuplabel">First name</span><br>
                                 <input type="text" name="Firstname" size="20" value="{{ $groupdata['booking']->firstname }}">
-                            </td>
-                            <td><span class="signuplabel">Last name</span><br>
+                            </div>
+                            <div class="textfield_right">
+                                <span class="signuplabel">Last name</span><br>
                                 <input type="text" name="Lastname" size="20" value="{{ $groupdata['booking']->lastname }}">
-                            </td>
-                            <td><span class="signuplabel"><?php //echo $_SESSION[agent_name]?></span><br>
-                                {{ $groupdata['booking']->inspector_popup }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span class="signup_label_optional">Current Address</span><br>
+                            </div>
+                            <div class="textfield_left">
+                                <span class="signuplabel">Inspectors</span><br>
+                                <div>
+                                    {!! $inspector_popup !!}
+                            </div>
+                            <div class="textfield_right">
+                                <span class="signup_label_optional">Current Address</span><br>
                                 <input type="text" name="Current_Address" size="20" value="{{ $groupdata['booking']->address }}">
-                            </td>
-                            <td><span class="signup_label_optional">City</span><br>
+                            </div>
+                            <div class="textfield_left">
+                                <span class="signup_label_optional">City</span><br>
                                 <input type="text" name="City" size="20" value="{{ $groupdata['booking']->city }}">
-                            </td>
-                            <td>
+                            </div>
+                            <div class="textfield_right">
                                 <span class="signup_label_optional">State, ZIP</span><br>
-                                <select name="State" size="1" class="smallselect">
+                                <div class="two_col_cont">
+                                    <select name="State" size="1" class="smallselect">
                                     <?php //if ($row[state]){echo "<option value=\"$row[state]\">$row[state]</option>";}?>
                                     <option value="AK">AK</option>
                                     <option value="AL">AL</option>
@@ -123,11 +119,12 @@
                                     <option value="SK">SK</option>
                                     <option value="YT">YT</option>
                                 </select>
+                            </div>
+                            <div class="two_col_cont">
                                 <input type="text" name="ZIP" size="8" value="{{ $groupdata['booking']->zip }}">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
+                            </div>
+                            </div>
+                            <div class="textfield_left">
                                 <span class="signuplabel">Contact Phone</span><br>
                                 <input type="text" name="Phone" size="20" value="{{ $groupdata['booking']->dayphone }}">
                                 <!--<select name="phone_name" class="smallselect">
@@ -140,8 +137,8 @@
                                     <option value="Other">Other</option>
                                     <option value="N/A">N/A</option>
                                     </select>-->
-                            </td>
-                            <td>
+                            </div>
+                            <div class="textfield_right">
                                 <span class="signup_label_optional">Additional Phone</span><br>
                                 <input type="text" name="phone2" size="20" value="{{ $groupdata['booking']->homephone }}"><!--<select name="phone2_name" class="smallselect">
                                     <?php //if ($row[phone2_name]){//echo "<option value=\"$row[phone2_name]\">$row[phone2_name]</option>";}?>
@@ -153,91 +150,81 @@
                                     <option value="Other">Other</option>
                                     <option value="N/A">N/A</option>
                                     </select>-->
-                            </td>
-                            <td><span class="signup_label_optional">Email</span><br>
+                            </div>
+                            <div class="textfield_left"><span class="signup_label_optional">Email</span><br>
                                 <input type="text" name="Email" size="20" value="{{ $groupdata['booking']->email }}" maxlength="128">
-                            </td>
-                        </tr>
+                            </div>
                         <?php //if ($_SESSION[show_agent_information]){?>
-                        <tr>
-                            <td valign="top"><span class="signup_label_optional">Agent Name</span><br>
+                           <div class="textfield_right">
+                            <span class="signup_label_optional">Agent Name</span><br>
                                 <input type="text" name="agent_name" value="{{ $groupdata['booking']->agent_name }}" size="20">
-                            </td>
-                            <td valign="top"><span class="signup_label_optional">Agent Phone</span><br>
+                            </div>
+                            <div class="textfield_left">
+                                <span class="signup_label_optional">Agent Phone</span><br>
                                 <input type="text" name="agent_phone" value="{{ $groupdata['booking']->agent_phone }}" size="20">
-                            </td>
-                            <td valign="top"><span class="signup_label_optional">Agent Email<br>
+                            </div>
+                            <div class="textfield_right">
+                                <span class="signup_label_optional">Agent Email<br>
                                 </span><input type="text" name="agent_email" value="{{ $groupdata['booking']->agent_email }}" size="20">
-                            </td>
-                        </tr>
+                            </div>
                         <?//}?>
                         <?php //if ($_SESSION[business_information][require_listing_agent] == "1"){?>
-                        <tr>
-                            <td valign="top"><span class="signup_label_optional">Listing Agent Name</span><br>
-                                <input type="text" name="Listing_Agent" value="{{ $groupdata['booking']->listing_agent }}" size="20">
-                            </td>
-                            <td valign="top"><span class="signup_label_optional">Listing Office</span><br>
+                        <div class="textfield_left">
+                            <span class="signup_label_optional">Listing Agent Name</span><br>
+                            <input type="text" name="Listing_Agent" value="{{ $groupdata['booking']->listing_agent }}" size="20">
+                            </div>
+                            <div class="textfield_right">
+                                <span class="signup_label_optional">Listing Office</span><br>
                                 <input type="text" name="Listing_Office" value="{{ $groupdata['booking']->listing_office }}" size="20">
-                            </td>
-                            <td valign="top"><span class="signup_label_optional">Listing Office Phone<br>
+                            </div>
+                            <div class="textfield_left">
+                                <span class="signup_label_optional">Listing Office Phone<br>
                                 </span><input type="text" name="Listing_Phone" value="{{ $groupdata['booking']->listing_phone }}" size="20">
-                            </td>
-                        </tr>
+                            </div>
                         <?//}?>
-                        <tr>
-                            <td valign="middle"><span class="signup_label_optional">Price Quoted</span><br>
-                                <input type="text" name="price" value="${{ $groupdata['booking']->price }}" size="5" maxlength="244"><input type="checkbox" name="quote_override" value="1"><span class="note">Override Auto Pricing</span>
-                            </td>
+                        <div class="textfield_right">
+                            <span class="signup_label_optional">Price Quoted &nbsp;&nbsp;(<input type="checkbox" name="quote_override" value="1"> Override Auto Pricing)</span><br>
+                                <input type="text" name="price" value="${{ $groupdata['booking']->price }}" size="5" maxlength="244">
+                            </div>
                             <?php //if ($_SESSION[show_agent_information]){?>
-                            <td><span class="signup_label_optional">Method of Entry</span><br>
+                            <div class="textfield_left">
+                                <span class="signup_label_optional">Method of Entry</span><br>
                                 <input type="text" name="other_entry_method" value="{{ $groupdata['booking']->entry_method }}" size="20" maxlength="244">
-                            </td>
-                            <td valign="middle"><span class="signup_label_optional">MLS Number</span><br>
+                            </div>
+                            <div class="textfield_right">
+                                <span class="signup_label_optional">MLS Number</span><br>
                                 <input type="text" name="mls" value="{{ $groupdata['booking']->mls }}" size="20" maxlength="244">
-                            </td>
+                            </div>
                             <?//} else {?>
-                            <td></td>
-                            <td></td>
+                            
                             <?//}?>
-                        </tr>
-                        <tr>
-                            <td colspan="3" valign="middle"><span class="signuplabel">Start:<br>
+                        <div class="textfield_left">
+                            <span class="signuplabel">Start:<br>
                                 </span>{!! $groupdata['start_popup'] !!}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" valign="middle"><span class="signuplabel">End:<br>
+                            </div>
+                        <div class="textfield_right">
+                            <span class="signuplabel">End:<br>
                                 </span>{!! $groupdata['end_popup'] !!}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" valign="middle"><span class="signup_label_optional">Internal Notes:<br>
+                            </div>
+                        <div class="textfield_left">
+                            <span class="signup_label_optional">Internal Notes:<br>
                                 <textarea name="notes" rows="4" cols="70">{{ $groupdata['booking']->notes }}</textarea></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" valign="middle"><span class="signup_label_optional">Client Notes:<br>
+                            </div>
+                        <div class="textfield_right">
+                            <span class="signup_label_optional">Client Notes:<br>
                                 <textarea name="user_notes" rows="4" cols="70">{{ $groupdata['booking']->user_notes }}</textarea></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" valign="middle"><span class="signup_label_optional">Includes:<br>
+                            </div>
+                        <div class="textfield_left">
+                            <span class="signup_label_optional">Includes:<br>
                                 </span>{!! $groupdata['add_on_checkboxes'] !!}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" valign="top">
+                         </div>
+                        <div class="textfield_right">
                                 <input type="hidden" name="trigger" value="1">
                                 <input type="hidden" name="action" value="edit_booking"><input type="hidden" name="target" value="{{ $groupdata['id'] }}">
                                 <input type="submit" name="submit" value="Edit Appointment &raquo;">
                                 &nbsp;&nbsp;<input type="checkbox" name="send_again" value="1"><span class="note">Resend Email Receipts</span>
-                            </td>
-                            <td></td>
-                        </tr>
-                    </table>
+                            </div>
                 </form>
-            </td>
-        </tr>
-    </table>
+</div>
 </div>
 @endsection

@@ -21,6 +21,8 @@
 
                             {!! Form::text('firstname',$UserData['name'], array('id' => 'firstname', 'class' => 'form-control', 'placeholder' => trans('profile.firstname'))) !!}
 
+                            <input type="hidden" name="userid" value="{{$UserData['user_id']}}">
+
                             <span class="glyphicon {{ $errors->has('firstname') ? ' glyphicon-asterisk ' : ' ' }} form-control-feedback" aria-hidden="true"></span>
 
                             @if ($errors->has('firstname'))

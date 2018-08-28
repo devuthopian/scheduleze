@@ -11,9 +11,11 @@ use App\LocationTime;
 use App\PanelTemplate;
 use App\Location;
 use App\UserDetails;
+use App\Reports;
 use Illuminate\Support\Facades\Input;
 use PDF;
 use DB;
+use Validator;
 
 class SchedulezeController extends Controller
 {
@@ -235,12 +237,99 @@ class SchedulezeController extends Controller
         return view('appointments.bookings', compact('id', 'first', 'last','form'));
     }
 
+    public function Documents()
+    {
+        $id = session('id');
+
+        $last = time();
+        $first = $last - 1209500;
+
+        return view('appointments.documents', compact('id', 'first', 'last'));
+    }
+
+    public function DocumnetFilter(Request $request)
+    {
+        $data = Input::get();
+        $id = $data['users_details'];
+            
+        $first = "12:00 AM ".$data['monthstart'][0]."/".$data['daystart'][0]."/".$data['yearstart'][0]."";
+        //echo "first: $first<br>";
+        $first = strtotime($first);
+        $last = "11:59 PM ".$_POST['monthend'][1]."/".$_POST['dayend'][1]."/".$_POST['yearend'][1]."";
+        //echo "last:$last<br>";
+        $last = strtotime($last);
+
+        return view('appointments.documents', compact('id', 'first', 'last'));
+    }
+
+    public function DocumnetReport($bookingid)
+    {
+        $booking_inspector = get_field ('bookings', 'user_id', $bookingid);   
+        check_permission($booking_inspector);
+        
+        $inspector_email = get_field('users', 'email', $booking_inspector);
+        $inspector_email2 = get_field('users_details', 'email2', $booking_inspector);
+        $firstname = get_field('users_details', 'name', $booking_inspector);
+        $lastname = get_field('users_details', 'lastname', $booking_inspector);
+        $address = ucfirst(get_field('bookings', 'inspection_address', $bookingid));
+        $loc = get_field('bookings', 'location', $bookingid);
+        $location = ucfirst(get_field('locations', 'name', $loc));
+        $email = get_field('bookings', 'email', $bookingid);
+        $agent_email = get_field('bookings', 'agent_email', $bookingid);
+
+        $Report = array('inspector_email' => $inspector_email, 'inspector_email2' => $inspector_email2, 'firstname' => $firstname, 'lastname' => $lastname, 'address' => $address, 'location' => $location, 'email' => $email, 'agent_email' => $agent_email);
+
+        return view('appointments.postreport', compact('bookingid', 'Report'));
+    }
+
+    public function SaveReport(Request $request)
+    {
+        $data = Input::get();
+        $validatedData = Validator::make($request->all(), [
+            'userfile' => 'required| mimes:jpeg,pdf,doc,docx | max:1000'
+        ]);
+
+        if ($validatedData->fails()) {
+            return redirect('BuildingTypess')->withErrors($validatedData)->withInput();
+        }
+
+        $md5 = md5(microtime());
+        $added = time();
+
+        $expire = (($data['expire'] * 86400) + $added);
+
+        $Reports = Reports::updateOrCreate(
+            ['booking' => $data['booking']],
+            [
+                'booking' => $data['booking'],
+                'code' => substr($md5, 5, 8),
+                'summary' => $data['summary'],
+                'memo' => $data['memo'],
+                'added' => $added,
+                'expire' => $expire
+            ]
+        );
+
+        $imageName = $Reports->id . '.' . 
+        $request->file('userfile')->getClientOriginalExtension();
+
+        $request->file('userfile')->move(
+            base_path() . '/public/images/reports/', $imageName
+        );
+        
+        $Reports = Reports::updateOrCreate(
+            ['booking' => $data['booking']],
+            [
+                'pdf' => $imageName
+            ]
+        );
+
+        return redirect('/scheduleze/documents')->with('message','Report added');
+    }
+
     public function UpdateBooking(Request $request, $id)
     {
         $data = Input::get();
-
-        dd($data);
-
         $getstend = DB::table('bookings')->select('starttime', 'endtime')->where('id', $id)->first();
 
         if (isset($data['quote_override'])){
@@ -397,10 +486,10 @@ class SchedulezeController extends Controller
 
         $add_on_checkboxes = get_addon_checkboxes("addons", "id", "name", "addon", "", "rank", "ASC", "40", $addons_edit, 3);
 
-        $groupdata = array('userid' => $userid, 'booking' => $booking, 'location_popup' => $location_popup, 'type_pop' => $type_pop, 'size_pop' => $size_pop, 'age_pop' => $age_pop, 'inspector_popup' => $inspector_popup, 'start_popup' => $start_popup, 'end_popup' => $end_popup, 'add_on_checkboxes' => $add_on_checkboxes, 'id' => $id);
+        $groupdata = array('userid' => $userid, 'booking' => $booking, 'location_popup' => $location_popup, 'type_pop' => $type_pop, 'size_pop' => $size_pop, 'age_pop' => $age_pop, 'start_popup' => $start_popup, 'end_popup' => $end_popup, 'add_on_checkboxes' => $add_on_checkboxes, 'id' => $id);
 
         
-        return view('appointments.editbooking', compact('groupdata'));
+        return view('appointments.editbooking', compact('groupdata', 'inspector_popup'));
     }
 
     public function DeleteBooking($id)
