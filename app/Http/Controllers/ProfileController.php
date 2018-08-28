@@ -39,15 +39,22 @@ class ProfileController extends Controller
             'business_lname'    => 'required',
         ]);
     }
+
     /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Http\Response
-     */
-     public function UserProfile()
+    * Show the application dashboard.
+    *
+    * @return \Illuminate\Http\Response
+    */
+    public function UserProfile($id = null)
     {
-        $userid           =   Auth::id();
+        if(empty($id)){
+            $userid           =   Auth::id();
+        }else{
+            $userid           =   $id;
+        }
+        
         $UserData         =   UserDetails::where('user_id', $userid)->first();
+
         $data = [
             'UserData' => $UserData,
         ];

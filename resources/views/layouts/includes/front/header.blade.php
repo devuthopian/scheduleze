@@ -107,6 +107,9 @@
                             <a href="#">Users</a>
                             <ul >
                                 <li>
+                                    <a href="{{ route('Inspectors') }}">Inspectors</a>
+                                </li>
+                                <li>
                                     <a href="{{ route('AddInspector') }}">Add Inspector</a>
                                 </li>
                             </ul>

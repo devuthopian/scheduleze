@@ -40,7 +40,7 @@ Route::group(['middleware' => ['web']], function () {
 		Route::get('/scheduleze/appointments','AppointmentController@index');
 		Route::get('/scheduleze/Reoccurrence','SchedulezeController@blockouts_occurance')->name('Reoccurrence');
 		Route::get('/scheduleze/DriveTime','SchedulezeController@drivetime')->name('Drivetime');
-		Route::get('/scheduleze/booking/{form?}','SchedulezeController@Bookings');
+		Route::get('/scheduleze/booking/{form?}/{userid?}','SchedulezeController@Bookings');
 		Route::get('/scheduleze/booking/edit/{id?}','SchedulezeController@EditBooking');
 		Route::get('/scheduleze/booking/delete/{id?}','SchedulezeController@DeleteBooking');
 		Route::post('/scheduleze/booking/update/{id?}','SchedulezeController@UpdateBooking');
@@ -82,13 +82,14 @@ Route::group(['middleware' => ['web']], function () {
 		Route::get('/account_info', 'Auth\RegisterController@account_info');
 		Route::post('/account_info_save', 'Auth\RegisterController@account_info_save')->name('account_info_save');
 
-		Route::get('/profile', 'ProfileController@UserProfile')->name('profile');
+		Route::get('/profile/{id?}', 'ProfileController@UserProfile')->name('profile');
 		Route::post('/profile_update', 'ProfileController@updateUserAccount')->name('profile_update');
 
 		Route::get('/business_info', 'ProfileController@UserBusinessProfile')->name('business_info');
 		Route::post('/business_info_update', 'ProfileController@updateUserBusinessAccount')->name('business_info_update');
 
 		Route::get('/scheduleze/add_inspector', 'InspectorController@add_inspector')->name('AddInspector');
+		Route::get('/scheduleze/inspectors', 'InspectorController@Inspectors')->name('Inspectors');
 		Route::post('/inspector/save', 'InspectorController@store')->name('StoreInspector');
 	});
 });

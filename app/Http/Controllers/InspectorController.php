@@ -43,13 +43,20 @@ class InspectorController extends Controller
         ]);
     }
 
+    public function Inspectors()
+    {
+        $business_id = session('business_id');
+        $userdetails = UserDetails::where('business', $business_id)->get();
+
+        return view('inspectors.inspectors', compact('userdetails'));
+    }
    
     /**
-     * Show the application dashboard.
+     * Show the application add Inspector.
      *
      * @return \Illuminate\Http\Response
      */
-     public function add_inspector()
+    public function add_inspector()
     {
         return view('inspectors.Add_Inspector');
     }

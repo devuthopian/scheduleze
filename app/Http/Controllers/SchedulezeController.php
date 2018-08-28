@@ -220,9 +220,14 @@ class SchedulezeController extends Controller
     *
     * @return \Illuminate\Http\Response
     */
-    public function Bookings($form)
+    public function Bookings($form, $userid = null)
     {
-        $id = session('id');
+        if(empty($userid)){
+            $id = session('id');
+        }else{
+            $id = $userid;
+        }
+
         $first = time();
         $last = $first + 1209500;
 
