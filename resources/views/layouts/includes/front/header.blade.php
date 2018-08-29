@@ -12,8 +12,10 @@
                         <li><a href="#">Plans/Prices</a></li>
                         <li><a href="#">Support</a></li>
                         <li><a href="{{ url('contact') }}">Contact</a></li>
-                        <li class="try_it_now"><a href="#signup">Try It Now</a></li>
-                        <li class="login"><a href="{{ route('login') }}">Login</a></li>
+                        @if(substr(strrchr(url()->current(),"/"),1) != 'login')
+                            <li class="try_it_now"><a href="#signup">Try It Now</a></li>
+                            <li class="login"><a href="{{ route('login') }}">Login</a></li>
+                        @endif
                     </ul>
                 </nav>
                 @else
@@ -45,10 +47,10 @@
                                     @endif
                                 </li>
                                 <li>
-                                    <a href="{{ url('/scheduleze/dayticket/'.$id) }}">My Tickets</a>
+                                    <a href="{{ url('/scheduleze/dayticket/'.$id.'/'.$first) }}">My Tickets</a>
                                 </li>
                                 <li>
-                                    <a href="{{ url('/scheduleze/dayticket/'.$id.'/'.$first) }}">My Today</a>
+                                    <a href="{{ url('/scheduleze/dayticket/'.$id) }}">My Today</a>
                                 </li>
                                 <li>
                                     <a href="{{ url('/scheduleze/dayticket/'.$id.'/'.$tomorrow) }}">My Tomorrow </a>

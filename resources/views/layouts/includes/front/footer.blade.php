@@ -18,12 +18,14 @@
             </div> -->
         </div>
         <div class="footer_bottom">
-            <div class="col-sm-4">
-                <h3>Contact <br> Scheduleze</h3>
-                <p>Thanks for your interest in Scheduleze. Please contact us<br>
-                    at one of these cell-phone free email addresses.
-                </p>
-            </div>
+            @guest
+                <div class="col-sm-4">
+                    <h3>Contact <br> Scheduleze</h3>
+                    <p>Thanks for your interest in Scheduleze. Please contact us<br>
+                        at one of these cell-phone free email addresses.
+                    </p>
+                </div>
+            @endguest
             <div class="col-sm-4">
                 <div class="quick_links">
                     <h3>Quick <br> Links</h3>
@@ -38,22 +40,24 @@
                 </div>
             </div>
             @guest
-                <div class="col-sm-4" id="signup">
-                    <h3>Try it now free for <br>30 days</h3>
-                    @php $allindustries = getallIndustries() @endphp
-                    <form method="POST" action="{{ route('register') }}" aria-label="{{ __('Register') }}">
-                        @csrf
-                        <select name="txtIndustries" required>
-                            <option value="-1">Select Industrial</option>
-                            @foreach($allindustries as $key => $industries)
-                                <option  value="{{ $key }}">{{ $industries }}</option>
-                            @endforeach
-                        </select>
-                        <input id="email" type="email" class="{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" placeholder="Business Email" required>
-                        <!-- <input type="text" placeholder="Business Email"> -->
-                        <input type="submit" value="TRY IT NOW" name="">
-                    </form>
-                </div>
+                @if(substr(strrchr(url()->current(),"/"),1) != 'login')
+                    <div class="col-sm-4" id="signup">
+                        <h3>Try it now free for <br>30 days</h3>
+                        @php $allindustries = getallIndustries() @endphp
+                        <form method="POST" action="{{ route('register') }}" aria-label="{{ __('Register') }}">
+                            @csrf
+                            <select name="txtIndustries" required>
+                                <option value="-1">Select Industrial</option>
+                                @foreach($allindustries as $key => $industries)
+                                    <option  value="{{ $key }}">{{ $industries }}</option>
+                                @endforeach
+                            </select>
+                            <input id="email" type="email" class="{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" placeholder="Business Email" required>
+                            <!-- <input type="text" placeholder="Business Email"> -->
+                            <input type="submit" value="TRY IT NOW" name="">
+                        </form>
+                    </div>
+                @endif
             @endguest
         </div>
     </div>

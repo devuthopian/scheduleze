@@ -1,16 +1,12 @@
 @extends('layouts.front')
 
 @section('content')
+<div class="set_recc_block">
 <div class="container">
 	<div class="row">
 		<div class="col-sm-12">
-			<h3>
-				Select Inspector
-			</h3>
-			<div class="clearfix"></div>
-			<span>
-				Bold Names indicate Administrator status
-			</span>
+			<h2>Select Inspector</h2>
+			<h5>Bold Names indicate Administrator status</h5>
 			<table border="0" cellspacing="4" cellpadding="0" class="table border table-responsive table-borderd table-striped select-default">
                 <tbody>
                     <tr class="dark-table-heading">
@@ -48,5 +44,6 @@
 			</table>
 		</div>
 	</div>
+</div>
 </div>
 @endsection

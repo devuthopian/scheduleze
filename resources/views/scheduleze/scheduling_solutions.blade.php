@@ -64,15 +64,15 @@
             <h3>Show Me <br>How It Works</h3>
         </div>
         <div class="col-sm-3">
-            <img src="{{ url('images/how-it-work-icon.jpg') }}" alt="">
+            <img src="{{ url('images/straight-control-icon.jpg') }}" alt="">
             <h3>Take me <br>Straight to The Controls </h3>
         </div>
         <div class="col-sm-3">
-            <img src="{{ url('images/how-it-work-icon.jpg') }}" alt="">
+            <img src="{{ url('images/cost-icon.jpg') }}" alt="">
             <h3>How much <br>does it cost</h3>
         </div>
         <div class="col-sm-3">
-            <img src="{{ url('images/how-it-work-icon.jpg') }}" alt="">
+            <img src="{{ url('images/scheduleze-icon.jpg') }}" alt="">
             <h3>Sign up for <br>Scheduleze now</h3>
         </div>
     </div>

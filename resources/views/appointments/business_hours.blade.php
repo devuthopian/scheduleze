@@ -1,33 +1,28 @@
 @extends('layouts.front')
 
 @section('content')
+<div class="set_recc_block">
 <div class="container">
-
-    <div class="framecell">
-        <div class="frameadmin">
-            <form action="#" method="post" style=" margin-top:120px;">
-            	<div class="col-sm-4">
-	                <span class="head">Business hours for {{ Auth::user()->name }}</span>
-	                <br> Please specify any business hours for
+            <form action="#" method="post">
+            	<div class="set_recc_cont">
+	                <h2>Business hours for {{ Auth::user()->name }}</h2>
+	                <h4>Please specify any business hours for</h4>
 	            </div>
-	            <div class="col-sm-4 adminsubmitbar">
-	            	<div class="form-group">
-		                <select name="inspector" class="smallselect form-control">
-		                    <option value="60" selected="">{{ Auth::user()->name }}</option>
-		                </select>
+	            <div class="set_recc_cont">
+	            	<div class="select_field">
+		                {!! get_inspector_popup("name", $id) !!}
 
-		                <input type="submit" name="Submit" class="submit btn btn-default" value="Switch">
+		                <input type="submit" name="Submit" class="submit" value="Switch">
 		                <input type="hidden" name="action" value="business_hours" class="form-control">
-		            </div>
+		            
 	            </div>
             </form>
             <div class="clearfix"></div>
-            <div class="col-sm-12">
+            <div>
 	            <form action="{{ route('StoreBusinessHours') }}" method="post">
 	            	@csrf
 	                Please select your normal working hours for each day
-	                <br><span class="note">Specify reoccurring blockouts, like the second Tuesday of each month on your <a href="#" class="note_link">Reoccurring Blockouts</a> page.</span>
-	                <br>
+	                <h5>Specify reoccurring blockouts, like the second Tuesday of each month on your <a href="#" class="note_link">Reoccurring Blockouts</a> page.</h5>
 		                <input type="hidden" name="trigger" value="1">
 		                <input type="hidden" name="action" value="business_hours">
 	                <br>
@@ -120,21 +115,12 @@
 	                    </tbody>
 	                </table>
 	                <br>
-	                <input type="submit" class="submit btn btn-primary" name="Submit" value="Update Business Hours">
+	                <input type="submit" class="submit" name="Submit" value="Update Business Hours">
 	            </form>
         	</div>
-            <br>
-            <br>
-            <br>
-        </div>
-    </div>
-    <div class="col-sm-12 align-center take-command">
-	    <div class="logo">
-	        <a href="index.php" class="btn btn-primary">
-	        	<img src="/images/scheduleze-logo.gif" alt="Take command of your day" border="0">
-	        </a>
-	    </div>
-	</div>
- 
+    <!-- <div class="col-sm-12">
+	    <a href="../index.php"><img src="../images/scheduleze-logo.gif" alt="Take command of your day" width="244" height="79" align="right" border="0" class="logo"></a>
+	</div> -->
+ </div>
 </div>
 @endsection

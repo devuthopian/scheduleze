@@ -10,6 +10,7 @@
 @endif
 <div class="nsignup_cont">
 <div class="container">
+    <div class="sign_up_inner_cont">
            <form action="{{ url('/scheduleze/booking/update/'.$groupdata['id']) }}" method="post" name="appointment">
                     @csrf
                     <h3>Edit Appointment Details</h3>
@@ -22,10 +23,12 @@
                                 {!! $groupdata['location_popup'] !!}</span>
                             </div>
                             <div class="textfield_full">
+                                <div class="three_col_cont">
                                 <span class="signuplabel">
                                     Type of appointment:<br>
                                     {!! $groupdata['type_pop'] !!} {!! $groupdata['size_pop'] !!} {!! $groupdata['age_pop'] !!}
                                 </span>
+                            </div>
                             </div>
                             <div class="textfield_left">
                                 <span class="signuplabel">First name</span><br>
@@ -183,7 +186,7 @@
                             </div>
                         <?//}?>
                         <div class="textfield_right">
-                            <span class="signup_label_optional">Price Quoted &nbsp;&nbsp;(<input type="checkbox" name="quote_override" value="1"> Override Auto Pricing)</span><br>
+                            <span class="signup_label_optional">Price Quoted &nbsp;&nbsp;( <input type="checkbox" name="quote_override" value="1"> Override Auto Pricing )</span><br>
                                 <input type="text" name="price" value="${{ $groupdata['booking']->price }}" size="5" maxlength="244">
                             </div>
                             <?php //if ($_SESSION[show_agent_information]){?>
@@ -198,13 +201,17 @@
                             <?//} else {?>
                             
                             <?//}?>
-                        <div class="textfield_left">
+                        <div class="textfield_full">
+                            <div class="six_col_cont">
                             <span class="signuplabel">Start:<br>
                                 </span>{!! $groupdata['start_popup'] !!}
                             </div>
-                        <div class="textfield_right">
+                            </div>
+                        <div class="textfield_full">
+                            <div class="six_col_cont">
                             <span class="signuplabel">End:<br>
                                 </span>{!! $groupdata['end_popup'] !!}
+                            </div>
                             </div>
                         <div class="textfield_left">
                             <span class="signup_label_optional">Internal Notes:<br>
@@ -214,17 +221,18 @@
                             <span class="signup_label_optional">Client Notes:<br>
                                 <textarea name="user_notes" rows="4" cols="70">{{ $groupdata['booking']->user_notes }}</textarea></span>
                             </div>
-                        <div class="textfield_left">
+                        <div class="textfield_full">
                             <span class="signup_label_optional">Includes:<br>
                                 </span>{!! $groupdata['add_on_checkboxes'] !!}
                          </div>
-                        <div class="textfield_right">
+                        <div class="textfield_full">
                                 <input type="hidden" name="trigger" value="1">
                                 <input type="hidden" name="action" value="edit_booking"><input type="hidden" name="target" value="{{ $groupdata['id'] }}">
                                 <input type="submit" name="submit" value="Edit Appointment &raquo;">
                                 &nbsp;&nbsp;<input type="checkbox" name="send_again" value="1"><span class="note">Resend Email Receipts</span>
                             </div>
                 </form>
+</div>
 </div>
 </div>
 @endsection

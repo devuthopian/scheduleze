@@ -5,7 +5,7 @@
 <script src="{{ URL::asset('js/materialize.js') }}"></script>
 <link href="{{ asset('css/materialize.css') }}" rel="stylesheet">
 	{!! Form::open([ 'route' => ['storebuild'],'method' => 'post'] ) !!}
-<div class="building">
+<div class="building building_cont">
 	<div class="container">
 		<div class="frameadmin">
 			<span class="head">
@@ -16,7 +16,7 @@
 				<input type="hidden" name="txtform" value="{{$name}}">				
 				<table border="0" cellspacing="0" cellpadding="2" class="table table-responsive table-bordered">
 					<tbody>
-						<tr class="thead">
+						<tr class="dark-table-heading">
 							<td>
 								<span class="formlabel">Service Description</span><br>
 							</td>
@@ -40,6 +40,7 @@
 							</td>
 						</tr>
 						<tbody class="txtBuildId">
+							<input type="hidden" id="txtypol" value="{{ $users_details }}">
 							@php $i=0; @endphp
 							@forelse($Building as $BuildType)
 								<tr class="trtable_{{ $i }}">
@@ -115,12 +116,10 @@
 						</tbody>
 						<span id="showtxt"></span>
 						<tr>
-							<td colspan="4"><input type="submit" name="submit" value="Save Building Types" class="submit btn btn-success bluebtn">
+							<td colspan="8"><input type="submit" name="submit" value="Save Building Types" class="submit btn btn-success bluebtn">
 								<input type="hidden" name="action" value="building_types">
 								<input type="hidden" name="trigger" value="2">&nbsp;&nbsp;
 							</td>
-							<td></td>
-							<td></td>
 						</tr>
 						<tr>
 							<a href="#" class="add_column columnaddons" id="add_column">Add Column</a>
@@ -135,11 +134,11 @@
 			</span>
 			Use this page to create a list of services which clients may wish to choose <b>in addition</b> to services they choose from the primary Building Type menu created on the Building Type page.  Do not use this list for services which are standalone, or independent of other services you offer.  Stand alone services belong in <a href="#" class="note">Building Type popup.</a><br><br><br><br>
 		</div>
-		<div class="logo">
+		<!-- <div class="logo">
 			<a href="#">
 				<img src="{{URL::asset('/images/logo.png')}}" alt="Take command of your day" height="79" width="235" border="0">
 			</a>
-		</div>
+		</div> -->
 		<div class="frame-closing"><br><br>
 			<span class="note">Customer Support: <a href="mailto:support@scheduleze.com">support@scheduleze.com</a>
 			</span>
@@ -155,6 +154,13 @@
 	        	$('.my_select_{{ $excep->exception }} option[value="{{ $excep->user_id }}"]').prop('selected', false);
 	        	$('.my_select_{{ $excep->exception }}').formSelect();
 	        @endforeach
+
+	        $('.add_column').click(function(event) {
+	        	setTimeout(function(){
+		        	var newcolid = $('.newcol:last').attr('data-main-id');
+		        	$('.my_select_'+newcolid).formSelect();
+		        }, 500);
+	        });
 
 			$('.selectedbs').change(function() {
 				var exception = $(this).attr('data-main-id');

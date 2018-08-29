@@ -45,6 +45,7 @@
 	}
 
 @endphp
+<div class="nsignup_cont">
 <div class="container">
 	<div class="framecell">
 		<div class="frameadmin adding_blockout_cont">
@@ -91,5 +92,6 @@
 			</div>
 		</div>
 	</div>
+</div>
 </div>
 @endsection

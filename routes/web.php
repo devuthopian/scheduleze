@@ -39,6 +39,7 @@ Route::group(['middleware' => ['web']], function () {
 		Route::get('/scheduleze/BusinessHours', 'SchedulezeController@BusinessHours');
 		Route::get('/scheduleze/appointments','AppointmentController@index');
 		Route::get('/scheduleze/Reoccurrence','SchedulezeController@blockouts_occurance')->name('Reoccurrence');
+		Route::post('/scheduleze/Reoccurrence','SchedulezeController@blockouts_occurance');
 		Route::get('/scheduleze/DriveTime','SchedulezeController@drivetime')->name('Drivetime');
 		Route::get('/scheduleze/booking/{form?}/{userid?}','SchedulezeController@Bookings');
 		Route::get('/scheduleze/booking/form/edit/{id?}','SchedulezeController@EditBooking');
@@ -56,7 +57,7 @@ Route::group(['middleware' => ['web']], function () {
 		Route::post('/scheduleze/documents', 'SchedulezeController@DocumnetFilter');
 		Route::get('/scheduleze/documents/viewreport/{booking?}', 'SchedulezeController@DocumnetReport');
 		Route::post('/scheduleze/save/report', 'SchedulezeController@SaveReport');
-
+		Route::get('/viewreports/{id?}/{code?}/{go?}', 'SchedulezeController@ViewReport');
 		//Route::get('/scheduleze/blockouts','SchedulezeController@ListBlockout')->name('ListBlockout');
 
 		Route::post('ajaxappointment', 'PanelController@storeAppointment');

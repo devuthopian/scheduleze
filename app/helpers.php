@@ -304,6 +304,7 @@ if(! function_exists('get_inspector_popup')){
 
 		$rows = DB::select('select * from users_details '.$where.' order by permission DESC');
 		$html = "\n\t\t\t<select name=\"users_details\" class=\"smallselect\">";
+
 		foreach ($rows as $row) {
 			if($row->user_id == $id){
 				$select = "selected";
@@ -1937,16 +1938,16 @@ if(! function_exists('get_todays_starttime')){
 }
 if(! function_exists('get_bus_users')){
 	function get_bus_users(){
-		$buisnessid = session('business_id');
-		$users_details = DB::table('users_details')->select('user_id')->where('business', $buisnessid)->get();
+		$business = session('business_id');
+		$users_details = DB::table('users_details')->select('user_id')->where('business', $business)->get();
 		return $users_details;
 	}
 }
 
 if(! function_exists('get_subs_users')){
 	function get_subs_users($i = 0){
-		$buisnessid = session('business_id');
-		$users_details = DB::table('users_details')->select('name','user_id')->where('business', $buisnessid)->get();
+		$business = session('business_id');
+		$users_details = DB::table('users_details')->select('name','user_id')->where('business', $business)->get();
 		$form = "<select name=\"selectedusers[$i][]\" class=\"form-control my_select_$i selectedbs\" size=\"1\" multiple style=\"display:none;\" data-main-id=\"$i\">";
 		$form .="<option value=\"\" disabled></option>";
 		foreach ($users_details as $value) {
@@ -1954,6 +1955,59 @@ if(! function_exists('get_subs_users')){
 		}
 		$form .= "</select>";
 		return $form;
+	}
+}
+
+
+
+if(! function_exists('handoff_file')){
+	function handoff_file($file_id){
+		
+		$filename = get_field('reports', 'pdf', $file_id);
+		
+		$full_file= ('images/reports/'.$filename);
+		if(!is_file($full_file)){  //if the file doesn't exist, error out
+			session(['warning' => "Sorry that report no longer exists"]);
+			return false;
+		} else {
+			
+			$file_size = filesize($full_file);
+			//echo "$file_size";
+			//echo "$full_file";
+			header('Content-Description: File Transfer');
+			header("Content-Type: application/octet-stream\n");
+			header("Content-Disposition: attachment; filename=\"$filename\"\n");
+			header("Content-Transfer-Encoding: binary\n");
+			header("Content-Length: $file_size\n");
+		
+			$ff=fopen("$full_file","r");
+			fpassthru($ff);
+			
+			
+			return true;
+		}
+	}
+}
+
+if(! function_exists('get_icon')){
+	function get_icon($file_name){
+
+		$extension = explode(".",$file_name);
+
+		$num = (count($extension))-1;
+
+		$icon = $extension[$num].".gif";
+
+		$images = "images/icon_images/".$icon."";
+
+		if(!file_exists($images)){
+			$icon = "pdf.gif";
+			//$icon="iconfiles/$icon";
+		} else {
+			$icon = $icon;
+		}
+
+		return $icon;
 	}
 }
 
@@ -2063,10 +2117,9 @@ if(! function_exists('view_for_reports')){
 				$report = $this->pull_array($sql);*/
 
 				$report = DB::table("reports")->where([['booking', '=', $row->id],['removed', '=', 0]])->first();
-
 				if (isset($report)) {
 					//access reports table and give view link
-					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\"><a target=\"_blank\" href=\"../viewreports.php?id=".$report->id."&ac=".$report->code."\"><nobr>View Report</nobr></a></td>\n
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\"><a target=\"_blank\" href=\"/viewreports/".$report->id."/".$report->code."\"><nobr>View Report</nobr></a></td>\n
 					<td bgcolor=\"#$bgcolor\" class=\"display\" align=\"center\">$report->views</td>\n";
 				} else {
 					//give post link
@@ -2077,6 +2130,8 @@ if(! function_exists('view_for_reports')){
 				$html .= "</tr>\n";
 				
 			}
+		}else{
+			$html = '<tr><td class="display" style="text-align: center;">No Results Found</td></tr>';
 		}
 		return $html;
 	}

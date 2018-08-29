@@ -41,7 +41,7 @@ nav a {
   padding: 15px 10px 0;
 }
 nav a:hover {
-  color: #e1ac42;
+  color: #ff6600;
 }
 @media (max-width: 1326px) {
 .navigation .try_it_now {
@@ -81,14 +81,14 @@ nav > ul > li ul li {
   cursor: pointer;
   margin: 0px 0;
   padding: 10px 0;
-  border-bottom: 1px solid #da9e26;
+  border-bottom: 1px solid #ef5f00;
 }
 nav ul > li ul {
   position: absolute;
   width: 200px;
   z-index: 99;
   display: none;
-  background: #e1ac42;
+  background: #ff6600;
   margin-left: 0px;
 }
 nav ul > li ul li a { 
@@ -123,15 +123,19 @@ nav > ul li {
   margin: 0px;
   padding-left: 20px;
 }
-/*nav > ul li:after {
+.arrowicon {
+    position: relative;
+}
+.arrowicon:after {
   content: "\f107";
   font-family: FontAwesome;
   position: absolute;
-  right: 20px;
-  top: 5px;
+  right: 25px;
+  top: 10px;
   font-size: 20px;
   color: #fff;
-}*/
+  z-index: -1;
+}
 nav > ul li ul li {
     border-bottom: 0;
 }

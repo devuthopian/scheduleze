@@ -47,6 +47,8 @@ class BuildingController extends Controller
         $Modelproduct = new $Model;
         $ColumnName = $Modelproduct->getTableColumns();
 
+        $users_details = DB::table('users_details')->select('name','user_id')->where('business', $businessid)->get();
+
         //$Building = $Model::where([['business', $businessid]])->first();
         $BladeName = strtolower($name);
 
@@ -62,7 +64,7 @@ class BuildingController extends Controller
 
         $exception = Exceptions::select('exception','user_id')->where('type', $type)->get();
 
-        return view('building.'.$BladeName, compact('Building','name','ColumnName','exception'));
+        return view('building.'.$BladeName, compact('Building','name','ColumnName','exception', 'users_details'));
     }
 
 
@@ -85,7 +87,7 @@ class BuildingController extends Controller
     public function store(Request $request)
     {
         $businessid = $this->businessid;
-        $validatedData = Validator::make($request->all(), [
+        /*$validatedData = Validator::make($request->all(), [
             'price' => 'bail|required',
             'rank' => 'bail|required',
             'forcecall' => 'bail|required',
@@ -93,7 +95,7 @@ class BuildingController extends Controller
 
         if ($validatedData->fails()) {
             return redirect('BuildingTypess')->withErrors($validatedData)->withInput();
-        }
+        }*/
 
         $data = Input::get();
         /*
@@ -109,30 +111,31 @@ class BuildingController extends Controller
             ]
         );*/
         for($i = 0; $i < count($data['desc']); $i++) {
-            
-            if(isset($data['selected'][0])){
-                if($data['id'][$i] == $data['selected'][0]){
-                    $selected = 1;
+            if(isset($data['desc']) && !empty($data['desc'][$i])){
+                if(isset($data['selected'][0])){
+                    if($data['id'][$i] == $data['selected'][0]){
+                        $selected = 1;
+                    }else{
+                        $selected = 0;
+                    }
                 }else{
                     $selected = 0;
                 }
-            }else{
-                $selected = 0;
+                $redirecturl = $data['txtform'];
+                $txtForm = 'App\\'.$data['txtform'];
+                $BuildingTypes = $txtForm::updateOrCreate(
+                    ['id' => $data['id'][$i],'removed' => '0'],
+                    [
+                        'name' => $data['desc'][$i], 
+                        'buffer' => $data['buffer'][$i], 
+                        'business' => $businessid,
+                        'price' => str_replace('$', '', $data['price'][$i]),
+                        'status' => $data['forcecall'][$i],
+                        'rank' => $data['rank'][$i],
+                        'selected' => $selected
+                    ]
+                );
             }
-            $redirecturl = $data['txtform'];
-            $txtForm = 'App\\'.$data['txtform'];
-            $BuildingTypes = $txtForm::updateOrCreate(
-                ['id' => $data['id'][$i],'removed' => '0'],
-                [
-                    'name' => $data['desc'][$i], 
-                    'buffer' => $data['buffer'][$i], 
-                    'business' => $businessid,
-                    'price' => str_replace('$', '', $data['price'][$i]),
-                    'status' => $data['forcecall'][$i],
-                    'rank' => $data['rank'][$i],
-                    'selected' => $selected
-                ]
-            );
         }
         /*$collection = get_bus_users();
         

@@ -655,7 +655,7 @@ a:hover {
 }
 .login_section .login_right_cont {
   width: 50%;
-  float: left;
+  margin: 0px auto;
   background: #419aac;
   padding: 20px 10%;
 }
@@ -1099,31 +1099,6 @@ tr.dark-table-heading{ border:1px solid #555555; }
 
 /*styling*/
 
-
-form.recurring-form {
-    font-size: 15px;
-    margin: 40px 0 40px 0;
-    display: block;
-    float: left;
-    width: 100%;
-    line-height: 25px;
-}
-
-form.recurring-form select.smallselect {
-    background: #fff;
-    height: 38px;
-    margin: 0 0 10px 0;
-}
-
-
-form.recurring-form input.submit {
-    background: #ff6600;
-    border: none;
-    color: #fff;
-    border-radius: 5px;
-    padding: 6px 20px;
-}
-
 table.content-table {
     width: 100%;
     margin: 0 0 25px 0;
@@ -1147,7 +1122,7 @@ table.content-table td {
     border-left: 1px solid #ccc;
     width: 420px;
     text-align: center;
-    vertical-align: top;
+    vertical-align: middle;
 }
 
 table.content-table td select {
@@ -1220,11 +1195,20 @@ table.content-table input[type="checkbox"]:checked + label:after {
     width: 100%;
     float: left;
 }
+.nsignup_cont label {
+  opacity: 0.7 !important;
+}
+.nsignup_cont .container {
+    width: 100%;
+    background: #fbfbfb;
+    max-width: 800px;
+    padding: 0 1% 20px 2.6% !important;
+}
 .nsignup_cont h3 {
     font-size: 36px;
     text-transform: uppercase;
     color: #429caf;
-    margin: 50px 0 30px;
+    margin: 40px 0 30px;
 }
 .nsignup_cont .col-12 {
     width: 50%; 
@@ -1234,11 +1218,12 @@ table.content-table input[type="checkbox"]:checked + label:after {
 }
 .nsignup_cont input[type="text"], .nsignup_cont input[type="email"], .nsignup_cont input[type="password"] {
     width: 100%;
-    padding: 22px 25px;
+    padding: 11px 25px;
     border-radius: 30px;
     border: 0px;
     background: #d8d8d8;
     margin: 5px 0 30px;
+    height: 100%;
 }
 .signup_select [class*="col-"] select.form-control {
     width: 100%;
@@ -1249,10 +1234,20 @@ table.content-table input[type="checkbox"]:checked + label:after {
     margin: 5px 0 30px;
     border-bottom: 0px !important;
 }
+.nsignup_cont input[type="submit"] {
+  background: #48aabf;
+    border: 0px;
+    border-radius: 30px;
+    padding: 10px 50px;
+    color: #fff;
+    text-transform: uppercase;
+    margin: 20px 10px 20px 0;
+    display: inline-block;
+}
 .signup_select .col-12 {
     min-height: 100%;
 }
-.nsignup_cont .gmailbtn:hover { 
+.nsignup_cont .gmailbtn:hover, .nsignup_cont input[type="submit"]:hover { 
     background: #e2a729 !important;
 }
 .bookingmain {
@@ -1322,6 +1317,7 @@ table.content-table input[type="checkbox"]:checked + label:after {
 }
 .frameadmin .table > thead > tr > th, .frameadmin .table > tbody > tr > th, .frameadmin .table > tfoot > tr > th, .frameadmin .table > thead > tr > td, .frameadmin .table > tbody > tr > td, .frameadmin .table > tfoot > tr > td {
     padding: 15px 8px;
+    vertical-align: middle;
 }
 .frameadmin .bluebtn {
     background: #48aabf;
@@ -1358,6 +1354,10 @@ table.content-table input[type="checkbox"]:checked + label:after {
     background: #d8d8d8;
     margin: 5px 0 10px;
 }
+.adding_blockout_cont textarea {
+    max-width: 575px;
+    height: 100px;
+}
 .adding_blockout_cont input[type="submit"] {
     padding: 10px 20px;
     border-radius: 30px;
@@ -1372,14 +1372,148 @@ table.content-table input[type="checkbox"]:checked + label:after {
     background: #e2a729 !important;
 }
 .adding_blockout_cont .start_admin select, .adding_blockout_cont .end_admin select {
-    width: 10%;
-    max-width: 80px;
+    width: 12%;
+    max-width: 100px;
     float: left;
     margin-right: 1%;
 }
 .adding_blockout_cont .same_day {
     position: relative;
     top: 12px;
+}
+.nsignup_cont .sign_up_inner_cont {
+  padding: 0 2.6% 0 0;
+}
+.nsignup_cont .textfield_left {
+    width: 49%;
+    float: left;
+}
+.nsignup_cont .textfield_right {
+    width: 49%;
+    float: right;
+}
+.nsignup_cont .textfield_full {
+    width: 100%;
+    float: left;
+}
+.nsignup_cont .textfield_left select, .nsignup_cont .textfield_right select, .nsignup_cont .textfield_full select, .nsignup_cont .textfield_left textarea, .nsignup_cont .textfield_right textarea {
+    width: 100%;
+    padding: 10px 25px !important;
+    border-radius: 30px;
+    border: 0px;
+    background: #d8d8d8;
+    margin: 5px 0 30px;
+    border-bottom: 0px !important;
+}
+.nsignup_cont .textfield_full .three_col_cont select {
+    width: 32%;
+    float: left;
+    margin-right: 2%
+}
+.nsignup_cont .textfield_full .three_col_cont select:last-child {
+    float: right;
+    margin-right: 0%
+}
+.nsignup_cont .textfield_full .six_col_cont select {
+    width: 15%;
+    float: left;
+    margin-right: 2%
+}
+.nsignup_cont .textfield_full .six_col_cont select:last-child {
+    float: right;
+    margin-right: 0%
+}
+.nsignup_cont .two_col_cont {
+  width: 49%;
+  float: left;
+}
+.nsignup_cont .two_col_cont:last-child {
+  width: 49%;
+  float: right;
+}
+.set_recc_block {
+    width: 100%;
+    float: left;
+    padding: 40px 0 20px;
+}
+.set_recc_block h2 {
+    font-size: 36px;
+    text-transform: uppercase;
+    color: #429caf;
+    margin: 20px 0;
+}
+.set_recc_block select {
+    width: 100%;
+    max-width: 300px;
+    padding: 8px 20px;
+    border-radius: 30px;
+    border: 0px;
+    background: #d8d8d8;
+    margin: 10px 0;
+}
+.set_recc_block input[type="submit"] {
+    padding: 7px 50px;
+    border-radius: 30px;
+    border: 1px solid #fff;
+    background: #ff6600;
+    text-align: center;
+    color: #fff;
+    box-shadow: 0px 0px 18px #ccc;
+    margin: 10px 0px 10px;
+    font-size: 16px;
+}
+.set_recc_block input[type="submit"]:hover {
+    background: #429caf;
+}
+.set_recc_block table tr td select, .nsignup_cont table tr td select {
+  margin: 0px;
+}
+.set_recc_block .set_recc_cont .select_field {
+    float: left;
+    width: 28%;
+    margin-right: 5px;
+}
+.set_recc_block table tr td {
+  padding: 8px;
+}
+.building_cont input[type=text], .building_cont select {
+    width: auto !important;
+    max-width: 300px !important;
+    border-radius: 30px !important;
+    border: 0px !important;
+    background-color: #d8d8d8 !important;
+    height: 100% !important;
+    padding: 8px 10px !important;
+    margin: 0px !important;
+}
+.building_cont tr.dark-table-heading td {
+    border: 1px solid #383838 !important;
+    color: #fff;
+}
+#add_column, .add_columnfor_location {
+    background: #ff6600;
+    padding: 5px 15px;
+    border-radius: 30px;
+    display: inline-block;
+    margin: 10px 0;
+    color: #fff !important;
+}
+#add_column:hover, .add_columnfor_location:hover {
+    background: #429caf;
+}
+.building_cont .select-wrapper .caret {
+    right: 15px;
+    z-index: 1;
+}
+.set_recc_block span.subhead, .building_cont span.subhead {
+    font-size: 20px;
+    margin: 10px 0;
+    display: inline-block;
+    width: 100%;
+}
+.building_cont [type="radio"]:not(:checked), .building_cont [type="radio"]:checked {
+    position: relative; 
+    opacity: 1;
 }
 @media (max-width: 1024px) {
 .bookingmain .bookingcontainer .labelInsp, .bookingmain .bookingcontainer .labelstart, .bookingmain .bookingcontainer .labelend {
@@ -1393,6 +1527,12 @@ table.content-table input[type="checkbox"]:checked + label:after {
 }
 } 
 @media (max-width: 767px) {
+.nsignup_cont .container {
+    padding: 0 20px !important;
+}
+.nsignup_cont .sign_up_inner_cont {
+    padding: 0 0 0 0;
+}
 .nsignup_cont .col-12 {
     width: 100%;
     padding-right: 0px;
@@ -1420,6 +1560,9 @@ table.content-table input[type="checkbox"]:checked + label:after {
 .adding_blockout_cont .start_admin select, .adding_blockout_cont .end_admin select {
     width: 15%;
 }
+.nsignup_cont .textfield_left, .nsignup_cont .textfield_right {
+    width: 100%;
+}
 }
 @media (max-width: 480px) {
 .bookingmain .bookingcontainer .labelstart select, .bookingmain .bookingcontainer .labelend select {
@@ -1442,5 +1585,26 @@ table.content-table input[type="checkbox"]:checked + label:after {
 .adding_blockout_cont input[type="submit"] {
     width: 100%;
     margin-bottom: 20px;
+}
+.nsignup_cont .textfield_full .three_col_cont select {
+    width: 100%;
+    margin-right: 0;
+}
+.nsignup_cont .textfield_full .six_col_cont select {
+    width: 100%;
+    margin-right: 0;
+}
+.nsignup_cont input[type="submit"] {
+    margin: 20px 0px 20px 0;
+    width: 100%;
+}
+.set_recc_block h2 {
+    font-size: 30px;
+}
+.set_recc_block input[type="submit"] {
+    margin: 12px 0px 10px;
+}
+.set_recc_block .set_recc_cont .select_field {
+    width: 100%;
 }
 }

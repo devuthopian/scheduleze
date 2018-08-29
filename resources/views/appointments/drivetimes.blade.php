@@ -1,6 +1,7 @@
 @extends('layouts.front')
 
 @section('content')
+<div class="set_recc_block">
 	<div class="container">
 		@php 
 			$oldtimes = ""; 
@@ -15,19 +16,17 @@
 				@endphp
 			@endforeach
 		@endif
-		<table width="960" border="0" cellspacing="0" cellpadding="0">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
 			<tr>
 				<td bgcolor="white">
 					<form action="{{ route('StoreDriveTime') }}" method="post" name="FormName">
 						@csrf
 						<div class="frameadmin">
-							<span class="head">
-								Drive Time Details<br>
-							</span>
-							Please provide the approximate drive times between your service areas ~ Also see <a href="#">Zigzag Control</a><br>
+							<h2>Drive Time Details</h2>
+							<h5>Please provide the approximate drive times between your service areas ~ Also see <a href="#">Zigzag Control</a></h5><br>
 						
-							<table border="0" cellspacing="0" cellpadding="2">
-								<tr>
+							<table border="0" cellspacing="0" cellpadding="2" class="table border table-responsive table-borderd table-striped select-default">
+								<tr class="dark-table-heading">
 									<td><span class="formlabel">From:</span><nobr>&nbsp;&nbsp;&nbsp;</nobr></td>
 									<td><span class="formlabel">To:</span></td>
 									<td><span class="formlabel">Drive Time:</span></td>
@@ -70,4 +69,5 @@
 			</tr>
 		</table>
 	</div>
+</div>
 @endsection

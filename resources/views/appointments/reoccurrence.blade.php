@@ -1,26 +1,26 @@
 @extends('layouts.front')
 
 @section('content')
+<div class="set_recc_block">
 <div class="container">
-	<table width="960" border="0" cellspacing="0" cellpadding="0" style="margin: 0 auto;">
+    <form class="recurring-form" action="{{ url('/scheduleze/Reoccurrence') }}" method="post">
+                        <div class="set_recc_cont">
+                            <input type="hidden" name="action" value="reoccurrence">
+                            <h2>Set Recurring Blockouts</h2>
+                            <h4>Please specify any reoccurring time off for</h4>
+                        </div>
+                        <div class="set_recc_cont">
+                            <div class="select_field">
+                                {!! get_inspector_popup("name", $id) !!}
+                            <input type="submit" name="Submit" class="submit" value="Switch">
+                            <h5>(For example, Sundays, every week, or the second Tuesday of each month)</h5><br>
+                        </div>
+                    </form>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin: 0 auto;">
     <tbody>
         <tr>
             <td bgcolor="white" valign="top">
-                <div class="frameadmin">
-                    <form class="recurring-form" action="#" method="post">
-                        <div class="col-md-5">
-                            <input type="hidden" name="action" value="reoccurrence">
-                            <span class="head">Set Recurring Blockouts</span>
-                            <br> Please specify any reoccurring time off for
-                        </div>
-                        <div class="col-md-5">
-                            <select name="inspector" class="smallselect">
-                                <option value="60" selected="">Richard</option>
-                            </select>
-                            <input type="submit" name="Submit" class="submit" value="Switch">
-                            <br><span class="note">(For example, Sundays, every week, or the second Tuesday of each month)</span>
-                        </div>
-                    </form>
+                <div class="frameadmin">                    
                     <form action="{{ route('occurrenceoff') }}" method="post">
                         @csrf
                         @forelse($Daysoff as $key => $off)
@@ -86,7 +86,7 @@
                                                 {!! get_time_popup($default_time, $key, 0, 0, 0, 1, 1, 1, 'end') !!}
                                             </td>
                                             <td>
-                                                <span class="note">&nbsp;&nbsp;
+                                                <span class="note">
                                                     <div>
                                                         <input type="checkbox" name="weeks[{{$key}}][1]" checked="">
                                                         <label>1st&nbsp;</label>
@@ -199,18 +199,19 @@
                         <input type="submit" name="Submit" class="submit" value="Set Time off for Richard »">
                     </form>
                     <br>
-                    <span class="note"><a href="index.php" class="note_link">« Return to Admin Home</a></span>
+                    <!-- <span class="note"><a href="index.php" class="note_link">« Return to Admin Home</a></span> -->
                     <br>
                     <br>
                     <br>
                     <br>
                     <span class="note">Customer Support: <a href="mailto:support@scheduleze.com">support@scheduleze.com</a>
-               <a href="../index.php"><img src="../images/scheduleze-logo.gif" alt="Take command of your day" width="244" height="79" align="right" border="0" class="logo"></a>
+               <!-- <a href="../index.php"><img src="../images/scheduleze-logo.gif" alt="Take command of your day" width="244" height="79" align="right" border="0" class="logo"></a> -->
                </span>
                 </div>
             </td>
         </tr>
     </tbody>
 </table>
+</div>
 </div>
 @endsection

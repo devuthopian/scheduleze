@@ -86,13 +86,13 @@
 
     editor.on('storage:end:store', (resultObject) => {
         if (resultObject.message) {
-          alert(resultObject.message);
+            alert(resultObject.message);
         }
         if(resultObject.sharelink){
             var nos = resultObject.sharelink;
             var url = window.location.href;
-            var afterWith = url.substr(0, url.lastIndexOf("/") + 1);            
-            prompt("To Copy preview link: Ctrl+C", afterWith+''+nos);
+            var afterWith = url.substr(0, url.lastIndexOf("scheduling/schedulepanel"));            
+            prompt("To Copy preview link: Ctrl+C", afterWith+'template/'+nos);
         }
     });
 

@@ -117,7 +117,7 @@ class SchedulezeController extends Controller
     {
         $id = session('id');
         $businesshours = BusinessHours::where([['user_id','=',$id],['removed','=',0]])->get();
-        return view('appointments.business_hours', compact('businesshours'));
+        return view('appointments.business_hours', compact('id', 'businesshours'));
     }
 
     public function BookingFilter(Request $request, $form)
@@ -324,7 +324,52 @@ class SchedulezeController extends Controller
             ]
         );
 
-        return redirect('/scheduleze/documents')->with('message','Report added');
+        return redirect('/scheduling_solutions')->with('message','Report added');
+    }
+
+    public function ViewReport($id='', $go='', $code='')
+    {
+        if ( (!is_numeric($id)) or ((strlen($go)<5)) ) {
+            return redirect('/scheduleze/documents')->with('message', 'Not allowed to do that');
+        } else {
+
+            $now = time();
+            $row = DB::table('reports')->where('id', $id)->first();
+            //$sql = "select * from reports where id='$_GET[id]'";
+
+            $bus = get_field('bookings', 'business', $row->booking);
+            $email = get_field('business', 'public_email', $bus);
+            $phone = get_field('business', 'phone', $bus);       
+        }
+
+        if(isset($go)){
+            if ($row->code == $go) {
+                if (handoff_file($id)){
+                    $aug = $row->views + 1;
+                    $row = DB::table('reports')->where('id', $row->id)->update(['views' => $aug]);
+                } else {
+                    $message = session('warning');
+                }
+            }
+        }else{
+
+            $html = '';
+            if ($row->code != $code) {
+                $html = "Your link is not correct. Please contact us.";
+            } elseif ($row->expire < $now) {
+                $html = "Your report has expired.";
+            }
+            else {
+                //spit out the link
+                $date = date("F j, Y", $row->added);
+                
+                
+                $row->memo = stripslashes($row->memo);
+                $row->summary  = stripslashes($row->summary);
+            }
+        }
+
+        return view('appointments.viewreport', compact('row', 'id', 'code', 'now', 'message'));
     }
 
     public function UpdateBooking(Request $request, $id)
@@ -552,9 +597,16 @@ class SchedulezeController extends Controller
 
     public function blockouts_occurance()
     {
-        $id = session('id');
-        $Daysoff = Daysoff::where([['user_id','=',$id],['removed','=',0]])->get();
-        return view('appointments.reoccurrence', compact('Daysoff'));
+        $data = Input::get();
+
+        if(isset($data['users_details'])){
+            $id = $data['users_details'];
+        }else{
+            $id = session('id');
+        }
+
+        $Daysoff = Daysoff::where([['user_id', '=', $id],['removed', '=', 0]])->get();
+        return view('appointments.reoccurrence', compact('id', 'Daysoff'));
     }
 
      /**
