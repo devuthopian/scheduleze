@@ -1025,7 +1025,7 @@ a.btn.btn-link {
   text-align: center;
   float: none;
   width: 100%;
-  color: #3d9daf;
+  color: #ffffff;
   font-size: 12px;
 }
 a.button.button-facebook {
@@ -1607,4 +1607,9 @@ table.content-table input[type="checkbox"]:checked + label:after {
 .set_recc_block .set_recc_cont .select_field {
     width: 100%;
 }
+}
+p.change_link{
+    font-size: 16px;
+    text-align: center;
+    border-top: 1px solid rgb(219, 229, 232);
 }

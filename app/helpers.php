@@ -27,9 +27,15 @@ if (! function_exists('show_buffer')) {
 }
 
 if (! function_exists('state')) {
-    function state()
+    function state($selected = '')
     {
-    	$html = "\t\t\t\t<select name=\"state\" size=\"1\" class=\"smallselect\">\n";
+    	$html = "\t\t\t\t<select name=\"state\" id=\"business_state\" size=\"1\" class=\"smallselect\">\n";
+    	$html .= "\t\t\t\t<div class=\"form-group has-error business_state\" id=\"business_city\" style=\"display: none;\"><span class=\"help-block\">Business State is Required</span></div>";
+    	if(!empty($selected)){
+    		$html .= "\t\t\t\t\t<option value=\".$selected.\">".$selected."</option>";
+    	}else{
+    		$html .= "\t\t\t\t\t<option value=\"\">Business State</option>";
+    	}
     	$html .= "\t\t\t\t\t<option value=\"AK\">AK</option> <option value=\"AL\">AL</option> <option value=\"AR\">AR</option> <option value=\"AZ\">AZ</option> <option value=\"CA\">CA</option> <option value=\"CO\">CO</option> <option value=\"CT\">CT</option> <option value=\"DC\">DC</option> <option value=\"DE\">DE</option> <option value=\"FL\">FL</option> <option value=\"GA\">GA</option> <option value=\"HI\">HI</option> <option value=\"IA\">IA</option> <option value=\"ID\">ID</option> <option value=\"IL\">IL</option> <option value=\"IN\">IN</option> <option value=\"KS\">KS</option> <option value=\"KY\">KY</option> <option value=\"LA\">LA</option> <option value=\"MA\">MA</option> <option value=\"MD\">MD</option> <option value=\"ME\">ME</option> <option value=\"MI\">MI</option> <option value=\"MN\">MN</option> <option value=\"MO\">MO</option> <option value=\"MS\">MS</option> <option value=\"MT\">MT</option> <option value=\"NC\">NC</option> <option value=\"ND\">ND</option> <option value=\"NE\">NE</option> <option value=\"NH\">NH</option> <option value=\"NJ\">NJ</option> <option value=\"NM\">NM</option> <option value=\"NV\">NV</option> <option value=\"NY\">NY</option> <option value=\"OH\">OH</option> <option value=\"OK\">OK</option> <option value=\"OR\">OR</option> <option value=\"PA\">PA</option> <option value=\"RI\">RI</option> <option value=\"SC\">SC</option> <option value=\"SD\">SD</option> <option value=\"TN\">TN</option> <option value=\"TX\">TX</option> <option value=\"UT\">UT</option> <option value=\"VA\">VA</option> <option value=\"VT\">VT</option> <option value=\"WA\">WA</option> <option value=\"WI\">WI</option> <option value=\"WV\">WV</option> <option value=\"WY\">WY</option> <option value=\"\">--</option> <option value=\"AB\">AB</option> <option value=\"BC\">BC</option> <option value=\"MB\">MB</option> <option value=\"NB\">NB</option> <option value=\"NL\">NL</option> <option value=\"NT\">NT</option> <option value=\"NS\">NS</option> <option value=\"NU\">NU</option> <option value=\"ON\">ON</option> <option value=\"PE\">PE</option> <option value=\"QC\">QC</option> <option value=\"SK\">SK</option> <option value=\"YT\">YT</option>\n";
 		$html .= "</select>";
 		return $html;

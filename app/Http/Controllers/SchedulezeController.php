@@ -41,6 +41,11 @@ class SchedulezeController extends Controller
         return view('scheduleze.scheduling_solutions');
     }
 
+    public function scheduling_faq()
+    {
+        return view('scheduleze.schedule_faq');
+    }
+
     public function ZigZag()
     {
         $id = session('id');

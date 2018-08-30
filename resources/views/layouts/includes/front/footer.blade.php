@@ -30,17 +30,21 @@
                 <div class="quick_links">
                     <h3>Quick <br> Links</h3>
                     <ul>
-                        <li><a href="#">Scheduling Solutions</a></li>
-                        <li><a href="#">Success  Stories</a></li>
-                        <li><a href="#">Demo</a></li>
-                        <li><a href="#">FAQ</a></li>
-                        <li><a href="#">Contact</a></li>
-                        <li><a href="#">Client Login</a></li>
+                        <li><a href="{{ url('/') }}">Scheduling Solutions</a></li>
+                        <li><a href="{{ url('success_stories') }}">Success  Stories</a></li>
+                        <li><a href="{{ url('demo') }}">Demo</a></li>
+                        <li><a href="{{ url('scheduling_faq') }}">FAQ</a></li>
+                        <li><a href="{{ url('contact') }}">Contact</a></li>
+                        <li><a href="{{ route('login') }}">Client Login</a></li>
                     </ul>
                 </div>
             </div>
             @guest
-                @if(substr(strrchr(url()->current(),"/"),1) != 'login')
+                @php 
+                    $strchr = substr(strrchr(url()->current(),"/"),1); 
+                @endphp
+
+                @if($strchr != 'login' && $strchr != 'account_info')
                     <div class="col-sm-4" id="signup">
                         <h3>Try it now free for <br>30 days</h3>
                         @php $allindustries = getallIndustries() @endphp

@@ -39,7 +39,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/login';
 
     /**
      * Create a new controller instance.
@@ -49,6 +49,7 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+        auth()->logout();
     }
 
     /**
@@ -116,12 +117,11 @@ class RegisterController extends Controller
             if(!$check_reg->registration_completed){
             return redirect('/account_info/?token='.$token)->with('status', $status);
             } else {
-            return redirect('/login')->with('warning', "your Registration allready Completed.");
+            return redirect('/login')->with('warning', "Registration is already completed.");
             }
         } else{
             return redirect('/account_info/?token='.$token)->with('status', $status);
         }
-
     }
 
       public function account_info()
@@ -133,7 +133,7 @@ class RegisterController extends Controller
          if(!$check_reg->registration_completed){
           return view('auth.account_info');
          } else {
-          return redirect('/login')->with('warning', "your Registration already Completed.");
+          return redirect('/login')->with('warning', "Registration is already completed.");
          }
          } else{
                  return view('auth.account_info');
@@ -155,7 +155,7 @@ class RegisterController extends Controller
                     'contact_lastname' => $request->input('contact_lastname'),
                     'address' => $request->input('business_address'),
                     'city' => $request->input('business_city'),
-                    'state' => $request->input('business_state'),
+                    'state' => $request->input('state'),
                     'zip' => $request->input('business_zip'),
                     'phone' => $request->input('business_phone'),
                     'public_phone' => $request->input('additional_phone'),
@@ -168,8 +168,14 @@ class RegisterController extends Controller
                     'user_id' => $verifyUser->user_id,
                 ]);*/
                 $verifyUser->user->name = $request->input('Username');
+                $verifyUser->userdetails->name = $request->input('Username');
                 $verifyUser->user->password = bcrypt($request->input('pass'));
                 $verifyUser->user->save();
+
+                $userdetails = UserDetails::firstOrNew(array('user_id' => $verifyUser->user_id));
+                $userdetails->name = $request->input('Username');
+                $userdetails->save();
+
                 session(['business_id' => $business->id]);
                 $status = "Your Signup process Completed You can login now.";
             }else{

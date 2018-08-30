@@ -14,7 +14,6 @@
 Auth::routes();
 
 
-
 Route::group(['middleware' => ['web']], function () {
 	Route::get('/home', 'HomeController@index')->name('home');
 	Route::get('/', 'SchedulezeController@scheduling_solutions');
@@ -25,16 +24,21 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('/user/verify/{token}', 'Auth\RegisterController@verifyUser');
 
 	Route::get('/template/{value}', 'PanelController@show');
+	Route::get('/scheduling_solutions', 'SchedulezeController@scheduling_solutions')->name('scheduling_solutions');
+	Route::get('/scheduling_faq', 'SchedulezeController@scheduling_faq');
     Route::post('login/{inspector?}', 'Auth\InspectorAuthController@login');
 
 	Route::get('/login/{social}','Auth\LoginController@socialLogin')->where('social','twitter|facebook|linkedin|google|github|bitbucket');
  
 	Route::get('/login/{social}/callback','Auth\LoginController@handleProviderCallback')->where('social','twitter|facebook|linkedin|google|github|bitbucket');
+	Route::get('/success_stories', 'SchedulezeController@success_stories')->name('success_stories');
+
+	Route::get('/account_info', 'Auth\RegisterController@account_info');
+	Route::post('/account_info_save', 'Auth\RegisterController@account_info_save')->name('account_info_save');
 
 	Route::group(['middleware' => ['auth']], function() {
-		Route::get('/scheduling_solutions', 'SchedulezeController@scheduling_solutions')->name('scheduling_solutions');
+		
 		Route::get('/scheduling/schedulepanel', 'SchedulezeController@scheduling_panel')->name('schedulepanel');
-		Route::get('/success_stories', 'SchedulezeController@success_stories')->name('success_stories');
 
 		Route::get('/scheduleze/BusinessHours', 'SchedulezeController@BusinessHours');
 		Route::get('/scheduleze/appointments','AppointmentController@index');
@@ -85,8 +89,7 @@ Route::group(['middleware' => ['web']], function () {
 		Route::get('/business/Location', 'LocationController@index')->name('Location');
 		Route::post('/store', 'LocationController@store')->name('storelocation');
 
-		Route::get('/account_info', 'Auth\RegisterController@account_info');
-		Route::post('/account_info_save', 'Auth\RegisterController@account_info_save')->name('account_info_save');
+		
 
 		Route::get('/profile/{id?}', 'ProfileController@UserProfile')->name('profile');
 		Route::post('/profile_update', 'ProfileController@updateUserAccount')->name('profile_update');

@@ -86,8 +86,13 @@ class LoginController extends Controller
         }
         //$PanelTemplate = $user->Panel($user->id);
         $PanelTemplate = PanelTemplate::where('user_id',$user->id)->first();
+        if(empty($PanelTemplate)){
+            $panelurl = '';
+        }else{
+            $panelurl = $PanelTemplate->unqiue_url;
+        }
         $permission = get_field("users_details", "permission", $user->id);
-        session(['id' => $user->id, 'username' => $user->name, 'hashvalue' => $PanelTemplate->unqiue_url, 'permission' => $permission]);
+        session(['id' => $user->id, 'username' => $user->name, 'hashvalue' => $panelurl, 'permission' => $permission]);
         $business = Business::where('user_id', $user->id)->first();
 
         if($business){

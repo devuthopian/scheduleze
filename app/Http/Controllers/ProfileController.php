@@ -82,7 +82,10 @@ class ProfileController extends Controller
         $UserDetails->throttle       = $request->input('throttle');
         $UserDetails->permission     = $request->input('permission');
         $UserDetails->user->name     = $request->input('username');
-        $UserDetails->user->password     = bcrypt($request->input('password'));
+        if(!empty($request->input('password'))){
+            $UserDetails->user->password     = bcrypt($request->input('password'));
+        }
+        $UserDetails->business       = session('business_id');
         $UserDetails->save();
         $UserDetails->user->save();
       
@@ -112,11 +115,11 @@ class ProfileController extends Controller
         $UserBusinessDetails->contact_lastname  = $request->input('business_lname');
         $UserBusinessDetails->address           = $request->input('business_address');
         $UserBusinessDetails->city              = $request->input('business_city');
-        $UserBusinessDetails->state             = $request->input('business_state');
+        $UserBusinessDetails->state             = $request->input('state');
         $UserBusinessDetails->zip               = $request->input('business_zip');
         $UserBusinessDetails->phone             = $request->input('business_phone');
         $UserBusinessDetails->phone2            = $request->input('business_additional_phone');
-       // $UserBusinessDetails->timezone                = $request->input('business_timezone');
+        $UserBusinessDetails->timezone          = $request->input('business_timezone');
         $UserBusinessDetails->email             = $request->input('business_email');
         $UserBusinessDetails->website           = $request->input('business_website');
         $UserBusinessDetails->paypal            = $request->input('offer_paypal_account');

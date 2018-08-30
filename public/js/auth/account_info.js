@@ -5,22 +5,112 @@ var left, opacity, scale; //fieldset properties which we will animate
 var animating; //flag to prevent quick multi-click glitches
 
 $(".next").click(function(){
-	if($('.active').html() == 'Personal Details'){
-		if($('#business_name').val() == ''){
-			$('.business_name').show();
-			return false;
-		} 
+	if($('.active').html() == 'Business Details'){
 		if($('#contact_firstname').val() == ''){
-          $('.contact_firstname').show();
+			$('.contact_firstname').show();
 			return false;
+		}else{
+			$('.contact_firstname').hide();
+		}
+
+		if($('#contact_lastname').val() == ''){
+			$('.contact_lastname').show();
+			return false;
+		}else{
+			$('.contact_lastname').hide();
+		}
+
+		if($('#business_city').val() == ''){
+			$('.business_city').show();
+			return false;
+		}else{
+			$('.business_city').hide();
+		}
+
+		if($('#business_state').val() == ''){
+			$('.business_state').show();
+			return false;
+		}else{
+			$('.business_state').hide();
+		}
+
+		if($('#business_zip').val() == ''){
+			$('.business_zip').show();
+			return false;
+		}else{
+			$('.business_zip').hide();
+		}
+
+		if($('#business_phone').val() == ''){
+			$('.business_phone').show();
+			return false;
+		}else{
+			//var phone_pattern = '/([0-9]{10})|(\([0-9]{3}\)\s+[0-9]{3}\-[0-9]{4})/'; 
+			var phone_pattern = '[0-9\-\(\)\s]+';
+			var input_value = $('#business_phone').val();
+
+			if(phone_pattern.test( input_value )){
+				$('.business_phone').hide();
+			}else{
+				$('.business_phone').show();
+				return false;
+			}
 		}
 	}
-	/*if($('.current').html() == 'Additional Information'){
+
+	if($('.current').html() == 'Additional Information'){
 		if($('#additional_phone').val() == ''){
-			//alert('2nd');
-			return true;
+			$('.additional_phone').show();
+			return false;
+		}else{
+			$('.additional_phone').hide();
 		}
-	}*/
+
+		if($('#timezone').val() == ''){
+			$('.timezone').show();
+			return false;
+		}else{
+			$('.timezone').hide();
+		}
+
+		if($('#business_website').val() == ''){
+			$('.business_website').show();
+			return false;
+		}else{
+			$('.business_website').hide();
+		}
+
+		if($('#requested_email').val() == ''){
+			$('.requested_email').show();
+			return false;
+		}else{
+			$('.requested_email').hide();
+		}
+	}
+
+	if($('.current').html() == 'Account Setup'){
+		if($('#Username').val() == ''){
+			$('.Username').show();
+			return false;
+		}else{
+			$('.Username').hide();
+		}
+
+		if($('#pass').val() == ''){
+			$('.pass').show();
+			return false;
+		}else{
+			$('.pass').hide();
+		}
+
+		if($('#cpass').val() == ''){
+			$('.cpass').show();
+			return false;
+		}else{
+			$('.cpass').hide();
+		}
+	}
+	
 
 	if(animating) return false;
 	animating = true;
@@ -30,6 +120,7 @@ $(".next").click(function(){
 	
 	//activate next step on progressbar using the index of next_fs
 	$("#progressbar li").eq($("fieldset").index(current_fs)).addClass("active");
+	$("#progressbar li").eq($("fieldset").index(current_fs)).removeClass('current');
 	$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active current");
 	
 	//show the next fieldset
@@ -97,12 +188,16 @@ $(".previous").click(function(){
 	});
 });
 
-$(".submit").click(function(){
-	 var password = $("#pass").val();
-            var confirmPassword = $("#cpass").val();
-            if (password != confirmPassword) {
-                alert("Passwords do not match.");
-                return false;
-            }
-            return true;
+$(".submit").click(function(e){
+	var password = $("#pass").val();
+    var confirmPassword = $("#cpass").val();
+    if (password != confirmPassword) {
+    	e.preventDefault();
+    	$('.cpass').show();
+        //alert("Passwords do not match.");
+        return false;
+    }else{
+    	$('.cpass').hide();
+    }
+    return true;
 });

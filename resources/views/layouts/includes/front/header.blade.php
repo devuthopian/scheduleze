@@ -6,13 +6,17 @@
                 <nav>
                     <a href="#" class="n_toggle"><i class="fa fa-bars fa-2x"></i></a>
                     <ul>
-                        <li><a href="{{ url('scheduling_solutions') }}">Scheduling Solutions</a></li>
-                        <li><a href="{{ url('success_stories') }}">Success  Stories</a></li>
+                        <li><a href="{{ url('/') }}">Scheduling Solution</a></li>
+                        <li><a href="{{ url('success_stories') }}">Success Stories</a></li>
                         <li><a href="{{ url('demo') }}">Demo</a></li>
-                        <li><a href="#">Plans/Prices</a></li>
-                        <li><a href="#">Support</a></li>
+                        <li><a href="{{ url('scheduling_faq') }}">FAQ</a></li>
+                        <!--<li><a href="#">Support</a></li> -->
                         <li><a href="{{ url('contact') }}">Contact</a></li>
-                        @if(substr(strrchr(url()->current(),"/"),1) != 'login')
+                        @php 
+                            $strchr = substr(strrchr(url()->current(),"/"),1); 
+                        @endphp
+
+                        @if($strchr != 'login' && $strchr != 'account_info')
                             <li class="try_it_now"><a href="#signup">Try It Now</a></li>
                             <li class="login"><a href="{{ route('login') }}">Login</a></li>
                         @endif
