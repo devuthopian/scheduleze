@@ -39,6 +39,16 @@ $(".next").click(function(){
 			return false;
 		}else{
 			$('.business_zip').hide();
+
+			var input_value = $('#business_zip').val();
+
+			if (validatezip(input_value)) {
+				$('.business_zip').hide();
+			}else{
+				$('.business_zip').show();
+				$('.business_zip').text('Zip code is invalid!');
+				return false;
+			}
 		}
 
 		if($('#business_phone').val() == ''){
@@ -46,25 +56,27 @@ $(".next").click(function(){
 			return false;
 		}else{
 			//var phone_pattern = '/([0-9]{10})|(\([0-9]{3}\)\s+[0-9]{3}\-[0-9]{4})/'; 
-			var phone_pattern = '[0-9\-\(\)\s]+';
+			//var phone_pattern = '[0-9\-\(\)\s]+';
+
 			var input_value = $('#business_phone').val();
 
-			if(phone_pattern.test( input_value )){
+			if (validatePhone(input_value)) {
 				$('.business_phone').hide();
 			}else{
 				$('.business_phone').show();
+				$('.business_phone').text('Number is invalid!');
 				return false;
 			}
 		}
 	}
 
 	if($('.current').html() == 'Additional Information'){
-		if($('#additional_phone').val() == ''){
+		/*if($('#additional_phone').val() == ''){
 			$('.additional_phone').show();
 			return false;
 		}else{
 			$('.additional_phone').hide();
-		}
+		}*/
 
 		if($('#timezone').val() == ''){
 			$('.timezone').show();
@@ -73,18 +85,26 @@ $(".next").click(function(){
 			$('.timezone').hide();
 		}
 
-		if($('#business_website').val() == ''){
+		/*if($('#business_website').val() == ''){
 			$('.business_website').show();
 			return false;
 		}else{
 			$('.business_website').hide();
-		}
+		}*/
 
 		if($('#requested_email').val() == ''){
 			$('.requested_email').show();
 			return false;
 		}else{
-			$('.requested_email').hide();
+			var input_value = $('#requested_email').val();
+
+			if (isEmail(input_value)) {
+				$('.requested_email').hide();
+			}else{
+				$('.requested_email').show();
+				$('.requested_email').text('Email is invalid!');
+				return false;
+			}
 		}
 	}
 
@@ -109,6 +129,33 @@ $(".next").click(function(){
 		}else{
 			$('.cpass').hide();
 		}
+	}
+
+	function isEmail(email) {
+		var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+		return regex.test(email);
+	}
+
+	function validatePhone(txtPhone) {
+	    var a = txtPhone;
+	    var filter = /([0-9]{10})|(\([0-9]{3}\)\s+[0-9]{3}\-[0-9]{4})/;
+	    if (filter.test(a)) {
+	        return true;
+	    }
+	    else {
+	        return false;
+	    }
+	}
+
+	function validatezip(txtzip) {
+	    var a = txtzip;
+	    var zipRegex = /^\d{5}$/;
+	    if (zipRegex.test(a)) {
+	        return true;
+	    }
+	    else {
+	        return false;
+	    }
 	}
 	
 

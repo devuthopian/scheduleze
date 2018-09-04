@@ -1,4 +1,8 @@
-<div class="footer_section">
+@guest
+    <div class="footer_section">
+@else
+    <div class="footer_section loguser">
+@endguest
     <div class="container">
         <div class="footer_top">
             <!-- <div class="footer_top_cont">

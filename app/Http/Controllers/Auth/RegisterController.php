@@ -124,24 +124,23 @@ class RegisterController extends Controller
         }
     }
 
-      public function account_info()
+    public function account_info()
     {
-          $verifyUser = VerifyUser::where('token',$_GET['token'])->first();
+        $verifyUser = VerifyUser::where('token',$_GET['token'])->first();
 
-          $check_reg = Business::where('user_id', $verifyUser->user_id)->first();
-          if(isset($check_reg )){
-         if(!$check_reg->registration_completed){
-          return view('auth.account_info');
-         } else {
-          return redirect('/login')->with('warning', "Registration is already completed.");
-         }
-         } else{
-                 return view('auth.account_info');
-         }
-
-
+        $check_reg = Business::where('user_id', $verifyUser->user_id)->first();
+        if(isset($check_reg )){
+            if(!$check_reg->registration_completed){
+                return view('auth.account_info');
+            } else {
+                return redirect('/login')->with('warning', "Registration is already completed.");
+            }
+        } else{
+            return view('auth.account_info');
+        }
     }
-        public function account_info_save(Request $request)
+
+    public function account_info_save(Request $request)
     {
         $user_token = $request->input('user_token'); // option 1
         $verifyUser = VerifyUser::where('token', $user_token)->first();
@@ -168,7 +167,7 @@ class RegisterController extends Controller
                     'user_id' => $verifyUser->user_id,
                 ]);*/
                 $verifyUser->user->name = $request->input('Username');
-                $verifyUser->userdetails->name = $request->input('Username');
+                //$verifyUser->userdetails->name = $request->input('Username');
                 $verifyUser->user->password = bcrypt($request->input('pass'));
                 $verifyUser->user->save();
 

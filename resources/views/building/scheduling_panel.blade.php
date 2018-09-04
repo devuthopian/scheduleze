@@ -7,6 +7,7 @@
 <script src="{{ URL::asset('dist/grapesjs-lory-slider.min.js') }}"></script>
 <script src="{{ URL::asset('js/jquery-3.2.1.min.js') }}"></script>
 <link href="{{ asset('css/fontawesome.css') }}" rel="stylesheet">
+<link rel="shortcut icon" href="{{ asset('images/favicon_icon.png') }}" type="image/x-icon" />
 <link rel="stylesheet" href="{{ URL::asset('css/style.css') }}">
 @include('layouts.includes.front.header')
 <div class="panel-main">
@@ -24,7 +25,7 @@
                             <span>GrapesJS</span>
                         </div> -->
                         <div class="description">
-                            This is demo represemtation for your div, you can it with your suitable choice.
+                            This is demo representation for panel, you can change it with your suitable choice.
                         </div>
                     </div>
                 </div>
@@ -43,6 +44,7 @@
         showOffsets: 1,
         noticeOnUnload: 0,
         container: '#gjs',
+        removable: false,
         fromElement: false,
         plugins: [/*'gjs-plugin-forms',*/'gjs-preset-webpage'],
         pluginsOpts: {
@@ -82,6 +84,7 @@
         },
     });
 
+
     
 
     editor.on('storage:end:store', (resultObject) => {
@@ -116,7 +119,6 @@
             //editor.setHtml(html);
             //editor.setCss(css);
             editor.setStyle(css);
-
             const LandingPage = {
                 html: resultObject.html,
                 css: resultObject.css,

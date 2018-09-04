@@ -3,15 +3,11 @@
 
 @section('content')
 	{!! Form::open([ 'route' => ['storelocation'],'method' => 'post'] ) !!}
-<div class="building">
+<div class="set_recc_block">
 	<div class="container">
 		<div class="frameadmin">
-			<span class="head">
-				<span class="head">
-					Locations<br>
-				</span>
-			</span>
-			<span class="note">Order is the order the items appear in the popup menu, use radio button to set menu default.<!--<br>Cap is the total number of this class of service you wish to allow booked in a single calendar day.</span>--><p></p>				
+			<h2>Locations<h2>
+			<h5>Order is the order the items appear in the popup menu, use radio button to set menu default.<!--<br>Cap is the total number of this class of service you wish to allow booked in a single calendar day.</span>--></h5>				
 				<table border="0" cellspacing="0" cellpadding="2" class="table table-responsive table-bordered">
 					<tbody>
 						<tr class="thead">
@@ -75,8 +71,8 @@
 				Building Type Strategy<br>
 			</span>
 			You must have a Building Types menu with at least one type of service, time and cost for Scheduleze to function properly.  Building Size popups and Building Age popups are optional, and can be configured to add additional time and cost to the basic Building Type selected by the client.<br><br>If you are not going to use price modifiers, you may wish to list various service combinations here and provide total prices for each.  This creates the simplest user interface for your clients and increases the likelihood of the client to book immediately on-line (simple forms look easier to complete).<br><br>However, if you are going to setup Building Age and Building Size popups as well, use this menu for basic Building Type only.  Provide the absolute minimum price and time for each service type as the modifier popups will add additional time and costs that you specify to this baseline cost for each Building Type.<br><br>
-		</div> -->
-		<!-- <div class="logo">
+		</div>
+		<div class="logo">
 			<a href="#">
 				<img src="{{URL::asset('/images/logo.png')}}" alt="Take command of your day" height="79" width="235" border="0">
 			</a>

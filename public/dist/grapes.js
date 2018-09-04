@@ -31913,12 +31913,21 @@ var Component = Backbone.Model.extend(_Styleable2.default).extend({
           command: 'tlb-clone'
         });
       }
-      if (model.get('removable')) {
-        tb.push({
-          attributes: { class: 'fa fa-trash-o' },
-          command: 'tlb-delete'
-        });
-      }
+      console.log(model.attributes);
+		const classCollection = model.get('classes');
+		if (classCollection.where({name: 'panel'}).length) {
+			model.set('removable', false);
+		}
+		if(model.attributes.tagName != 'form' && model.attributes.tagName != 'select' && model.attributes.tagName != 'p') {
+	      if (model.get('removable')) {
+	        tb.push({
+	          attributes: { class: 'fa fa-trash-o' },
+	          command: 'tlb-delete'
+	        });
+	      }
+	  }else{
+		model.set('removable', false);
+	  }
       model.set('toolbar', tb);
     }
   },

@@ -82,7 +82,7 @@
                         <div class="form-group has-error business_website" style="display: none;">
                             <span class="help-block ">Additional Phone is Required</span>
                         </div>
-                        <input type="email" name="requested_email" id="requested_email" placeholder="Requested email" />
+                        <input type="email" name="requested_email" id="requested_email" placeholder="Business email" />
                         <div class="form-group has-error requested_email" style="display: none;">
                             <span class="help-block ">Email is Required</span>
                         </div>
@@ -96,7 +96,7 @@
                         <div class="form-group has-error Username" style="display: none;">
                             <span class="help-block ">Username is Required</span>
                         </div>
-                        <input required type="password" name="pass" id="pass" placeholder="Password"/>
+                        <input required type="password" name="pass" id="pass" min="5" placeholder="Password"/>
                         <div class="form-group has-error pass" style="display: none;">
                             <span class="help-block ">Password is Required</span>
                         </div>

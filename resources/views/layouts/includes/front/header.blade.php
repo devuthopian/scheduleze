@@ -22,7 +22,7 @@
                         @endif
                     </ul>
                 </nav>
-                @else
+            @else
                 @php 
                     $hashvalue = session('hashvalue');
                     $id = Auth::user()->id;
@@ -172,7 +172,7 @@
                         </li> -->
                     </ul>
                 </nav>
-                @endguest
+            @endguest
         </div>
     </div>
 </div>
