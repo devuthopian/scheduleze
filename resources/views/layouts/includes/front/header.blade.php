@@ -1,3 +1,4 @@
+<div class="loader"></div>
 <div class="header_section">
     <div class="head_left"><a href="{{ url('scheduling_solutions') }}"><img src="{{ url('images/logo.png') }}" alt="" class="logohead"></a></div>
     <div class="head_right">

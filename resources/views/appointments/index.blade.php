@@ -28,8 +28,7 @@
 				<br>
 				<input type="hidden" name="reference_id" value="{{ $id }}">
 				<input type="hidden" name="businessId" value="{{ $businessid }}">
-				<span>Select Building Type Here</span>
-				<br>
+				<p class="bgtitle">Select Building Type Here</p>
 				<select name="building_type" class="" required>
 					<option value="">--Select--</option>
 					@foreach($types as $type)

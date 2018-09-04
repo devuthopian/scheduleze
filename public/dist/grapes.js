@@ -31913,12 +31913,11 @@ var Component = Backbone.Model.extend(_Styleable2.default).extend({
           command: 'tlb-clone'
         });
       }
-      console.log(model.attributes);
 		const classCollection = model.get('classes');
 		if (classCollection.where({name: 'panel'}).length) {
 			model.set('removable', false);
 		}
-		if(model.attributes.tagName != 'form' && model.attributes.tagName != 'select' && model.attributes.tagName != 'p') {
+		if(model.attributes.tagName != 'form' && model.attributes.tagName != 'select' && model.attributes.tagName != 'p' && model.attributes.tagName != 'checkbox' && model.attributes.tagName != 'input') {
 	      if (model.get('removable')) {
 	        tb.push({
 	          attributes: { class: 'fa fa-trash-o' },

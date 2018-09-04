@@ -81,3 +81,7 @@ $(document).ready(function() {
         }, 500);
     });
 });
+
+$(window).on('load', function(){
+    $('.loader').fadeOut(1000);
+});

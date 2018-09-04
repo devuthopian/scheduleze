@@ -126,6 +126,8 @@
                 style: resultObject.style,
             };
             console.log('Response is always good.');
+        }else{
+            alert('There is nothing to show you');
         }
     });
     //editor.getSelected().addStyle({'background-image': `url(${url})`});

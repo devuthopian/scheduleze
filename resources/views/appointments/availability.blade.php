@@ -1,8 +1,24 @@
 @php 
     $gjs = PanelTemplate(session('id'));
 @endphp
+<div class="loader"></div>
 {!! $gjs->gjs_html !!}
-<div class="NewForm">
+<style type="text/css">
+    @if(!empty($gjs))
+        {!! $gjs->gjs_css !!}
+    @endif
+    .loader { 
+        position: fixed; 
+        left: 0; 
+        top: 0; 
+        z-index: 999; 
+        width: 100%; 
+        height: 100%; 
+        overflow: visible; 
+        background: #fff url('/images/Preloader_2.gif') no-repeat center center; 
+    }
+</style>
+<div class="NewForm" style="display: none;">
     @if (is_array($PanelForm) || is_object($PanelForm))
 
         @foreach ($PanelForm as $pform)
@@ -67,14 +83,11 @@
 <script src="{{ asset('js/jquery.min.js') }}"></script>
 <script type="text/javascript">
     $(document).ready(function() {
+        $('.loader').show();
         if($("#dontbreakdiv").length > 0) {
             $('.panel').html($('.NewForm').html());
+            $('.loader').remove();
             $('.NewForm').remove();
         }
     });
 </script>
-<style type="text/css">
-    @if(!empty($gjs))
-        {!! $gjs->gjs_css !!}
-    @endif
-</style>

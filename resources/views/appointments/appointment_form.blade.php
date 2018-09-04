@@ -4,7 +4,23 @@
 @php 
     $gjs = PanelTemplate(session('id'));
 @endphp
+<div class="loader"></div>
 {!! $gjs->gjs_html !!}
+<style type="text/css">
+    @if(!empty($gjs))
+        {!! $gjs->gjs_css !!}
+    @endif
+    .loader { 
+        position: fixed; 
+        left: 0; 
+        top: 0; 
+        z-index: 999; 
+        width: 100%; 
+        height: 100%; 
+        overflow: visible; 
+        background: #fff url('/images/Preloader_2.gif') no-repeat center center; 
+    }
+</style>
 <div class="NewForm">
     @if (is_array($PanelForm) || is_object($PanelForm))
 
@@ -268,14 +284,11 @@
             $('.alert-info').html('<strong>There is nothing to show you.</strong> Click  <a href="{{ url("/form/BuildingTypes") }}"><strong>here</strong></a> to add services.');
         @endif
 
+        $('.loader').show();
         if($("#dontbreakdiv").length > 0) {
             $('.panel').html($('.NewForm').html());
+            $('.loader').remove();
             $('.NewForm').remove();
         }
     });
 </script>
-<style type="text/css">
-    @if(!empty($gjs))
-        {!! $gjs->gjs_css !!}
-    @endif
-</style>

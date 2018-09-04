@@ -636,7 +636,11 @@ class SchedulezeController extends Controller
     {
         $id = session('id');
         $businessinfo = PanelTemplate::where('user_id',$id)->first();
-        $html = $businessinfo->gjs_html;
+        if(isset($businessinfo->gjs_html) && !empty($businessinfo->gjs_html)){
+            $html = $businessinfo->gjs_html;
+        }else{
+            $html = '';
+        }
 
        /* $sizes = $businessinfo->BuildingSizes;
         $types = $businessinfo->BuildingTypes;

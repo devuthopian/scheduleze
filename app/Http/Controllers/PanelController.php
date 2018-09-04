@@ -203,7 +203,6 @@ class PanelController extends Controller
         
         $inspectors = UserDetails::where([['business', '=', $business_id],['removed', '=', '0']])->get();
         $template = PanelTemplate::where('unqiue_url',$id)->orWhere('id', $id)->first();
-
         session(['panel_id' => $template->id]);
 
         return view('building.template', compact('template','inspectors'));
