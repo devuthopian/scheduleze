@@ -28,7 +28,7 @@ $(document).ready(function() {
         if(rowCount == ''){
             var rowCount = $('.txtBuildId tr').length;
         }
-        
+
         var actualstate = rowCount;
 
         var nameuserid = $('#txtypol').val();
@@ -73,8 +73,12 @@ $(document).ready(function() {
                 method : "POST",
                 data : {id:dataid, _token: $('meta[name="csrf-token"]').attr('content'), table: datamodel},
                 dataType : "JSON",
+                beforeSend: function() {
+                    $('.load').show();
+                },
                 success:function(data){
                     $("#showtxt").html(data.msg);
+                    $('.load').fadeOut(1000);
                 }
             });
         }

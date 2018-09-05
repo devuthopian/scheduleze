@@ -54,7 +54,7 @@
 						</tbody>
 						<span id="showtxt"></span>
 						<tr>
-							<td colspan="4"><input type="submit" name="submit" value="Save Building Types" class="submit btn btn-success bluebtn">
+							<td colspan="4"><input type="submit" name="submit" value="Save Location" class="submit btn btn-success bluebtn">
 								<input type="hidden" name="action" value="building_types">
 								<input type="hidden" name="trigger" value="2">&nbsp;&nbsp;
 							</td>

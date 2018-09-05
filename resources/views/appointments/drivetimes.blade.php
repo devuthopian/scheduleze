@@ -23,7 +23,7 @@
 						@csrf
 						<div class="frameadmin">
 							<h2>Drive Time Details</h2>
-							<h5>Please provide the approximate drive times between your service areas ~ Also see <a href="#">Zigzag Control</a></h5><br>
+							<h5>Please provide the approximate drive times between your service areas ~ Also see <a href="{{ route('ZigZag') }}">Zigzag Control</a></h5><br>
 						
 							<table border="0" cellspacing="0" cellpadding="2" class="table border table-responsive table-borderd table-striped select-default">
 								<tr class="dark-table-heading">
@@ -57,11 +57,11 @@
 									<input type="submit" name="submit" value="Set Drivetimes &raquo;" class="submit"></td>
 									<td></td>
 								</tr>
-								<tr>
+								<!-- <tr>
 									<td colspan="2"><br>
 										<span class="note"><a href="#" class="note_link">&laquo; Return to Admin Home</a></span></td>
 									<td></td>
-								</tr>
+								</tr> -->
 							</table>
 						</div>
 					</form>

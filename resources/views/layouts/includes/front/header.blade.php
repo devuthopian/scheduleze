@@ -133,12 +133,12 @@
                                 <li>
                                     <a href="{{ url('business_info') }}">Business Profile</a>
                                 </li>
-                                <li>
+                                <!-- <li>
                                     <a href="#">Headers/Footers</a>
                                 </li>
                                 <li>
                                     <a href="#">Email Attachment</a>
-                                </li>
+                                </li> -->
                                 <li>
                                     <a href="#">Recurring Payment</a>
                                 </li>

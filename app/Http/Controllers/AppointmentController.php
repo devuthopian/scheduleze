@@ -289,10 +289,14 @@ class AppointmentController extends Controller
         //$hashvalue = Session::get('hashvalue');
 
         $data = session('data');
-        if(!isset($data)){
+        $bookingavailable = session('bookingavailable');
+        if( $bookingavailable == null){
+
+            session()->forget('data');
             $data = Input::get();
             session([ 'data' => $data]);
         }
+
         
         array_splice($data, 0, 1);
         $formdata = Input::get();
@@ -376,7 +380,7 @@ class AppointmentController extends Controller
         //$id = Session::get('id');
         //$hashvalue = Session::get('hashvalue');
         $data = Input::get();
-        session([ 'data' => $data]);
+        session([ 'data' => $data, 'bookingavailable' => 'yes']);
 
         $business_id = $data['businessId'];
         //session(['appointments' => $data]);

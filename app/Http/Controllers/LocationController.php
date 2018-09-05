@@ -70,7 +70,8 @@ class LocationController extends Controller
             );
         }
 
-        return redirect('/business/Location')->with('message','Successfully saved!');
+        return redirect('/scheduleze/appointments')->with('message','Successfully saved!');
+        //return redirect('/business/Location')->with('message','Successfully saved!');
     }
 
     /**

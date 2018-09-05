@@ -1,6 +1,7 @@
 @extends('layouts.front')
 
 @section('content')
+<div class="load" style="display: none;"></div>
 <script src="{{ URL::asset('js/jquery-3.3.1.min.js') }}"></script>
 <script src="{{ URL::asset('js/materialize.js') }}"></script>
 <link href="{{ asset('css/materialize.css') }}" rel="stylesheet">
@@ -152,15 +153,6 @@
 				Add-on Services<br>
 			</span>
 			Use this page to create a list of services which clients may wish to choose <b>in addition</b> to services they choose from the primary Building Type menu created on the Building Type page.  Do not use this list for services which are standalone, or independent of other services you offer.  Stand alone services belong in <a href="#" class="note">Building Type popup.</a><br><br><br><br>
-		</div>
-		<!-- <div class="logo">
-			<a href="#">
-				<img src="{{URL::asset('/images/logo.png')}}" alt="Take command of your day" height="79" width="235" border="0">
-			</a>
-		</div> -->
-		<div class="frame-closing"><br><br>
-			<span class="note">Customer Support: <a href="mailto:support@scheduleze.com">support@scheduleze.com</a>
-			</span>
 		</div>
 	</div>
 </div>

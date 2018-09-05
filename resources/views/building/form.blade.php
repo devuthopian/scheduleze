@@ -1,5 +1,6 @@
 @section('content')
 
+<div class="load" style="display: none;"></div>
 <script src="{{ URL::asset('js/jquery-3.3.1.min.js') }}"></script>
 
 <script src="{{ URL::asset('js/materialize.js') }}"></script>
@@ -320,31 +321,32 @@
 
 		<div class="tip">
 
-			<span class="subhead">
+			
 
-				Building Type Strategy<br>
+				@if($name == 'BuildingSizes')
+					<span class="subhead">
+						Building Sizes Strategy
+					</span>
 
-			</span>
+					The fewer ranges here the better. Simpler forms encourage people to complete them. Provide additional costs and additional time required for each range or "0" if there is no additional impacts for that Building Size over your primary service cost/time which you established in your Building Types menu.
 
-			You must have a Building Types menu with at least one type of service, time and cost for Scheduleze to function properly.  Building Size popups and Building Age popups are optional, and can be configured to add additional time and cost to the basic Building Type selected by the client.<br><br>If you are not going to use price modifiers, you may wish to list various service combinations here and provide total prices for each.  This creates the simplest user interface for your clients and increases the likelihood of the client to book immediately on-line (simple forms look easier to complete).<br><br>However, if you are going to setup Building Age and Building Size popups as well, use this menu for basic Building Type only.  Provide the absolute minimum price and time for each service type as the modifier popups will add additional time and costs that you specify to this baseline cost for each Building Type.<br><br>
+                @elseif($name == 'BuildingTypes')
+					<span class="subhead">
+						Building Types and Prices Strategy
+					</span>
 
-		</div>
+					You must have a Building Types menu with at least one type of service, time and cost for Scheduleze to function properly.  Building Size popups and Building Age popups are optional, and can be configured to add additional time and cost to the basic Building Type selected by the client.<br><br>If you are not going to use price modifiers, you may wish to list various service combinations here and provide total prices for each.  This creates the simplest user interface for your clients and increases the likelihood of the client to book immediately on-line (simple forms look easier to complete).<br><br>However, if you are going to setup Building Age and Building Size popups as well, use this menu for basic Building Type only.  Provide the absolute minimum price and time for each service type as the modifier popups will add additional time and costs that you specify to this baseline cost for each Building Type.<br><br>
 
-		<!-- <div class="logo">
+                @else($name == 'BuildingAges')
+					<span class="subhead">
+						Building Ages Strategy
+					</span>
 
-			<a href="#">
+					The simpler you make users' booking experience, the more bookings you will receive. In general, a few range selections work better than many specific choices.
 
-				<img src="{{URL::asset('/images/logo.png')}}" alt="Take command of your day" height="79" width="235" border="0">
+					Provide additional costs and additional time required for each range or "0" if there is no additional impacts for that option over your baseline cost/time which you established in your Building Types menu.
 
-			</a>
-
-		</div> -->
-
-		<div class="frame-closing"><br><br>
-
-			<span class="note">Customer Support: <a href="mailto:support@scheduleze.com">support@scheduleze.com</a>
-
-			</span>
+                @endif
 
 		</div>
 

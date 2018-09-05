@@ -59,7 +59,8 @@
 
 				<p class="subhead">Select Location<br>
 										
-				<select name="location" class="small_select">
+				<select name="location" class="small_select" required>
+					<option value="">--Select--</option>
 					@foreach ($Location as $id => $name)
 						<option value="{{ $id }}">{{ $name }}</option>
 					@endforeach
