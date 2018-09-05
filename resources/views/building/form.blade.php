@@ -112,31 +112,31 @@
 
 							@forelse($Building as $BuildType)
 
-								<tr class="trtable_{{ $i }}">
+								<tr class="trtable_{{ $BuildType->id }}">
 
 									<td>
 
-										<input class="form-control" type="text" name="desc[{{ $i }}]" size="32" value="{{ $BuildType->name }}" required>
+										<input class="form-control" type="text" name="desc[{{ $BuildType->id }}]" size="32" value="{{ $BuildType->name }}" required>
 
-										<input type="hidden" class="form-control" name="id[{{ $i }}]" value="{{ $BuildType->id }}">
+										<input type="hidden" class="form-control" id="buildId" name="id[{{ $BuildType->id }}]" value="{{ $BuildType->id }}">
 
 									</td>
 
 									<td>				
 
-										{!! show_buffer($i, $BuildType->buffer) !!}
+										{!! show_buffer($BuildType->id, $BuildType->buffer) !!}
 
 									</td>
 
 									<td>
 
-										<input type="text" class="form-control" name="price[{{ $i }}]" value="{{ $BuildType->price }}" size="5" required>
+										<input type="text" class="form-control" name="price[{{ $BuildType->id }}]" value="{{ $BuildType->price }}" size="5" required>
 
 									</td>
 
 									<td align="center">
 
-										<input type="text" class="form-control" name="rank[{{ $i }}]" value="{{ $BuildType->rank }}" size="3" required>
+										<input type="text" class="form-control" name="rank[{{ $BuildType->id }}]" value="{{ $BuildType->rank }}" size="3" required>
 
                                     </td>
 
@@ -148,7 +148,7 @@
 
 									<td>
 
-										<select name="forcecall[{{ $i }}]" class="form-control" size="1">
+										<select name="forcecall[{{ $BuildType->id }}]" class="form-control" size="1">
 
 											<option value="1" @if($BuildType->status == 1) selected="" @endif>Book using size/age</option>
 
@@ -170,7 +170,7 @@
 
 									<td>
 
-										<a href='#' class='note_link' id="{{ $i }}" data-model="{{$name}}" data-id="{{ $BuildType->id }}">Remove</a>
+										<a href='#' class='note_link' id="{{ $BuildType->id }}" data-model="{{$name}}" data-id="{{ $BuildType->id }}">Remove</a>
 
 									</td>
 
@@ -206,7 +206,7 @@
 
 									<td><input class="form-control" type="text" name="desc[0]" size="32" value="" required>
 
-									<input class="form-control" type="hidden" name="id[0]" value="0"></td>
+									<input class="form-control" type="hidden" id="buildId" name="id[0]" value="0"></td>
 
 									<td>				
 
@@ -228,7 +228,7 @@
 
                                     <td>
 
-                                        <input  type="radio" value="0" name="selected[0]" required>
+                                        <input  type="radio" value="0" name="selected[0]">
 
                                     </td>
 
@@ -378,11 +378,6 @@
 		        	$('.my_select_'+newcolid).formSelect();
 		        }, 500);
 	        });
-	        
-
-	        
-
-
 
 			$('.selectedbs').change(function() {
 

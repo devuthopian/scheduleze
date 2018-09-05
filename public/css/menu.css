@@ -71,29 +71,34 @@ nav * {
   margin: 0;
 }
 nav > ul { 
-  display: flex; 
+  display: inline-block; 
+  width: 100%;
+  text-align: right;
 }
 nav > ul > li {
   cursor: pointer;
   position: relative;
+  display: inline-block;
 }
 nav > ul > li ul li {
   cursor: pointer;
   margin: 0px 0;
   padding: 10px 0;
   border-bottom: 1px solid #ef5f00;
+  text-align: left;
 }
 nav ul > li ul {
   position: absolute;
-  width: 200px;
+  width: auto;
   z-index: 99;
   display: none;
   background: #ff6600;
   margin-left: 0px;
+  white-space: nowrap;
 }
 nav ul > li ul li a { 
   color: #fff; 
-  padding: 0 0 0 20px;  
+  padding: 0 20px;  
 }
 nav ul > li ul li a:hover { 
   color: #000; 
@@ -170,7 +175,7 @@ nav > ul {
   display: none; 
   margin: 0px 0px 0px 0px; 
   padding: 0px;
-  background: #e1ac42;
+  background: #ff6600;
   position: absolute;
   z-index: 9999;
   top: 64px;
@@ -185,10 +190,10 @@ nav ul > li > ul,  nav ul > li > ul > li > ul > li > ul,  nav ul > li > ul > li 
 }
 @media (max-width: 480px) {
 nav > a {
-    top: -50px;
+    top: -55px;
 }
 nav > ul {
-    top: 17px;
+    top: 12px;
     width: 100%;
 }
 }

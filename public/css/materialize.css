@@ -6720,7 +6720,7 @@ textarea.materialize-textarea {
 [type="radio"]:checked {
   position: absolute;
   opacity: 0;
-  pointer-events: none;
+  /*pointer-events: none;*/
 }
 
 [type="radio"]:not(:checked) + span,

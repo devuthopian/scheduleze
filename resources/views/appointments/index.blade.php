@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="{{ URL::asset('css/panelstyle.css') }}">
-<a href="{{ URL::previous() }}" class="gobutton">Go Back</a>
+<link rel="shortcut icon" href="{{ asset('images/favicon_icon.png') }}" type="image/x-icon" />
+<!-- <a href="{{ URL::previous() }}" class="gobutton">Go Back</a> -->
 <hr>
 <div class="takehtml">
 	<div id="dontbreakdiv">
@@ -86,7 +87,7 @@
 	            dataType : "JSON",
 	            success:function(data){
 	                console.log(data.message);
-	                $('.alert-info').html('<strong>Successfully saved!</strong> Click  <a href="{{ route("schedulepanel") }}"><strong>here</strong></a> to change the look of your form.');
+	                $('.alert-info').html('<a href="{{ URL::previous() }}"><strong>Ok</strong></a>');
 	            }
 	        });
 	    @else

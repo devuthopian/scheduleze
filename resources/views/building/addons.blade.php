@@ -43,33 +43,31 @@
 							<input type="hidden" id="txtypol" value="{{ $users_details }}">
 							@php $i=0; @endphp
 							@forelse($Building as $BuildType)
-								<tr class="trtable_{{ $i }}">
+								<tr class="trtable_{{ $BuildType->id }}">
 									<td>
-										<input class="form-control" type="text" name="desc[{{ $i }}]" size="32" value="{{ $BuildType->name }}" required>
-										<input class="form-control" type="hidden" name="id[{{ $i }}]" value="{{ $BuildType->id }}">
+										<input class="form-control" type="text" name="desc[{{ $BuildType->id }}]" size="32" value="{{ $BuildType->name }}" required>
+										<input class="form-control" type="hidden" id="buildId" name="id[{{ $BuildType->id }}]" value="{{ $BuildType->id }}">
 									</td>
 									<td>				
-										{!! show_buffer($i, $BuildType->buffer) !!}
+										{!! show_buffer($BuildType->id, $BuildType->buffer) !!}
 									</td>
 									<td>
-										<input type="text" class="form-control" name="price[{{ $i }}]" value="{{ $BuildType->price }}" size="5" required>
+										<input type="text" class="form-control" name="price[{{ $BuildType->id }}]" value="{{ $BuildType->price }}" size="5" required>
 									</td>
 									<td align="center">
-										<input type="text" class="form-control" name="rank[{{ $i }}]" value="{{ $BuildType->rank }}" size="3" required>
+										<input type="text" class="form-control" name="rank[{{ $BuildType->id }}]" value="{{ $BuildType->rank }}" size="3" required>
 									</td>
 									<td>
-										<select name="forcecall[{{ $i }}]" size="1" class="form-control">
-											<option value="1" @if($BuildType->status == 1) selected="" @endif>Book using size/age</option>
-											<option value="2" @if($BuildType->status == 2) selected="" @endif>Book as standalone</option>
-											<option value="0" @if($BuildType->status == 0) selected="" @endif>Require phone call</option>
-											<option value="3" @if($BuildType->status == 3) selected="" @endif>Use as Label</option>
+										<select name="forcecall[{{ $BuildType->id }}]" size="1" class="form-control">
+											<option value="0" @if($BuildType->status == 0) selected="" @endif>Book on-line</option>
+											<option value="1" @if($BuildType->status == 1) selected="" @endif>Require phone call</option>
 										</select>
 									</td>
 									<td>
 										{!! get_subs_users($BuildType->id) !!}
 									</td>
 									<td>
-										<a href='#' class='note_link' id="{{ $i }}" data-model="{{$name}}" data-id="{{ $BuildType->id }}">Remove</a>
+										<a href='#' class='note_link' id="{{ $BuildType->id }}" data-model="{{$name}}" data-id="{{ $BuildType->id }}">Remove</a>
 									</td>
 								</tr>
 								<script type="text/javascript">
@@ -87,7 +85,7 @@
 							@empty
 							    <tr class="trtable_0">
 									<td><input class="form-control" type="text" name="desc[0]" size="32" value="" required>
-									<input class="form-control" type="hidden" name="id[0]" value="0"></td>
+									<input class="form-control" type="hidden" id="buildId" name="id[0]" value="0"></td>
 									<td>				
 										{!! show_buffer(0, 10800) !!}
 									</td>
@@ -99,10 +97,10 @@
 									</td>
 									<td>
 										<select name="forcecall[0]" size="1" class="form-control">
-											<option value="1" selected="">Book using size/age</option>
-											<option value="2">Book as standalone</option>
-											<option value="0">Require phone call</option>
-											<option value="3">Use as Label</option>
+											<!-- <option value="1" selected="">Book using size/age</option> -->
+											<option value="0">Book on-line</option>
+											<option value="1">Require phone call</option>
+											<!-- <option value="3">Use as Label</option> -->
 										</select>
 									</td>
 									<td>
@@ -112,11 +110,32 @@
 										<a href='#' class='note_link' id="0" data-id="">Remove</a>
 									</td>
 								</tr>
+								<script type="text/javascript">
+
+								    jQuery(document).ready(function($) {
+
+								        $('.my_select_0').formSelect();
+
+								        $('.my_select_0 option:not(:disabled)').not(':selected').prop('selected', true);
+
+									    $('.dropdown-content.multiple-select-dropdown input[type="checkbox"]:not(:checked)').not(':disabled').prop('checked', 'checked');
+
+									    var values = $('.dropdown-content.multiple-select-dropdown input[type="checkbox"]:checked').not(':disabled').parent().map(function() {
+
+									        return $(this).text();
+
+									    }).get();
+
+									    $('input.select-dropdown').val(values.join(', '));
+
+								    });
+
+								</script>
 							@endforelse
 						</tbody>
 						<span id="showtxt"></span>
 						<tr>
-							<td colspan="8"><input type="submit" name="submit" value="Save Building Types" class="submit btn btn-success bluebtn">
+							<td colspan="8"><input type="submit" name="submit" value="Save Addon" class="submit btn btn-success bluebtn">
 								<input type="hidden" name="action" value="building_types">
 								<input type="hidden" name="trigger" value="2">&nbsp;&nbsp;
 							</td>

@@ -1945,7 +1945,7 @@ if(! function_exists('get_todays_starttime')){
 if(! function_exists('get_bus_users')){
 	function get_bus_users(){
 		$business = session('business_id');
-		$users_details = DB::table('users_details')->select('user_id')->where('business', $business)->get();
+		$users_details = DB::table('users_details')->select('user_id')->where('business', $business)->get()->toArray();
 		return $users_details;
 	}
 }

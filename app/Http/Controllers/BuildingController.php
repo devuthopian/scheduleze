@@ -98,6 +98,7 @@ class BuildingController extends Controller
         }*/
 
         $data = Input::get();
+        //dd($data);
         /*
         $redirecturl = $data['txtform'];
         $txtForm = 'App\\Dp'.$data['txtform'];
@@ -110,10 +111,31 @@ class BuildingController extends Controller
                 'builder_area' => json_encode($htmldata['txtBuilderArea'])
             ]
         );*/
-        for($i = 0; $i < count($data['desc']); $i++) {
-            if(isset($data['desc']) && !empty($data['desc'][$i])){
+
+        /*if(isset($data['selectedusers']) && !empty($data['selectedusers'])){
+            $getselectedusers = array();
+            foreach ($data['selectedusers'] as $keyselect => $value) {
+                $getselectedusers[] = $data['selectedusers'][$keyselect];
+            }
+        }*/
+
+        $collection = get_bus_users();
+        /*$col = array();
+        foreach ($collection as $keycol => $value) {                
+            $resevercol[] = $collection[$keycol]->user_id;
+        }*/
+
+
+        foreach ($data['desc'] as $key => $value) {
+
+            $col = array();
+            foreach ($collection as $keycol => $value) {
+                $col[] = $collection[$keycol]->user_id;
+                $resevercol[] = $collection[$keycol]->user_id;
+            }
+            if(isset($data['desc']) && !empty($data['desc'][$key])){
                 if(isset($data['selected'][0])){
-                    if($data['id'][$i] == $data['selected'][0]){
+                    if($data['id'][$key] == $data['selected'][0]){
                         $selected = 1;
                     }else{
                         $selected = 0;
@@ -124,55 +146,52 @@ class BuildingController extends Controller
                 $redirecturl = $data['txtform'];
                 $txtForm = 'App\\'.$data['txtform'];
                 $BuildingTypes = $txtForm::updateOrCreate(
-                    ['id' => $data['id'][$i],'removed' => '0'],
+                    ['id' => $data['id'][$key],'removed' => '0'],
                     [
-                        'name' => $data['desc'][$i], 
-                        'buffer' => $data['buffer'][$i], 
+                        'name' => $data['desc'][$key], 
+                        'buffer' => $data['buffer'][$key], 
                         'business' => $businessid,
-                        'price' => str_replace('$', '', $data['price'][$i]),
-                        'status' => $data['forcecall'][$i],
-                        'rank' => $data['rank'][$i],
+                        'price' => str_replace('$', '', $data['price'][$key]),
+                        'status' => $data['forcecall'][$key],
+                        'rank' => $data['rank'][$key],
                         'selected' => $selected
                     ]
                 );
             }
-        }
-        /*$collection = get_bus_users();
         
-        $datselc = $data['selectedusers'];
-        foreach ($datselc as $key => $value) {
-            foreach ($value as $ky) {
-                foreach ($collection as $k => $vue) {
-                    $kith[] = $vue->user_id;
-                    if($ky == $vue->user_id){
-                        $kin[] = $vue->user_id;
-                        $kbuildtype[] = $key;
+       
+            if(isset($data['selectedusers'][$key]) && !empty($data['selectedusers'][$key])){
+                foreach ($col as $k => $value) { //
+                    if(in_array($col[$k], $data['selectedusers'][$key])){
+                        unset($col[$k]);
                     }
                 }
             }
-        }
 
-        $kithkin = array_unique($kin);
-        $kithar = array_diff($kith, $kithkin);
-
-        $type = $data['txtform'];
-        dd($kbuildtype);
-        if ($type == 'BuildingTypes'){
-            $type = 1;
-        }elseif ($type == 'BuildingSizes') {
-            $type = 2;
-        }elseif ($type == 'BuildingSizes') {
-            $type = 3;
-        }else{
-            $type = 4;
+            $type = $data['txtform'];
+            if ($type == 'BuildingTypes'){
+                $type = 1;
+            }elseif ($type == 'BuildingSizes') {
+                $type = 2;
+            }elseif ($type == 'BuildingSizes') {
+                $type = 3;
+            }else{
+                $type = 4;
+            }
+            //echo "<pre>"; print_r($col);
+            if(isset($col) && !empty($col)){
+                foreach ($col as $keysel => $v) {
+                    Exceptions::updateOrCreate(
+                        ['exception' => $BuildingTypes->id, 'type' => $type, 'user_id' => $col[$keysel]],
+                        [
+                            'user_id' => $col[$keysel],
+                            'exception' => $BuildingTypes->id,
+                            'type' => $type
+                        ]
+                    );
+                }
+            }       
         }
-        for ($i=0; $i < count($kithar); $i++) { 
-            Exceptions::create([
-                'user_id' => $kithar[$i],
-                'exception' => $kbuildtype[$i],
-                'type' => $type
-            ]);
-        }*/
 
         $txtForm = strtolower($txtForm);
 
@@ -182,7 +201,7 @@ class BuildingController extends Controller
     public function storeException(Request $request)
     {
         $data = Input::get();
-
+        //dd($data);
         if ($data['type'] == 'BuildingTypes'){
             $type = 1;
         }elseif ($data['type'] == 'BuildingSizes') {
@@ -194,12 +213,13 @@ class BuildingController extends Controller
         }
 
         if(isset($data['user_id'])){
-            for ($i=0; $i < count($data['user_id']); $i++) {
-            
+            //for ($i=0; $i < count($data['user_id']); $i++) {
+            foreach ($data['user_id'] as $key => $value) {
+
                 $exception = Exceptions::updateOrCreate(
-                    ['exception' => $data['exception'], 'type' => $type, 'user_id' => $data['user_id'][$i]],
+                    ['exception' => $data['exception'], 'type' => $type, 'user_id' => $data['user_id'][$key]],
                     [
-                        'user_id' => $data['user_id'][$i],
+                        'user_id' => $data['user_id'][$key],
                         'exception' => $data['exception'],
                         'type' => $type
                     ]
