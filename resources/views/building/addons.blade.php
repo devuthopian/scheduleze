@@ -81,8 +81,7 @@
 									        return $(this).text();
 									    }).get();
 									    $('input.select-dropdown').val(values.join(', '));
-
-									    $(".my_select_{{ $i }}").prepend("<option value=''></option>");
+									    
 									    $(".my_select_{{ $i }} option").each(function()
 										{
 										    if($(this).attr('data-in') == 1){
@@ -138,7 +137,6 @@
 
 									    $('input.select-dropdown').val(values.join(', '));
 
-									    $(".my_select_0").prepend("<option value=''></option>");
 									    $(".my_select_0 option").each(function()
 										{
 										    if($(this).attr('data-in') == 1){
