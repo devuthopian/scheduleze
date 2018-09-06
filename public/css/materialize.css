@@ -2265,6 +2265,7 @@ abbr[title] {
 b,
 strong {
   font-weight: inherit;
+  color: black;
 }
 
 /**
