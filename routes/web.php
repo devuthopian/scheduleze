@@ -23,6 +23,8 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('/contact', 'SchedulezeController@contact')->name('contact');
 	Route::get('/user/verify/{token}', 'Auth\RegisterController@verifyUser');
 
+	Route::get('/ConfirmStatus', 'SchedulezeController@confirm_status');
+
 	Route::get('/template/{value}', 'PanelController@show');
 	Route::get('/scheduling_solutions', 'SchedulezeController@scheduling_solutions')->name('scheduling_solutions');
 	Route::get('/scheduling_faq', 'SchedulezeController@scheduling_faq');

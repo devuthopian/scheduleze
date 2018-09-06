@@ -19,7 +19,7 @@
                         <div class="form-group">
                             <!-- {!! Form::label('firstname', trans('profile.firstname') , array('class' => 'col-12 control-label')); !!} -->
 
-                            {!! Form::text('firstname',$UserData['name'], array('id' => 'firstname', 'class' => 'form-control', 'placeholder' => trans('profile.firstname'))) !!}
+                            {!! Form::text('firstname',$UserData['name'], array('id' => 'firstname', 'class' => 'form-control', 'placeholder' => trans('profile.firstname'), 'title' => 'Firstname')) !!}
 
                             <input type="hidden" name="userid" value="{{$UserData['user_id']}}">
 
@@ -41,7 +41,7 @@
                     <div class="form-group">
                         <!-- {!! Form::label('lastname', trans('profile.lastname') , array('class' => 'col-12 control-label')); !!} -->
 
-                        {!! Form::text('lastname',$UserData['lastname'], array('id' => 'lastname', 'class' => 'form-control', 'placeholder' => trans('profile.lastname'))) !!}
+                        {!! Form::text('lastname',$UserData['lastname'], array('id' => 'lastname', 'class' => 'form-control', 'placeholder' => trans('profile.lastname'), 'title' => 'Lastname')) !!}
 
                         <span class="glyphicon {{ $errors->has('lastname') ? ' glyphicon-asterisk ' : ' ' }} form-control-feedback" aria-hidden="true"></span>
 
@@ -55,11 +55,11 @@
                     </div>
                 </div>
 
-                <div class="col-12">
+                <div class="col-12 joinemail">
                     <div class="form-group">
                         <!-- {!! Form::label('backupEmail', trans('profile.backupEmail') , array('class' => 'col-12 control-label')); !!} -->
 
-                        {!! Form::text('backupEmail',$UserData['email2'], array('id' => 'backupEmail', 'class' => 'form-control', 'placeholder' => trans('profile.backupEmail'))) !!}
+                        {!! Form::text('Email', $UserData->user->email, array('id' => 'Email', 'class' => 'form-control', 'placeholder' => 'Email', 'title' => 'Email')) !!} <span class="slashspan">/</span> {!! Form::text('backupEmail', $UserData['email2'], array('id' => 'backupEmail', 'class' => 'form-control', 'placeholder' => trans('profile.backupEmail'), 'title' => 'Backup Email')) !!}
 
                         <span class="glyphicon {{ $errors->has('backupEmail') ? ' glyphicon-asterisk ' : ' ' }} form-control-feedback" aria-hidden="true"></span>
 
@@ -77,7 +77,7 @@
                     <div class="form-group">
                         <!-- {!! Form::label('username', trans('profile.username') , array('class' => 'col-12 control-label')); !!} -->
 
-                        {!! Form::text('username',$UserData->user->name, array('id' => 'username', 'class' => 'form-control', 'placeholder' => trans('profile.username'))) !!}
+                        {!! Form::text('username', $UserData->user->name, array('id' => 'username', 'class' => 'form-control', 'placeholder' => trans('profile.username'), 'title' => 'Username')) !!}
 
                         <span class="glyphicon {{ $errors->has('username') ? ' glyphicon-asterisk ' : ' ' }} form-control-feedback" aria-hidden="true"></span>
 
@@ -93,7 +93,7 @@
 
                  <div class="col-12">
                     <div class="form-group">
-                        <input name="password" id="password" type="password" class="{{ $errors->has('password') ? ' is-invalid' : '' }} form-control" placeholder="Password"  autofocus>
+                        <input name="password" id="password" type="password" class="{{ $errors->has('password') ? ' is-invalid' : '' }} form-control" placeholder="Password" autofocus title="Password">
 
                        @if ($errors->has('password'))
 
@@ -107,7 +107,7 @@
                 <!-- Confirm Password -->
                 <div class="col-12">
                     <div class="form-group">
-                       <input name="password_confirmation" id="password-confirm" type="password" placeholder="Confirm Password" class="form-control"  autofocus>
+                       <input name="password_confirmation" id="password-confirm" type="password" placeholder="Confirm Password" class="form-control" autofocus title="Confirm Password">
                     </div>
                 </div>
 

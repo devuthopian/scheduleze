@@ -1,18 +1,18 @@
 <div class="loader"></div>
 <div class="header_section">
-    <div class="head_left"><a href="{{ url('scheduling_solutions') }}"><img src="{{ url('images/logo.png') }}" alt="" class="logohead"></a></div>
+    <div class="head_left"> @guest<a href="{{ url('scheduling_solutions') }}"> @else <a href="#"> @endguest<img src="{{ url('images/logo.png') }}" alt="" class="logohead"></a></div>
     <div class="head_right">
         <div class="navigation">
             @guest
                 <nav>
                     <a href="#" class="n_toggle"><i class="fa fa-bars fa-2x"></i></a>
                     <ul>
-                        <li><a href="{{ url('/') }}">Scheduling Solution</a></li>
-                        <li><a href="{{ url('success_stories') }}">Success Stories</a></li>
-                        <li><a href="{{ url('demo') }}">Demo</a></li>
-                        <li><a href="{{ url('scheduling_faq') }}">FAQ</a></li>
+                        <li><a href="{{ url('/#signup') }}">Scheduling Solution</a></li>
+                        <li><a href="{{ url('success_stories#signup') }}">Success Stories</a></li>
+                        <li><a href="{{ url('demo#signup') }}">Demo</a></li>
+                        <li><a href="{{ url('scheduling_faq#signup') }}">FAQ</a></li>
                         <!--<li><a href="#">Support</a></li> -->
-                        <li><a href="{{ url('contact') }}">Contact</a></li>
+                        <li><a href="{{ url('contact#signup') }}">Contact</a></li>
                         @php 
                             $strchr = substr(strrchr(url()->current(),"/"),1); 
                         @endphp
@@ -35,9 +35,11 @@
                 <nav>
                     <a href="#" class="n_toggle"><i class="fa fa-bars fa-2x"></i></a>
                     <ul>
-                        <li>
-                            <a href="{{ url('scheduling_solutions') }}">Home</a>
-                        </li>
+                        @guest
+                            <li>
+                                <a href="{{ url('scheduling_solutions') }}">Home</a>
+                            </li>
+                        @endguest
                         <li class="arrowicon">
                             <a href="#">Appointments</a>
                             <ul >

@@ -30,6 +30,11 @@ class SchedulezeController extends Controller
         return view('scheduleze.welcome');
     }
 
+    public function confirm_status()
+    {
+        return view('auth.email_confirm');
+    }
+
      /**
      * Show the application home page.
      *

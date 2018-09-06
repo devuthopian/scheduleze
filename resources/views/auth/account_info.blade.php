@@ -19,23 +19,23 @@
                     <fieldset>
                         <h2 class="fs-title">Business Details</h2>
                         <br>
-                        <input required type="text" name="business_name" id="business_name" placeholder="Business Name"/>
+                        <input required type="text" name="business_name" id="business_name" title="Business Name" placeholder="Business Name"/>
                         <div class="form-group has-error business_name" style="display: none;">
                             <span class="help-block ">Business Name is Required</span>
                         </div>
-                        <input type="text" name="contact_firstname" id="contact_firstname" placeholder="Contact Firstname"/>
+                        <input type="text" name="contact_firstname" id="contact_firstname" title="Firstname" placeholder="Contact Firstname"/>
                         <div class="form-group has-error contact_firstname" style="display: none;">
                             <span class="help-block ">Contact First-name is Required</span>
                         </div>
-                        <input type="text" name="contact_lastname" id="contact_lastname" placeholder="Contact Lastname"/>
+                        <input type="text" name="contact_lastname" id="contact_lastname" title="Lastname" placeholder="Contact Lastname"/>
                         <div class="form-group has-error contact_lastname" style="display: none;">
                             <span class="help-block ">Contact Last-name is Required</span>
                         </div>
-                        <input type="text" name="business_address" id ="business_address" placeholder="Business Address"/>
+                        <input type="text" name="business_address" id ="business_address" title="Business Address" placeholder="Business Address"/>
                         <div class="form-group has-error business_address" style="display: none;">
                             <span class="help-block ">Business Address is Required</span>
                         </div>
-                        <input type="text" name="business_city" id="business_city" placeholder="Business City"/>
+                        <input type="text" name="business_city" id="business_city" title="Business City" placeholder="Business City"/>
                         <div class="form-group has-error business_city" style="display: none;">
                             <span class="help-block ">Business City is Required</span>
                         </div>
@@ -46,12 +46,12 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <input type="text" name="business_zip" id="business_zip" placeholder="ZIP"/>
+                            <input type="text" name="business_zip" id="business_zip" title="ZIP" placeholder="ZIP"/>
                             <div class="form-group has-error business_zip" style="display: none;">
                                 <span class="help-block ">Business zip is Required</span>
                             </div>
                         </div>
-                        <input type="text" name="business_phone" id="business_phone" placeholder="Business Phone"/>
+                        <input type="text" name="business_phone" id="business_phone" title="Business Phone" placeholder="Business Phone"/>
                         <div class="form-group has-error business_phone" style="display: none;">
                             <span class="help-block ">Business Phone is Required</span>
                         </div>
@@ -60,7 +60,7 @@
                     <fieldset>
                         <h2 class="fs-title">Additional Information</h2>
                         <br>
-                        <input type="text" name="additional_phone" id="additional_phone" placeholder="Additional Phone"/>
+                        <input type="text" name="additional_phone" id="additional_phone" title="Additional Phone" placeholder="Additional Phone"/>
                         <div class="form-group has-error additional_phone" style="display: none;">
                             <span class="help-block ">Additional Phone is Required</span>
                         </div>
@@ -78,11 +78,11 @@
                             <span class="help-block ">Timezone is Required</span>
                         </div>
                         <br>
-                        <input type="text" name="business_website" id="business_website" placeholder="Business Website"/>
+                        <input type="text" name="business_website" id="business_website" title="Business Website" placeholder="Business Website"/>
                         <div class="form-group has-error business_website" style="display: none;">
                             <span class="help-block ">Additional Phone is Required</span>
                         </div>
-                        <input type="email" name="requested_email" id="requested_email" placeholder="Business email" />
+                        <input type="email" name="requested_email" id="requested_email" title="Business Email" placeholder="Business email" />
                         <div class="form-group has-error requested_email" style="display: none;">
                             <span class="help-block ">Email is Required</span>
                         </div>
@@ -92,15 +92,15 @@
                     <fieldset>
                         <h2 class="fs-title">Create your account</h2>
                         <h3 class="fs-subtitle">Fill in your credentials</h3>
-                        <input required type="text" name="Username" id="Username" placeholder="Username"/>
+                        <input required type="text" name="Username" id="Username" title="Username" placeholder="Username"/>
                         <div class="form-group has-error Username" style="display: none;">
                             <span class="help-block ">Username is Required</span>
                         </div>
-                        <input required type="password" name="pass" id="pass" min="5" placeholder="Password"/>
+                        <input required type="password" name="pass" id="pass" min="5" title="Password" placeholder="Password"/>
                         <div class="form-group has-error pass" style="display: none;">
                             <span class="help-block ">Password is Required</span>
                         </div>
-                        <input required type="password" name="cpass" id="cpass" placeholder="Confirm Password"/>
+                        <input required type="password" name="cpass" id="cpass" title="Confirm Password" placeholder="Confirm Password"/>
                         <div class="form-group has-error cpass" style="display: none;">
                             <span class="help-block ">Password must match</span>
                         </div>

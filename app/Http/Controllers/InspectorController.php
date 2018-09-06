@@ -66,11 +66,12 @@ class InspectorController extends Controller
     {
         return view('inspectors.Add_Inspector');
     }
+    
     public function store(Request $request)
     {        
         $businessid = $this->businessid;
         $data = Input::get();
-
+        $indus_id = session('indus_id');
         $validatedData = Validator::make($request->all(), [
             'username' => 'required|string|unique:inspectors,username',
             'email' => 'required|string|unique:inspectors,email',
@@ -81,12 +82,14 @@ class InspectorController extends Controller
             return redirect('/scheduleze/add_inspector')->withErrors($validatedData)->withInput();
         }
 
+        $verified = 1;
+
         $user = User::create([
             //'name' => $data['name'],
             'email' => $data['email'],
             'name' => $data['username'],
             'password' => bcrypt($data['password']),
-            'verified' => 1           
+            'verified' => $verified
         ]);
  
         $verifyUser = VerifyUser::create([
@@ -96,7 +99,7 @@ class InspectorController extends Controller
 
         UserDetails::create([
             'user_id' => $user->id,
-            'indus_id' => 0,
+            'indus_id' => $indus_id,
             'business' => $businessid,
             'hidden' => $data['masking'],
             'lastname' => $data['lastname'],
@@ -105,11 +108,11 @@ class InspectorController extends Controller
             'padding_day' => $data['padding_day'],
             'look_ahead' => $data['day_forward'],
             'throttle' => $data['throttle'],
-            'permission' => 1
+            'permission' => $data['permission']
         ]);
         
         Mail::to($user->email)->send(new VerifyMail($user));
 
-        return redirect('/scheduling_solutions')->with('message', 'We sent '.$data["username"].' an activation code.');
+        return redirect('/scheduleze/inspectors');
     }
 }

@@ -1772,13 +1772,14 @@ table.content-table input[type="checkbox"]:checked + label:after {
     background: #fff url('/images/Preloader_2.gif') no-repeat center center; 
 }
 
-.load { 
-    position: fixed; 
-    left: 0; 
-    top: 0; 
-    z-index: 999; 
-    width: 100%; 
-    height: 100%; 
-    overflow: visible; 
-    background: #fff url('https://needsecured.com/developer/scheduleze/public/images/loader.gif') no-repeat center center; 
+.joinemail input {
+    width: 48% !important;
+    float: left;
+}
+.joinemail .slashspan {
+    display: inline-block;
+    float: left;
+    position: relative;
+    top: 14px;
+    margin: 0 2px;
 }

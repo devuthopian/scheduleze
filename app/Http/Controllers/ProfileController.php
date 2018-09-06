@@ -82,6 +82,7 @@ class ProfileController extends Controller
         $UserDetails->throttle       = $request->input('throttle');
         $UserDetails->permission     = $request->input('permission');
         $UserDetails->user->name     = $request->input('username');
+        $UserDetails->user->email    = $request->input('Email');
         if(!empty($request->input('password'))){
             $UserDetails->user->password     = bcrypt($request->input('password'));
         }

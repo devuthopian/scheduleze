@@ -24,7 +24,11 @@
 	                    <tr>
 	                        <td>
 	                        	<b>
-	                        		{{ $details->name }}
+	                        		@if(empty($details->name))
+	                        			{{ $details->user->name }}
+	                        		@else
+	                        			{{ $details->name }}
+	                        		@endif
 	                        	</b>
 	                        </td>
 	                        <td>

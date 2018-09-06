@@ -31,7 +31,7 @@ class RegisterController extends Controller
     protected function registered(Request $request, $user)
     {
         $this->guard()->logout();
-        return redirect('/login')->with('status', 'We sent you an activation code. Check your email and click on the link to verify.');
+        return redirect('/ConfirmStatus')->with('confirmstatus', 'We sent you an activation code. Check your email and click on the link to verify.');
     }
 
     /**
@@ -172,11 +172,12 @@ class RegisterController extends Controller
                 $verifyUser->user->save();
 
                 $userdetails = UserDetails::firstOrNew(array('user_id' => $verifyUser->user_id));
-                $userdetails->name = $request->input('Username');
+                $userdetails->business = $business->id;
+                $userdetails->administrator = 1;
                 $userdetails->save();
 
                 session(['business_id' => $business->id]);
-                $status = "Your Signup process Completed You can login now.";
+                $status = "Your Signup process is complete, you can log in now.";
             }else{
                 $status = "Your e-mail is already verified. You can now login.";
             }

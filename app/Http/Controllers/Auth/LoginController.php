@@ -32,7 +32,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/scheduling_solutions';
+    protected $redirectTo = '/scheduleze/booking/appointment';
 
     /**
      * Create a new controller instance.
@@ -92,7 +92,8 @@ class LoginController extends Controller
             $panelurl = $PanelTemplate->unqiue_url;
         }
         $permission = get_field("users_details", "permission", $user->id);
-        session(['id' => $user->id, 'username' => $user->name, 'hashvalue' => $panelurl, 'permission' => $permission]);
+        $indus_id = get_field("users_details", "indus_id", $user->id);
+        session(['id' => $user->id, 'username' => $user->name, 'hashvalue' => $panelurl, 'permission' => $permission, 'indus_id' => $indus_id]);
         $business = Business::where('user_id', $user->id)->first();
 
         if($business){

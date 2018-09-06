@@ -44,22 +44,22 @@
 							<input type="hidden" id="txtypol" value="{{ $users_details }}">
 							@php $i=0; @endphp
 							@forelse($Building as $BuildType)
-								<tr class="trtable_{{ $BuildType->id }}">
+								<tr class="trtable_{{ $i }}">
 									<td>
-										<input class="form-control" type="text" name="desc[{{ $BuildType->id }}]" size="32" value="{{ $BuildType->name }}" required>
-										<input class="form-control" type="hidden" id="buildId" name="id[{{ $BuildType->id }}]" value="{{ $BuildType->id }}">
+										<input class="form-control" type="text" name="desc[{{ $i }}]" size="32" value="{{ $BuildType->name }}" required>
+										<input class="form-control" type="hidden" id="buildId" name="id[{{ $i }}]" value="{{ $BuildType->id }}">
 									</td>
 									<td>				
 										{!! show_buffer($BuildType->id, $BuildType->buffer) !!}
 									</td>
 									<td>
-										<input type="text" class="form-control" name="price[{{ $BuildType->id }}]" value="{{ $BuildType->price }}" size="5" required>
+										<input type="text" class="form-control" name="price[{{ $i }}]" value="{{ $BuildType->price }}" size="5" required>
 									</td>
 									<td align="center">
-										<input type="text" class="form-control" name="rank[{{ $BuildType->id }}]" value="{{ $BuildType->rank }}" size="3" required>
+										<input type="text" class="form-control" name="rank[{{ $i }}]" value="{{ $BuildType->rank }}" size="3" required>
 									</td>
 									<td>
-										<select name="forcecall[{{ $BuildType->id }}]" size="1" class="form-control">
+										<select name="forcecall[{{ $i }}]" size="1" class="form-control">
 											<option value="0" @if($BuildType->status == 0) selected="" @endif>Book on-line</option>
 											<option value="1" @if($BuildType->status == 1) selected="" @endif>Require phone call</option>
 										</select>
@@ -73,13 +73,21 @@
 								</tr>
 								<script type="text/javascript">
 								    jQuery(document).ready(function($) {
-								        $('.my_select_{{ $BuildType->id }}').formSelect();
-								        $('.my_select_{{ $BuildType->id }} option:not(:disabled)').not(':selected').prop('selected', true);
+								        $('.my_select_{{ $i }}').formSelect();
+								        $('.my_select_{{ $i }} option:not(:disabled)').not(':selected').prop('selected', true);
+
 									    $('.dropdown-content.multiple-select-dropdown input[type="checkbox"]:not(:checked)').not(':disabled').prop('checked', 'checked');
 									    var values = $('.dropdown-content.multiple-select-dropdown input[type="checkbox"]:checked').not(':disabled').parent().map(function() {
 									        return $(this).text();
 									    }).get();
 									    $('input.select-dropdown').val(values.join(', '));
+
+									    $(".my_select_{{ $i }} option").each(function()
+										{
+										    if($(this).attr('data-in') == 1){
+										    	$(this).html('<b>'+$(this).text()+'</b>');
+										    }
+										});
 								    });
 								</script>	
 								@php $i++; @endphp
@@ -128,6 +136,14 @@
 									    }).get();
 
 									    $('input.select-dropdown').val(values.join(', '));
+
+									    $(".my_select_0 option").each(function()
+										{
+										    if($(this).attr('data-in') == 1){
+										    	$(this).html('<b>'+$(this).text()+'</b>');
+										    }
+										});
+
 
 								    });
 

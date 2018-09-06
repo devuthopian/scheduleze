@@ -113,31 +113,31 @@
 
 							@forelse($Building as $BuildType)
 
-								<tr class="trtable_{{ $BuildType->id }}">
+								<tr class="trtable_{{ $i }}">
 
 									<td>
 
-										<input class="form-control" type="text" name="desc[{{ $BuildType->id }}]" size="32" value="{{ $BuildType->name }}" required>
+										<input class="form-control" type="text" name="desc[{{ $i }}]" size="32" value="{{ $BuildType->name }}" required>
 
-										<input type="hidden" class="form-control" id="buildId" name="id[{{ $BuildType->id }}]" value="{{ $BuildType->id }}">
+										<input type="hidden" class="form-control" id="buildId" name="id[{{ $i }}]" value="{{ $BuildType->id }}">
 
 									</td>
 
 									<td>				
 
-										{!! show_buffer($BuildType->id, $BuildType->buffer) !!}
+										{!! show_buffer($i, $BuildType->buffer) !!}
 
 									</td>
 
 									<td>
 
-										<input type="text" class="form-control" name="price[{{ $BuildType->id }}]" value="{{ $BuildType->price }}" size="5" required>
+										<input type="text" class="form-control" name="price[{{ $i }}]" value="{{ $BuildType->price }}" size="5" required>
 
 									</td>
 
 									<td align="center">
 
-										<input type="text" class="form-control" name="rank[{{ $BuildType->id }}]" value="{{ $BuildType->rank }}" size="3" required>
+										<input type="text" class="form-control" name="rank[{{ $i }}]" value="{{ $BuildType->rank }}" size="3" required>
 
                                     </td>
 
@@ -149,7 +149,7 @@
 
 									<td>
 
-										<select name="forcecall[{{ $BuildType->id }}]" class="form-control" size="1">
+										<select name="forcecall[{{ $i }}]" class="form-control" size="1">
 
 											<option value="1" @if($BuildType->status == 1) selected="" @endif>Book using size/age</option>
 
@@ -165,7 +165,7 @@
 
 									<td>
 
-										{!! get_subs_users($BuildType->id) !!}
+										{!! get_subs_users($i) !!}
 
 									</td>
 
@@ -181,9 +181,9 @@
 
 								    jQuery(document).ready(function($) {
 
-								        $('.my_select_{{ $BuildType->id }}').formSelect();
+								        $('.my_select_{{ $i }}').formSelect();
 
-								        $('.my_select_{{ $BuildType->id }} option:not(:disabled)').not(':selected').prop('selected', true);
+								        $('.my_select_{{ $i }} option:not(:disabled)').not(':selected').prop('selected', true);
 
 									    $('.dropdown-content.multiple-select-dropdown input[type="checkbox"]:not(:checked)').not(':disabled').prop('checked', 'checked');
 
@@ -194,6 +194,13 @@
 									    }).get();
 
 									    $('input.select-dropdown').val(values.join(', '));
+
+								        $(".my_select_{{ $i }} option").each(function()
+										{
+										    if($(this).attr('data-in') == 1){
+										    	$(this).html('<b>'+$(this).text()+'</b>');
+										    }
+										});
 
 								    });
 
@@ -269,8 +276,6 @@
 
 								        $('.my_select_0').formSelect();
 
-
-
 								        $('.my_select_0 option:not(:disabled)').not(':selected').prop('selected', true);
 
 									    $('.dropdown-content.multiple-select-dropdown input[type="checkbox"]:not(:checked)').not(':disabled').prop('checked', 'checked');
@@ -282,6 +287,13 @@
 									    }).get();
 
 									    $('input.select-dropdown').val(values.join(', '));
+
+									    $(".my_select_0 option").each(function()
+										{
+										    if($(this).attr('data-in') == 1){
+										    	$(this).html('<b>'+$(this).text()+'</b>');
+										    }
+										});
 
 								    });
 

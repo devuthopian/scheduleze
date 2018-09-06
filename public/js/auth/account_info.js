@@ -46,7 +46,7 @@ $(".next").click(function(){
 				$('.business_zip').hide();
 			}else{
 				$('.business_zip').show();
-				$('.business_zip').text('Zip code is invalid!');
+				$('.business_zip').text('Zip code is invalid! Must have five characters');
 				return false;
 			}
 		}

@@ -1953,11 +1953,16 @@ if(! function_exists('get_bus_users')){
 if(! function_exists('get_subs_users')){
 	function get_subs_users($i = 0){
 		$business = session('business_id');
-		$users_details = DB::table('users_details')->select('name','user_id')->where('business', $business)->get();
+		$users_details = DB::table('users_details')->select('name','user_id','administrator')->where('business', $business)->get();
 		$form = "<select name=\"selectedusers[$i][]\" class=\"form-control my_select_$i selectedbs\" size=\"1\" multiple style=\"display:none;\" data-main-id=\"$i\">";
 		$form .="<option value=\"\" disabled></option>";
 		foreach ($users_details as $value) {
-			$form .= "<option value=\"$value->user_id\">$value->name</option>";
+			$username = $value->name;
+			if(empty($username) || $username == null){
+				$users = DB::table('users')->select('name','id')->where('id', $value->user_id)->first();
+				$username = $users->name;
+			}
+			$form .= "<option value=\"$value->user_id\" data-in=\"$value->administrator\">$username</option>";
 		}
 		$form .= "</select>";
 		return $form;

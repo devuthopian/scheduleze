@@ -24,20 +24,21 @@ $(document).ready(function() {
         //event.preventDefault();
    
         //var rowCount = $('.txtBuildId tr').length;
-        var rowCount = $('#buildId').val() + 1;
-        if(rowCount == ''){
+        //var rowCount = $('#buildId').val() + 1;
+        //if(rowCount == ''){
             var rowCount = $('.txtBuildId tr').length;
-        }
+        //}
 
         var actualstate = rowCount;
 
         var nameuserid = $('#txtypol').val();
 
         var nuid = jQuery.parseJSON(nameuserid);
+        console.log(nuid);
 
         var html = [];
         $.each( nuid, function( key, value ) {
-            html.push("<option value='"+value.user_id+"'>"+value.name+"</option>");
+            html.push("<option value='"+value.id+"' data-in='"+value.administrator+"'>"+value.name+"</option>");
         });
 
         if(document.location.href.match(/[^\/]+$/)[0] == 'Addons' || document.location.href.match(/[^\/]+$/)[0] == 'Addons#'){
@@ -48,7 +49,7 @@ $(document).ready(function() {
         }
 
 
-        $('.txtBuildId').append("<tr class='trtable_"+actualstate+"'><td><input type='text' class='form-control' name='desc["+actualstate+"]' size='32' value=''><input type='hidden' name='id["+actualstate+"]' value='0'></td><td><select name='buffer["+actualstate+"]' class='small_select selectpicker form-control'><option value='0'>0 min</option><option value='900'>15 min</option><option value='1800'>30 min</option><option value='2700'>45 min</option><option value='3600'>60 min</option><option value='4500'>75 min</option><option value='5400'>90 min</option><option value='6300'>1.75 hrs</option><option value='7200'>2 hrs</option><option value='8100'>2.25 hrs</option><option value='9000'>2.5 hrs</option><option value='9900'>2.75 hrs</option><option value='10800'>3 hrs</option><option value='11700'>3.25 hrs</option><option value='12600'>3.5 hrs</option><option value='13500'>3.75 hrs</option><option value='14400'>4 hrs</option><option value='15300'>4.25 hrs</option><option value='16200'>4.5 hrs</option><option value='17100'>4.75 hrs</option><option value='18000'>5 hrs</option><option value='18900'>5.25 hrs</option><option value='19800'>5.5 hrs</option><option value='20700'>5.75 hrs</option><option value='21600'>6 hrs</option><option value='22500'>6.25 hrs</option><option value='23400'>6.5 hrs</option><option value='24300'>6.75 hrs</option><option value='25200'>7 hrs</option><option value='26100'>7.25 hrs</option><option value='27000'>7.5 hrs</option><option value='27900'>7.75 hrs</option><option value='28800'>8 hrs</option><option value='29700'>8.25 hrs</option><option value='30600'>8.5 hrs</option><option value='31500'>8.75 hrs</option><option value='32400'>9 hrs</option></select></td><td><input type='text' class='form-control' name='price["+actualstate+"]' value='' size='5'></td><td align='center'><input type='text' name='rank["+actualstate+"]' value='' class='form-control' size='3'></td><td class='radiocolumn'><input type='radio' value='"+actualstate+"' name='selected[0]'></td><td>"+selecthtml+"</td><td><select name='selectedusers["+actualstate+"][]' class='form-control newcol selectedbs my_select_"+actualstate+"' size='1' multiple style='display:none;' data-main-id='"+actualstate+"'><option value='' disabled></option>"+html+"</select></td><td><a href='#' class='note_link' id='"+actualstate+"'>Remove</a></td></tr>");
+        $('.txtBuildId').append("<tr class='trtable_"+actualstate+"'><td><input type='text' class='form-control' name='desc["+actualstate+"]' size='32' value=''><input type='hidden' name='id["+actualstate+"]' value='0'></td><td><select name='buffer["+actualstate+"]' class='small_select selectpicker form-control'><option value='0'>0 min</option><option value='900'>15 min</option><option value='1800'>30 min</option><option value='2700'>45 min</option><option value='3600'>60 min</option><option value='4500'>75 min</option><option value='5400'>90 min</option><option value='6300'>1.75 hrs</option><option value='7200'>2 hrs</option><option value='8100'>2.25 hrs</option><option value='9000'>2.5 hrs</option><option value='9900'>2.75 hrs</option><option value='10800'>3 hrs</option><option value='11700'>3.25 hrs</option><option value='12600'>3.5 hrs</option><option value='13500'>3.75 hrs</option><option value='14400'>4 hrs</option><option value='15300'>4.25 hrs</option><option value='16200'>4.5 hrs</option><option value='17100'>4.75 hrs</option><option value='18000'>5 hrs</option><option value='18900'>5.25 hrs</option><option value='19800'>5.5 hrs</option><option value='20700'>5.75 hrs</option><option value='21600'>6 hrs</option><option value='22500'>6.25 hrs</option><option value='23400'>6.5 hrs</option><option value='24300'>6.75 hrs</option><option value='25200'>7 hrs</option><option value='26100'>7.25 hrs</option><option value='27000'>7.5 hrs</option><option value='27900'>7.75 hrs</option><option value='28800'>8 hrs</option><option value='29700'>8.25 hrs</option><option value='30600'>8.5 hrs</option><option value='31500'>8.75 hrs</option><option value='32400'>9 hrs</option></select></td><td><input type='text' class='form-control' name='price["+actualstate+"]' value='' size='5' required></td><td align='center'><input type='text' name='rank["+actualstate+"]' value='' class='form-control' size='3' required></td><td class='radiocolumn'><input type='radio' value='"+actualstate+"' name='selected[0]'></td><td>"+selecthtml+"</td><td><select name='selectedusers["+actualstate+"][]' class='form-control newcol selectedbs my_select_"+actualstate+"' size='1' multiple style='display:none;' data-main-id='"+actualstate+"'><option value='' disabled></option>"+html+"</select></td><td><a href='#' class='note_link' id='"+actualstate+"'>Remove</a></td></tr>");
     });
 
 
