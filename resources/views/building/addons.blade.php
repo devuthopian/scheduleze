@@ -180,7 +180,15 @@
 	        @foreach($exception as $excep)
 	        	$('.my_select_{{ $excep->exception }} option[value="{{ $excep->user_id }}"]').prop('selected', false);
 	        	$('.my_select_{{ $excep->exception }}').formSelect();
+
+	        	$(".my_select_{{ $excep->exception }} option").each(function()
+				{
+				    if($(this).attr('data-in') == 1){
+				    	$(this).html('<b>'+$(this).text()+'</b>');
+				    }
+				});
 	        @endforeach
+
 
 	        $('.add_column').click(function(event) {
 	        	setTimeout(function(){

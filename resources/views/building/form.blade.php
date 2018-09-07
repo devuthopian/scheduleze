@@ -382,6 +382,13 @@
 
 	        	$('.my_select_{{ $excep->exception }}').formSelect();
 
+	        	$(".my_select_{{ $excep->exception }} option").each(function()
+				{
+				    if($(this).attr('data-in') == 1){
+				    	$(this).html('<b>'+$(this).text()+'</b>');
+				    }
+				});
+
 	        @endforeach
 
 
