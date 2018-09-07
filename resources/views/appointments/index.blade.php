@@ -3,7 +3,7 @@
 <!-- <a href="{{ URL::previous() }}" class="gobutton">Go Back</a> -->
 <hr>
 <div class="takehtml">
-	<div id="dontbreakdiv">
+	<div id="dontbreakdiv" class="dontbdiv">
 		<div class="panel">
 			@if(!empty($Inspector))
 				@php 

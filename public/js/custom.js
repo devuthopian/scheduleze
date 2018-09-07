@@ -69,6 +69,7 @@ $(document).ready(function() {
 
         if(dataid > 0){
             var location = window.location.protocol + "//" + window.location.host + "/";
+            //var location = "https://needsecured.com/developer/scheduleze/public/";
             $.ajax({
                 url : location + 'ajaxrequest',
                 method : "POST",
@@ -87,9 +88,9 @@ $(document).ready(function() {
 
    $("ul").children().html()
 
-   if($('.thin').children().html() == '<b>tawk.to</b>'){
+    /*if($('.thin').children().html() == '<b>tawk.to</b>'){
         $('.thin').children().html('<b>Scheduleze</b>');
-   }
+    }*/
 
     $('.columnaddons').click(function(event) {
         /* Act on the event */

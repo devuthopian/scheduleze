@@ -1071,7 +1071,7 @@ button.btn.btn-success.gmailbtn { background: #48aabf; border: 0px; border-radiu
 
 .panel-main div#gjs {
     display: inline-block;
-    height: 500px !important;
+    /*height: 500px !important;*/
 }
 .logohead{
     width: 80%;

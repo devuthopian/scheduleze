@@ -31914,9 +31914,14 @@ var Component = Backbone.Model.extend(_Styleable2.default).extend({
         });
       }
 		const classCollection = model.get('classes');
+		if (classCollection.where({name: 'dontbdiv'}).length) {
+			model.set('removable', false);
+		}
+
 		if (classCollection.where({name: 'panel'}).length) {
 			model.set('removable', false);
 		}
+
 		if(model.attributes.tagName != 'form' && model.attributes.tagName != 'select' && model.attributes.tagName != 'p' && model.attributes.tagName != 'checkbox' && model.attributes.tagName != 'input') {
 	      if (model.get('removable')) {
 	        tb.push({

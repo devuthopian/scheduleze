@@ -81,7 +81,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="arrowicon">
+                        <li>
                             <a href="{{ route('Document') }}">Document</a>
                         </li>
                         <li class="arrowicon">

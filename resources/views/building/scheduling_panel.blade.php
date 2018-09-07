@@ -9,6 +9,7 @@
 <link href="{{ asset('css/fontawesome.css') }}" rel="stylesheet">
 <link rel="shortcut icon" href="{{ asset('images/favicon_icon.png') }}" type="image/x-icon" />
 <link rel="stylesheet" href="{{ URL::asset('css/style.css') }}">
+<link rel="stylesheet" href="{{ URL::asset('css/tooltip.css') }}">
 @include('layouts.includes.front.header')
 <div class="panel-main">
     @php $value = session('id'); @endphp
@@ -35,6 +36,7 @@
 </div>
 <div class="button" style="text-align:center;">
     <button id="btnSave"><i class="fa fa-save" aria-hidden="true"></i> Save</button>
+    <button class="btnSaveTemplate"><i class="fa fa-folder" aria-hidden="true"></i> Save Template</button>
 </div>
 <script type="text/javascript">
 
@@ -45,7 +47,8 @@
         noticeOnUnload: 0,
         container: '#gjs',
         removable: false,
-        fromElement: false,
+        fromElement: 1,
+        showOffsets: 1,
         plugins: [/*'gjs-plugin-forms',*/'gjs-preset-webpage'],
         pluginsOpts: {
             /*'gjs-plugin-forms': {
@@ -53,7 +56,12 @@
             },*/
             'gjs-preset-webpage': {
                 btnLabel: 'EXPORT',
-                preHtml: '<!doctype><html><head><link rel="stylesheet" href="./css/style.css"></head><body>'
+                preHtml: '<!doctype><html><head><link rel="stylesheet" href="./css/style.css"></head><body>',
+                modalImportTitle: 'Import Template',
+                modalImportLabel: '<div style="margin-bottom: 10px; font-size: 13px;">Paste here your HTML/CSS and click Import</div>',
+                modalImportContent: function(editor) {
+                  return editor.getHtml() + '<style>'+editor.getCss()+'</style>'
+                }
             }
         },
         storageManager: {
@@ -84,8 +92,39 @@
         },
     });
 
+    var pn = editor.Panels;
+    var modal = editor.Modal;
 
-    
+    editor.Commands.add('canvas-clear', function() {
+        if(confirm('Are you sure to clean the canvas?')) {
+          var comps = editor.DomComponents.clear();
+          setTimeout(function(){ localStorage.clear()}, 0)
+        }
+    });
+
+    // Add and beautify tooltips
+    [['sw-visibility', 'Show Borders'], ['preview', 'Preview'], ['fullscreen', 'Fullscreen'],
+    ['export-template', 'Export'], ['undo', 'Undo'], ['redo', 'Redo'],
+    ['gjs-open-import-webpage', 'Import'], ['canvas-clear', 'Clear canvas']].forEach(function(item) {
+        pn.getButton('options', item[0]).set('attributes', {title: item[1], 'data-tooltip-pos': 'bottom'});
+    });
+    [['open-sm', 'Style Manager'], ['open-layers', 'Layers'], ['open-blocks', 'Blocks']].forEach(function(item) {
+        pn.getButton('views', item[0]).set('attributes', {title: item[1], 'data-tooltip-pos': 'bottom'});
+    });
+    var titles = document.querySelectorAll('*[title]');
+
+    for (var i = 0; i < titles.length; i++) {
+        var el = titles[i];
+        var title = el.getAttribute('title');
+        title = title ? title.trim(): '';
+        if(!title)
+        break;
+        el.setAttribute('data-tooltip', title);
+        el.setAttribute('title', '');
+    }
+
+    pn.getButton('options', 'sw-visibility').set('active', 1);
+
 
     editor.on('storage:end:store', (resultObject) => {
         if (resultObject.message) {
@@ -139,6 +178,18 @@
         editor.store(res => console.log('Store callback'));
 
         //editor.runCommand('gjs-export-zip');
+    });
+
+
+    $('.btnSaveTemplate').click(function(event) {
+        event.preventDefault();
+
+        $('.fa-code').click();
+
+        setTimeout(function(){ 
+            $('.gjs-mdl-btn-close').click(); 
+            $('.gjs-btn-prim').click(); 
+        }, 0);
     });
 
 
@@ -213,20 +264,42 @@
     });
     
 </script>
+<script src="{{ asset('js/nav_jquery.min.js') }}"></script>
+<script src="{{ asset('js/custom.js') }}"></script>
+<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('js/jquery.easing.min.js') }}"></script>
+<script src="{{ asset('js/jquery-ui.min.js') }}"></script>
+<script src="{{ asset('js/form_builder.js') }}"></script>
+<script src="{{ asset('js/popper.min.js') }}"></script>
 <style type="text/css">
 #btnSave {
-    font-family: Helvetica, Arial, sans-serif;
-    font-size: 18px;
-    padding: 10px 30px;
-    margin: 10px 0px 0px;
-    border:0px;
-    display:inline-block;
-    background-color: #eee;
-    background:#D682A4;
-    border-radius:20px;
-    color: #ffffff;
-    text-decoration: none;
+    background: #429caf !important;
+    color: #ffffff !important;
+    border-radius: 30px;
+    padding: 8px 30px;
+    margin: 7px 0 5px;
+    border: 1px solid #fff !important;
+    box-shadow: 0px 0px 18px #ccc;
+    font-size: 14px;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
+}
+.btnSaveTemplate {
+    background: #429caf !important;
+    color: #ffffff !important;
+    border-radius: 30px;
+    padding: 8px 30px;
+    margin: 7px 0 5px;
+    border: 1px solid #fff !important;
+    box-shadow: 0px 0px 18px #ccc;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+.header_section {
+    padding: 20px 0 8px;
+}
+nav a{
+    text-decoration: none;
 }
 </style>

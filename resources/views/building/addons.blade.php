@@ -65,7 +65,7 @@
 										</select>
 									</td>
 									<td>
-										{!! get_subs_users($BuildType->id) !!}
+										{!! get_subs_users($i) !!}
 									</td>
 									<td>
 										<a href='#' class='note_link' id="{{ $BuildType->id }}" data-model="{{$name}}" data-id="{{ $BuildType->id }}">Remove</a>
@@ -77,9 +77,15 @@
 								        $('.my_select_{{ $i }} option:not(:disabled)').not(':selected').prop('selected', true);
 
 									    $('.dropdown-content.multiple-select-dropdown input[type="checkbox"]:not(:checked)').not(':disabled').prop('checked', 'checked');
+
 									    var values = $('.dropdown-content.multiple-select-dropdown input[type="checkbox"]:checked').not(':disabled').parent().map(function() {
-									        return $(this).text();
+									    	if($(this).attr('data-in') == 1){
+									    		return $(this).html('<b>'+$(this).text()+'</b>');
+									    	}else{
+									        	return $(this).text();
+									    	}
 									    }).get();
+
 									    $('input.select-dropdown').val(values.join(', '));
 									    
 									    $(".my_select_{{ $i }} option").each(function()
@@ -180,13 +186,6 @@
 	        @foreach($exception as $excep)
 	        	$('.my_select_{{ $excep->exception }} option[value="{{ $excep->user_id }}"]').prop('selected', false);
 	        	$('.my_select_{{ $excep->exception }}').formSelect();
-
-	        	$(".my_select_{{ $excep->exception }} option").each(function()
-				{
-				    if($(this).attr('data-in') == 1){
-				    	$(this).html('<b>'+$(this).text()+'</b>');
-				    }
-				});
 	        @endforeach
 
 
@@ -194,6 +193,25 @@
 	        	setTimeout(function(){
 		        	var newcolid = $('.newcol:last').attr('data-main-id');
 		        	$('.my_select_'+newcolid).formSelect();
+
+		        	$('.my_select_'+newcolid+' option:not(:disabled)').not(':selected').prop('selected', true);
+
+				    $('.dropdown-content.multiple-select-dropdown input[type="checkbox"]:not(:checked)').not(':disabled').prop('checked', 'checked');
+
+				    var values = $('.dropdown-content.multiple-select-dropdown input[type="checkbox"]:checked').not(':disabled').parent().map(function() {
+
+				        return $(this).text();
+
+				    }).get();
+
+				    $('input.select-dropdown').val(values.join(', '));
+
+		        	$(".my_select_"+newcolid+" option").each(function()
+					{
+					    if($(this).attr('data-in') == 1){
+					    	$(this).html('<b>'+$(this).text()+'</b>');
+					    }
+					});
 		        }, 500);
 	        });
 

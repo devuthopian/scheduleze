@@ -20,17 +20,20 @@ class PanelController extends Controller
      */
     public function index($id)
     {
+        $data = '';
         $template = PanelTemplate::where('user_id',$id)->first();
-        Session::put('hashvalue', $template->unqiue_url);
+        if(!empty($template)){
+            Session::put('hashvalue', $template->unqiue_url);
 
-        $data = json_encode([
-          'gjs-components'=> $template->gjs_components,
-          'gjs-styles'=> $template->gjs_styles,
-          'gjs-assets'=> $template->gjs_assets,
-          'gjs-css'=> $template->gjs_css,
-          'gjs-html'=> $template->gjs_html,
-          'url' => $template->unqiue_url
-        ]);        
+            $data = json_encode([
+              'gjs-components'=> $template->gjs_components,
+              'gjs-styles'=> $template->gjs_styles,
+              'gjs-assets'=> $template->gjs_assets,
+              'gjs-css'=> $template->gjs_css,
+              'gjs-html'=> $template->gjs_html,
+              'url' => $template->unqiue_url
+            ]);
+        }
         
 
         return $data;
