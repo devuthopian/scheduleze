@@ -10,7 +10,7 @@
                         <li><a href="{{ url('/#signup') }}">Scheduling Solution</a></li>
                         <li><a href="{{ url('success_stories#signup') }}">Success Stories</a></li>
                         <li><a href="{{ url('demo#signup') }}">Demo</a></li>
-                        <li><a href="{{ url('scheduling_faq#signup') }}">FAQ</a></li>
+                        <li><a href="{{ url('/faq#signup') }}">FAQ</a></li>
                         <!--<li><a href="#">Support</a></li> -->
                         <li><a href="{{ url('contact#signup') }}">Contact</a></li>
                         @php 

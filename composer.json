@@ -7,6 +7,8 @@
     "require": {
         "php": "^7.1.3",
         "barryvdh/laravel-dompdf": "^0.8.2",
+        "bpocallaghan/faq": "^0.0.2",
+        "bpocallaghan/sluggable": "^1.2",
         "doctrine/dbal": "^2.8",
         "fideloper/proxy": "^4.0",
         "laravel/framework": "5.6.*",

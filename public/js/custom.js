@@ -86,7 +86,9 @@ $(document).ready(function() {
         }
     });
 
-   $("ul").children().html()
+
+
+   //$("ul").children().html()
 
     /*if($('.thin').children().html() == '<b>tawk.to</b>'){
         $('.thin').children().html('<b>Scheduleze</b>');
@@ -98,6 +100,42 @@ $(document).ready(function() {
             $('.radiocolumn').remove();
         }, 500);
     });
+
+
+    $('#faq-box')
+        .on('show.bs.collapse', function (e) {
+            $.post('/faq/question/' + $(e.target).attr('data-id'));
+
+            $(e.target).parents('.card').addClass('card-info');
+        })
+        .on('hide.bs.collapse', function (e) {
+            $(e.target).parents('.card').removeClass('card-info');
+        });
+
+    $('.btn-helpful').on('click', function (e) {
+        e.preventDefault();
+        //alert('opsda');
+
+        // show spinner
+        var $footer = $('#faq-footer-' + $(this).attr('data-id'));
+        $footer.html("<i class=\"fa fa-spinner fa-spin text-primary text-sm\"></i>");
+
+        // post and show response
+        $.ajax({
+            url : '/faq/question/' + $(this).attr('data-id') + '/' + $(this).attr('data-type'),
+            method : "POST",
+            data : {_token: $('meta[name="csrf-token"]').attr('content')},
+            dataType : "JSON",
+            success:function(data){
+                $footer.html("<div><small><span class=\"text-muted\">Thank you for your feedback.</span></small></div>");
+            }
+        });
+        /*$.post('/faq/question/' + $(this).attr('data-id') + '/' + $(this).attr('data-type'), function () {
+            $footer.html("<div><small><span class=\"text-muted\">Thank you for your feedback.</span></small></div>");
+        });*/
+        return false;
+    });
+
 });
 
 $(window).on('load', function(){

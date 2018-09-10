@@ -38,6 +38,29 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('/account_info', 'Auth\RegisterController@account_info');
 	Route::post('/account_info_save', 'Auth\RegisterController@account_info_save')->name('account_info_save');
 
+	Route::group(['prefix' => 'faq', 'namespace' => 'Website'], function () {
+	    Route::get('', 'FAQController@index');
+	    Route::post('/question/{faq}/{type?}', 'FAQController@incrementClick');
+	});
+	Route::group(['namespace' => 'Admin\FAQ'], function () {
+	    Route::resource('/faqs/categories', 'CategoriesController');
+	    Route::get('faqs/order', 'OrderController@index');
+	    Route::post('faqs/order', 'OrderController@updateOrder');
+	    Route::resource('/faqs', 'FAQsController');
+	});
+
+	Route::get('/faqs/{faqId?}/{action?}', 'Website\FAQController@faqsAction');
+
+	/*Route::get('/faq', 'FAQController@index');
+	Route::post('/faq/question/{faq}/{type?}', 'FAQController@incrementClick');
+
+	Route::group(['namespace' => 'FAQ'], function () {
+	    Route::resource('/faqs/categories', 'CategoriesController');
+	    Route::get('faqs/order', 'OrderController@index');
+	    Route::post('faqs/order', 'OrderController@updateOrder');
+	    Route::resource('/faqs', 'FaqsController');
+	});*/
+
 	Route::group(['middleware' => ['auth']], function() {
 		
 		Route::get('/scheduling/schedulepanel', 'SchedulezeController@scheduling_panel')->name('schedulepanel');
