@@ -37,9 +37,12 @@
                                 </td>
                                 <td>{{ date_format($item->updated_at, "Y/m/d H:i:s") }}</td>
                                 <td>
-                                	<a href="{{ url('/faqs/'.$item->id.'') }}/show" id="show" class="show">Show</a> 
-                                	<a href="{{ url('/faqs/'.$item->id.'') }}/edit" id="edit" class="edit">Edit</a> 
-                                	<a href="{{ url('/faqs/'.$item->id.'') }}/delete" id="delete" class="delete">Delete</a>
+                                	<button data-url="{{ url('/faqs/'.$item->id.'') }}/show" class="btn btn-info common" class="common" id="show">Show</button>
+
+                                	<button data-url="{{ url('/faqs/'.$item->id.'') }}/edit" class="btn common" data-toggle="modal" data-target="#myModal" id="edit">Edit</button>
+
+                                	<button data-url="{{ url('/faqs/'.$item->id.'') }}/delete" class="btn btn-danger common" data-toggle="modal" data-target="#myModal" class="common" id="delete">Delete</button>
+
                                 </td>
 							</tr>
 						@endforeach
@@ -49,9 +52,34 @@
 			</div>
 		</div>
 	</div>
+	<script src="{{ asset('js/jquery.min.js') }}"></script>
+	<script type="text/javascript">
+		$(document).ready(function(e){
+			$('.common').click(function(event) {
+				event.preventDefault();
+				var url = $(this).attr('data-url');
+				$.ajax({
+					url: url,
+					method : "POST",
+					data : {_token: $('meta[name="csrf-token"]').attr('content')},
+					dataType : "JSON",
+					success:function(data) {
+						$('#myModal').modal('show'); 
+						$('.modal-title').text(data.question);
+						$('.modal-body').text(data.answer);
+						//$('.modal-body').text(data.title);
+						console.log(data);
+					}
+				});
+			});
+		});
+	</script>
+
 @endsection
+
+
 <div id="myModal" class="modal fade" role="dialog">
-	<div class="modal-dialog">
+	<div class="modal-dialog modal-lg">
 		<!-- Modal content-->
 		<div class="modal-content">
 			<div class="modal-header">

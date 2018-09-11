@@ -36,6 +36,6 @@ class FAQController extends Controller
 
     public function faqsAction(FAQ $faqId, $action ='show')
     {
-        dd($faqId);
+        return $faqId;
     }
 }

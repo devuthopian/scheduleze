@@ -38,6 +38,27 @@
     <button id="btnSave"><i class="fa fa-save" aria-hidden="true"></i> Save</button>
     <button class="btnSaveTemplate"><i class="fa fa-folder" aria-hidden="true"></i> Save Template</button>
 </div>
+
+<div id="info-panel" style="display:none">
+    <br/>
+    <img src="{{ url('images/logo.png') }}" class="logohead">
+    <br/>
+    <div class="info-panel-label">
+        <b>GrapesJS Webpage Builder</b> is a simple showcase of what is possible to achieve with the
+        <a class="info-panel-link gjs-four-color" target="_blank" href="https://github.com/artf/grapesjs">GrapesJS</a>
+        core library
+        <br/><br/>
+        For any hint about the demo check the
+        <a class="info-panel-link gjs-four-color" target="_blank" href="https://github.com/artf/grapesjs-preset-webpage">Webpage Preset repository</a>
+        and open an issue. For problems with the builder itself, open an issue on the main
+        <a class="info-panel-link gjs-four-color" target="_blank" href="https://github.com/artf/grapesjs">GrapesJS repository</a>
+        <br/><br/>
+        Being a free and open source project contributors and supporters are extremely welcome.
+        If you like the project support it with a donation of your choice or become a backer/sponsor via
+        <a class="info-panel-link gjs-four-color" target="_blank" href="https://opencollective.com/grapesjs">Open Collective</a>
+    </div>
+</div>
+
 <script type="text/javascript">
 
     //grapejs editor
@@ -100,6 +121,31 @@
           var comps = editor.DomComponents.clear();
           setTimeout(function(){ localStorage.clear()}, 0)
         }
+    });
+
+    var cmdm = editor.Commands;
+    var mdlClass = 'gjs-mdl-dialog-sm';
+    var infoContainer = document.getElementById('info-panel');
+    cmdm.add('open-info', function() {
+        var mdlDialog = document.querySelector('.gjs-mdl-dialog');
+        mdlDialog.className += ' ' + mdlClass;
+        infoContainer.style.display = 'block';
+        modal.setTitle('Tips for you');
+        modal.setContent(infoContainer);
+        modal.open();
+        modal.getModel().once('change:open', function() {
+            mdlDialog.className = mdlDialog.className.replace(mdlClass, '');
+        });
+    });
+
+    pn.addButton('options', {
+        id: 'open-info',
+        className: 'fa fa-question-circle',
+        command: function() { editor.runCommand('open-info') },
+        attributes: {
+            'title': 'Help',
+            'data-tooltip-pos': 'bottom',
+        },
     });
 
     // Add and beautify tooltips

@@ -49,7 +49,7 @@ Route::group(['middleware' => ['web']], function () {
 	    Route::resource('/faqs', 'FAQsController');
 	});
 
-	Route::get('/faqs/{faqId?}/{action?}', 'Website\FAQController@faqsAction');
+	Route::post('/faqs/{faqId?}/{action?}', 'Website\FAQController@faqsAction');
 
 	/*Route::get('/faq', 'FAQController@index');
 	Route::post('/faq/question/{faq}/{type?}', 'FAQController@incrementClick');
