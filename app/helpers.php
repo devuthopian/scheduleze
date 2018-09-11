@@ -963,6 +963,43 @@ if(! function_exists('bookings_check')){
 	}
 }
 
+if(! function_exists('verify_time')){
+	function verify_time ($starttime, $endtime, $inspector) {		
+		//mail("peter@advanced-design.com", "Scheduleze Verify Time inputs", "Starttime = $starttime\nEndtime = $endtime\nInspector = $inspector", "From: info@scheduleze.com\n");
+		$row = DB::table('bookings')->where([['starttime', '<=', $endtime],['endtime', '>=', $starttime+1],[]])->orWhere([['starttime', '>=', $starttime],['endtime', '<=', $endtime]])->where([['inspector', '=', $inspector],['removed', '=', 0]])->orderBy('starttime', 'asc')->limit(1)->first();
+
+		$num = $row->count();
+
+		//$row = "select * from bookings where ((starttime <= $endtime and endtime >= ($starttime+1)) or (starttime>=$starttime and endtime<=$endtime)) and inspector=$inspector and removed='0' order by starttime asc limit 1";
+		//$row = $this->pull_assoc($sql);
+		//$num = $this->num_rows(); //echo "**$num<br>";
+		
+		$allow_conflict = get_field("inspectors", "allow_conflict", $inspector);
+		if ($allow_conflict == "1"){
+			$num ="";  //destroy any sql discovered conflicts
+		}
+		
+		//if we didn't get valid values, then fail to verify
+		if ($inspector < 10){
+			$num = 1;
+		}
+		
+		if ($endtime < 100){
+			$num = 1;
+		}
+		
+		if ($starttime < 100){
+			$num = 1;
+		}
+		
+		if (($num=="") || ($row->endtime < $row->starttime)) { // if the endtime is less than the starttime then we have a reverse booking that is likely an accidental edit action on the part of the user, so proceed anyway.
+			return TRUE;
+		} else {
+			return FALSE; 
+		}
+	}
+}
+
 if(! function_exists('check_loc_buffer')){
 	function check_loc_buffer($start, $end, $np, $loctime, $location, $zamount='0') {
 		$buffer=0;

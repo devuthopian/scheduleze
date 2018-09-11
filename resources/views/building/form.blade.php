@@ -77,9 +77,9 @@
 
 							</td>
 
-                            <td>
+                            <!-- <td>
 
-                            </td>
+                            </td> -->
 
 							<td>
 
@@ -141,11 +141,11 @@
 
                                     </td>
 
-                                    <td>
+                                   <!--  <td>
 
 										<input type="radio" value="{{ $BuildType->id }}" name="selected[0]" @if($BuildType->selected == 1) checked @endif>
 
-									</td>
+									</td> -->
 
 									<td>
 
@@ -240,11 +240,11 @@
 
 									</td>
 
-                                    <td>
+                                    <!-- <td>
 
                                         <input  type="radio" value="0" name="selected[0]">
 
-                                    </td>
+                                    </td> -->
 
 									<td>
 

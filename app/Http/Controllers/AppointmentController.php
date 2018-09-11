@@ -16,6 +16,7 @@ use App\AddonBookings;
 use Illuminate\Support\Facades\Input;
 use Session;
 use DB;
+use Agents;
 
 class AppointmentController extends Controller
 {
@@ -327,42 +328,63 @@ class AppointmentController extends Controller
         $endtime = (( $starttime + $buffer ) - 2);
 
         $data = Input::get();
-        $Booking = Booking::create([
-            'price' => $request->input('total_price'),
-            'user_id' => $request->input('inspector'),
-            'location' => $request->input('location'),
-            'building_type' => $request->input('building_type'),
-            'building_size' => $request->input('building_size'),
-            'building_age' => $request->input('building_ages'),
-            'business' => $request->input('business'),
-            'starttime' => $request->input('starttime'),
-            'endtime' => $endtime,
-            'inspection_address' => $request->input('requiredInspection_Address'),
-            'firstname' => $request->input('requiredFirstname'),
-            'lastname' => $request->input('requiredLastname'),
-            'address' => $request->input('Current_Address'),
-            'city' => $request->input('City'),
-            'state' => $request->input('state'),
-            'zip' => $request->input('ZIP'),
-            'email' => $request->input('requiredEmail'),
-            'homephone' => $request->input('requiredPhone'),
-            'dayphone' => $request->input('phone2'),
-            'agent_name' => $request->input('Agent_Name'),
-            'agent_phone' => $request->input('Agent_Phone'),
-            'agent_email' => $request->input('Agent_Email'),
-            'entry_method' => $request->input('entry_method'),
-            'mls' => $request->input('mls'),
-            'notes' => $request->input('notes')
-        ]);
+        if(verify_time($starttime, $endtime, $request->input('inspector')))
+        {
+            $Booking = Booking::create([
+                'price' => $request->input('total_price'),
+                'user_id' => $request->input('inspector'),
+                'location' => $request->input('location'),
+                'building_type' => $request->input('building_type'),
+                'building_size' => $request->input('building_size'),
+                'building_age' => $request->input('building_ages'),
+                'business' => $request->input('business'),
+                'starttime' => $request->input('starttime'),
+                'endtime' => $endtime,
+                'inspection_address' => $request->input('requiredInspection_Address'),
+                'firstname' => $request->input('requiredFirstname'),
+                'lastname' => $request->input('requiredLastname'),
+                'address' => $request->input('Current_Address'),
+                'city' => $request->input('City'),
+                'state' => $request->input('state'),
+                'zip' => $request->input('ZIP'),
+                'email' => $request->input('requiredEmail'),
+                'homephone' => $request->input('requiredPhone'),
+                'dayphone' => $request->input('phone2'),
+                'agent_name' => $request->input('Agent_Name'),
+                'agent_phone' => $request->input('Agent_Phone'),
+                'agent_email' => $request->input('Agent_Email'),
+                'entry_method' => $request->input('entry_method'),
+                'mls' => $request->input('mls'),
+                'notes' => $request->input('notes')
+            ]);
 
-        $addon = session('addon');        
-        if (is_array($addon)){
-            foreach ($addon as $addn){
+            $addon = session('addon');        
+            if (is_array($addon)){
+                foreach ($addon as $addn){
 
-                $AddonBookings = AddonBookings::create([
-                    'addon' => $addn,
-                    'booking' => $request->input('business')
+                    $AddonBookings = AddonBookings::create([
+                        'addon' => $addn,
+                        'booking' => $request->input('business')
+                    ]);
+                }
+            }
+
+            if((!Cookie::get('agent_id')) || ($request->input('remember_agent') == "1")) {
+                $cookie_id = md5(microtime());
+                $AddonBookings = Agents::create([
+                    'name' =>  $request->input('agent_name');
+                    'phone' => $request->input('agent_phone');
+                    'email' => $request->input('agent_email');
+                    'cookie_id' => $cookie_id;
+                    'remember' => $request->input('remember_agent');
+                    'business' => $request->input('business');
                 ]);
+
+                $expire = time() + 60*60*24*180;
+
+                Cookie::queue('agent_id', $cookie_id, $expire);
+
+                /*setcookie("agent_id", $ag[cookie_id], $expire, "/", ".scheduleze.com");*/ //old method for saving cookie
             }
         }
 
