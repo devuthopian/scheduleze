@@ -85,7 +85,7 @@ class LoginController extends Controller
             return back()->with('warning', 'You need to confirm your account. We have sent you an activation code, please check your email.');
         }
         //$PanelTemplate = $user->Panel($user->id);
-        $PanelTemplate = PanelTemplate::where('user_id',$user->id)->first();
+        $PanelTemplate = PanelTemplate::where('user_id', $user->id)->first();
         if(empty($PanelTemplate)){
             $panelurl = '';
         }else{
@@ -102,6 +102,8 @@ class LoginController extends Controller
         //if(!empty($PanelTemplate->unqiue_url)){
             //return redirect('/template/'.$PanelTemplate->unqiue_url);
         //}
+
+        get_business_information($business->id);
 
         return redirect()->intended($this->redirectPath());
         

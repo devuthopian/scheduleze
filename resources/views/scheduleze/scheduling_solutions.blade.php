@@ -34,7 +34,7 @@
                         <a href="#">Get Started</a>
                     </div>
                     <div class="col-sm-6">
-                        <img src="{{ url('images/ban-thum.png') }}" alt="">
+                        <img src="{{ url('images/ban-thum1.png') }}" alt="">
                     </div>
                 </div>
                 <div class="item">
@@ -43,7 +43,7 @@
                         <a href="#">Get Started</a>
                     </div>
                     <div class="col-sm-6">
-                        <img src="{{ url('images/ban-thum.png') }}" alt="">
+                        <img src="{{ url('images/testimonial_img.png') }}" alt="">
                     </div>
                 </div>
             </div>

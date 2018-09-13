@@ -1,6 +1,6 @@
 <div class="loader"></div>
 <div class="header_section">
-    <div class="head_left"> @guest<a href="{{ url('scheduling_solutions') }}"> @else <a href="#"> @endguest<img src="{{ url('images/logo.png') }}" alt="" class="logohead"></a></div>
+    <div class="head_left"> @guest<a href="{{ url('scheduling_solutions') }}"> @else <a href="#"> @endguest<img src="{{ url('images/logo.png') }}" alt="Take command of your day" class="logohead"></a></div>
     <div class="head_right">
         <div class="navigation">
             @guest
@@ -137,10 +137,10 @@
                                 </li>
                                 <!-- <li>
                                     <a href="#">Headers/Footers</a>
-                                </li>
-                                <li>
-                                    <a href="#">Email Attachment</a>
                                 </li> -->
+                                <li>
+                                    <a href="{{ url('/profile/Email/Attachment') }}">Email Attachment</a>
+                                </li>
                                 <li>
                                     <a href="#">Recurring Payment</a>
                                 </li>

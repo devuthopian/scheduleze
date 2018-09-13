@@ -5,6 +5,7 @@
 @php
 	$i_name = get_field('users_details', 'name', $id);
 	$i_last_name = get_field('users_details', 'lastname', $id);
+	$business_infomation = get_business_information(session('business_id'));
 
 	if ($first == "") {
 		$first = time();
@@ -41,7 +42,7 @@
 				<input type="hidden" name="inc" value="all">
 			@else
 				@php 
-				$inc='block'; 
+				$inc='block';
 				$include = 'include bookings';
 				$url = url('/scheduleze/booking/appointment');
 				@endphp

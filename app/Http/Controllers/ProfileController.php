@@ -8,10 +8,12 @@ use App\Business;
 use App\UserDetails;
 use Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Input;
 
 
 class ProfileController extends Controller
 {
+    protected $business_id = '';
     /**
      * Create a new controller instance.
      *
@@ -20,6 +22,7 @@ class ProfileController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->business_id = session('business_id');
     }
 
     public function profile_validator(array $data)
@@ -60,6 +63,23 @@ class ProfileController extends Controller
         ];
         return view('profiles.UserProfileEdit')->with($data);
     }
+
+    public function SaveEmailAttachment(Request $request)
+    {
+        $data = Input::get();
+        $files = $request->file();
+        foreach($files as $key){
+            $name = $key->getClientOriginalName();
+            //$keyextension = $key->getClientOriginalExtension();
+            $getFilename = $key->getFilename();
+            $key->move(public_path( 'attachments/'.$this->business_id ), $name );
+        }
+        
+        $business = Business::where('id', $this->business_id)->update(['email_attachment' => $name]);
+
+        return view('profiles.EmailAttachment', compact('name'));
+    }
+
     public function updateUserAccount(Request $request)
     {
         $userid = $request->input('userid');

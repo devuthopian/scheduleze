@@ -65,6 +65,8 @@ Route::group(['middleware' => ['web']], function () {
 		
 		Route::get('/scheduling/schedulepanel', 'SchedulezeController@scheduling_panel')->name('schedulepanel');
 
+		Route::get('/appointment/receipt/{id?}','AppointmentController@reciept');
+
 		Route::get('/scheduleze/BusinessHours', 'SchedulezeController@BusinessHours');
 		Route::get('/scheduleze/appointments','AppointmentController@index');
 		Route::get('/scheduleze/Reoccurrence','SchedulezeController@blockouts_occurance')->name('Reoccurrence');
@@ -117,6 +119,8 @@ Route::group(['middleware' => ['web']], function () {
 		
 
 		Route::get('/profile/{id?}', 'ProfileController@UserProfile')->name('profile');
+		Route::get('/profile/Email/Attachment', 'SchedulezeController@EmailAttachment');
+		Route::post('/profile/Email/Attachment', 'ProfileController@SaveEmailAttachment');
 		Route::post('/profile_update', 'ProfileController@updateUserAccount')->name('profile_update');
 
 		Route::get('/business_info', 'ProfileController@UserBusinessProfile')->name('business_info');

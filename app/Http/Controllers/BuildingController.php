@@ -20,7 +20,7 @@ class BuildingController extends Controller
 {
 
     /**
-     * @var Upload path
+     * @var Business ID
      */
     protected $businessid = '';
     

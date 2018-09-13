@@ -58,7 +58,7 @@
                 $building_age = '';
             }
 
-            //$authorized_inspectors = get_inspector_exceptions($businessId, $BuildType, $building_size, $building_age, $addons, session('total_price'));
+            $authorized_inspectors = get_inspector_exceptions($businessId, $BuildType, $building_size, $building_age, $addons, session('total_price'));
 
             $increment = 900;
             if(!empty($data['addon'])){
@@ -122,7 +122,9 @@
                                                     Click menu to view all openings for {!! username($data[0]['inspector']) !!}
                                                 </span>
                                                 <br>
-                                                @php print_r(get_available_times_popup2($location, $total_time, 1, 12, $increment, 0, 0)); @endphp
+                                                @foreach($authorized_inspectors as $qualified_inspector)
+                                                    @php print_r(get_available_times_popup2($location, $total_time, $qualified_inspector->id, $qualified_inspector->look_ahead, $increment, 0, 0)); @endphp
+                                                @endforeach
                                                 <br>
                                                 <span class="note">
                                                     Don't see a time that fits your schedule?  Please call 907-223-4958.
@@ -131,9 +133,9 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="3"><span class="formlabel">Inspection {!! getlocation($data['location']) !!}</span>
+                                        <td colspan="3"><span class="formlabel"><b>Inspection {!! getlocation($data['location']) !!}</b></span>
                                             <br>
-                                            <input type="text" name="requiredInspection_Address" size="40" value="">
+                                            <input type="text" name="requiredInspection_Address" size="40" value="" required>
                                             <br>
                                             @if(!empty($data[0]['starttime']))
                                                 <span class="note"><b>Beginning at {{ $start_date }}.  Cost: ${!! CountAppFormCost($data) !!}</b></span>
@@ -143,13 +145,13 @@
         											 Total Cost: $500</span>--></td>
                                     </tr>
                                     <tr>
-                                        <td><span class="signuplabel">First name</span>
+                                        <td><span class="signuplabel"><b>First name</b></span>
                                             <br>
-                                            <input type="text" name="requiredFirstname" size="20" value="">
+                                            <input type="text" name="requiredFirstname" size="20" value="" required>
                                         </td>
-                                        <td><span class="signuplabel">Last name</span>
+                                        <td><span class="signuplabel"><b>Last name</b></span>
                                             <br>
-                                            <input type="text" name="requiredLastname" size="20" value="">
+                                            <input type="text" name="requiredLastname" size="20" value="" required>
                                         </td>
                                         <td></td>
                                     </tr>
@@ -169,13 +171,13 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><span class="signuplabel">Email</span>
+                                        <td><span class="signuplabel"><b>Email</b></span>
                                             <br>
-                                            <input type="text" name="requiredEmail" size="20" value="" maxlength="128">
+                                            <input type="email" name="requiredEmail" size="20" value="" maxlength="128" required>
                                         </td>
-                                        <td><span class="signuplabel">Phone</span>
+                                        <td><span class="signuplabel"><b>Phone</b></span>
                                             <br>
-                                            <input type="text" name="requiredPhone" size="9" value="">
+                                            <input type="text" name="requiredPhone" size="9" value="" required>
                                             <select name="phone_name" class="smallselect">
                                                 <option value="Cell">Cell</option>
                                                 <option value="Home">Home</option>
@@ -213,7 +215,7 @@
                                         </td>
                                         <td valign="top"><span class="signup_label_optional">Agent Email<br>
         											</span>
-                                            <input type="text" name="Agent_Email" value="" size="20">
+                                            <input type="email" name="Agent_Email" value="" size="20">
                                         </td>
                                     </tr>
                                     <tr>

@@ -35,6 +35,14 @@ class SchedulezeController extends Controller
         return view('auth.email_confirm');
     }
 
+    public function EmailAttachment()
+    {
+        $business_id = session('business_id');
+        $business = Business::where('id', $business_id)->first();
+        $name = $business->email_attachment;
+        return view('profiles.EmailAttachment', compact('name'));
+    }
+
      /**
      * Show the application home page.
      *

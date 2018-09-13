@@ -88,7 +88,11 @@
 	            dataType : "JSON",
 	            success:function(data){
 	                console.log(data.message);
-	                $('.alert-info').html('<a href="{{ URL::previous() }}"><strong>Ok</strong></a>');
+	                if(data.message == 'Successfully Saved!'){
+	                	$('.alert-info').html('<a href="{{ URL::previous() }}"><strong>Ok</strong></a>');
+	                }else{
+	                	$('.alert-info').html('<a href="{{ URL::previous() }}"><strong>Something went wrong.</strong></a>');
+	                }
 	            }
 	        });
 	    @else

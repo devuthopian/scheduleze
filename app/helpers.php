@@ -295,7 +295,7 @@ if(! function_exists('edit_filter')){
 
 if(! function_exists('get_inspector_popup')){
 	function get_inspector_popup($column='name', $id='', $bus='') {
-		if ($bus=="") {
+		if ($bus == "") {
 			$bus = session('business_id');
 		}
 		if(empty($id)){
@@ -312,6 +312,10 @@ if(! function_exists('get_inspector_popup')){
 		$html = "\n\t\t\t<select name=\"users_details\" class=\"smallselect\">";
 
 		foreach ($rows as $row) {
+			if(empty($row->$column)){
+				$users_row = DB::table('users')->where('id', $row->user_id)->first();
+				$row->$column = $users_row->name;
+			}
 			if($row->user_id == $id){
 				$select = "selected";
 			} else {
@@ -665,7 +669,7 @@ if(!function_exists('get_available_times_popup2')){
 		//create increment array
 		$add_few_final = $days_forward - 3;
 		while ($c < $days_forward){
-			$thisday = date ("w", "$proposed_starttime");
+			$thisday = date ("w", $proposed_starttime);
 			if (($c > 12) && ($c < $add_few_final) && ($throttle == 1)){  // added April 2005 -- signiifcantly reduces load by knocking out 3 of 4 days after 12 days of showing all available, the < few final, makes it sure to show the farthest out 3 days so there are some slots showing at the farthest time out into the future  (3 covers weekends)
 				//print $n % $throttle."  ";
 				if (($c % 4) == 0){
@@ -675,12 +679,13 @@ if(!function_exists('get_available_times_popup2')){
 				array_push($incray,$proposed_starttime);
 			}
 			$proposed_starttime = $proposed_starttime + $increment;
-			$newday = date ("w", "$proposed_starttime");
-			if ($thisday != "$newday"){
+			$newday = date ("w", $proposed_starttime);
+			if ($thisday != $newday){
 				// its a new day!  increment the day counter so at some point this tireless loop will stop.
 				$c++;
 			}
 		}
+
 		$conflict="";
 		$day ='';
 		$i = 0;  //APPROVED loop counter, used for array index
@@ -716,7 +721,7 @@ if(!function_exists('get_available_times_popup2')){
 				if (count($days_off_array)>0) {
 				foreach ($days_off_array as $re){
 					
-					if (($re->day == $startday) and (is_numeric(strpos("$re->weeks", "$startweek"))) || (($re->day == $endday) && (is_numeric(strpos("$re->weeks", "$endweek"))))){  ///the value of startweek occurs ever in $re[week]))
+					if (($re->day == $startday) and (is_numeric(strpos($re->weeks, $startweek))) || (($re->day == $endday) && (is_numeric(strpos($re->weeks, $endweek))))){  ///the value of startweek occurs ever in $re[week]))
 						//ok, we have a conflict by day, now check the time (more efficient than checking the time on each one.
 						$start_hour_minute = date ("Gi", $starttime);
 						$end_hour_minute = (date ("Gi", $endtime))+$buffer;
@@ -815,11 +820,10 @@ if(!function_exists('get_available_times_popup2')){
 		echo "-->";
 		//
 	}*/
-		
+		$previous_proposed_start = "";
 		$html = "\n\t\t<select name=\"starttime\">";
 		if (is_array($s)){
-			$previous_proposed_start = "";
-			$proposed_appointment_start = "";
+			//$proposed_appointment_start = "";
 			//print "<!--$proposed_size_duration-->";
 			foreach ($s as $proposed_appointment_start){  // for every potential valid time
 				// we don't want to show every hour of the day, just 9, 12, 3, 6 etc -- so once we have printed a time out, we need to not check for the next 3 hours
@@ -837,8 +841,8 @@ if(!function_exists('get_available_times_popup2')){
 							$time_forward = $time_forward - $divisor;
 						}
 						//print "<!--". date("g:i a, l, F j", $proposed_appointment_start)." and time forward = $time_forward last print $t-->\n";
-					}			
-					$previous_proposed_start = $proposed_appointment_start;
+				}		
+				$previous_proposed_start = $proposed_appointment_start;
 	
 				if ($time_forward > 1){
 						$time_forward--;
@@ -848,23 +852,25 @@ if(!function_exists('get_available_times_popup2')){
 					//print "<!-- $t -->\n";
 					unset($nextprev);
 					$nextprev = find_prev($proposed_appointment_start, $proposed_appointment_endtime, $multi);
+
 					//********** this broke if there was booking inside a blockout, as find_prev only returned the appointment immediately before and immediately following
 					//********** this was a great idea as it reduced the ammount of computation handed to bookings_check however, since it only looked one back
 					//********** and one forward, it was blind to a larger, older blockout, that had a smaller newer booking inside of it
-					//if($this->bookings_check ($proposed_appointment_start, $proposed_appointment_endtime, $nextprev)) {
-
+					//if($this->bookings_check ($proposed_appointment_start, $proposed_appointment_endtime, $nextprev)) {				
 					if(bookings_check ($proposed_appointment_start, $proposed_appointment_endtime, $multi)) {
 						//echo "&nbsp;&nbsp;&nbsp;$t:$newday:$day<br>";
 						$check = check_loc_buffer($proposed_appointment_start, $proposed_appointment_endtime, $nextprev, $loctime, $location, $zamount);
+
 						if ($business_wide == "1"){
-							$_SESSION['business_wide_start'][$proposed_appointment_start] = $inspector; //by using the starttime as the key, we automatically end up with unique openings
+							session(['business_wide_start.'.$proposed_appointment_start => $inspector]); //by using the starttime as the key, we automatically end up with unique openings
+							//$_SESSION['business_wide_start'][$proposed_appointment_start] = $inspector; 
 						}
 						if ($show_endtimes == "1"){
 							$book = (date("g:ia - ", $proposed_appointment_start).date("g:ia, ", ($proposed_appointment_endtime+3)).date("l, F j", $proposed_appointment_start));
 						} else {
 							$book = date("g:i a, l, F j", $proposed_appointment_start);
 						}
-						if ($check==TRUE) {
+						if ($check == TRUE) {
 							//$html.= "\n\t\t\t<option value=\"$proposed_appointment_start\">".$book.$show_endtime."</option>";
 							$html.= "\n\t\t\t<option value=\"$proposed_appointment_start\">".$book."</option>";
 							$time_forward = (($proposed_size_duration)/$increment);
@@ -934,15 +940,17 @@ if(! function_exists('find_prev')){
 }
 
 if(! function_exists('bookings_check')){
-	function bookings_check ($starttime, $endtime, $multi) { 
+	function bookings_check ($starttime, $endtime, $multi) {
 		if (count($multi)==0) {
 			/*if ($_SESSION[business] == 8){
 			echo "<!-- returned true because of no bookings in the $multi array-->";
 			}*/
 			return true;
 		}
+				
+
 		foreach ($multi as $array) {
-			if(is_array($array)) {
+			//if(is_array($array)) {
 				/*if ($_SESSION[business] == 8){
 					echo "<!--\n";
 					echo "Proposed start ".date("g:i a, l, F j, Y", $starttime)." with id $array[id] start ".date("g:i a, l, F j, Y", $array[starttime])."\n";
@@ -953,36 +961,39 @@ if(! function_exists('bookings_check')){
 					echo "-->\n\n";
 				}*/
 				//echo "<br>Time:".date("g:i a, l, F j, Y", $array[starttime]).":$array[starttime]:$starttime";
-				if (($array['starttime'] <= $endtime and $array['endtime'] >= ($starttime+1)) or ($array['starttime']>=$starttime and $array['endtime']<=$endtime)) {
+				if (($array->starttime <= $endtime and $array->endtime >= ($starttime+1)) or ($array->starttime>=$starttime and $array->endtime<=$endtime)) {
 					//print "<!-- conflict on $array[id] Proposed start ".date("g:i a, l, F j, Y", $starttime)."\n-->";
 					return false;
 				}
-			}
+			//}
 		}
 		return true;
 	}
 }
 
 if(! function_exists('verify_time')){
-	function verify_time ($starttime, $endtime, $inspector) {		
+	function verify_time ($starttime, $endtime, $inspector) {
 		//mail("peter@advanced-design.com", "Scheduleze Verify Time inputs", "Starttime = $starttime\nEndtime = $endtime\nInspector = $inspector", "From: info@scheduleze.com\n");
-		$row = DB::table('bookings')->where([['starttime', '<=', $endtime],['endtime', '>=', $starttime+1],[]])->orWhere([['starttime', '>=', $starttime],['endtime', '<=', $endtime]])->where([['inspector', '=', $inspector],['removed', '=', 0]])->orderBy('starttime', 'asc')->limit(1)->first();
+		$row = DB::table('bookings')->where([['starttime', '<=', $endtime],['endtime', '>=', $starttime+1]])->orWhere([['starttime', '>=', $starttime],['endtime', '<=', $endtime]])->where([['user_id', '=', $inspector],['removed', '=', 0]])->orderBy('starttime', 'asc')->first();
 
-		$num = $row->count();
+		if(empty($row) && $row == null){
+			$num = '';
+		}else{
+			$num = 1;
+		}
 
 		//$row = "select * from bookings where ((starttime <= $endtime and endtime >= ($starttime+1)) or (starttime>=$starttime and endtime<=$endtime)) and inspector=$inspector and removed='0' order by starttime asc limit 1";
 		//$row = $this->pull_assoc($sql);
 		//$num = $this->num_rows(); //echo "**$num<br>";
 		
-		$allow_conflict = get_field("inspectors", "allow_conflict", $inspector);
+		$allow_conflict = get_field("users_details", "allow_conflict", $inspector);
 		if ($allow_conflict == "1"){
-			$num ="";  //destroy any sql discovered conflicts
-		}
-		
+			$num = "";  //destroy any sql discovered conflicts
+		}		
 		//if we didn't get valid values, then fail to verify
-		if ($inspector < 10){
+		/*if ($inspector < 10){
 			$num = 1;
-		}
+		}*/
 		
 		if ($endtime < 100){
 			$num = 1;
@@ -991,8 +1002,13 @@ if(! function_exists('verify_time')){
 		if ($starttime < 100){
 			$num = 1;
 		}
+
+		$rowendtime = !empty($row->endtime) ? $row->endtime : '';
+		$rowstarttime = !empty($row->starttime) ? $row->starttime : '';
 		
-		if (($num=="") || ($row->endtime < $row->starttime)) { // if the endtime is less than the starttime then we have a reverse booking that is likely an accidental edit action on the part of the user, so proceed anyway.
+		
+		if (($num == "") || ($rowendtime < $rowstarttime)) // if the endtime is less than the starttime then we have a reverse booking that is likely an accidental edit action on the part of the user, so proceed anyway.
+		{
 			return TRUE;
 		} else {
 			return FALSE; 
@@ -1305,7 +1321,7 @@ if(! function_exists('display_for_edit')){
 
 			$whereArr = [['endtime', '>', $first], ['starttime', '<', $last], ['user_id', '=', $id], ['type', '=', 0], ['removed', '=', 0]];
 
-		} 
+		}
 		elseif($inc == "" && !empty($first))
 		{
 
@@ -1906,6 +1922,30 @@ if(! function_exists('get_addon_information')){
 		$addons = DB::table('addons_bookings')->where('booking', $booking)->get();
 		$ads = format_addons($addons);
 		return $ads;
+	}
+}
+
+if(! function_exists('get_business_information')){
+	function get_business_information($business){
+		/*$sql = "select * from business where id = '$business' and removed = '0'";*/
+		$row = DB::table('business')->where([['id', '=', $business],['removed', '=', 0]])->first();
+		/*$row = $this->pull_assoc($sql);*/
+		$html = "<span class=\"head\">".$row->name."</span>";
+		$html .= "<div class=\"small_indent\"><span class=\"address\">";
+		foreach ($row as $key => $rw){
+			session(['business_information.'.$key => $rw]);
+		}
+		if (strlen($row->public_address)>3){
+			$html .= $row->public_address."<br>";
+		}
+		if (strlen($row->public_phone) > 3){
+			$html .= $row->public_phone;
+			session(['business_information.phone' => $row->public_phone]);
+		}
+		$html .= "</span></div>";
+		session(['business_card' => $html]);
+		session(['agent_label' => get_field("business_types", "agent_name", session('business_information.type'))]);
+		return $html;
 	}
 }
 
