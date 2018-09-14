@@ -68,6 +68,7 @@ Route::group(['middleware' => ['web']], function () {
 		Route::get('/appointment/receipt/{id?}','AppointmentController@reciept');
 
 		Route::get('/scheduleze/BusinessHours', 'SchedulezeController@BusinessHours');
+		Route::post('/scheduleze/BusinessHours', 'SchedulezeController@BusinessHours');
 		Route::get('/scheduleze/appointments','AppointmentController@index');
 		Route::get('/scheduleze/Reoccurrence','SchedulezeController@blockouts_occurance')->name('Reoccurrence');
 		Route::post('/scheduleze/Reoccurrence','SchedulezeController@blockouts_occurance');
@@ -80,6 +81,7 @@ Route::group(['middleware' => ['web']], function () {
 		Route::post('/scheduleze/booking/{form?}','SchedulezeController@BookingFilter');
 		Route::get('/scheduleze/blockout/{form?}/{id?}','SchedulezeController@Blockout');
 		Route::post('/scheduleze/blockout/{form?}','SchedulezeController@storeBlockout');
+		Route::get('/services/content', 'SchedulezeController@changeContent');
 
 		Route::get('/scheduleze/zigzag','SchedulezeController@ZigZag')->name('ZigZag');
 		Route::post('/scheduleze/zigzag','SchedulezeController@storeZigZag');

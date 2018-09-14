@@ -56,7 +56,7 @@ class InspectorController extends Controller
 
         return view('inspectors.inspectors', compact('userdetails'));
     }
-   
+    
     /**
      * Show the application add Inspector.
      *
@@ -71,7 +71,7 @@ class InspectorController extends Controller
     {        
         $businessid = $this->businessid;
         $data = Input::get();
-        $indus_id = session('indus_id');
+        $indus_id = session('indus_id'); // get indus_id
         $validatedData = Validator::make($request->all(), [
             'username' => 'required|string|unique:inspectors,username',
             'email' => 'required|string|unique:inspectors,email',
@@ -91,7 +91,7 @@ class InspectorController extends Controller
             'password' => bcrypt($data['password']),
             'verified' => $verified
         ]);
- 
+        
         $verifyUser = VerifyUser::create([
             'user_id' => $user->id,
             'token' => str_random(40)
@@ -110,8 +110,8 @@ class InspectorController extends Controller
             'throttle' => $data['throttle'],
             'permission' => $data['permission']
         ]);
-        
-        Mail::to($user->email)->send(new VerifyMail($user));
+
+        //Mail::to($user->email)->send(new VerifyMail($user));
 
         return redirect('/scheduleze/inspectors');
     }

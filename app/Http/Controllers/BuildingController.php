@@ -30,7 +30,7 @@ class BuildingController extends Controller
     public function __construct()
     { 
         // Set the businessid
-        $this->businessid = session('business_id');
+        $this->businessid = !empty(session('business_id')) ? session('business_id') : '';
     }
 
     /**
@@ -42,17 +42,18 @@ class BuildingController extends Controller
     {
         $businessid = $this->businessid;
         $Model = 'App\\'.$name;
-        $Building = Business::find($businessid)->$name;
+
+        $Building = !empty(Business::find($businessid)->$name) ? Business::find($businessid)->$name : '';
         //$Buildingdesc = $Model::where([['business', $businessid],['removed',0]])->pluck('name', 'id');
 
         $Modelproduct = new $Model;
         $ColumnName = $Modelproduct->getTableColumns();        
 
         $users_details = DB::table('users')
-            ->join('users_details', 'users.id', '=', 'users_details.user_id')
-            ->select('users.id', 'users.name', 'users_details.administrator')
-            ->where('users_details.business', '=', $businessid)
-            ->get();
+        ->join('users_details', 'users.id', '=', 'users_details.user_id')
+        ->select('users.id', 'users.name', 'users_details.administrator')
+        ->where('users_details.business', '=', $businessid)
+        ->get();
 
         //$Building = $Model::where([['business', $businessid]])->first();
         $BladeName = strtolower($name);
@@ -163,8 +164,8 @@ class BuildingController extends Controller
                     ]
                 );
             }
-        
-       
+            
+            
             if(isset($data['selectedusers'][$key]) && !empty($data['selectedusers'][$key])){
                 foreach ($col as $k => $value) { //
                     if(in_array($col[$k], $data['selectedusers'][$key])){

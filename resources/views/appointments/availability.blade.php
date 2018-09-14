@@ -69,9 +69,15 @@
 						@foreach($authorized_inspectors as $qualified_inspector)
 						{!! Form::open([ 'route' => ['BookingForm'],'method' => 'post'] ) !!}
 							<input type="hidden" name="inspector" value="{{ $qualified_inspector->user_id }}"><br>
-							<span class="subhead">Openings for {{ $qualified_inspector->name }}</span><br>
+                            @php 
+                                $qualified_inspector_name = $qualified_inspector->name;
+                            @endphp
+                            @if(empty($qualified_inspector->name))
+                                @php $qualified_inspector_name = username($qualified_inspector->user_id); @endphp
+                            @endif
+							<span class="subhead">Openings for {{ $qualified_inspector_name }}</span><br>
 							@php print_r(get_available_times_popup2($location, $total_time, $qualified_inspector->user_id, $qualified_inspector->look_ahead, $increment, 0, $qualified_inspector->throttle)); @endphp
-							<input type="submit" value="Reserve {{ $qualified_inspector->name }}"><br>
+							<input type="submit" value="Reserve {{ $qualified_inspector_name }}"><br>
 						{!! Form::close() !!}
 						@endforeach
 					</td>

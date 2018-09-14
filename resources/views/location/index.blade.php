@@ -23,21 +23,23 @@
 						</tr>
 						<tbody class="txtlocationId"> 
 							@php $i=0; @endphp
-							@forelse($locations as $location)
-								<tr class="trtable_{{ $i }}">
-									<input type="hidden" class="form-control" name="id[{{ $i }}]" value="{{ $location->id }}">
-									<td>
-										<input type="text" class="form-control" name="name[{{ $i }}]" value="{{ $location->name }}" size="5" required>
-									</td>
-									<td align="center">
-										<input type="text" class="form-control" name="price[{{ $i }}]" value="{{ $location->price }}" size="3" required>
-                                    </td>
-									<td>
-										<a href='#' class='note_link' id="{{ $i }}" data-model="Location" data-id="{{ $location->id }}">Remove</a>
-									</td>
-								</tr>
-								@php $i++; @endphp
-							@empty
+							@unless(empty($location))
+								@foreach($locations as $location)
+									<tr class="trtable_{{ $i }}">
+										<input type="hidden" class="form-control" name="id[{{ $i }}]" value="{{ $location->id }}">
+										<td>
+											<input type="text" class="form-control" name="name[{{ $i }}]" value="{{ $location->name }}" size="5" required>
+										</td>
+										<td align="center">
+											<input type="text" class="form-control" name="price[{{ $i }}]" value="{{ $location->price }}" size="3" required>
+	                                    </td>
+										<td>
+											<a href='#' class='note_link' id="{{ $i }}" data-model="Location" data-id="{{ $location->id }}">Remove</a>
+										</td>
+									</tr>
+									@php $i++; @endphp
+								@endforeach
+							@else
 							    <tr class="trtable_0">
 							    	<input type="hidden" class="form-control" name="id[0]" value="0">
 									<td>
@@ -50,7 +52,7 @@
 										<a href='#' class='note_link' id="0" data-id="0">Remove</a>
 									</td>
 								</tr>
-							@endforelse
+							@endunless
 						</tbody>
 						<span id="showtxt"></span>
 						<tr>

@@ -66,8 +66,13 @@ class ProfileController extends Controller
 
     public function SaveEmailAttachment(Request $request)
     {
+        Validator::make($request->file(), [
+            'file' => 'required|max:10000|mimes:doc,docx,pdf',
+        ])->validate();
+
         $data = Input::get();
         $files = $request->file();
+
         foreach($files as $key){
             $name = $key->getClientOriginalName();
             //$keyextension = $key->getClientOriginalExtension();
@@ -124,11 +129,13 @@ class ProfileController extends Controller
     }
     public function updateUserBusinessAccount(Request $request)
     {
-        $userid            =   Auth::id();
+        $userid =   Auth::id();
         $business_profile_validator = $this->business_profile_validator($request->all());
+
         if ($business_profile_validator->fails()) {
             return back()->withErrors($business_profile_validator)->withInput();
         }
+
         $UserBusinessDetails = Business::firstOrNew(array('user_id' => $userid));
         $UserBusinessDetails->user_id           = $userid;
         $UserBusinessDetails->name              = $request->input('business_name');
@@ -162,6 +169,9 @@ class ProfileController extends Controller
         $UserDetails = UserDetails::firstOrNew(array('user_id' => $userid));
         $UserDetails->business = $UserBusinessDetails->id;
         $UserDetails->save();
+
+        session(['business_id' => $UserBusinessDetails->id]);
+        get_business_information($UserBusinessDetails->id);
         
         return redirect('/business_info')->with('message', trans('profile.updateSuccess'));
     }

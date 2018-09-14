@@ -85,7 +85,13 @@ if (! function_exists('show_day_forward')) {
 
 if(! function_exists('getallIndustries')){
 	function getallIndustries(){
-		return DB::table('industries')->pluck('page_name', 'id');
+		return DB::table('business_types')->pluck('agent_name', 'id');
+	}
+}
+
+if(! function_exists('getBusinessIndustry')){
+	function getBusinessIndustry($id = ''){
+		return DB::table('business_types')->where('id', $id)->first();
 	}
 }
 
@@ -629,7 +635,7 @@ if(!function_exists('get_available_times_popup2')){
 		//$bushrs = $this->pull_multi("select * from bushours where user_id = '$user_id' and removed = '0'");
 		$bushrs = DB::table('bushour')->where([['user_id', '=', $user_id],['removed', '=', '0']])->get();
 		if (count ($bushrs) < 2){
-			$bushrs = DB::table('bushour')->where([['business', '=', $business],['removed', '=', '0']])->orderBy('user_id', 'ASC')->limit(7)->get();
+			//$bushrs = DB::table('bushour')->where([['business', '=', $business],['removed', '=', '0']])->orderBy('user_id', 'ASC')->limit(7)->get();
 			//$bushrs = $this->pull_multi("select * from bushours where business = '$_SESSION[business]' and removed = '0' order by inspector ASC limit 7"); //get the 7 records in bushours that have the lowest inspector id, this should be the first, admin user
 		}
 		//$blockouts = $this->pull_multi("select id from bookings where inspector = '$inspector' and removed = '0' and type = '1' and (endtime >= $proposed_starttime and starttime <= $ahead+$proposed_starttime) order by starttime asc");
@@ -1136,40 +1142,47 @@ if(! function_exists('get_time_popup')){
 			// apply GLOBAL timezone on the output side, not the input side
 		}
 		$popups = '';
+		$hr = '';
 		if ($hour==1) {
 			if ($time!=0) {
-				$hr = date("g",$time);
+				$hr = date("g", $time);
 			}
 			$popups = hour_popup($hr, $designate, $session);
 		}
+		$min = '';
 		if ($minute==1) {
 			if ($time!=0) {
-				$min = date("i",$time);
+				$min = date("i", $time);
 			}
 			$popups .= minute_popup($min, $designate, $session);
 		}
+		$ampm = '';
 		if ($am==1) {
 			if ($time!=0) {
-				$ampm = date("A",$time);
+				$ampm = date("A", $time);
 			}
 			$popups .= am_popup($ampm, $designate, $session);
 		}
+		$month_num = '';
+		$month_name = '';
 		if ($month==1) {
 			if ($time!=0) {	
-				$month_num=date("m",$time);
-				$month_name=date("M",$time);
+				$month_num=date("m", $time);
+				$month_name=date("M", $time);
 			}
 			$popups .= month_popup($month_num, $month_name, $designate, $session);
-		}	
+		}
+		$day_num = '';
 		if ($day==1) {
 			if ($time!=0) {
-				$day_num = date("j",$time);
+				$day_num = date("j", $time);
 			}
 			$popups .= day_num_popup($day_num, $designate, $session);
 		}
+		$year_num = '';
 		if ($year==1) {
 			if ($time!=0) {
-				$year_num = date("y",$time);
+				$year_num = date("y", $time);
 			}
 			$popups .= year_popup($year_num, $designate, $session);
 		}
@@ -1277,11 +1290,15 @@ if(! function_exists('array_flatten')){
 
 if(! function_exists('get_timezone')){
 	function get_timezone($business = '0'){
-		if ($business == 0){
+		$business = $business == 0 ? session('business_id') : '';
+		/*if ($business == 0){
 			$business = session('business_id');
+		}*/
+		if(!empty($business)){
+			$timezone = get_field("business", "timezone", $business);
 		}
-		$timezone = get_field("business", "timezone", $business);
-		return $timezone;
+
+		return !empty($timezone) ? $timezone : '';
 	}
 }
 

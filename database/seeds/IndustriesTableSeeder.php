@@ -12,9 +12,9 @@ class IndustriesTableSeeder extends Seeder
      */
     public function run()
     {
-    	$inspectors_page_name = array('0' => 'agents','1' => 'appliance', '2' => 'auto_service', '3' => 'aviators', '4' => 'handyman', '5' => 'inspectors', '6' => 'lenders', '7' => 'payment', '8' => 'photo', '9' => 'rentals', '10' => 'salon', '11' => 'tire');
+    	$inspectors_page_name = array('0' => 'Home Inspection', '1' => 'Mortgage Lender', '2' => 'Real Estate Agent', '3' => 'House Doctor', '4' => 'Appliance Repair', '5' => 'Auto Service', '6' => 'Hair Salon', '7' => 'Photographer', '8' => 'Tire Service', '9' => 'Property Management', '10' => 'Aviation');
 
-    	$inspectors_name = array('0' => 'Agents','1' => 'Appliance', '2' => 'Auto Service', '3' => 'Aviators', '4' => 'Handyman', '5' => 'Inspectors', '6' => 'Lenders', '7' => 'Payment', '8' => 'Photo', '9' => 'Rentals', '10' => 'Salon', '11' => 'Tire');
+    	$inspectors_name = array('0' => 'Inspector', '1' => 'Lender', '2' => 'Realtor', '3' => 'Handyman', '4' => 'Technician', '5' => 'Service Bay', '6' => 'Stylist', '7' => 'Photographer', '8' => 'Bay', '9' => 'Unit', '10' => 'Pilot');
 
     	for ($i=0; $i < count($inspectors_page_name); $i++) { 
     		DB::table('industries')->insert(['name' => $inspectors_page_name[$i], 'page_name' => $inspectors_name[$i]]);

@@ -4,6 +4,7 @@
 <div class="set_recc_block">
 <div class="container">
     <form class="recurring-form" action="{{ url('/scheduleze/Reoccurrence') }}" method="post">
+        @csrf
                         <div class="set_recc_cont">
                             <input type="hidden" name="action" value="reoccurrence">
                             <h2>Set Recurring Blockouts</h2>

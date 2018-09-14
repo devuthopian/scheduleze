@@ -4,6 +4,15 @@
 <div class="container">
 	<div class="framecell">
 		<div class="frameadmin adding_blockout_cont">
+			@if ($errors->any())
+			    <div class="alert alert-danger">
+			        <ul>
+			            @foreach ($errors->all() as $error)
+			                <li>{{ $error }}</li>
+			            @endforeach
+			        </ul>
+			    </div>
+			@endif
 			<div class="clearfix"></div>
         	<div class="head_admin">
 	            <span class="head">
@@ -16,7 +25,7 @@
 	                <input type="hidden" name="booking" value="{{ session('business_id') }}">
 	              	<span class="formlabel">Select Document to Attach</span>
 	              	<div class="note">Name the file something short and clear, like &quot;ABC-Contract.pdf&quot;</div>
-					<input type="file" name="userfile" size="24">
+					<input type="file" name="file" size="24" required>
 					<div class="note">PDF, Word, Powerpoint, JPEG image only, 2.0 megs max</div>
 	                <span class="warning_green">Existing email attachment set to: {{ $name }}</span>
 					<input type="hidden" name="trigger" value="1">

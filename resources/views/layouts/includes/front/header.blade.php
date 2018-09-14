@@ -31,6 +31,7 @@
                     $tomorrow = time() + 86400;
                     $tomorrow = get_todays_starttime($tomorrow);
                     $first = get_todays_starttime($now);
+                    $getbusindus = getBusinessIndustry(session('indus_id'));
                 @endphp
                 <nav>
                     <a href="#" class="n_toggle"><i class="fa fa-bars fa-2x"></i></a>
@@ -88,16 +89,16 @@
                             <a href="{{ url('/form/BuildingTypes') }}">{{ __('nav.services') }}</a>
                             <ul >
                                 <li>
-                                    <a href="{{ url('/form/BuildingTypes') }}">{{ __('nav.buildtype') }}</a>
+                                    <a href="{{ url('/form/BuildingTypes') }}">{{ $getbusindus->type_label }}</a>
                                 </li>
                                 <li>
-                                    <a href="{{ url('/form/BuildingSizes') }}">{{ __('nav.buildsizes') }}</a>
+                                    <a href="{{ url('/form/BuildingSizes') }}">{{ $getbusindus->size_label }}</a>
                                 </li>
                                 <li>
-                                    <a href="{{ url('/form/BuildingAges') }}">{{ __('nav.buildages') }}</a>
+                                    <a href="{{ url('/form/BuildingAges') }}">{{ $getbusindus->age_label }}</a>
                                 </li>
                                 <li>
-                                    <a href="{{ url('/form/Addons') }}">{{ __('nav.Addons') }}</a>
+                                    <a href="{{ url('/form/Addons') }}">{{ $getbusindus->addon_label }}</a>
                                 </li>
                             </ul>
                         </li>
@@ -135,9 +136,11 @@
                                 <li>
                                     <a href="{{ url('business_info') }}">Business Profile</a>
                                 </li>
-                                <!-- <li>
-                                    <a href="#">Headers/Footers</a>
-                                </li> -->
+                                @if(session('administrator') == 1)
+                                    <li>
+                                        <a href="{{ url('services/content') }}">Services Content</a>
+                                    </li>
+                                @endif
                                 <li>
                                     <a href="{{ url('/profile/Email/Attachment') }}">Email Attachment</a>
                                 </li>
@@ -180,10 +183,21 @@
     </div>
 </div>
 
-<div class="col-sm-10">
-    @if(session()->has('message'))
-        <div class="alert alert-success">
-            {{ session()->get('message') }}
-        </div>
-    @endif
-</div>
+
+    <div class="col-sm-10">
+        @if(session()->has('message'))
+            <div class="alert alert-success">
+                {{ session()->get('message') }}
+            </div>
+        @endif
+    </div>
+    @guest
+    @else
+        <?php if(empty(session('business_id'))){ ?>
+            <div class="col-sm-10">            
+                <div class="alert alert-warning">
+                    You need to fill business info before proceeding to something else. It will help us to cooperate with you! <span class="breadcrumb"> Profile > Business Profile </span>
+                </div>
+            </div>
+        <?php } ?>
+    @endguest

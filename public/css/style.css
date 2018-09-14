@@ -1786,3 +1786,6 @@ table.content-table input[type="checkbox"]:checked + label:after {
 .warning_green {
     color: #006636;
 }
+.breadcrumb {
+    color: grey !important;
+}

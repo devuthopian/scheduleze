@@ -78,7 +78,7 @@ class LoginController extends Controller
         return 'name';
     }
 
-     public function authenticated(Request $request, $user)
+    public function authenticated(Request $request, $user)
     {
         if (!$user->verified) {
             auth()->logout();
@@ -91,19 +91,22 @@ class LoginController extends Controller
         }else{
             $panelurl = $PanelTemplate->unqiue_url;
         }
-        $permission = get_field("users_details", "permission", $user->id);
+        $permission = get_field("users_details", "permission", $user->id); //get permission details
+        $administrator = get_field("users_details", "administrator", $user->id); //get administrator details
         $indus_id = get_field("users_details", "indus_id", $user->id);
-        session(['id' => $user->id, 'username' => $user->name, 'hashvalue' => $panelurl, 'permission' => $permission, 'indus_id' => $indus_id]);
+        session(['id' => $user->id, 'username' => $user->name, 'hashvalue' => $panelurl, 'permission' => $permission, 'indus_id' => $indus_id, 'administrator' => $administrator]);
         $business = Business::where('user_id', $user->id)->first();
 
         if($business){
             session(['business_id' => $business->id]);
+            get_business_information($business->id);
+        }else{
+            return redirect('business_info')->with('warning', 'You need to fill business info before proceeding to anything else. It will help us to cooperate with you!');
         }
         //if(!empty($PanelTemplate->unqiue_url)){
             //return redirect('/template/'.$PanelTemplate->unqiue_url);
         //}
-
-        get_business_information($business->id);
+        
 
         return redirect()->intended($this->redirectPath());
         
@@ -137,7 +140,7 @@ class LoginController extends Controller
         //$user->token;
 
         $user = User::where([['email', '=', $userSocial->getEmail()],['verified', '=', 1]])->first();
- 
+        
         if($user){
 
             Auth::login($user);
@@ -174,7 +177,7 @@ class LoginController extends Controller
             //if(!empty($hashvalue)){
                 //$return = '/template'.$hashvalue;
             //}else{
-                $return = $this->redirectPath();
+            $return = $this->redirectPath();
             //}
             return redirect($return)->with('status', 'You Temporary Password is '.$randpass.'. Please change it in profile section!');
 

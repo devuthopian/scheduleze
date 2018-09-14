@@ -9,8 +9,8 @@
 		$submit_label = "Add Blockout";
 		$checked = "checked";
 		$message = "Check &quot;same day&quot; to disregard second month/day/year menus";
-		$default_time = ((time()) + get_timezone(session('business_id')));
-		$default_endtime = ($default_time + 3600);
+		$default_time = !empty(session('business_id')) ? ((time()) + get_timezone(session('business_id'))) : 0;
+		$default_endtime = !empty($default_time) ? ($default_time + 3600) : 0;
 		$id = session('id');
 		session(['affected_inspector' => $id]);
 

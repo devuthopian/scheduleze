@@ -3,7 +3,8 @@
 @section('content')
 <div class="set_recc_block">
 <div class="container">
-            <form action="#" method="post">
+            <form action="{{ url('/scheduleze/BusinessHours') }}" method="post">
+            	@csrf
             	<div class="set_recc_cont">
 	                <h2>Business hours for {{ Auth::user()->name }}</h2>
 	                <h4>Please specify any business hours for</h4>
@@ -22,7 +23,7 @@
 	            <form action="{{ route('StoreBusinessHours') }}" method="post">
 	            	@csrf
 	                Please select your normal working hours for each day
-	                <h5>Specify reoccurring blockouts, like the second Tuesday of each month on your <a href="#" class="note_link">Reoccurring Blockouts</a> page.</h5>
+	                <h5>Specify reoccurring blockouts, like the second Tuesday of each month on your <a href="{{ route('Reoccurrence') }}" class="note_link">Reoccurring Blockouts</a> page.</h5>
 		                <input type="hidden" name="trigger" value="1">
 		                <input type="hidden" name="action" value="business_hours">
 	                <br>

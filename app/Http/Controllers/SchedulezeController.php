@@ -18,7 +18,22 @@ use DB;
 use Validator;
 
 class SchedulezeController extends Controller
-{
+{    
+    /**
+    * @var User ID
+    */
+    protected $user_id = '';
+    protected $business_id = '';
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        // Set the user_id
+        $this->user_id = session('id');
+        $this->business_id = !empty(session('business_id')) ? session('business_id') : '';
+    }
 	 /**
      * Show the application homepage.
      *
@@ -30,6 +45,11 @@ class SchedulezeController extends Controller
         return view('scheduleze.welcome');
     }
 
+    public function changeContent()
+    {
+        return view('profiles.ServiceContent');
+    }
+
     public function confirm_status()
     {
         return view('auth.email_confirm');
@@ -37,9 +57,8 @@ class SchedulezeController extends Controller
 
     public function EmailAttachment()
     {
-        $business_id = session('business_id');
-        $business = Business::where('id', $business_id)->first();
-        $name = $business->email_attachment;
+        $business = Business::where('id', $this->business_id)->first();
+        $name = !empty($business->email_attachment) ? $business->email_attachment : '';
         return view('profiles.EmailAttachment', compact('name'));
     }
 
@@ -61,7 +80,7 @@ class SchedulezeController extends Controller
 
     public function ZigZag()
     {
-        $id = session('id');
+        $id = $this->user_id;
         $businesshours = BusinessHours::where([['user_id','=',$id],['removed','=',0]])->get();
 
         //zigzag stuff
@@ -81,7 +100,7 @@ class SchedulezeController extends Controller
     public function storeZigZag(Request $request)
     {
         $data = Input::get();
-        $id = session('id');
+        $id = $this->user_id;
 
         if ($data['trigger'] == 1) {
             if ($data['zigzag'] == 1) {
@@ -133,7 +152,13 @@ class SchedulezeController extends Controller
 
     public function BusinessHours()
     {
-        $id = session('id');
+        $data = Input::get();
+        if(!empty($data['users_details']) && isset($data['users_details'])){
+            $id = $data['users_details'];
+        }else{
+            $id = $this->user_id;
+        }
+        
         $businesshours = BusinessHours::where([['user_id','=',$id],['removed','=',0]])->get();
         return view('appointments.business_hours', compact('id', 'businesshours'));
     }
@@ -143,7 +168,7 @@ class SchedulezeController extends Controller
         $data = Input::get();
 
         if(empty($data['users_details'])){
-            $id = session('id');
+            $id = $this->user_id;
         }else{
             $id = $data['users_details'];
         }
@@ -243,7 +268,7 @@ class SchedulezeController extends Controller
     public function Bookings($form, $userid = null)
     {
         if(empty($userid)){
-            $id = session('id');
+            $id = $this->user_id;
         }else{
             $id = $userid;
         }
@@ -257,7 +282,7 @@ class SchedulezeController extends Controller
 
     public function Documents()
     {
-        $id = session('id');
+        $id = $this->user_id;
 
         $last = time();
         $first = $last - 1209500;
@@ -524,12 +549,12 @@ class SchedulezeController extends Controller
 
     public function EditBooking(Request $request, $id)
     {
-        $userid = session('id');
+        $userid = $this->user_id;
         $booking = Booking::where('id', $id)->first();
 
         $location_popup = get_location_popup($booking->location);
 
-        $business = session('business_id'); //get business id from session
+        $business = $this->business_id; //get business id from session
         $type_pop = get_pricing_popup($business, "building_types", "building_type", "smallselect", $booking->building_type);
         $size_pop = get_pricing_popup($business, "building_sizes", "building_size",  "smallselect", $booking->building_size);
         $age_pop = get_pricing_popup($business, "building_ages", "building_age", "smallselect", $booking->building_age);
@@ -578,7 +603,7 @@ class SchedulezeController extends Controller
     }
     public function Blockout($form, $blockId = null)
     {
-        $id = session('id');
+        $id = $this->user_id;
         $first = time();
         $last = $first + 1209500;
 
@@ -600,9 +625,9 @@ class SchedulezeController extends Controller
 
     public function drivetime()
     {
-        $business_id = session('business_id');
+        $business_id = $this->business_id;
         $LocationTime = LocationTime::where([['business','=',$business_id],['removed','=',0]])->get()->toArray();
-        $Location = Location::where([['business','=',$business_id],['removed','=',0]])->get()->toArray();
+        $Location = Location::where([['business','=', $business_id],['removed','=',0]])->get()->toArray();
         $locs2 = $Location;
         return view('appointments.drivetimes',['LocationTime' => $LocationTime, 'locs2' => $locs2, 'Location' => $Location]);
     }
@@ -620,7 +645,7 @@ class SchedulezeController extends Controller
         if(isset($data['users_details'])){
             $id = $data['users_details'];
         }else{
-            $id = session('id');
+            $id = $this->user_id;
         }
 
         $Daysoff = Daysoff::where([['user_id', '=', $id],['removed', '=', 0]])->get();
@@ -647,8 +672,8 @@ class SchedulezeController extends Controller
 
     public function scheduling_panel()
     {
-        $id = session('id');
-        $businessinfo = PanelTemplate::where('user_id',$id)->first();
+        $id = $this->user_id;
+        $businessinfo = PanelTemplate::where('user_id', $id)->first();
         if(isset($businessinfo->gjs_html) && !empty($businessinfo->gjs_html)){
             $html = $businessinfo->gjs_html;
         }else{

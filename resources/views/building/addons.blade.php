@@ -43,61 +43,63 @@
 						<tbody class="txtBuildId">
 							<input type="hidden" id="txtypol" value="{{ $users_details }}">
 							@php $i=0; @endphp
-							@forelse($Building as $BuildType)
-								<tr class="trtable_{{ $i }}">
-									<td>
-										<input class="form-control" type="text" name="desc[{{ $i }}]" size="32" value="{{ $BuildType->name }}" required>
-										<input class="form-control" type="hidden" id="buildId" name="id[{{ $i }}]" value="{{ $BuildType->id }}">
-									</td>
-									<td>				
-										{!! show_buffer($BuildType->id, $BuildType->buffer) !!}
-									</td>
-									<td>
-										<input type="text" class="form-control" name="price[{{ $i }}]" value="{{ $BuildType->price }}" size="5" required>
-									</td>
-									<td align="center">
-										<input type="text" class="form-control" name="rank[{{ $i }}]" value="{{ $BuildType->rank }}" size="3" required>
-									</td>
-									<td>
-										<select name="forcecall[{{ $i }}]" size="1" class="form-control">
-											<option value="0" @if($BuildType->status == 0) selected="" @endif>Book on-line</option>
-											<option value="1" @if($BuildType->status == 1) selected="" @endif>Require phone call</option>
-										</select>
-									</td>
-									<td>
-										{!! get_subs_users($i) !!}
-									</td>
-									<td>
-										<a href='#' class='note_link' id="{{ $BuildType->id }}" data-model="{{$name}}" data-id="{{ $BuildType->id }}">Remove</a>
-									</td>
-								</tr>
-								<script type="text/javascript">
-								    jQuery(document).ready(function($) {
-								        $('.my_select_{{ $i }}').formSelect();
-								        $('.my_select_{{ $i }} option:not(:disabled)').not(':selected').prop('selected', true);
+							@unless(empty($Building))
+								@foreach($Building as $BuildType)
+									<tr class="trtable_{{ $i }}">
+										<td>
+											<input class="form-control" type="text" name="desc[{{ $i }}]" size="32" value="{{ $BuildType->name }}" required>
+											<input class="form-control" type="hidden" id="buildId" name="id[{{ $i }}]" value="{{ $BuildType->id }}">
+										</td>
+										<td>				
+											{!! show_buffer($BuildType->id, $BuildType->buffer) !!}
+										</td>
+										<td>
+											<input type="text" class="form-control" name="price[{{ $i }}]" value="{{ $BuildType->price }}" size="5" required>
+										</td>
+										<td align="center">
+											<input type="text" class="form-control" name="rank[{{ $i }}]" value="{{ $BuildType->rank }}" size="3" required>
+										</td>
+										<td>
+											<select name="forcecall[{{ $i }}]" size="1" class="form-control">
+												<option value="0" @if($BuildType->status == 0) selected="" @endif>Book on-line</option>
+												<option value="1" @if($BuildType->status == 1) selected="" @endif>Require phone call</option>
+											</select>
+										</td>
+										<td>
+											{!! get_subs_users($i) !!}
+										</td>
+										<td>
+											<a href='#' class='note_link' id="{{ $BuildType->id }}" data-model="{{$name}}" data-id="{{ $BuildType->id }}">Remove</a>
+										</td>
+									</tr>
+									<script type="text/javascript">
+									    jQuery(document).ready(function($) {
+									        $('.my_select_{{ $i }}').formSelect();
+									        $('.my_select_{{ $i }} option:not(:disabled)').not(':selected').prop('selected', true);
 
-									    $('.dropdown-content.multiple-select-dropdown input[type="checkbox"]:not(:checked)').not(':disabled').prop('checked', 'checked');
+										    $('.dropdown-content.multiple-select-dropdown input[type="checkbox"]:not(:checked)').not(':disabled').prop('checked', 'checked');
 
-									    var values = $('.dropdown-content.multiple-select-dropdown input[type="checkbox"]:checked').not(':disabled').parent().map(function() {
-									    	if($(this).attr('data-in') == 1){
-									    		return $(this).html('<b>'+$(this).text()+'</b>');
-									    	}else{
-									        	return $(this).text();
-									    	}
-									    }).get();
+										    var values = $('.dropdown-content.multiple-select-dropdown input[type="checkbox"]:checked').not(':disabled').parent().map(function() {
+										    	if($(this).attr('data-in') == 1){
+										    		return $(this).html('<b>'+$(this).text()+'</b>');
+										    	}else{
+										        	return $(this).text();
+										    	}
+										    }).get();
 
-									    $('input.select-dropdown').val(values.join(', '));
-									    
-									    $(".my_select_{{ $i }} option").each(function()
-										{
-										    if($(this).attr('data-in') == 1){
-										    	$(this).html('<b>'+$(this).text()+'</b>');
-										    }
-										});
-								    });
-								</script>	
-								@php $i++; @endphp
-							@empty
+										    $('input.select-dropdown').val(values.join(', '));
+										    
+										    $(".my_select_{{ $i }} option").each(function()
+											{
+											    if($(this).attr('data-in') == 1){
+											    	$(this).html('<b>'+$(this).text()+'</b>');
+											    }
+											});
+									    });
+									</script>	
+									@php $i++; @endphp
+								@endforeach
+							@else
 							    <tr class="trtable_0">
 									<td><input class="form-control" type="text" name="desc[0]" size="32" value="" required>
 									<input class="form-control" type="hidden" id="buildId" name="id[0]" value="0"></td>
@@ -154,7 +156,7 @@
 								    });
 
 								</script>
-							@endforelse
+							@endunless
 						</tbody>
 						<span id="showtxt"></span>
 						<tr>

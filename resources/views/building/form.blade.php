@@ -110,112 +110,112 @@
 								$i=0;
 
 							@endphp							
+							@unless(empty($Building))
+								@foreach($Building as $BuildType)
 
-							@forelse($Building as $BuildType)
+									<tr class="trtable_{{ $i }}">
 
-								<tr class="trtable_{{ $i }}">
+										<td>
 
-									<td>
+											<input class="form-control" type="text" name="desc[{{ $i }}]" size="32" value="{{ $BuildType->name }}" required>
 
-										<input class="form-control" type="text" name="desc[{{ $i }}]" size="32" value="{{ $BuildType->name }}" required>
+											<input type="hidden" class="form-control" id="buildId" name="id[{{ $i }}]" value="{{ $BuildType->id }}">
 
-										<input type="hidden" class="form-control" id="buildId" name="id[{{ $i }}]" value="{{ $BuildType->id }}">
+										</td>
 
-									</td>
+										<td>				
 
-									<td>				
+											{!! show_buffer($i, $BuildType->buffer) !!}
 
-										{!! show_buffer($i, $BuildType->buffer) !!}
+										</td>
 
-									</td>
+										<td>
 
-									<td>
+											<input type="text" class="form-control" name="price[{{ $i }}]" value="{{ $BuildType->price }}" size="5" required>
 
-										<input type="text" class="form-control" name="price[{{ $i }}]" value="{{ $BuildType->price }}" size="5" required>
+										</td>
 
-									</td>
+										<td align="center">
 
-									<td align="center">
+											<input type="text" class="form-control" name="rank[{{ $i }}]" value="{{ $BuildType->rank }}" size="3" required>
 
-										<input type="text" class="form-control" name="rank[{{ $i }}]" value="{{ $BuildType->rank }}" size="3" required>
+	                                    </td>
 
-                                    </td>
+	                                   <!--  <td>
 
-                                   <!--  <td>
+											<input type="radio" value="{{ $BuildType->id }}" name="selected[0]" @if($BuildType->selected == 1) checked @endif>
 
-										<input type="radio" value="{{ $BuildType->id }}" name="selected[0]" @if($BuildType->selected == 1) checked @endif>
+										</td> -->
 
-									</td> -->
+										<td>
 
-									<td>
+											<select name="forcecall[{{ $i }}]" class="form-control" size="1">
 
-										<select name="forcecall[{{ $i }}]" class="form-control" size="1">
+												<option value="1" @if($BuildType->status == 1) selected="" @endif>Book using size/age</option>
 
-											<option value="1" @if($BuildType->status == 1) selected="" @endif>Book using size/age</option>
+												<option value="2" @if($BuildType->status == 2) selected="" @endif>Book as standalone</option>
 
-											<option value="2" @if($BuildType->status == 2) selected="" @endif>Book as standalone</option>
+												<option value="0" @if($BuildType->status == 0) selected="" @endif>Require phone call</option>
 
-											<option value="0" @if($BuildType->status == 0) selected="" @endif>Require phone call</option>
+												<option value="3" @if($BuildType->status == 3) selected="" @endif>Use as Label</option>
 
-											<option value="3" @if($BuildType->status == 3) selected="" @endif>Use as Label</option>
+											</select>
 
-										</select>
+										</td>
 
-									</td>
+										<td>
 
-									<td>
+											{!! get_subs_users($i) !!}
 
-										{!! get_subs_users($i) !!}
+										</td>
 
-									</td>
+										<td>
 
-									<td>
+											<a href='#' class='note_link' id="{{ $BuildType->id }}" data-model="{{$name}}" data-id="{{ $BuildType->id }}">Remove</a>
 
-										<a href='#' class='note_link' id="{{ $BuildType->id }}" data-model="{{$name}}" data-id="{{ $BuildType->id }}">Remove</a>
+										</td>
 
-									</td>
+									</tr>
 
-								</tr>
+									<script type="text/javascript">
 
-								<script type="text/javascript">
+									    jQuery(document).ready(function($) {
 
-								    jQuery(document).ready(function($) {
+									        $('.my_select_{{ $i }}').formSelect();
 
-								        $('.my_select_{{ $i }}').formSelect();
+									        $('.my_select_{{ $i }} option:not(:disabled)').not(':selected').prop('selected', true);
 
-								        $('.my_select_{{ $i }} option:not(:disabled)').not(':selected').prop('selected', true);
+										    $('.dropdown-content.multiple-select-dropdown input[type="checkbox"]:not(:checked)').not(':disabled').prop('checked', 'checked');
 
-									    $('.dropdown-content.multiple-select-dropdown input[type="checkbox"]:not(:checked)').not(':disabled').prop('checked', 'checked');
+										    var values = $('.dropdown-content.multiple-select-dropdown input[type="checkbox"]:checked').not(':disabled').parent().map(function() {
 
-									    var values = $('.dropdown-content.multiple-select-dropdown input[type="checkbox"]:checked').not(':disabled').parent().map(function() {
+										        return $(this).text();
 
-									        return $(this).text();
+										    }).get();
 
-									    }).get();
+										    $('input.select-dropdown').val(values.join(', '));
+											
 
-									    $('input.select-dropdown').val(values.join(', '));
-										
+									        $(".my_select_{{ $i }} option").each(function()
+											{
+											    if($(this).attr('data-in') == 1){
+											    	$(this).html('<b>'+$(this).text()+'</b>');
+											    	var getadmin = $(this).text();
 
-								        $(".my_select_{{ $i }} option").each(function()
-										{
-										    if($(this).attr('data-in') == 1){
-										    	$(this).html('<b>'+$(this).text()+'</b>');
-										    	var getadmin = $(this).text();
+											    	/*if($('.dropdown-content.multiple-select-dropdown span').not(':disabled').text() == getadmin){
+											    		$('.dropdown-content.multiple-select-dropdown span').not(':disabled').html('<b>'+$(this).text()+'</b>');
+											    	}*/
+											    }
+											});
 
-										    	/*if($('.dropdown-content.multiple-select-dropdown span').not(':disabled').text() == getadmin){
-										    		$('.dropdown-content.multiple-select-dropdown span').not(':disabled').html('<b>'+$(this).text()+'</b>');
-										    	}*/
-										    }
-										});
+									    });
 
-								    });
+									</script>						
 
-								</script>						
+									@php $i++; @endphp
 
-								@php $i++; @endphp
-
-							@empty
-
+								@endforeach
+							@else
 							    <tr class="trtable_0">
 
 									<td><input class="form-control" type="text" name="desc[0]" size="32" value="" required>
@@ -305,7 +305,7 @@
 
 								</script>
 
-							@endforelse
+							@endunless
 
 						</tbody>
 

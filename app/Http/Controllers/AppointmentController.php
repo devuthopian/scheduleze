@@ -20,12 +20,13 @@ use Mail;
 use App\Agents;
 use Cookie;
 use PDF;
+use Crypt;
 
 class AppointmentController extends Controller
 {
-        /**
-     * @var User ID
-     */
+    /**
+    * @var User ID
+    */
     protected $user_id = '';
     protected $business_id = '';
     
@@ -33,7 +34,7 @@ class AppointmentController extends Controller
      * Constructor
      */
     public function __construct()
-    { 
+    {
         // Set the user_id
         $this->user_id = session('id');
         $this->business_id = session('business_id');
@@ -267,6 +268,7 @@ class AppointmentController extends Controller
 
     public function reciept($id='')
     {
+        $id = Crypt::decrypt($id);
         $row = DB::table('bookings')->where([['id', '=', $id],['removed', '=', 0]])->first();
 
         if ($row->business == "0"){
@@ -553,6 +555,7 @@ class AppointmentController extends Controller
             $email_body .= "&nbsp;&nbsp;&nbsp;Agent Email: ".$agent_email2."<br><br>";
 
             $attachment = Business::select('email_attachment')->where('id', $request->input('business'))->first();
+            $start = date("g:i a, l, F jS", $data['starttime']);
 
             if(!empty($user_notes2)){
                 $email_body .= "Note: ".$user_notes2."<br><br>";
@@ -581,35 +584,40 @@ class AppointmentController extends Controller
 
             $emails = [$inspector_email, $inspector_additional_email, $business_info_email, $business_info_email2];
 
-            Mail::send(['html' => 'appointments.mail'], ['email_body' => $email_body, 'emails' => $emails] , function($message) use ($email_body, $emails) {
+            $text = "<h2>You have received an on-line booking for ".$start." with the following information:</h2><br> <h2>IMPORTANT NOTICE:</h2> <i>A copy of our Inspection Agreement is attachment for your review prior to the inspection.</i><br>";
+
+            Mail::send(['html' => 'appointments.mail'], ['email_body' => $email_body, 'emails' => $emails, 'text' => $text] , function($message) use ($email_body, $emails, $text) {
                 $message->to($emails)->subject('On-line inspection booking');
                 $message->from('support@scheduleze.com', 'Scheduleze');
+                $message->replyTo('noreply@scheduleze.com', 'no Reply');
                 //$message->setBody("You have received an on-line inspection booking with the following information:\n\n".$email_body."", 'text/html'); // for HTML rich messages;
             });
 
             if (!empty($data['requiredEmail'])){ //reasonably valid email address for the client
 
-                Mail::send(['html' => 'appointments.mail'], ['email_body' => $email_body, 'data' => $data, 'business_name' => $business_name, 'attachment' => $attachment] , function($message) use ($email_body, $data, $business_name, $attachment) {
-                    $message->to($data['requiredEmail'])->subject('On-line inspection booking');
+                $text = "<h2>You have requested a inspection for ".$start." with the following details:</h2><br> <h2>IMPORTANT NOTICE:</h2> <i>A copy of our Inspection Agreement is attachment for your review prior to the inspection.</i><br>";
+
+                Mail::send(['html' => 'appointments.mail'], ['start' => $start, 'email_body' => $email_body, 'data' => $data, 'business_name' => $business_name, 'attachment' => $attachment, 'text' => $text] , function($message) use ($email_body, $data, $business_name, $start, $Booking, $attachment, $text) {
+                    $message->to($data['requiredEmail'])->subject('+ On-line inspection booking at '.$start.' - #'.$Booking->id.'');
                     $message->from('support@scheduleze.com', $business_name);
+                    $message->replyTo('noreply@scheduleze.com', 'no Reply');
                     $message->attach(public_path().'/attachments/'.$data['business'].'/'.$attachment->email_attachment);
                     //$message->setBody("You have requested an inspection with the following details:<br>", 'text/html'); // for HTML rich messages;
                 });
             }
-
-            $start = date("g:i a, l, F jS", $data['starttime']);
             
             if (!empty($data['Agent_Email'])){ //reasonably valid email address for the agent
                 $text = "<h2>An on-line inspection has been requested for ".$start." with the following details:</h2><br> <h2>IMPORTANT NOTICE:</h2> <i>A copy of our Inspection Agreement is attachment for your review prior to the inspection.</i><br>";
 
                 Mail::send(['html' => 'appointments.mail'], ['start' => $start, 'email_body' => $email_body, 'data' => $data, 'inspector_email' => $inspector_email, 'text' => $text] , function($message) use ($email_body, $inspector_email, $data, $business_name, $start, $Booking, $text) {
                     $message->to($data['Agent_Email'])->subject('+ On-line booking at '.$start.' - #'.$Booking->id.'');
+                    $message->replyTo('noreply@scheduleze.com', 'no Reply');
                     $message->from('support@scheduleze.com', $business_name);
                     //$message->setBody('', 'text/html'); // for HTML rich messages;
                 });
             }
 
-            return redirect('/appointment/receipt/'.$Booking->id.'');
+            return redirect('/appointment/receipt/'.Crypt::encrypt($Booking->id).'');
         }
 
         return redirect('/scheduling_solutions')->with('message', 'That time has just been booked by someone else.');

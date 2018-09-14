@@ -5,7 +5,9 @@
 @php
 	$i_name = get_field('users_details', 'name', $id);
 	$i_last_name = get_field('users_details', 'lastname', $id);
-	$business_infomation = get_business_information(session('business_id'));
+	if(!empty(session('business_id'))){
+		$business_infomation = get_business_information(session('business_id'));
+	}
 
 	if ($first == "") {
 		$first = time();
