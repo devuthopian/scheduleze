@@ -8,7 +8,7 @@
 		$do = "Adding Blockout";
 		$submit_label = "Add Blockout";
 		$checked = "checked";
-		$message = "Check &quot;same day&quot; to disregard second month/day/year menus";
+		$message = "Check same day to disregard second month/day/year menus";
 		$default_time = !empty(session('business_id')) ? ((time()) + get_timezone(session('business_id'))) : 0;
 		$default_endtime = !empty($default_time) ? ($default_time + 3600) : 0;
 		$id = session('id');
@@ -18,7 +18,7 @@
 		$do = "Editing Blockout";
 		$submit_label = "Edit Blockout";
 		$checked = "";
-		$message = "Check &quot;same day&quot; to disregard second month/day/year menus";
+		$message = "Check same day to disregard second month/day/year menus";
 
 		$default_time = $row->starttime;
         $default_endtime = $row->endtime;
@@ -34,6 +34,7 @@
 	$i_last_name = get_field('users_details', 'lastname', $id);
 
 	$inspector_popup = get_inspector_popup('name', session('affected_inspector'));
+	$location = get_location_popup();
 	$inspector_name = get_field('users_details', 'name', session('affected_inspector'));
 
 	$start_popup = get_time_popup ($default_time, $designate="", 1, 1, 1, 1, 1, 1 ,'starttime');
@@ -64,6 +65,10 @@
 						<div class="inspector_admin">
 							<label>Inspector:&nbsp;</label>
 							{!! $inspector_popup !!}
+						
+						<div class="location_blockout">
+							<label>&nbsp;Location:&nbsp;</label>
+							{!! $location !!}
 						</div>
 						<div class="start_admin">
 							<label>Start:&nbsp; </label>
@@ -84,8 +89,8 @@
 						</div>
 						<div>								
 							<input type="submit" value="<?php echo $submit_label?> &raquo;">&nbsp;&nbsp;
-							<input type="checkbox" value="1" name="send_email">
-							<span class="note">Send Email Notice to <?php echo $inspector_name?></span>
+							<!-- <input type="checkbox" value="1" name="send_email">
+							<span class="note">Send Email Notice to <?php echo $inspector_name?></span> -->
 						</div>
 					</form>
 					<!-- <span class="note"><a href="index.php" class="note_link">&laquo; Return to Admin Home</a></span> -->

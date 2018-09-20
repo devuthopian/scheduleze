@@ -23,7 +23,7 @@ class PanelController extends Controller
         $data = '';
         $template = PanelTemplate::where('user_id',$id)->first();
         if(!empty($template)){
-            Session::put('hashvalue', $template->unqiue_url);
+            Session::put('hashvalue', $template->unique_url);
 
             $data = json_encode([
               'gjs-components'=> $template->gjs_components,
@@ -31,7 +31,7 @@ class PanelController extends Controller
               'gjs-assets'=> $template->gjs_assets,
               'gjs-css'=> $template->gjs_css,
               'gjs-html'=> $template->gjs_html,
-              'url' => $template->unqiue_url
+              'url' => $template->unique_url
             ]);
         }
         
@@ -82,7 +82,7 @@ class PanelController extends Controller
             [   
                 'user_id' => $id,
                 'gjs_html' => $gjs_html,
-                'unqiue_url' => $hashvalue,
+                'unique_url' => $hashvalue,
                 'gjs_css' => $gjs_css
             ]
         );
@@ -127,12 +127,12 @@ class PanelController extends Controller
                 'gjs_styles' => $gjs_styles,
                 'gjs_html' => $data['gjs-html'],
                 'gjs_components' => $gjs_components,
-                'unqiue_url' => $hashvalue
+                'unique_url' => $hashvalue
             ]
         );
         if($PanelTemplate->id){
             session(['panel_id' => $PanelTemplate->id]);
-            $ans = array('message' => 'Successfully Saved!', 'sharelink' => $PanelTemplate->unqiue_url );
+            $ans = array('message' => 'Successfully Saved!', 'sharelink' => $PanelTemplate->unique_url );
             return json_encode($ans);
         }else{
             $ans = array('message' => 'Something went wrong' );
@@ -183,7 +183,7 @@ class PanelController extends Controller
             ['user_id' => $id],
             [
                 'gjs_assets' => json_encode($result),
-                'unqiue_url' => $hashvalue
+                'unique_url' => $hashvalue
             ]
         );
 
@@ -205,8 +205,18 @@ class PanelController extends Controller
         $business_id = session('business_id');
         
         $inspectors = UserDetails::where([['business', '=', $business_id],['removed', '=', '0']])->get();
-        $template = PanelTemplate::where('unqiue_url',$id)->orWhere('id', $id)->first();
+        $template = PanelTemplate::where('unique_url', $id)->orWhere('id', $id)->first();
         session(['panel_id' => $template->id]);
+
+        if(empty($business_id)){
+            $business_id = get_field('users_details', 'business', $template->user_id);
+            session(['business_id' => $business_id]);
+    
+            get_business_information($business_id);
+
+            $inspectors = UserDetails::where([['business', '=', $business_id],['removed', '=', '0']])->get();
+        }
+    
 
         return view('building.template', compact('template','inspectors'));
     }

@@ -63,6 +63,9 @@
                                 <li>
                                     <a href="{{ url('/scheduleze/dayticket/'.$id.'/'.$tomorrow) }}">My Tomorrow </a>
                                 </li>
+                                <li>
+                                    <a href="{{ url('/scheduleze/mapmyday') }}">Map My Day</a>
+                                </li>
                             </ul>
                         </li>
                         <li class="arrowicon">

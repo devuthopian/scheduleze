@@ -2,7 +2,13 @@
 <a href="{{ URL::previous() }}" class="gobutton">Go Back</a>
 <hr> -->
 @php 
-    $gjs = PanelTemplate(session('id'));
+    if(empty(session('id'))){
+        $gjs = PanelTemplate($data['reference_id']);
+    }
+    else{
+        $gjs = PanelTemplate(session('id'));
+    }
+    
 @endphp
 <div class="loader"></div>
 {!! $gjs->gjs_html !!}
@@ -30,7 +36,11 @@
         @php
             $addons = array();
             $BuildType = $data['building_type'];
-            $businessId = Session::get('business_id');
+            if(empty(session('business_id'))){
+                $businessId = get_field('users_details', 'business', $data['reference_id']);
+            }else{
+                $businessId = Session::get('business_id');
+            }
             $building_size = $data['building_size'];
             $building_age = $data['building_age'];
             $location = $data['location'];
@@ -59,7 +69,6 @@
             }
 
             $authorized_inspectors = get_inspector_exceptions($businessId, $BuildType, $building_size, $building_age, $addons, session('total_price'));
-
             $increment = 900;
             if(!empty($data['addon'])){
                 session(['addon' => $data['addon']]);
@@ -77,7 +86,6 @@
             if(!empty($data['building_size'])){
                 $building_sizes = $data['building_size'];
             }
-
         @endphp
         <table class="accent" width="650">
             <tbody>
@@ -123,7 +131,7 @@
                                                 </span>
                                                 <br>
                                                 @foreach($authorized_inspectors as $qualified_inspector)
-                                                    @php print_r(get_available_times_popup2($location, $total_time, $qualified_inspector->id, $qualified_inspector->look_ahead, $increment, 0, 0)); @endphp
+                                                    @php print_r(get_available_times_popup2($location, $total_time, $qualified_inspector->user_id, $qualified_inspector->look_ahead, $increment, 0, 0)); @endphp
                                                 @endforeach
                                                 <br>
                                                 <span class="note">

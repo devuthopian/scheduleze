@@ -33,8 +33,12 @@ class LocationController extends Controller
     public function index()
     {
         $businessinfo = Business::find($this->businessid);
-        $locations = !empty($businessinfo->location) ? $businessinfo->location : '';
-
+        if(!empty($businessinfo->location)){
+            $locations = $businessinfo->location;
+        }else{
+            $locations = '';
+        }
+        
         return view('location.index', compact('businessinfo', 'locations'));
     }
 

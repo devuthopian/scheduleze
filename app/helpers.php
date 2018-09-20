@@ -1255,9 +1255,13 @@ if(! function_exists('month_popup')){
 if(! function_exists('am_popup')){
 	function am_popup($am, $designate, $session) {
 		$popup ="\t\t\t\t<select name=\"am".$session."[".$designate."]\" class=\"smallselect\">\n";
-		$popup .="\t\t\t\t	<option value=\"$am\" selected>$am</option>\n";
-		$popup .="\t\t\t\t	<option value=\"AM\">AM</option>\n";
-		$popup .="\t\t\t\t	<option value=\"PM\">PM</option>\n";
+		if($am == 'AM'){
+			$popup .="\t\t\t\t	<option value=\"AM\" selected>AM</option>\n";
+			$popup .="\t\t\t\t	<option value=\"PM\">PM</option>\n";
+		}else{
+			$popup .="\t\t\t\t	<option value=\"PM\">PM</option>\n";
+			$popup .="\t\t\t\t	<option value=\"PM\" selected>PM</option>\n";
+		}
 		$popup .="\t\t\t\t</select>\n";
 		return $popup;
 	}
@@ -1290,15 +1294,15 @@ if(! function_exists('array_flatten')){
 
 if(! function_exists('get_timezone')){
 	function get_timezone($business = '0'){
-		$business = $business == 0 ? session('business_id') : '';
+		$business = session('business_id');
 		/*if ($business == 0){
 			$business = session('business_id');
 		}*/
-		if(!empty($business)){
-			$timezone = get_field("business", "timezone", $business);
-		}
+		//if(!empty($business)){
+		$timezone = get_field("business", "timezone", $business);
+		//}
 
-		return !empty($timezone) ? $timezone : '';
+		return $timezone;
 	}
 }
 

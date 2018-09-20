@@ -35,7 +35,8 @@
     </div>
 </div>
 <div class="button" style="text-align:center;">
-    <button id="btnSave"><i class="fa fa-save" aria-hidden="true"></i> Save</button>
+    <button class="common" onclick="history.go(-1);"><i class="fa fa fa-long-arrow-left" aria-hidden="true"></i> Go Back</button>
+    <button id="btnSave" class="common"><i class="fa fa-save" aria-hidden="true"></i> Save</button>
     <button class="btnSaveTemplate"><i class="fa fa-folder" aria-hidden="true"></i> Save Template</button>
 </div>
 
@@ -59,7 +60,40 @@
     </div>
 </div>
 
+@if($MarkDomain == 0)
+    <div class="modal-wrapper">
+        <div class="modal">
+            <div class="head">
+                <a class="btn-close trigger" href="javascript:;"></a>
+            </div>
+            <div class="content">
+                <form action="{{ url('scheduling/update_template_url') }}" method="post">
+                    @csrf
+                    <input type="hidden" name="">
+                    <fieldset>
+                        <legend>Enter your domain so we masked landing page URL as your domain name</legend>
+                        <label for="name">Domain name:</label>
+                        <input type="text" id="domain" name="txtDomain" placeholder="Enter your domain here">
+                    </fieldset>
+                    <button class="txtBtnSubmit" type="submit">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+@endif
+
 <script type="text/javascript">
+
+@if($MarkDomain == 0)
+    $('.modal-wrapper').toggleClass('open');
+    $('.panel-main').toggleClass('blur');
+
+    $('.trigger').click(function() {
+        $('.modal-wrapper').toggleClass('open');
+        $('.panel-main').toggleClass('blur');
+        return false;
+    });
+@endif
 
     //grapejs editor
     var editor = grapesjs.init({
@@ -118,8 +152,8 @@
 
     editor.Commands.add('canvas-clear', function() {
         if(confirm('Are you sure to clean the canvas?')) {
-          var comps = editor.DomComponents.clear();
-          setTimeout(function(){ localStorage.clear()}, 0)
+            var comps = editor.DomComponents.clear();
+            setTimeout(function(){ localStorage.clear()}, 0)
         }
     });
 
@@ -179,8 +213,9 @@
         if(resultObject.sharelink){
             var nos = resultObject.sharelink;
             var url = window.location.href;
-            var afterWith = url.substr(0, url.lastIndexOf("scheduling/schedulepanel"));            
-            prompt("To Copy preview link: Ctrl+C", afterWith+'template/'+nos);
+            var afterWith = url.substr(0, url.lastIndexOf("scheduling/schedulepanel"));
+            prompt('Embed this panel on your website: Ctrl+C', '<embed src="'+afterWith+'template/'+nos+'" style="width:500px; height: 300px;">');  
+            prompt("Or you can Copy to preview link: Ctrl+C", afterWith+'template/'+nos);
         }
     });
 
@@ -318,15 +353,15 @@
 <script src="{{ asset('js/form_builder.js') }}"></script>
 <script src="{{ asset('js/popper.min.js') }}"></script>
 <style type="text/css">
-#btnSave {
+.common {
     background: #429caf !important;
     color: #ffffff !important;
     border-radius: 30px;
-    padding: 8px 30px;
+    padding: 12px 30px;
     margin: 7px 0 5px;
     border: 1px solid #fff !important;
     box-shadow: 0px 0px 18px #ccc;
-    font-size: 14px;
+    font-size: 17px;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
 }
@@ -334,11 +369,11 @@
     background: #429caf !important;
     color: #ffffff !important;
     border-radius: 30px;
-    padding: 8px 30px;
+    padding: 12px 30px;
     margin: 7px 0 5px;
     border: 1px solid #fff !important;
     box-shadow: 0px 0px 18px #ccc;
-    font-size: 14px;
+    font-size: 17px;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
 }
@@ -347,5 +382,159 @@
 }
 nav a{
     text-decoration: none;
+}
+
+
+
+/*modal css*/
+.blur{
+    -webkit-filter: blur(5px);
+    -moz-filter: blur(5px);
+    -o-filter: blur(5px);
+    -ms-filter: blur(5px);
+    filter: blur(5px);
+}
+
+
+.modal-wrapper{
+    width:100%;
+    height:100%;
+    position:fixed;
+    top:0; left:0;
+    background:rgba(255,257,153,0.75);
+    visibility:hidden;
+    opacity:0;
+    -webkit-transition: all 0.25s ease-in-out;
+    -moz-transition: all 0.25s ease-in-out;
+    -o-transition: all 0.25s ease-in-out;
+    transition: all 0.25s ease-in-out;
+}
+
+.modal-wrapper.open{
+    opacity:1;
+    visibility:visible;
+}
+
+.modal{
+    width: 600px;
+    height: inherit;
+    display: block;
+    margin: 50% 0 0 -300px;
+    position: relative;
+    top: 50%; left:50%;
+    background: #fff;
+    opacity: 0;
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+}
+
+.modal-wrapper.open .modal{
+    margin-top:-200px;
+    opacity:1;
+}
+
+.head{
+    width:90%;
+    height:32px;
+    padding:1.5em 5%;
+    overflow:hidden;
+    background:#01bce5;
+}
+
+.btn-close{
+    width:32px;
+    height:32px;
+    display:block;
+    float:right;
+}
+
+.btn-close::before, .btn-close::after{
+    content:'';
+    width:32px;
+    height:6px;
+    display:block;
+    background:#fff;
+}
+
+.btn-close::before{
+    margin-top:12px;
+    -webkit-transform:rotate(45deg);
+    -moz-transform:rotate(45deg);
+    -o-transform:rotate(45deg);
+    transform:rotate(45deg);
+}
+
+.btn-close::after{
+    margin-top:-6px;
+    -webkit-transform:rotate(-45deg);
+    -moz-transform:rotate(-45deg);
+    -o-transform:rotate(-45deg);
+    transform:rotate(-45deg);
+}
+
+.content{
+    padding:5%;
+}
+
+form {
+    max-width: 300px;
+    margin: 10px auto;
+    padding: 10px 20px;
+    background: #f4f7f8;
+    border-radius: 8px;
+}
+input[type="text"]{
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    font-size: 16px;
+    height: auto;
+    margin: 0;
+    outline: 0;
+    padding: 15px;
+    width: 100%;
+    background-color: #e8eeef;
+    color: #8a97a0;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03) inset;
+    margin-bottom: 30px;
+}
+
+.txtBtnSubmit {
+    padding: 19px 39px 18px 39px;
+    color: #FFF;
+    background-color: #4bc970;
+    font-size: 18px;
+    text-align: center;
+    font-style: normal;
+    border-radius: 5px;
+    width: 100%;
+    border: 1px solid #3ac162;
+    border-width: 1px 1px 3px;
+    box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.1) inset;
+    margin-bottom: 10px;
+}
+fieldset {
+    margin-bottom: 30px;
+    border: none;
+}
+label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+label.light {
+    font-weight: 300;
+    display: inline;
+}
+legend {
+    font-size: 1.4em;
+    margin-bottom: 10px;
+    color: #3BB7E3;
+}
+@media screen and (min-width: 480px) {
+    form {
+        max-width: 480px;
+    }
 }
 </style>

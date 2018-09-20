@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AlterPanelTemplate20180730 extends Migration
+class AlterTablePanelAddColumn20180920 extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AlterPanelTemplate20180730 extends Migration
     public function up()
     {
         Schema::table('panel_template', function (Blueprint $table) {
-            $table->string('unique_url')->after('gjs_components')->unique();
+            $table->unsignedInteger('marked_domain')->after('unique_url')->nullable()->default('0');
         });
     }
 
@@ -26,7 +26,7 @@ class AlterPanelTemplate20180730 extends Migration
     public function down()
     {
         Schema::table('panel_template', function (Blueprint $table) {
-            $table->dropColumn('unique_url');
+            $table->dropColumn('marked_domain');
         });
     }
 }

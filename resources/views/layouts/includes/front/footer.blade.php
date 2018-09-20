@@ -4,8 +4,8 @@
     <div class="footer_section loguser">
 @endguest
     <div class="container">
-        <div class="footer_top">
-            <!-- <div class="footer_top_cont">
+        <!-- <div class="footer_top">
+            <div class="footer_top_cont">
                 <img src="{{ url('images/footer_icon1.png') }}" alt="">
                 <p>Snailmail Address:<br>
                     Scheduleze ,PO Box 670382<br>
@@ -19,31 +19,31 @@
             <div class="footer_top_cont">
                 <img src="{{ url('images/footer_icon1.png') }}" alt="">
                 <p>Email:<br> General Email:<br> info@scheduleze.com </p>
-            </div> -->
-        </div>
-        <div class="footer_bottom">
-            @guest
-                <div class="col-sm-4">
-                    <h3>Contact <br> Scheduleze</h3>
-                    <p>Thanks for your interest in Scheduleze. Please contact us<br>
-                        at one of these cell-phone free email addresses.
-                    </p>
-                </div>
-            @endguest
-            <div class="col-sm-4">
-                <div class="quick_links">
-                    <h3>Quick <br> Links</h3>
-                    <ul>
-                        <li><a href="{{ url('/') }}">Scheduling Solutions</a></li>
-                        <li><a href="{{ url('success_stories') }}">Success  Stories</a></li>
-                        <li><a href="{{ url('demo') }}">Demo</a></li>
-                        <li><a href="{{ url('scheduling_faq') }}">FAQ</a></li>
-                        <li><a href="{{ url('contact') }}">Contact</a></li>
-                        <li><a href="{{ route('login') }}">Client Login</a></li>
-                    </ul>
-                </div>
             </div>
-            @guest
+        </div> -->
+        @guest
+            <div class="footer_bottom">
+                
+                    <div class="col-sm-4">
+                        <h3>Contact <br> Scheduleze</h3>
+                        <p>Thanks for your interest in Scheduleze. Please contact us<br>
+                            at one of these cell-phone free email addresses.
+                        </p>
+                    </div>
+                
+                <div class="col-sm-4">
+                    <div class="quick_links">
+                        <h3>Quick <br> Links</h3>
+                        <ul>
+                            <li><a href="{{ url('/') }}">Scheduling Solutions</a></li>
+                            <li><a href="{{ url('success_stories') }}">Success  Stories</a></li>
+                            <li><a href="{{ url('demo') }}">Video</a></li>
+                            <li><a href="{{ url('scheduling_faq') }}">FAQ</a></li>
+                            <li><a href="{{ url('contact') }}">Contact</a></li>
+                            <li><a href="{{ route('login') }}">Client Login</a></li>
+                        </ul>
+                    </div>
+                </div>
                 @php 
                     $strchr = substr(strrchr(url()->current(),"/"),1); 
                 @endphp
@@ -66,8 +66,9 @@
                         </form>
                     </div>
                 @endif
-            @endguest
-        </div>
+                
+            </div>
+        @endguest
     </div>
     <div class="copyright_section">
         <div class="container">

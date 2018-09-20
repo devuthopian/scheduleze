@@ -89,7 +89,7 @@ class LoginController extends Controller
         if(empty($PanelTemplate)){
             $panelurl = '';
         }else{
-            $panelurl = $PanelTemplate->unqiue_url;
+            $panelurl = $PanelTemplate->unique_url;
         }
         $permission = get_field("users_details", "permission", $user->id); //get permission details
         $administrator = get_field("users_details", "administrator", $user->id); //get administrator details
@@ -103,8 +103,8 @@ class LoginController extends Controller
         }else{
             return redirect('business_info')->with('warning', 'You need to fill business info before proceeding to anything else. It will help us to cooperate with you!');
         }
-        //if(!empty($PanelTemplate->unqiue_url)){
-            //return redirect('/template/'.$PanelTemplate->unqiue_url);
+        //if(!empty($PanelTemplate->unique_url)){
+            //return redirect('/template/'.$PanelTemplate->unique_url);
         //}
         
 

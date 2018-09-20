@@ -11,6 +11,7 @@ use App\PanelTemplate;
 use App\Business;
 use App\Exceptions;
 use App\UserDetails;
+use App\ServiceContent;
 use Session;
 use Illuminate\Support\Facades\Hash;
 /*use Illuminate\Support\Facades\Route;*/
@@ -55,6 +56,8 @@ class BuildingController extends Controller
         ->where('users_details.business', '=', $businessid)
         ->get();
 
+        $ServiceContent = ServiceContent::where([['business_type_id', '=', session('indus_id')],['business', '=', $this->businessid]])->first();
+
         //$Building = $Model::where([['business', $businessid]])->first();
         $BladeName = strtolower($name);
 
@@ -70,9 +73,26 @@ class BuildingController extends Controller
 
         $exception = Exceptions::select('exception','user_id')->where('type', $type)->get();
 
-        return view('building.'.$BladeName, compact('Building','name','ColumnName','exception', 'users_details'));
+        return view('building.'.$BladeName, compact('Building', 'name', 'ColumnName', 'exception', 'users_details', 'ServiceContent'));
     }
 
+
+    public function storeServiceContent(Request $request)
+    {
+        $data = Input::get();        
+
+        $BusinessTypes = ServiceContent::updateOrCreate(
+            ['business' => $this->business_id, 'business_type_id' => $data['txtBusinessID']],
+            [
+                'type_content' => $data['building_type'],
+                'size_content' => $data['building_size'],
+                'age_content' => $data['building_age'],
+                'add_on_service_content' => $data['add_on_service']
+            ]
+        );
+
+        return redirect('/services/content')->with('message', 'Content saved');
+    }
 
     /**
      * Show the form for creating a new resource.

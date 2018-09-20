@@ -51,6 +51,11 @@ Route::group(['middleware' => ['web']], function () {
 
 	Route::post('/faqs/{faqId?}/{action?}', 'Website\FAQController@faqsAction');
 
+	Route::post('/scheduleze/bookingform', 'AppointmentController@bookingform')->name('BookingForm'); //		
+	Route::post('/scheduleze/bookingavailable', 'AppointmentController@bookingavailable')->name('BookingAvailable'); //
+	Route::post('/scheduleze/bookappointment', 'AppointmentController@storebookingappointment')->name('BookAppointment');
+	Route::get('/appointment/receipt/{id?}','AppointmentController@reciept');
+
 	/*Route::get('/faq', 'FAQController@index');
 	Route::post('/faq/question/{faq}/{type?}', 'FAQController@incrementClick');
 
@@ -65,7 +70,7 @@ Route::group(['middleware' => ['web']], function () {
 		
 		Route::get('/scheduling/schedulepanel', 'SchedulezeController@scheduling_panel')->name('schedulepanel');
 
-		Route::get('/appointment/receipt/{id?}','AppointmentController@reciept');
+		Route::post('/scheduling/update_template_url', 'SchedulezeController@UpdateTemplateUrl');
 
 		Route::get('/scheduleze/BusinessHours', 'SchedulezeController@BusinessHours');
 		Route::post('/scheduleze/BusinessHours', 'SchedulezeController@BusinessHours');
@@ -82,6 +87,8 @@ Route::group(['middleware' => ['web']], function () {
 		Route::get('/scheduleze/blockout/{form?}/{id?}','SchedulezeController@Blockout');
 		Route::post('/scheduleze/blockout/{form?}','SchedulezeController@storeBlockout');
 		Route::get('/services/content', 'SchedulezeController@changeContent');
+		Route::post('/services/content', 'SchedulezeController@changeContent');
+		Route::get('/scheduleze/mapmyday', 'SchedulezeController@mapmyday');
 
 		Route::get('/scheduleze/zigzag','SchedulezeController@ZigZag')->name('ZigZag');
 		Route::post('/scheduleze/zigzag','SchedulezeController@storeZigZag');
@@ -99,7 +106,6 @@ Route::group(['middleware' => ['web']], function () {
 		Route::post('/scheduleze/storebusinesshours', 'AppointmentController@storebusinesshours')->name('StoreBusinessHours');
 		Route::post('/scheduleze/storedrivetime', 'AppointmentController@storedrivetime')->name('StoreDriveTime');
 		Route::post('/scheduleze/storeoffdays', 'AppointmentController@storestoreoffdays')->name('occurrenceoff');
-		Route::post('/scheduleze/bookappointment', 'AppointmentController@storebookingappointment')->name('BookAppointment');
 
 		Route::post('/store-template/{value}', 'PanelController@store');
 		Route::post('/template/store/{value}', 'PanelController@update');
@@ -109,9 +115,8 @@ Route::group(['middleware' => ['web']], function () {
 		Route::get('/form/{name?}', 'BuildingController@index')->name('Building');
 		Route::post('/storebuild', 'BuildingController@store')->name('storebuild');
 		Route::post('/storeException', 'BuildingController@storeException');
-
-		Route::post('/scheduleze/bookingform', 'AppointmentController@bookingform')->name('BookingForm'); //		
-		Route::post('/scheduleze/bookingavailable', 'AppointmentController@bookingavailable')->name('BookingAvailable'); //
+		Route::post('/services/storeServiceContent', 'BuildingController@storeServiceContent');
+		
 
 		Route::post('/ajaxrequest', 'BuildingController@updatebuild');
 

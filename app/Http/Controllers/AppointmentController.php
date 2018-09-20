@@ -432,7 +432,7 @@ class AppointmentController extends Controller
         $full_description = get_full_description($building_type, $building_size, $building_age);
 
         $location_name = get_field('locations', 'name', $data['location']);
-        $inspector_name = get_field('users', 'name', $this->user_id);
+        $inspector_name = get_field('users', 'name', $request->input('inspector'));
 
         $adds_info = '';
         $addons_description = '';

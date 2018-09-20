@@ -110,7 +110,7 @@
 								$i=0;
 
 							@endphp							
-							@unless(empty($Building))
+							@unless($Building->isEmpty())
 								@foreach($Building as $BuildType)
 
 									<tr class="trtable_{{ $i }}">
@@ -346,23 +346,34 @@
 						Building Sizes Strategy
 					</span>
 
-					The fewer ranges here the better. Simpler forms encourage people to complete them. Provide additional costs and additional time required for each range or "0" if there is no additional impacts for that Building Size over your primary service cost/time which you established in your Building Types menu.
+					@if(!empty($ServiceContent->size_content))
+						{!! $ServiceContent->size_content !!}
+					@else
+						The fewer ranges here the better. Simpler forms encourage people to complete them. Provide additional costs and additional time required for each range or "0" if there is no additional impacts for that Building Size over your primary service cost/time which you established in your Building Types menu.
+					@endif
 
                 @elseif($name == 'BuildingTypes')
 					<span class="subhead">
 						Building Types and Prices Strategy
 					</span>
 
-					You must have a Building Types menu with at least one type of service, time and cost for Scheduleze to function properly.  Building Size popups and Building Age popups are optional, and can be configured to add additional time and cost to the basic Building Type selected by the client.<br><br>If you are not going to use price modifiers, you may wish to list various service combinations here and provide total prices for each.  This creates the simplest user interface for your clients and increases the likelihood of the client to book immediately on-line (simple forms look easier to complete).<br><br>However, if you are going to setup Building Age and Building Size popups as well, use this menu for basic Building Type only.  Provide the absolute minimum price and time for each service type as the modifier popups will add additional time and costs that you specify to this baseline cost for each Building Type.<br><br>
+					@if(!empty($ServiceContent->type_content))
+						{!! $ServiceContent->type_content !!}
+					@else
+							You must have a Building Types menu with at least one type of service, time and cost for Scheduleze to function properly.  Building Size popups and Building Age popups are optional, and can be configured to add additional time and cost to the basic Building Type selected by the client.<br><br>If you are not going to use price modifiers, you may wish to list various service combinations here and provide total prices for each.  This creates the simplest user interface for your clients and increases the likelihood of the client to book immediately on-line (simple forms look easier to complete).<br><br>However, if you are going to setup Building Age and Building Size popups as well, use this menu for basic Building Type only.  Provide the absolute minimum price and time for each service type as the modifier popups will add additional time and costs that you specify to this baseline cost for each Building Type.<br><br>
+					@endif
 
                 @else($name == 'BuildingAges')
 					<span class="subhead">
 						Building Ages Strategy
 					</span>
+					@if(!empty($ServiceContent->age_content))
+						{!! $ServiceContent->age_content !!}
+					@else
+						The simpler you make users' booking experience, the more bookings you will receive. In general, a few range selections work better than many specific choices.
 
-					The simpler you make users' booking experience, the more bookings you will receive. In general, a few range selections work better than many specific choices.
-
-					Provide additional costs and additional time required for each range or "0" if there is no additional impacts for that option over your baseline cost/time which you established in your Building Types menu.
+						Provide additional costs and additional time required for each range or "0" if there is no additional impacts for that option over your baseline cost/time which you established in your Building Types menu.
+					@endif
 
                 @endif
 

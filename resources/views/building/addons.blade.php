@@ -43,7 +43,7 @@
 						<tbody class="txtBuildId">
 							<input type="hidden" id="txtypol" value="{{ $users_details }}">
 							@php $i=0; @endphp
-							@unless(empty($Building))
+							@unless($Building->isEmpty())
 								@foreach($Building as $BuildType)
 									<tr class="trtable_{{ $i }}">
 										<td>
@@ -176,7 +176,11 @@
 			<span class="subhead">
 				Add-on Services<br>
 			</span>
-			Use this page to create a list of services which clients may wish to choose <b>in addition</b> to services they choose from the primary Building Type menu created on the Building Type page.  Do not use this list for services which are standalone, or independent of other services you offer.  Stand alone services belong in <a href="#" class="note">Building Type popup.</a><br><br><br><br>
+			@if(!empty($ServiceContent->add_on_service_content))
+				{!! $ServiceContent->add_on_service_content !!}
+			@else
+				Use this page to create a list of services which clients may wish to choose <b>in addition</b> to services they choose from the primary Building Type menu created on the Building Type page.  Do not use this list for services which are standalone, or independent of other services you offer.  Stand alone services belong in <a href="#" class="note">Building Type popup.</a><br><br><br><br>
+			@endif
 		</div>
 	</div>
 </div>

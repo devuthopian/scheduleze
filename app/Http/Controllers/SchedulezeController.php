@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Business;
 use App\Booking;
+use App\BusinessTypes;
 use App\BusinessHours;
 use App\Daysoff;
 use App\LocationTime;
@@ -12,6 +13,7 @@ use App\PanelTemplate;
 use App\Location;
 use App\UserDetails;
 use App\Reports;
+use App\ServiceContent;
 use Illuminate\Support\Facades\Input;
 use PDF;
 use DB;
@@ -45,9 +47,20 @@ class SchedulezeController extends Controller
         return view('scheduleze.welcome');
     }
 
+    public function mapmyday()
+    {
+        return view('scheduleze.mapmyday');
+    }
+
     public function changeContent()
     {
-        return view('profiles.ServiceContent');
+        $data = Input::get();
+        $default = !empty($data) ? $data['txtIndustries'] : '1';
+        
+        $BusinessTypes = BusinessTypes::where('id', $default)->first();
+        $ServiceContent = ServiceContent::where([['business', '=', $this->business_id], ['business_type_id', '=', $default]])->first();
+
+        return view('profiles.ServiceContent', compact('BusinessTypes', 'ServiceContent'));
     }
 
     public function confirm_status()
@@ -70,6 +83,7 @@ class SchedulezeController extends Controller
 
     public function scheduling_solutions()
     {
+        auth()->logout();
         return view('scheduleze.scheduling_solutions');
     }
 
@@ -210,8 +224,10 @@ class SchedulezeController extends Controller
 
     public function storeBlockout(Request $request, $form)
     {
-        $data = Input::get();        
+        $data = Input::get();
         check_permission($data['users_details']);
+
+        $location = $data['location'];
 
         $starttime = $data['hourstarttime'][0].":".$data['minutestarttime'][0]." ".$data['amstarttime'][0]." ".$data['monthstarttime'][0]."/".$data['daystarttime'][0]."/".$data['yearstarttime'][0];
 
@@ -252,7 +268,8 @@ class SchedulezeController extends Controller
             'starttime' => $starttime,
             'endtime' => $endtime,
             'notes' => $notes,
-            'type' => $type
+            'type' => $type,
+            'location' => $location
         ]);
 
         $blockId = $Booking->id;
@@ -601,6 +618,7 @@ class SchedulezeController extends Controller
         return back()->with('message', 'Process Failed! Please try again');
 
     }
+
     public function Blockout($form, $blockId = null)
     {
         $id = $this->user_id;
@@ -626,10 +644,10 @@ class SchedulezeController extends Controller
     public function drivetime()
     {
         $business_id = $this->business_id;
-        $LocationTime = LocationTime::where([['business','=',$business_id],['removed','=',0]])->get()->toArray();
+        $LocationTime = LocationTime::where([['business', '=', $business_id],['removed', '=', 0]])->get()->toArray();
         $Location = Location::where([['business','=', $business_id],['removed','=',0]])->get()->toArray();
         $locs2 = $Location;
-        return view('appointments.drivetimes',['LocationTime' => $LocationTime, 'locs2' => $locs2, 'Location' => $Location]);
+        return view('appointments.drivetimes', ['LocationTime' => $LocationTime, 'locs2' => $locs2, 'Location' => $Location]);
     }
 
     /**
@@ -676,8 +694,11 @@ class SchedulezeController extends Controller
         $businessinfo = PanelTemplate::where('user_id', $id)->first();
         if(isset($businessinfo->gjs_html) && !empty($businessinfo->gjs_html)){
             $html = $businessinfo->gjs_html;
+            $user_id = $businessinfo->user_id;
+            $MarkDomain = $businessinfo->marked_domain;
         }else{
             $html = '';
+            $user_id = '';
         }
 
        /* $sizes = $businessinfo->BuildingSizes;
@@ -685,7 +706,38 @@ class SchedulezeController extends Controller
         $addons = $businessinfo->Addons;
         $Location = $businessinfo->Location->pluck('name', 'id');*/
         
-        return view('building.scheduling_panel', compact('html'));
+        return view('building.scheduling_panel', compact('html', 'user_id', 'MarkDomain'));
+    }
+
+    /**
+    * Update template url
+    *
+    * @return \Illuminate\Http\Response
+    */
+
+
+    public function UpdateTemplateUrl()
+    {
+        $id = $this->user_id;
+        $data = Input::get();
+        $panelurl = $data['txtDomain'];
+
+        if (strpos($panelurl, ".") !== false) {
+            $panelurl = str_replace(".", "", $panelurl);
+            $panelurl = preg_replace('/[^A-Za-z0-9\-]/', '', $panelurl);
+        }
+
+        $panel = PanelTemplate::updateOrCreate(
+            ['user_id' => $id],
+            [
+                'unique_url' => $panelurl,
+                'marked_domain' => 1
+            ]
+        );
+
+        session(['hashvalue' => $panelurl]);
+
+        return redirect('/scheduling/schedulepanel')->with('message', 'success');
     }
 
      /**

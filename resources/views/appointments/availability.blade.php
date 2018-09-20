@@ -1,5 +1,11 @@
 @php 
-    $gjs = PanelTemplate(session('id'));
+    if(empty(session('id'))){
+        $gjs = PanelTemplate($data['reference_id']);
+    }
+    else{
+        $gjs = PanelTemplate(session('id'));
+    }
+    
 @endphp
 <div class="loader"></div>
 {!! $gjs->gjs_html !!}
@@ -64,7 +70,7 @@
 				<tr>
 					<td>
 						<span class="grayhead"><b>Scheduling an inspection in {!! getlocation($data['location']) !!}</b></span><br>
-						<span class="head"><h3>{{ Auth::user()->name }}</h3></span>
+						<span class="head"><h3></h3></span>
 						<div class="small_indent"><span class="address"></span></div>
 						@foreach($authorized_inspectors as $qualified_inspector)
 						{!! Form::open([ 'route' => ['BookingForm'],'method' => 'post'] ) !!}

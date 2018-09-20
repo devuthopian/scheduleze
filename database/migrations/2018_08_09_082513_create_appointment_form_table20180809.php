@@ -22,7 +22,7 @@ class CreateAppointmentFormTable20180809 extends Migration
             $table->longText('gjs_styles')->nullable();
             $table->longText('gjs_html')->nullable();
             $table->longText('gjs_components')->nullable();
-            $table->string('unqiue_url')->unique();
+            $table->string('unique_url')->unique();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

@@ -6,7 +6,7 @@
 <div class="set_recc_block">
 	<div class="container">
 		<div class="frameadmin">
-			<h2>Locations<h2>
+			<h2>Locations</h2>
 			<h5>Order is the order the items appear in the popup menu, use radio button to set menu default.<!--<br>Cap is the total number of this class of service you wish to allow booked in a single calendar day.</span>--></h5>				
 				<table border="0" cellspacing="0" cellpadding="2" class="table table-responsive table-bordered">
 					<tbody>
@@ -23,7 +23,7 @@
 						</tr>
 						<tbody class="txtlocationId"> 
 							@php $i=0; @endphp
-							@unless(empty($location))
+							@unless($locations->isEmpty())
 								@foreach($locations as $location)
 									<tr class="trtable_{{ $i }}">
 										<input type="hidden" class="form-control" name="id[{{ $i }}]" value="{{ $location->id }}">
@@ -79,10 +79,6 @@
 				<img src="{{URL::asset('/images/logo.png')}}" alt="Take command of your day" height="79" width="235" border="0">
 			</a>
 		</div> -->
-		<div class="frame-closing"><br><br>
-			<span class="note">Customer Support: <a href="mailto:support@scheduleze.com">support@scheduleze.com</a>
-			</span>
-		</div>
 	</div>
 </div>	
 	
