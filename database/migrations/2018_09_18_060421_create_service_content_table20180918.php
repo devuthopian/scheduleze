@@ -17,10 +17,10 @@ class CreateServiceContentTable20180918 extends Migration
             $table->increments('id')->unique();
             $table->unsignedInteger('business_type_id')->default('0');
             $table->unsignedInteger('business')->default('0');
-            $table->string('type_content')->nullable();
-            $table->string('size_content')->nullable();
-            $table->string('age_content')->nullable();
-            $table->string('add_on_service_content')->nullable();
+            $table->longText('type_content')->nullable();
+            $table->longText('size_content')->nullable();
+            $table->longText('age_content')->nullable();
+            $table->longText('add_on_service_content')->nullable();
             $table->timestamps();
 
             $table->foreign('business')->references('id')->on('business');

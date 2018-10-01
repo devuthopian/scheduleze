@@ -21,7 +21,7 @@
                                 <div class="form-group row">
                                    <!--  <label for="email" class="col-sm-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label> -->
                                     <div class="col-md-12">
-                                        <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name') }}" placeholder="Username" required autofocus>
+                                        <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ $value ? $value : '' }}" placeholder="Username" required autofocus>
                                         @if ($errors->has('name'))
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $errors->first('name') }}</strong>
@@ -44,9 +44,17 @@
                                 <div class="form-group row">
                                     <div class="col-md-7 offset-md-4">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+                                            <input class="form-check-input" type="checkbox" name="txtremember" id="txtremember" {{ old('remember') ? 'checked' : '' }}>
                                             <label class="form-check-label" for="remember">
                                                 {{ __('Remember Me') }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7 offset-md-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="logged_in" id="logged_in">
+                                            <label class="form-check-label" for="Loggin in">
+                                                {{ __('Stay me Logged In') }}
                                             </label>
                                         </div>
                                     </div>

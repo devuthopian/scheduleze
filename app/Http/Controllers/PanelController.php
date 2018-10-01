@@ -7,9 +7,11 @@ use Illuminate\Support\Facades\Input;
 use App\PanelTemplate;
 use App\AppointmentForm;
 use App\UserDetails;
+use App\PanelDefault;
 use Session;
 use Illuminate\Support\Facades\Hash;
 use DB;
+use File;
 
 class PanelController extends Controller
 {
@@ -18,10 +20,17 @@ class PanelController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id)
+    public function index($id, $panel_defualt = '')
     {
         $data = '';
-        $template = PanelTemplate::where('user_id',$id)->first();
+
+        if(!empty($panel_defualt)){
+            $template = PanelDefault::where('user_id', $id)->first();
+        }
+        else{
+            $template = PanelTemplate::where('user_id', $id)->first();
+        }
+
         if(!empty($template)){
             Session::put('hashvalue', $template->unique_url);
 
@@ -60,7 +69,7 @@ class PanelController extends Controller
             $hashvalue = str_replace ('/', '', Hash::make($username, ['Saringan'=>'Naruto Uzumaki! Road To Ninja.']));
             Session::put('hashvalue', $hashvalue);
         }
-        $paneltemp = PanelTemplate::where('user_id',$id)->first();
+        $paneltemp = PanelTemplate::where('user_id', $id)->first();
         if($paneltemp){
             $gjs_html = $paneltemp->gjs_html;
             if(!empty($gjs_html)){
@@ -77,6 +86,7 @@ class PanelController extends Controller
             $gjs_html = $data['gjs_html'];
             $gjs_css = $data['gjs_css'];
         }
+
         $PanelTemplate = PanelTemplate::updateOrCreate(
             ['user_id' => $id],
             [   
@@ -86,6 +96,36 @@ class PanelController extends Controller
                 'gjs_css' => $gjs_css
             ]
         );
+
+        $PanelDefault = PanelDefault::where('user_id', $id)->first();
+        if($PanelDefault){
+            $gjs_html = $PanelDefault->gjs_html;
+            if(!empty($gjs_html)){
+                $new_html = $data['gjs_html'];
+                $new_html = str_replace("$","\\$",$new_html);
+                $divid = "dontbreakdiv";
+                $gjs_html = preg_replace("#<div[^>]*id=\"{$divid}\".*?</div>#si",$new_html,$gjs_html);
+                $gjs_css = $PanelDefault->gjs_css;
+            }else{
+                $gjs_html = $data['gjs_html'];
+                $gjs_css = $data['gjs_css'];
+            }
+        }else{
+            $gjs_html = $data['gjs_html'];
+            $gjs_css = $data['gjs_css'];
+        }
+
+        $PanelDefault = PanelDefault::updateOrCreate(
+            ['user_id' => $id],
+            [   
+                'user_id' => $id,
+                'gjs_html' => $gjs_html,
+                'unique_url' => $hashvalue,
+                'gjs_css' => $gjs_css
+            ]
+        );
+
+        
         if($PanelTemplate->id){
             $ans = array('message' => 'Successfully Saved!' );
             return json_encode($ans);
@@ -167,7 +207,10 @@ class PanelController extends Controller
             foreach ($key as $value) {
                 $name = $value->getClientOriginalName();
                 $getFilename = $value->getFilename();
-                $value->move(public_path( 'template/view/images/' ), $name );
+                $value->move( 'template/view/images/', $name );
+
+                File::copy('template/view/images/'.$name, 'scheduling/view/images/'.$name);
+
                 $filename[] = array('type' => 'image','src' => 'images/'.$name, "unitDim" => "px","height" => 0,"width" => 0 );
                 $viewfile[] = array('type' => 'image','src' => 'view/images/'.$name, "unitDim" => "px","height" => 0,"width" => 0 );
             }

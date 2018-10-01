@@ -32,6 +32,8 @@
                     $tomorrow = get_todays_starttime($tomorrow);
                     $first = get_todays_starttime($now);
                     $getbusindus = getBusinessIndustry(session('indus_id'));
+                    $administration = get_field('users_details', 'administrator', $id);
+                    $day = 10;
                 @endphp
                 <nav>
                     <a href="#" class="n_toggle"><i class="fa fa-bars fa-2x"></i></a>
@@ -55,7 +57,11 @@
                                     @endif
                                 </li>
                                 <li>
-                                    <a href="{{ url('/scheduleze/dayticket/'.$id.'/'.$first) }}">My Tickets</a>
+                                    @if($administration == 1)
+                                        <a href="{{ url('/scheduleze/dayticket/all/') }}">All Tickets</a>
+                                    @else
+                                        <a href="{{ url('/scheduleze/dayticket/'.$id.'/'.$first) }}">My Tickets</a>
+                                    @endif
                                 </li>
                                 <li>
                                     <a href="{{ url('/scheduleze/dayticket/'.$id) }}">My Today</a>
@@ -65,6 +71,9 @@
                                 </li>
                                 <li>
                                     <a href="{{ url('/scheduleze/mapmyday') }}">Map My Day</a>
+                                </li>
+                                <li>
+                                    <a href="#" data-toggle="modal" data-target="#myModal">Search</a>
                                 </li>
                             </ul>
                         </li>

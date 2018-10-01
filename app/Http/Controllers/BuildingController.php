@@ -79,10 +79,10 @@ class BuildingController extends Controller
 
     public function storeServiceContent(Request $request)
     {
-        $data = Input::get();        
-
+        $data = Input::get();
+        
         $BusinessTypes = ServiceContent::updateOrCreate(
-            ['business' => $this->business_id, 'business_type_id' => $data['txtBusinessID']],
+            ['business' => $this->businessid, 'business_type_id' => $data['txtBusinessType']],
             [
                 'type_content' => $data['building_type'],
                 'size_content' => $data['building_size'],

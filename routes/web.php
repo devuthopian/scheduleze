@@ -23,6 +23,9 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('/contact', 'SchedulezeController@contact')->name('contact');
 	Route::get('/user/verify/{token}', 'Auth\RegisterController@verifyUser');
 
+	Route::get('/cookie/set', 'CookieController@setCookie');
+	Route::get('/cookie/get', 'CookieController@getCookie');
+
 	Route::get('/ConfirmStatus', 'SchedulezeController@confirm_status');
 
 	Route::get('/template/{value}', 'PanelController@show');
@@ -51,8 +54,8 @@ Route::group(['middleware' => ['web']], function () {
 
 	Route::post('/faqs/{faqId?}/{action?}', 'Website\FAQController@faqsAction');
 
-	Route::post('/scheduleze/bookingform', 'AppointmentController@bookingform')->name('BookingForm'); //		
-	Route::post('/scheduleze/bookingavailable', 'AppointmentController@bookingavailable')->name('BookingAvailable'); //
+	Route::post('/scheduling/bookingform', 'AppointmentController@bookingform')->name('BookingForm'); //		
+	Route::post('/scheduling/bookingavailable', 'AppointmentController@bookingavailable')->name('BookingAvailable'); //
 	Route::post('/scheduleze/bookappointment', 'AppointmentController@storebookingappointment')->name('BookAppointment');
 	Route::get('/appointment/receipt/{id?}','AppointmentController@reciept');
 
@@ -88,7 +91,7 @@ Route::group(['middleware' => ['web']], function () {
 		Route::post('/scheduleze/blockout/{form?}','SchedulezeController@storeBlockout');
 		Route::get('/services/content', 'SchedulezeController@changeContent');
 		Route::post('/services/content', 'SchedulezeController@changeContent');
-		Route::get('/scheduleze/mapmyday', 'SchedulezeController@mapmyday');
+		Route::get('/scheduleze/mapmyday/{location?}', 'SchedulezeController@mapmyday');
 
 		Route::get('/scheduleze/zigzag','SchedulezeController@ZigZag')->name('ZigZag');
 		Route::post('/scheduleze/zigzag','SchedulezeController@storeZigZag');
@@ -109,7 +112,7 @@ Route::group(['middleware' => ['web']], function () {
 
 		Route::post('/store-template/{value}', 'PanelController@store');
 		Route::post('/template/store/{value}', 'PanelController@update');
-		Route::get('/load-template/{value}', 'PanelController@index');
+		Route::get('/load-template/{value}/{panel_defualt?}', 'PanelController@index');
 		Route::post('/template/images/{value}', 'PanelController@saveimagetemplate');
 		
 		Route::get('/form/{name?}', 'BuildingController@index')->name('Building');
@@ -126,6 +129,7 @@ Route::group(['middleware' => ['web']], function () {
 		
 
 		Route::get('/profile/{id?}', 'ProfileController@UserProfile')->name('profile');
+		Route::get('/profile/remove/{id?}', 'ProfileController@RemoveUserProfile');
 		Route::get('/profile/Email/Attachment', 'SchedulezeController@EmailAttachment');
 		Route::post('/profile/Email/Attachment', 'ProfileController@SaveEmailAttachment');
 		Route::post('/profile_update', 'ProfileController@updateUserAccount')->name('profile_update');

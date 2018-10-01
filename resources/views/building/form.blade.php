@@ -171,7 +171,7 @@
 
 										<td>
 
-											<a href='#' class='note_link' id="{{ $BuildType->id }}" data-model="{{$name}}" data-id="{{ $BuildType->id }}">Remove</a>
+											<a href='#' class='note_link' id="{{ $i }}" data-model="{{$name}}" data-id="{{ $BuildType->id }}">Remove</a>
 
 										</td>
 

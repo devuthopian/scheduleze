@@ -3,8 +3,15 @@
 @section('content')
 
 @php
-	$i_name = get_field('users_details', 'name', $id);
-	$i_last_name = get_field('users_details', 'lastname', $id);
+	$i_name = '';
+	
+	if($id != 'all'){
+		$i_name = get_field('users_details', 'name', $id);
+		$i_last_name = get_field('users_details', 'lastname', $id);
+	}else{
+		$i_last_name = $id;
+	}
+
 	if(!empty(session('business_id'))){
 		$business_infomation = get_business_information(session('business_id'));
 	}
@@ -26,7 +33,7 @@
 		<form action="{{ url('/scheduleze/booking/'.$form.'') }}" method="post">
 			@csrf
 			<input type="hidden" name="action" value="{{$form}}">
-			{!! edit_filter($first, $id, $i_name, $last) !!}
+			{!! edit_filter($first, $id, $i_name, $last, $administration) !!}
 			@if($form == 'appointment')
 				@php
 					$inc='book'; 
@@ -63,12 +70,11 @@
 					<tr>
 						<td bgcolor="white">
 							<div class="frameadmin">
-								<span class="head">{{ucfirst($form)}} for {{ $i_name }} {{ $i_last_name }}<br></span>
+								<span class="head">{{ucfirst($form)}} for {{ $i_name }} {{ $i_last_name }} <a href="{{ $url }}" class="note"><nobr>{{ $include }}</nobr></a><br></span> 
 								<div>
 									Review, modify or remove your appointments
 									<a href="{{ url('/scheduleze/dayticket/'.$id) }}" target="_blank" class="note">Print Tickets »</a>
 								</div>
-								<a href="{{ $url }}" class="note"><nobr>{{ $include }}</nobr></a>
 								<table cellpadding="3" cellspacing="0" border="0" width="100%" class="table border table-responsive table-borderd table-striped select-default">
 									<form action="#" method="post" name="FormName">
 										{!! display_for_edit($id, $first, $last, $order='', $inc) !!}

@@ -23,13 +23,23 @@
                     @foreach($userdetails as $details)
 	                    <tr>
 	                        <td>
-	                        	<b>
-	                        		@if(empty($details->name))
-	                        			{{ $details->user->name }}
-	                        		@else
-	                        			{{ $details->name }}
-	                        		@endif
-	                        	</b>
+                        		@if(empty($details->name))
+                        			@if($details->permission == 1)
+	                        			<b>
+	                        				{{ $details->user->name }}
+	                        			<b>
+                        			@else
+                        				{{ $details->user->name }}
+                        			@endif
+                        		@else
+                        			@if($details->permission == 1)
+	                        			<b>
+	                        				{{ $details->name }}
+	                        			<b>
+                        			@else
+                        				{{ $details->name }}
+                        			@endif
+                        		@endif
 	                        </td>
 	                        <td>
 	                        	<a href="{{ url('/scheduleze/booking/appointment/'.$details->user_id) }}">
@@ -40,7 +50,10 @@
 	                        	</a>
 	                        </td>
 	                        <td>
-	                        	<a href="{{ url('/profile/'.$details->user_id) }}">Edit</a> <!-- / <a href="#">Remove</a> -->
+	                        	<a href="{{ url('/profile/'.$details->user_id) }}">Edit</a>
+	                        	@if($details->administrator == 0)
+	                        		| <a href="{{ url('/profile/remove/'.$details->user_id) }}">Remove</a>
+	                        	@endif
 	                        </td>
 	                    </tr>
 	                @endforeach

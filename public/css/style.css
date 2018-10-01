@@ -55,6 +55,8 @@
  .banner_section a {
      background: #e2a729 !important;
      color: #ffffff !important;
+     -webkit-border-radius: 30px;
+     -moz-border-radius: 30px;
      border-radius: 30px;
      padding: 14px 40px;
      margin: 30px 0;
@@ -132,6 +134,8 @@
  .choose_industry_section .col-sm-12 a {
      background: #429caf !important;
      color: #ffffff !important;
+     -webkit-border-radius: 30px;
+     -moz-border-radius: 30px;
      border-radius: 30px;
      padding: 12px 40px;
      margin: 40px 0px 30px;
@@ -188,6 +192,8 @@
  .subscribe_newsletter input[type="text"] {
      width: 100%;
      padding: 15px 25px;
+     -webkit-border-radius: 30px;
+     -moz-border-radius: 30px;
      border-radius: 30px;
      border: 0px;
      background: #fff;
@@ -197,6 +203,8 @@
      right: 0;
      top: 0;
      padding: 14px 50px;
+     -webkit-border-radius: 30px;
+     -moz-border-radius: 30px;
      border-radius: 30px;
      border: 1px solid #fff;
      background: #429caf;
@@ -225,6 +233,8 @@
      float: left;
      border: 1px solid #ccc;
      padding: 40px;
+     -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
      border-radius: 4px;
      overflow: hidden;
      position: relative;
@@ -293,6 +303,8 @@
  .plan_price_section .plan_price_cont a {
      background: #429caf !important;
      color: #ffffff !important;
+     -webkit-border-radius: 30px;
+     -moz-border-radius: 30px;
      border-radius: 30px;
      padding: 15px 30px;
      margin: 20px 0px 10px;
@@ -409,6 +421,8 @@
 }
  .footer_section select {
      width: 100%;
+     height: 40px;
+     line-height: 35px;
      padding: 8px 20px;
      border: 0px;
      background: #d8d8d8;
@@ -420,6 +434,8 @@
  .footer_section input[type="email"] {
      width: 100%;
      padding: 10px 25px;
+     -webkit-border-radius: 30px;
+     -moz-border-radius: 30px;
      border-radius: 30px;
      border: 0px;
      background: #d8d8d8;
@@ -444,6 +460,8 @@
  .footer_section input[type="submit"] {
      width: 100%;
      padding: 12px 20px;
+     -webkit-border-radius: 30px;
+     -moz-border-radius: 30px;
      border-radius: 30px;
      border: 1px solid #fff;
      background: #429caf;
@@ -659,6 +677,8 @@
  .login_section .login_right_cont input[type="text"], .login_section .login_right_cont input[type="email"] {
      width: 100%;
      padding: 0px 20px;
+     -webkit-border-radius: 30px;
+     -moz-border-radius: 30px;
      border-radius: 30px;
      border: 0px;
      background: #fff;
@@ -668,6 +688,8 @@
  .login_section .login_right_cont input[type="password"] {
      width: 100%;
      padding: 0px 25px;
+     -webkit-border-radius: 30px;
+     -moz-border-radius: 30px;
      border-radius: 30px;
      border: 0px;
      background: #fff;
@@ -694,6 +716,8 @@
  .login_section .login_right_cont input[type="submit"], .login_section .login_right_cont button {
      width: 100%;
      padding: 12px 20px;
+     -webkit-border-radius: 30px;
+     -moz-border-radius: 30px;
      border-radius: 30px;
      border: 1px solid #fff;
      background: #e2a729;
@@ -718,6 +742,8 @@
      padding: 10px 0;
      margin: 0 5px;
      font-size: 16px;
+     -webkit-border-radius: 50%;
+     -moz-border-radius: 50%;
      border-radius: 50%;
 }
  .login_section .login_right_cont .social_icon span:hover {
@@ -791,6 +817,8 @@
      font-weight: bold;
      color: white;
      border: 0 none;
+     -webkit-border-radius: 25px;
+     -moz-border-radius: 25px;
      border-radius: 25px;
      cursor: pointer;
      padding: 10px 5px;
@@ -805,6 +833,8 @@
      font-weight: bold;
      color: white;
      border: 0 none;
+     -webkit-border-radius: 25px;
+     -moz-border-radius: 25px;
      border-radius: 25px;
      cursor: pointer;
      padding: 10px 5px;
@@ -855,6 +885,8 @@
      font-size: 12px;
      color: #333;
      background: white;
+     -webkit-border-radius: 25px;
+     -moz-border-radius: 25px;
      border-radius: 25px;
      margin: 0 auto 10px auto;
 }
@@ -890,6 +922,8 @@
      font-weight: bold;
      color: #ee0979;
      border: 0 none;
+     -webkit-border-radius: 25px;
+     -moz-border-radius: 25px;
      border-radius: 25px;
      cursor: pointer;
      padding: 5px 25px;
@@ -926,6 +960,8 @@
      border: 1px solid #b5bbbb !important;
      width: auto !important;
      padding: 15px 50px !important;
+     -webkit-border-radius: 50px !important;
+     -moz-border-radius: 50px !important;
      border-radius: 50px !important;
      margin: 0px auto !important;
      text-align: center;
@@ -951,6 +987,8 @@
      border: 1px solid #b5bbbb;
      width: auto ;
      padding: 15px 50px;
+     -webkit-border-radius: 50px;
+     -moz-border-radius: 50px;
      border-radius: 50px;
      text-align: center;
      float: none;
@@ -967,6 +1005,8 @@
      border: 1px solid #b5bbbb;
      width: auto ;
      padding: 15px 50px;
+     -webkit-border-radius: 50px;
+     -moz-border-radius: 50px;
      border-radius: 50px;
      text-align: center;
      float: none;
@@ -1005,6 +1045,8 @@
      border: 1px solid #b5bbbb !important;
      width: auto !important;
      padding: 15px 50px !important;
+     -webkit-border-radius: 50px !important;
+     -moz-border-radius: 50px !important;
      border-radius: 50px !important;
      margin: 0px auto !important;
      text-align: center;
@@ -1030,6 +1072,8 @@
      border: 1px solid #b5bbbb;
      width: auto ;
      padding: 15px 50px;
+     -webkit-border-radius: 50px;
+     -moz-border-radius: 50px;
      border-radius: 50px;
      text-align: center;
      float: none;
@@ -1046,6 +1090,8 @@
      border: 1px solid #b5bbbb;
      width: auto ;
      padding: 15px 50px;
+     -webkit-border-radius: 50px;
+     -moz-border-radius: 50px;
      border-radius: 50px;
      text-align: center;
      float: none;
@@ -1075,12 +1121,15 @@
      box-shadow: inset 0 0px 0px rgba(0,0,0,.075);
      -webkit-box-shadow: inset 0 0px 0px rgba(0,0,0,.075);
      color:#333333;
+     -webkit-border-radius: 5px;
+     -moz-border-radius: 5px;
      border-radius:5px;
-     -webkit-border-radius:5px;
 }
  button.btn.btn-success.gmailbtn {
      background: #48aabf;
      border: 0px;
+     -webkit-border-radius: 30px;
+     -moz-border-radius: 30px;
      border-radius: 30px;
      padding: 10px 50px;
      text-transform: uppercase;
@@ -1128,6 +1177,8 @@
 }
  .adminsubmitbar select{
      width:69%;
+     -webkit-border-radius: 20px;
+     -moz-border-radius: 20px;
      border-radius:20px;
      padding:5px 20px;
      height:inherit;
@@ -1136,6 +1187,8 @@
      background: #ff6600;
      padding:7px 15px;
      color:#ffffff;
+     -webkit-border-radius: 20px;
+     -moz-border-radius: 20px;
      border-radius: 20px;
      border:0px;
 }
@@ -1270,6 +1323,8 @@
  .nsignup_cont input[type="text"], .nsignup_cont input[type="email"], .nsignup_cont input[type="password"] {
      width: 100%;
      padding: 11px 25px;
+     -webkit-border-radius: 30px;
+     -moz-border-radius: 30px;
      border-radius: 30px;
      border: 0px;
      background: #d8d8d8;
@@ -1279,6 +1334,8 @@
  .signup_select [class*="col-"] select.form-control {
      width: 100%;
      padding: 11px 25px !important;
+     -webkit-border-radius: 30px;
+     -moz-border-radius: 30px;
      border-radius: 30px;
      border: 0px;
      background: #d8d8d8;
@@ -1288,6 +1345,8 @@
  .nsignup_cont input[type="submit"] {
      background: #48aabf;
      border: 0px;
+     -webkit-border-radius: 30px;
+     -moz-border-radius: 30px;
      border-radius: 30px;
      padding: 10px 50px;
      color: #fff;
@@ -1313,7 +1372,11 @@
 }
  .bookingmain .bookingcontainer select {
      width: 86%;
+     height: 40px;
+     line-height: 35px;
      padding: 8px 20px;
+     -webkit-border-radius: 30px;
+     -moz-border-radius: 30px;
      border-radius: 30px;
      border: 0px;
      background: #d8d8d8;
@@ -1331,6 +1394,8 @@
 }
  .bookingmain .bookingcontainer input[type="submit"] {
      padding: 10px 50px;
+     -webkit-border-radius: 30px;
+     -moz-border-radius: 30px;
      border-radius: 30px;
      border: 1px solid #fff;
      background: #429caf;
@@ -1372,6 +1437,8 @@
 }
  .frameadmin .bluebtn {
      background: #48aabf;
+     -webkit-border-radius: 30px;
+     -moz-border-radius: 30px;
      border-radius: 30px;
 }
  .frameadmin .bluebtn:hover {
@@ -1398,8 +1465,12 @@
 }
  .adding_blockout_cont select, .adding_blockout_cont textarea {
      width: 100%;
+     height: 40px;
+     line-height: 35px;
      max-width: 250px;
      padding: 10px 15px;
+     -webkit-border-radius: 30px;
+     -moz-border-radius: 30px;
      border-radius: 30px;
      border: 0px;
      background: #d8d8d8;
@@ -1411,6 +1482,8 @@
 }
  .adding_blockout_cont input[type="submit"] {
      padding: 10px 20px;
+     -webkit-border-radius: 30px;
+     -moz-border-radius: 30px;
      border-radius: 30px;
      border: 1px solid #fff;
      background: #429caf;
@@ -1450,6 +1523,8 @@
  .nsignup_cont .textfield_left select, .nsignup_cont .textfield_right select, .nsignup_cont .textfield_full select, .nsignup_cont .textfield_left textarea, .nsignup_cont .textfield_right textarea {
      width: 100%;
      padding: 10px 25px !important;
+     -webkit-border-radius: 30px;
+     -moz-border-radius: 30px;
      border-radius: 30px;
      border: 0px;
      background: #d8d8d8;
@@ -1495,8 +1570,12 @@
 }
  .set_recc_block select {
      width: 100%;
+     height: 40px;
+     line-height: 35px;
      max-width: 300px;
      padding: 8px 20px;
+     -webkit-border-radius: 30px;
+     -moz-border-radius: 30px;
      border-radius: 30px;
      border: 0px;
      background: #d8d8d8;
@@ -1504,6 +1583,8 @@
 }
  .set_recc_block input[type="submit"] {
      padding: 7px 50px;
+     -webkit-border-radius: 30px;
+     -moz-border-radius: 30px;
      border-radius: 30px;
      border: 1px solid #fff;
      background: #ff6600;
@@ -1530,12 +1611,17 @@
  .building_cont input[type=text], .building_cont select {
      width: auto !important;
      max-width: 300px !important;
+     -webkit-border-radius: 30px !important;
+     -moz-border-radius: 30px !important;
      border-radius: 30px !important;
      border: 0px !important;
      background-color: #d8d8d8 !important;
      height: 100% !important;
      padding: 8px 10px !important;
      margin: 0px !important;
+}
+.building_cont select {
+    height: 36px !important;
 }
  .building_cont tr.dark-table-heading td {
      border: 1px solid #383838 !important;
@@ -1544,6 +1630,8 @@
  #add_column, .add_columnfor_location {
      background: #ff6600;
      padding: 5px 15px;
+     -webkit-border-radius: 30px;
+     -moz-border-radius: 30px;
      border-radius: 30px;
      display: inline-block;
      margin: 10px 0;
@@ -1589,6 +1677,8 @@
 }
  .nsignup_cont .textfield_full .bussthree_cont select {
      margin: 5px 0 0px;
+     height: 40px;
+     line-height: 35px;
 }
  .loguser .footer_bottom .quick_links {
      padding: 0 0 0 0%;
@@ -1661,9 +1751,9 @@
      width: 32.5%;
      padding: 10px 10px;
      margin-bottom: 20px;
-     border-radius: 30px;
      -webkit-border-radius: 30px;
      -moz-border-radius: 30px;
+     border-radius: 30px;
      border: 0px;
      background: #d8d8d8;
 }
@@ -1680,6 +1770,8 @@
      padding: 10px 30px;
      margin: 0px 0px 40px;
      border: 0px;
+     -webkit-border-radius: 30px;
+     -moz-border-radius: 30px;
      border-radius: 30px;
      color: #fff;
      font-size: 16px;
@@ -1863,6 +1955,8 @@
 .setservice_full textarea {
   width: 100%;
   padding: 10px 15px;
+  -webkit-border-radius: 30px;
+     -moz-border-radius: 30px;
   border-radius: 30px;
   border: 0px;
   background: #d8d8d8;
@@ -1899,4 +1993,7 @@
     width: 59%;
     float: right;
     margin: 20px 0 0;
+}
+.borderdisplay {
+   border-style: inset;
 }

@@ -9,6 +9,7 @@ use App\UserDetails;
 use Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
+use DB;
 
 
 class ProfileController extends Controller
@@ -62,6 +63,13 @@ class ProfileController extends Controller
             'UserData' => $UserData,
         ];
         return view('profiles.UserProfileEdit')->with($data);
+    }
+
+    public function RemoveUserProfile($id = '')
+    {
+        DB::table('users_details')->where('user_id', $id)->update(['removed' => 1]);
+
+        return redirect('/scheduleze/inspectors')->with('message', 'successfully removed');
     }
 
     public function SaveEmailAttachment(Request $request)

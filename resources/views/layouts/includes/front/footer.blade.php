@@ -70,6 +70,67 @@
             </div>
         @endguest
     </div>
+
+    <!-- Popup for search menu -->
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Search Appointments</h4>
+            </div>
+            <div class="modal-body">
+                <div class="signup_cont nsignup_cont">
+                    <div class="container">
+                        <form action="#" method="POST">
+                        @csrf
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    {!! Form::label('address', 'Address', array('class' => 'control-label')); !!}
+                                    <input type="text" name="txtAddress">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    {!! Form::label('client_name', 'Client Name', array('class' => 'control-label')); !!}
+                                    <input type="text" name="txtClientName">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    {!! Form::label('agent_name', 'Agent Name', array('class' => 'control-label')); !!}
+                                    <input type="text" name="txtAgentName">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    {!! Form::label('keyword', 'Keyword', array('class' => 'control-label')); !!}
+                                    <input type="text" name="txtKeyword">
+                                </div>
+                            </div>
+                            {!!
+                                Form::button('Search', array(
+                                    'class'             => 'btn btn-success gmailbtn',
+                                    'type'              => 'submit',
+                                ))
+                            !!}
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+        </div>
+    </div>
+
     <div class="copyright_section">
         <div class="container">
             <div class="copright_left">&copy; copyright all rights reserved</div>

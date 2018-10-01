@@ -49,9 +49,9 @@ class InspectorController extends Controller
         $userid = Auth::id();
         
         if($permission == 1){
-            $userdetails = UserDetails::where('business', $this->businessid)->get();
+            $userdetails = UserDetails::where([['business', '=', $this->businessid],['removed', '=', 0]])->get();
         }else{
-            $userdetails = UserDetails::where('user_id', $userid)->get();
+            $userdetails = UserDetails::where([['user_id', '=', $userid],['removed', '=', 0]])->get();
         }
 
         return view('inspectors.inspectors', compact('userdetails'));

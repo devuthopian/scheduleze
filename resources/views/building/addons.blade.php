@@ -51,7 +51,7 @@
 											<input class="form-control" type="hidden" id="buildId" name="id[{{ $i }}]" value="{{ $BuildType->id }}">
 										</td>
 										<td>				
-											{!! show_buffer($BuildType->id, $BuildType->buffer) !!}
+											{!! show_buffer($i, $BuildType->buffer) !!}
 										</td>
 										<td>
 											<input type="text" class="form-control" name="price[{{ $i }}]" value="{{ $BuildType->price }}" size="5" required>
@@ -69,7 +69,7 @@
 											{!! get_subs_users($i) !!}
 										</td>
 										<td>
-											<a href='#' class='note_link' id="{{ $BuildType->id }}" data-model="{{$name}}" data-id="{{ $BuildType->id }}">Remove</a>
+											<a href='#' class='note_link' id="{{ $i }}" data-model="{{$name}}" data-id="{{ $BuildType->id }}">Remove</a>
 										</td>
 									</tr>
 									<script type="text/javascript">

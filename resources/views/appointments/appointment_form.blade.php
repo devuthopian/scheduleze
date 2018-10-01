@@ -8,23 +8,25 @@
     else{
         $gjs = PanelTemplate(session('id'));
     }
-    
+    $userId = Auth::id();
 @endphp
-<div class="loader"></div>
+
+@if($data['reference_id'] == $userId)
+    <link rel="stylesheet" href="{{ URL::asset('css/style.css') }}">
+    @include('layouts.includes.front.header')
+@else
+    <link rel="stylesheet" href="{{ URL::asset('css/style.css') }}">
+    <div class="loader"></div>
+@endif
+
 {!! $gjs->gjs_html !!}
 <style type="text/css">
     @if(!empty($gjs))
         {!! $gjs->gjs_css !!}
     @endif
-    .loader { 
-        position: fixed; 
-        left: 0; 
-        top: 0; 
-        z-index: 999; 
-        width: 100%; 
-        height: 100%; 
-        overflow: visible; 
-        background: #fff url('/images/Preloader_2.gif') no-repeat center center; 
+
+    .header_section {
+        float: unset !important;
     }
 </style>
 <div class="NewForm">
@@ -41,8 +43,19 @@
             }else{
                 $businessId = Session::get('business_id');
             }
-            $building_size = $data['building_size'];
-            $building_age = $data['building_age'];
+
+            if(!empty($data['building_size'])){
+                $building_size = $data['building_size'];
+            }else{
+                $building_size = '';
+            }
+            
+            if(!empty($data['building_age'])){
+                $building_age = $data['building_age'];
+            }else{
+                $building_age = '';
+            }
+            
             $location = $data['location'];
             if(array_key_exists('addons', $data)){
                 $addons = $data['addons'];
@@ -103,10 +116,12 @@
                                                     $tot = buildType($data);                                     
                                                 @endphp
 
-                                                @for($i=0;$i<count($tot);$i++) 
-                                                    {{ $tot[$i] }}
-                                                    <br>
-                                                @endfor 
+                                                @if(!empty($tot))
+                                                    @for($i=0;$i<count($tot);$i++) 
+                                                        {{ $tot[$i] }}
+                                                        <br>
+                                                    @endfor 
+                                                @endif
                                                 <br>Total Cost: ${!! CountAppFormCost($data) !!}
                                             </span>
                                             <input type="hidden" name="full_description" value="">
@@ -146,7 +161,7 @@
                                             <input type="text" name="requiredInspection_Address" size="40" value="" required>
                                             <br>
                                             @if(!empty($data[0]['starttime']))
-                                                <span class="note"><b>Beginning at {{ $start_date }}.  Cost: ${!! CountAppFormCost($data) !!}</b></span>
+                                                <span class="note"><b>Beginning at {{ $start_date }}.  <!-- Cost: ${!! CountAppFormCost($data) !!} --></b></span>
                                             @endif
                                             <br>
                                             <!--<span class="note">Home/Condo 2501-3500 sq. ft. ($475)<br>
@@ -214,7 +229,7 @@
                                     <tr>
                                         <td valign="top"><span class="signup_label_optional">Agent Name</span>
                                             <br>
-
+                                            <?php $cookies = Cookie::get(); ?>
                                             <input type="text" name="Agent_Name" value="" size="20">
                                         </td>
                                         <td valign="top"><span class="signup_label_optional">Agent Phone</span>
@@ -294,11 +309,11 @@
             $('.alert-info').html('<strong>There is nothing to show you.</strong> Click  <a href="{{ url("/form/BuildingTypes") }}"><strong>here</strong></a> to add services.');
         @endif
 
-        $('.loader').show();
         if($("#dontbreakdiv").length > 0) {
             $('.panel').html($('.NewForm').html());
-            $('.loader').remove();
             $('.NewForm').remove();
+
+            $('.loader').fadeOut(1000);
         }
     });
 </script>

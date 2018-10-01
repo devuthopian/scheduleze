@@ -176,7 +176,7 @@ class AppointmentController extends Controller
             }
 
         }
-        return redirect('/scheduleze/DriveTime')->with('message','Successfully saved!');
+        return redirect('/scheduleze/booking/appointment')->with('message','Successfully saved!');
     }
 
 
@@ -501,7 +501,7 @@ class AppointmentController extends Controller
 
                 $expire = time() + 60*60*24*180;
 
-                Cookie::queue('agent_id', $cookie_id, $expire);
+                Cookie::queue('agent_id', $AddonBookings->id, $expire);
             }
 
                 /*setcookie("agent_id", $ag[cookie_id], $expire, "/", ".scheduleze.com");*/ //old method for saving cookie

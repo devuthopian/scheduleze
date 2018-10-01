@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use App\Http\Requests;
 
 use Socialite;
 use App\User;
@@ -13,6 +15,7 @@ use App\Business;
 use App\PanelTemplate;
 use Auth;
 use App\Http\Controllers\Auth\InspectorAuthController;
+use Cookie;
 
 class LoginController extends Controller
 {
@@ -43,10 +46,12 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
     use InspectorAuthController;
     use AuthenticatesUsers {
         logout as performLogout;
     }
+
 
     /**
     * Get the failed login response instance.
@@ -67,6 +72,12 @@ class LoginController extends Controller
             ]);
         }
     }*/
+
+    public function showLoginForm()
+    {
+        $value = Cookie::get('name');
+        return view('auth.login', compact('value'));
+    }
 
     /**
     * Override the username method used to validate login
@@ -103,10 +114,30 @@ class LoginController extends Controller
         }else{
             return redirect('business_info')->with('warning', 'You need to fill business info before proceeding to anything else. It will help us to cooperate with you!');
         }
+
+       
+
         //if(!empty($PanelTemplate->unique_url)){
             //return redirect('/template/'.$PanelTemplate->unique_url);
         //}
-        
+
+        if($request->input('logged_in') == 'on'){
+            $path = base_path('.env');
+
+            if (file_exists($path)) {
+                file_put_contents($path, str_replace(
+                    'SESSION_LIFETIME=120', 'SESSION_LIFETIME=1440', file_get_contents($path)
+                ));
+            }
+        }
+
+        if($request->input('txtremember') == 'on'){
+            //Cookie::queue(Cookie::forget('name'));
+            $username = $user->name;
+            $expire = time() + 960*60*24*180;
+            //$response->withCookie(cookie()->forever('name', $username));
+            Cookie::queue('name', $username, $expire);
+        }
 
         return redirect()->intended($this->redirectPath());
         

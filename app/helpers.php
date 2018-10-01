@@ -138,7 +138,8 @@ if(! function_exists('getlocation')){
 	function getlocation($id){
 		
 		$getformdata = DB::table('locations')->select('name','price')->where('id',$id)->first();
-		return $getformdata->name.' + $'.$getformdata->price;;
+		/*return $getformdata->name.' + $'.$getformdata->price;*/
+		return $getformdata->name;
 	}
 }
 
@@ -273,7 +274,7 @@ if(! function_exists('get_drivetime_popup')){
 }
 
 if(! function_exists('edit_filter')){
-	function edit_filter ($first, $id, $name, $last='0') {
+	function edit_filter ($first, $id, $name, $last='0', $administration = 0) {
 		//inspectors popup
 		$html = "<td class=\"display\"><div class=\"labelInsp\"><label>Inspector</label>";
 		/*$html .= "<option value =\"$id\">$name</option>
@@ -286,7 +287,7 @@ if(! function_exists('edit_filter')){
 		}
 		$html .= "</select></td>
 		";*/
-		$html .= get_inspector_popup("name", $id);
+		$html .= get_inspector_popup("name", $id, '', $administration);
 		//time popups
 		$html .= "<td class=\"display\"><div class=\"labelstart\"><label>Start time</label>".get_time_popup ($first, $designate="", 1, 1, 1, 0, 0, 0, 'start');
 		$html .="</div></td>";
@@ -300,7 +301,7 @@ if(! function_exists('edit_filter')){
 }
 
 if(! function_exists('get_inspector_popup')){
-	function get_inspector_popup($column='name', $id='', $bus='') {
+	function get_inspector_popup($column='name', $id='', $bus='', $administration = 0 ) {
 		if ($bus == "") {
 			$bus = session('business_id');
 		}
@@ -317,6 +318,14 @@ if(! function_exists('get_inspector_popup')){
 		$rows = DB::select('select * from users_details '.$where.' order by permission DESC');
 		$html = "\n\t\t\t<select name=\"users_details\" class=\"smallselect\">";
 
+		if($administration == 1){
+			if($id == 'all'){
+				$html .= "\n\t\t\t\t<option value=\"all\" selected>All</option>";
+			}else{
+				$html .= "\n\t\t\t\t<option value=\"all\">All</option>";
+			}
+		}
+
 		foreach ($rows as $row) {
 			if(empty($row->$column)){
 				$users_row = DB::table('users')->where('id', $row->user_id)->first();
@@ -327,6 +336,7 @@ if(! function_exists('get_inspector_popup')){
 			} else {
 				$select = "";
 			}
+
 			$html .= "\n\t\t\t\t<option value=\"".$row->user_id."\" $select>".$row->$column."</option>";
 			
 		}
@@ -553,7 +563,7 @@ if(! function_exists('get_zigpop')){
 if(! function_exists('get_field')){
 	function get_field($table, $field, $id) {
 		if($table == 'users_details'){
-			$get = DB::table($table)->select($field)->where('user_id', $id)->first();
+			$get = DB::table($table)->select($field)->where([['user_id', '=', $id],['removed', '=', 0]])->first();
 		}else{
 			$get = DB::table($table)->select($field)->where('id', $id)->first();
 		}
@@ -1259,7 +1269,7 @@ if(! function_exists('am_popup')){
 			$popup .="\t\t\t\t	<option value=\"AM\" selected>AM</option>\n";
 			$popup .="\t\t\t\t	<option value=\"PM\">PM</option>\n";
 		}else{
-			$popup .="\t\t\t\t	<option value=\"PM\">PM</option>\n";
+			$popup .="\t\t\t\t	<option value=\"AM\">AM</option>\n";
 			$popup .="\t\t\t\t	<option value=\"PM\" selected>PM</option>\n";
 		}
 		$popup .="\t\t\t\t</select>\n";
@@ -1318,40 +1328,69 @@ if(! function_exists('display_for_edit')){
 			$order = "id";
 			$incdec = "desc";
 		}
+		if($id == 'all'){
+			$order = "user_id";
+			$incdec = "desc";
+		}
 
 		$whereArr = array();
+		$business = session('business_id');
 
 		if ( $inc == "block" && $first == "") {
 
-			$whereArr = [['endtime', '>', $now], ['user_id', '=', $id], ['type', '=', 1], ['removed', '=', 0]];
-
+			if($id == 'all'){
+				$whereArr = [['endtime', '>', $now], ['business', '=', $business], ['type', '=', 1], ['removed', '=', 0]];
+			}
+			else{
+				$whereArr = [['endtime', '>', $now], ['user_id', '=', $id], ['type', '=', 1], ['removed', '=', 0]];
+			}
 		} 
 		elseif($inc == "block" && !empty($first))
 		{
-
-			$whereArr = [['endtime', '>', $first], ['starttime', '<', $last], ['user_id', '=', $id], ['type', '=', 1], ['removed', '=', 0]];
+			if($id == 'all'){
+				$whereArr = [['endtime', '>', $first], ['starttime', '<', $last], ['business', '=', $business], ['type', '=', 1], ['removed', '=', 0]];
+			}
+			else{
+				$whereArr = [['endtime', '>', $first], ['starttime', '<', $last], ['user_id', '=', $id], ['type', '=', 1], ['removed', '=', 0]];
+			}
 
 		}
 		elseif ( $inc=="book" && $first == "" ) {
 			
-			$whereArr = [['endtime', '>', $now], ['user_id', '=', $id], ['type', '=', 0], ['removed', '=', 0]];
+			if($id == 'all'){
+				$whereArr = [['endtime', '>', $now], ['business', '=', $business], ['type', '=', 0], ['removed', '=', 0]];
+			}
+			else{
+				$whereArr = [['endtime', '>', $now], ['user_id', '=', $id], ['type', '=', 0], ['removed', '=', 0]];
+			}
 
 		}
 		elseif($inc == "book" && !empty($first))
 		{
-
-			$whereArr = [['endtime', '>', $first], ['starttime', '<', $last], ['user_id', '=', $id], ['type', '=', 0], ['removed', '=', 0]];
-
+			if($id == 'all'){
+				$whereArr = [['endtime', '>', $first], ['starttime', '<', $last], ['business', '=', $business], ['type', '=', 0], ['removed', '=', 0]];
+			}
+			else{
+				$whereArr = [['endtime', '>', $first], ['starttime', '<', $last], ['user_id', '=', $id], ['type', '=', 0], ['removed', '=', 0]];
+			}
 		}
 		elseif($inc == "" && !empty($first))
 		{
-
-			$whereArr = [['endtime', '>', $first], ['starttime', '<', $last], ['user_id', '=', $id], ['removed', '=', 0]];
+			if($id == 'all'){
+				$whereArr = [['endtime', '>', $first], ['starttime', '<', $last], ['business', '=', $business], ['removed', '=', 0]];
+			}
+			else{
+				$whereArr = [['endtime', '>', $first], ['starttime', '<', $last], ['user_id', '=', $id], ['removed', '=', 0]];
+			}
 
 		}
 		else {
-			
-			$whereArr = [['endtime', '>', $now], ['user_id', '=', $id], ['removed', '=', 0]];
+			if($id == 'all'){
+				$whereArr = [['endtime', '>', $now], ['business', '=', $business], ['removed', '=', 0]];
+			}
+			else{
+				$whereArr = [['endtime', '>', $now], ['user_id', '=', $id], ['removed', '=', 0]];
+			}
 
 		}
 
@@ -1377,7 +1416,9 @@ if(! function_exists('display_for_edit')){
 
 		$h=0;
 		//loop to create the display
+		
 		if (count($tt)>0) {
+			$old = array();
 			foreach ($tt as $row) {
 				$h++;
 				if (($h%2)==0){
@@ -1400,11 +1441,17 @@ if(! function_exists('display_for_edit')){
 					$html .= "
 					<tr>
 						<td colspan = \"7\" bgcolor=\"#FFCD49\"><b>".$full_day_label."</b>&nbsp;&nbsp;";
-					$url = "https://needsecured.com/developer/scheduleze/public/scheduleze/dayticket/$row->user_id/1/$start_of_day";
+					$url = "https://needsecured.com/developer/scheduleze/scheduleze/dayticket/$row->user_id/1/$start_of_day";
 					$html .= '<a href="'.$url.'" target="_blank" class="note">Print Day Ticket &#187;</a></td>
 					</tr>';
 					
 				}
+
+				if (empty(array_search($row->user_id, $old))){
+					$i_name = get_field('users_details', 'name', $row->user_id);
+					$html .="<tr><td><b>".$i_name."</b></td></tr>";
+				}
+
 
 				
 				if ($end_day == $start_day) {
@@ -1420,15 +1467,15 @@ if(! function_exists('display_for_edit')){
 				}
 				//create html
 				$html .= "<tr>\n";
-				$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\">$hora</td>\n";
+				$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\">$hora</td>\n";
 				if ($row->type == 1) {
 					$notes = $row->notes;
-					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\">Blockout</td>\n";
-					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\">$notes</td>\n";
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\">Blockout</td>\n";
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\">$notes</td>\n";
 
-					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\">--</td>\n";
-					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\"><nobr>--</nobr><br></td>\n";
-					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\"><nobr>--</nobr><br><nobr></nobr></td>\n";
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\">--</td>\n";
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\"><nobr>--</nobr><br></td>\n";
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\"><nobr>--</nobr><br><nobr></nobr></td>\n";
 
 					$client_name = '';
 					$dayphone = '';
@@ -1454,7 +1501,12 @@ if(! function_exists('display_for_edit')){
 					//$city = $this->get_field("location", "name", "$location");
 
 					$city = DB::table('locations')->select('name')->where([['id', '=', $location],['removed', '=', 0]])->first();
-					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\">$inspection_address<br>$city->name</td>\n";
+
+					$encrypt = Crypt::encrypt($inspection_address, $city->name);
+					$route = 'http://scheduleze20.com/rick/scheduleze/mapmyday'.'/'.$encrypt;
+
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\"><a href=\"$route\">$inspection_address, $city->name</a></td>\n";
+
 					if ($user_notes !=""){ $user_notes = "<br>$user_notes"; }
 					if ($notes !=""){ $user_notes .= "<br><b>$notes</b>"; }
 					if($agent_email!=""){
@@ -1463,7 +1515,7 @@ if(! function_exists('display_for_edit')){
 						$agent_name = $agent_name;
 					}
 					
-					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\">$agent_name  $agent_phone $user_notes</td>\n";
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\">$agent_name  $agent_phone $user_notes</td>\n";
 				
 					if(isset($email)){
 						$client_name = "<a href=\"mailto:$email\" class=\"note_link\">$firstname $lastname</a>";
@@ -1471,22 +1523,22 @@ if(! function_exists('display_for_edit')){
 						$client_name = $firstname." ".$lastname;
 					}
 
-					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\">$price</td>\n";
-					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\"><nobr>$client_name</nobr><br>$siz</td>\n";
-					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\"><nobr>$dayphone</nobr><br><nobr>$homephone</nobr></td>\n";
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\">$price</td>\n";
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\"><nobr>$client_name</nobr><br>$siz</td>\n";
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\"><nobr>$dayphone</nobr><br><nobr>$homephone</nobr></td>\n";
 				}
 
 				if ($row->type == "1"){
 					//$url ='/scheduleze/blockout/EditBlockout/'.$blockout_id;
-					$url ='/developer/scheduleze/public/scheduleze/blockout/EditBlockout/'.$blockout_id;
-					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\"><nobr><a href=\"$url\" class=\"note_link\">Edit</a><span class\"note\">  </span><a href=\"delete/$blockout_id\"  class=\"note_link\">Remove</a></nobr></td>\n";
+					$url ='/developer/scheduleze/scheduleze/blockout/EditBlockout/'.$blockout_id;
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\"><nobr><a href=\"$url\" class=\"note_link\">Edit</a><span class\"note\">  </span><a href=\"delete/$blockout_id\"  class=\"note_link\">Remove</a></nobr></td>\n";
 				} else {
 					//$url = "https://needsecured.com/developer/scheduleze/public/scheduleze/booking/edit/$id";
-					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\"><nobr><a href=\"form/edit/$id\" class=\"note_link\">Edit</a><span class\"note\">  </span><a href=\"delete/$id\"  class=\"note_link\">Remove</a></nobr></td>\n";
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\"><nobr><a href=\"form/edit/$id\" class=\"note_link\">Edit</a><span class\"note\">  </span><a href=\"delete/$id\"  class=\"note_link\">Remove</a></nobr></td>\n";
 				}
 				$html .= "</tr>\n";
 				$last_end_day = date("j", $row->endtime);
-				
+				$old[$h] = $row->user_id;
 			}
 		}else{
 			$html = '<tr><td class="display" style="text-align: center;">No Results Found</td>';
@@ -1606,17 +1658,20 @@ if(! function_exists('display_dayticket')){
 			auth()->logout();
 		}
 		
-		if (!is_numeric($userid)){
+		$usrid = $userid;
+		if (!is_numeric($userid) && $userid != 'all'){
 			if (is_numeric(session('affected_inspector'))){
 				$userid = session('affected_inspector');
 			} else {
 				$userid = session('id');
 			}
+		}else{
+			$usrid = session('id');
 		}
 		
-		check_permission($userid);
+		check_permission($usrid);
 		
-		$this_business = get_field("users_details", "business", $userid);
+		$this_business = get_field("users_details", "business", $usrid);
 		
 		$show_email = get_field("business", "print_ticket_email", $this_business);
 		
@@ -1642,11 +1697,12 @@ if(! function_exists('display_dayticket')){
 		if ($first=="" || (!is_numeric($first))) {
 			if (is_numeric(session('first_time'))){
 				$first = session('first_time'); //use the value from the popup
-			} else {
-				$first = get_todays_starttime($now);
-				session(['first_time' => $first]);
 			}
+
+			$first = get_todays_starttime($now);
+			session(['first_time' => $first]);
 		}
+
 		
 		if ($days == "" || (!is_numeric($days))){
 			if (is_numeric(session('last_time'))){
@@ -1660,7 +1716,12 @@ if(! function_exists('display_dayticket')){
 		}
 		
 		$first = $first - 1;
-		$tt = DB::table('bookings')->where([['starttime', '>', $first],['starttime', '<', $last],['user_id', '=', $userid],['removed', '=', 0]])->orderBy('type', 'ASC')->orderBy('starttime', 'ASC')->get();
+
+		if($userid == 'all'){
+			$tt = DB::table('bookings')->where([['starttime', '>', $first],['starttime', '<', $last],['business', '=', $this_business],['removed', '=', 0]])->orderBy('type', 'ASC')->orderBy('starttime', 'ASC')->get();
+		}else{
+			$tt = DB::table('bookings')->where([['starttime', '>', $first],['starttime', '<', $last],['user_id', '=', $userid],['removed', '=', 0]])->orderBy('type', 'ASC')->orderBy('starttime', 'ASC')->get();
+		}
 			
 		//$sql = "select * from bookings where starttime > '$first' and starttime < '$last' and inspector = '$inspector'".$inc." and removed = '0' order by $order starttime asc";
 		
@@ -1698,8 +1759,11 @@ if(! function_exists('display_dayticket')){
 						$add_end_time = "";
 					}
 					$full_day_label = $add_end_time.date("l, F jS", $row->endtime);
-					$inspector_name = get_field('users_details', 'name', $userid);
-					$inspector_lastname = get_field('users_details', 'lastname', $userid);
+					/*if($userid == 'all'){
+						$userid = $row->user_id;
+					}*/
+					$inspector_name = get_field('users_details', 'name', $row->user_id);
+					$inspector_lastname = get_field('users_details', 'lastname', $row->user_id);
 					$html .= "
 					<tr>
 						<td colspan=\"4\" bgcolor=\"black\"><span class=\"whitehead\">$full_day_label</span></td>

@@ -35,6 +35,7 @@
     </div>
 </div>
 <div class="button" style="text-align:center;">
+    <button class="common callDefualt" style="float: left;"><i class="fa fa-refresh" aria-hidden="true"></i>  Restore to Default</button>
     <button class="common" onclick="history.go(-1);"><i class="fa fa fa-long-arrow-left" aria-hidden="true"></i> Go Back</button>
     <button id="btnSave" class="common"><i class="fa fa-save" aria-hidden="true"></i> Save</button>
     <button class="btnSaveTemplate"><i class="fa fa-folder" aria-hidden="true"></i> Save Template</button>
@@ -60,7 +61,7 @@
     </div>
 </div>
 
-@if($MarkDomain == 0)
+@if(!isset($MarkDomain) || $MarkDomain == 0)
     <div class="modal-wrapper">
         <div class="modal">
             <div class="head">
@@ -72,7 +73,7 @@
                     <input type="hidden" name="">
                     <fieldset>
                         <legend>Enter your domain so we masked landing page URL as your domain name</legend>
-                        <label for="name">Domain name:</label>
+                        <label class="label" for="name">Domain name:</label>
                         <input type="text" id="domain" name="txtDomain" placeholder="Enter your domain here">
                     </fieldset>
                     <button class="txtBtnSubmit" type="submit">Submit</button>
@@ -84,7 +85,7 @@
 
 <script type="text/javascript">
 
-@if($MarkDomain == 0)
+@if(!isset($MarkDomain) || $MarkDomain == 0)
     $('.modal-wrapper').toggleClass('open');
     $('.panel-main').toggleClass('blur');
 
@@ -94,7 +95,6 @@
         return false;
     });
 @endif
-
     //grapejs editor
     var editor = grapesjs.init({
         height: '100%',
@@ -250,6 +250,16 @@
             alert('There is nothing to show you');
         }
     });
+
+    $('.callDefualt').click(function(event) {
+        /* Act on the event */
+        event.preventDefault();
+        var panel_default = 1;
+        editor.StorageManager.get('remote').set({ urlLoad: '{{ url("/load-template/$value/'+panel_default+'") }}'});
+        editor.load(res => console.log('Load callback'));
+    });
+
+    
     //editor.getSelected().addStyle({'background-image': `url(${url})`});
 
     $('#btnSave').click(function(event) {
@@ -485,7 +495,7 @@ form {
     background: #f4f7f8;
     border-radius: 8px;
 }
-input[type="text"]{
+#domain {
     background: rgba(255, 255, 255, 0.1);
     border: none;
     font-size: 16px;
@@ -518,12 +528,12 @@ fieldset {
     margin-bottom: 30px;
     border: none;
 }
-label {
+.label {
     display: block;
     margin-bottom: 8px;
 }
 
-label.light {
+.label.light {
     font-weight: 300;
     display: inline;
 }

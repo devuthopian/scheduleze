@@ -36,7 +36,9 @@
 									@foreach ($locs2 as $loc2)
 										@if (count($oldt) > 1)
 											<?php 
-												$time = $oldt[$loc['id']][$loc2['id']];
+												if (isset($oldt[$loc['id']][$loc2['id']])) {
+													$time = $oldt[$loc['id']][$loc2['id']];
+												}
 											?>
 										@endif
 										<?php								

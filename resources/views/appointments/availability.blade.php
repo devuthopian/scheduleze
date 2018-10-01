@@ -5,23 +5,26 @@
     else{
         $gjs = PanelTemplate(session('id'));
     }
-    
+    $userId = Auth::id();
 @endphp
-<div class="loader"></div>
+   
+    
+    @if($data['reference_id'] == $userId)
+        <link rel="stylesheet" href="{{ URL::asset('css/style.css') }}">
+        @include('layouts.includes.front.header')
+    @else
+        <link rel="stylesheet" href="{{ URL::asset('css/style.css') }}">
+        <div class="loader"></div>
+    @endif
+
 {!! $gjs->gjs_html !!}
 <style type="text/css">
     @if(!empty($gjs))
         {!! $gjs->gjs_css !!}
     @endif
-    .loader { 
-        position: fixed; 
-        left: 0; 
-        top: 0; 
-        z-index: 999; 
-        width: 100%; 
-        height: 100%; 
-        overflow: visible; 
-        background: #fff url('/images/Preloader_2.gif') no-repeat center center; 
+
+    .header_section {
+        float: unset !important;
     }
 </style>
 <div class="NewForm" style="display: none;">
@@ -34,7 +37,19 @@
             $addons = array();
             $BuildType = $data['building_type'];
             $businessId = Session::get('business_id');
-            $building_size = $data['building_size'];
+
+            if(!empty($data['building_size'])){
+                $building_size = $data['building_size'];
+            }else{
+                $building_size = '';
+            }
+
+            if(!empty($data['building_age'])){
+                $building_age = $data['building_age'];
+            }else{
+                $building_age = '';
+            }
+
             $building_age = $data['building_age'];
             $location = $data['location'];
             if(array_key_exists('addons', $data)){
@@ -65,7 +80,7 @@
 
             $increment = 900;
         @endphp
-	    <table class="accent" width="650">
+	    <table class="accent">
 			<tbody>
 				<tr>
 					<td>
@@ -94,12 +109,14 @@
 </div>
 <script src="{{ asset('js/jquery.min.js') }}"></script>
 <script type="text/javascript">
-    $(document).ready(function() {
-        $('.loader').show();
+    $(document).ready(function() {        
         if($("#dontbreakdiv").length > 0) {
             $('.panel').html($('.NewForm').html());
-            $('.loader').remove();
             $('.NewForm').remove();
+
+            $('.loader').fadeOut(1000);
         }
+
+        
     });
 </script>

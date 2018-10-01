@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Input;
 use PDF;
 use DB;
 use Validator;
+use Auth;
+use Crypt;
 
 class SchedulezeController extends Controller
 {    
@@ -47,9 +49,10 @@ class SchedulezeController extends Controller
         return view('scheduleze.welcome');
     }
 
-    public function mapmyday()
+    public function mapmyday($location = '')
     {
-        return view('scheduleze.mapmyday');
+        $location = Crypt::decrypt($location);
+        return view('scheduleze.mapmyday', compact('location'));
     }
 
     public function changeContent()
@@ -83,7 +86,10 @@ class SchedulezeController extends Controller
 
     public function scheduling_solutions()
     {
-        auth()->logout();
+        if(Auth::id()){
+            return redirect('/scheduleze/booking/appointment');
+        }
+        //auth()->logout();
         return view('scheduleze.scheduling_solutions');
     }
 
@@ -219,7 +225,9 @@ class SchedulezeController extends Controller
         session(['first_time' => $first]);
         session(['last_time' => $last]);
 
-        return view('appointments.bookings', compact('id','first','last','order', 'inc', 'form'));
+        $administration = get_field('users_details', 'administrator', $this->user_id);
+
+        return view('appointments.bookings', compact('id','first','last','order', 'inc', 'form', 'administration'));
     }
 
     public function storeBlockout(Request $request, $form)
@@ -290,11 +298,13 @@ class SchedulezeController extends Controller
             $id = $userid;
         }
 
+        $administration = get_field('users_details', 'administrator', $id);
+
         $first = time();
         $last = $first + 1209500;
 
         /*$businesshours = BusinessHours::where([['user_id','=',$id],['removed','=',0]])->get();*/
-        return view('appointments.bookings', compact('id', 'first', 'last','form'));
+        return view('appointments.bookings', compact('id', 'first', 'last', 'form', 'administration'));
     }
 
     public function Documents()
@@ -644,7 +654,7 @@ class SchedulezeController extends Controller
     public function drivetime()
     {
         $business_id = $this->business_id;
-        $LocationTime = LocationTime::where([['business', '=', $business_id],['removed', '=', 0]])->get()->toArray();
+        $LocationTime = LocationTime::where([['business', '=', $business_id],['removed', '=', 0]])->orderBy('start', 'ASC')->get()->toArray();
         $Location = Location::where([['business','=', $business_id],['removed','=',0]])->get()->toArray();
         $locs2 = $Location;
         return view('appointments.drivetimes', ['LocationTime' => $LocationTime, 'locs2' => $locs2, 'Location' => $Location]);
@@ -723,7 +733,9 @@ class SchedulezeController extends Controller
         $panelurl = $data['txtDomain'];
 
         if (strpos($panelurl, ".") !== false) {
-            $panelurl = str_replace(".", "", $panelurl);
+            $rchar = array('.', 'https', 'http', 'www', 'com', 'co'); // content to be deleted from string
+
+            $panelurl = str_replace($rchar, "", $panelurl);
             $panelurl = preg_replace('/[^A-Za-z0-9\-]/', '', $panelurl);
         }
 
