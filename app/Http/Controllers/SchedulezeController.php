@@ -51,7 +51,11 @@ class SchedulezeController extends Controller
 
     public function mapmyday($location = '')
     {
-        $location = Crypt::decrypt($location);
+        if(!empty($location)){
+            $location = Crypt::decrypt($location);
+        }else{
+            $location = '';
+        }
         return view('scheduleze.mapmyday', compact('location'));
     }
 
@@ -183,7 +187,7 @@ class SchedulezeController extends Controller
         return view('appointments.business_hours', compact('id', 'businesshours'));
     }
 
-    public function BookingFilter(Request $request, $form)
+    public function BookingFilter(Request $request, $form = '')
     {
         $data = Input::get();
 
@@ -193,41 +197,101 @@ class SchedulezeController extends Controller
             $id = $data['users_details'];
         }
 
-        if (isset($data['daystart']) != "" && isset($_POST['dayend']) != "") {
+        $flag = 0;
+        if($form == 'AdvanceFilter'){
 
-            $first = "12:00 AM ".$data['monthstart'][0]."/".$data['daystart'][0]."/".$data['yearstart'][0];
-            $first = strtotime($first);
-            $last = "11:59 PM ".$data['monthend'][1]."/".$data['dayend'][1]."/".$data['yearend'][1];
-            $last = strtotime($last);
-            //$vars = "&first=$first&last=$last&inspector=$_POST[inspector]";
-
-        } elseif ($data['first']!="") {
-
-            $first = $data['first'];
-            $last = $data['last'];
-
-        } elseif (session('first_time') != "") {
-
-            $first = session('first_time');
-            $last = session('last_time');
-
-        } elseif ($first=="") {
+            $id = 'all';
 
             $first = time();
             $last = $first + 1209500;
 
-        } elseif (strlen($first) > 9) {
+            $bookings = DB::table('bookings')->select('bookings.id', 'bookings.business', 'bookings.price', 'bookings.inspection_address', 'bookings.firstname', 'bookings.price', 'bookings.lastname', 'bookings.agent_name', 'bookings.building_type', 'bookings.building_size', 'bookings.building_age', 'bookings.starttime', 'bookings.endtime', 'bookings.user_id', 'bookings.type', 'bookings.notes', 'bookings.location', 'bookings.user_notes', 'bookings.agent_email', 'bookings.agent_phone', 'bookings.email', 'bookings.homephone', 'bookings.dayphone', 'building_types.name', 'building_ages.name', 'building_sizes.name');
 
-            //$vars = "&first=$first&last=$last&inspector=$_POST[inspector]";
+            $bookings->leftJoin('building_types', 'bookings.business', '=', 'building_types.business');
+            $bookings->leftJoin('building_ages', 'bookings.business', '=', 'building_ages.business');
+            $bookings->leftJoin('building_sizes', 'bookings.business', '=', 'building_sizes.business');
+            $bookings->leftJoin('locations', 'bookings.business', '=', 'locations.business');
 
+            $bookings->where(function ($query) use ($first, $last) {
+                $query->where('endtime', '>', $first)->where('starttime', '<', $last);
+            });
+
+            if(!empty($data['txtAddress']))
+            {
+                $bookings->where(function ($query) use ($data) {
+                    $query->where('inspection_address', 'like', '%'.$data['txtAddress'].'%')->orWhere('locations.name', 'like', '%'.$data['txtAddress'].'%');
+                });
+            }
+
+
+            if(!empty($data['txtClientName'])){
+
+                $bookings->where(function ($query) use ($data) {
+                    $query->where('firstname', 'like', '%'.$data['txtClientName'].'%')->orWhere('lastname', 'like', '%'.$data['txtClientName'].'%');
+                });
+
+                /*$tt->where('firstname', 'like', '%'.$data['txtClientName'].'%')
+                ->orWhere('lastname', 'like', '%'.$data['txtClientName'].'%');*/
+
+                /*$whereArr[] = ['firstname', 'like', '%'.$data['txtClientName'].'%'];
+                $whereArr[] = ['lastname', 'like', '%'.$data['txtClientName'].'%'];*/
+            }
+
+            if(!empty($data['txtAgentName'])){
+                $bookings->where('agent_name', 'like', '%'.$data['txtAgentName'].'%');
+
+                /*$whereArr[] = ['agent_name', 'like', '%'.$data['txtAgentName'].'%'];*/
+            }
+
+            if(!empty($data['txtKeyword'])){
+
+                $bookings->where(function ($query) use ($data) {
+                    $query->where('inspection_address', 'like', '%'.$data['txtKeyword'].'%')->orWhere('firstname', 'like', '%'.$data['txtKeyword'].'%')->orWhere('bookings.price', 'like', '%'.$data['txtKeyword'].'%')->orWhere('lastname', 'like', '%'.$data['txtKeyword'].'%')->orWhere('building_types.name', 'like', '%'.$data['txtKeyword'].'%')->orWhere('building_ages.name', 'like', '%'.$data['txtKeyword'].'%')->orWhere('building_sizes.name', 'like', '%'.$data['txtKeyword'].'%')->orWhere('bookings.user_notes', 'like', '%'.$data['txtKeyword'].'%')->orWhere('bookings.notes', 'like', '%'.$data['txtKeyword'].'%');
+                });
+            }
+
+            $tt = $bookings->where('bookings.removed', 0)->groupBy('firstname')->get();
+
+            $flag = 1;
+
+        }else{
+            if (isset($data['daystart']) != "" && isset($_POST['dayend']) != "") {
+
+                $first = "12:00 AM ".$data['monthstart'][0]."/".$data['daystart'][0]."/".$data['yearstart'][0];
+                $first = strtotime($first);
+                $last = "11:59 PM ".$data['monthend'][1]."/".$data['dayend'][1]."/".$data['yearend'][1];
+                $last = strtotime($last);
+                //$vars = "&first=$first&last=$last&inspector=$_POST[inspector]";
+
+            } elseif ($data['first']!="") {
+
+                $first = $data['first'];
+                $last = $data['last'];
+
+            } elseif (session('first_time') != "") {
+
+                $first = session('first_time');
+                $last = session('last_time');
+
+            } elseif ($first=="") {
+
+                $first = time();
+                $last = $first + 1209500;
+
+            } elseif (strlen($first) > 9) {
+
+                //$vars = "&first=$first&last=$last&inspector=$_POST[inspector]";
+
+            }
+
+            session(['first_time' => $first]);
+            session(['last_time' => $last]);
+
+            $tt = array();
         }
-
-        session(['first_time' => $first]);
-        session(['last_time' => $last]);
-
         $administration = get_field('users_details', 'administrator', $this->user_id);
 
-        return view('appointments.bookings', compact('id','first','last','order', 'inc', 'form', 'administration'));
+        return view('appointments.bookings', compact('id', 'first', 'last', 'order', 'inc', 'form', 'administration', 'tt', 'flag'));
     }
 
     public function storeBlockout(Request $request, $form)
@@ -303,8 +367,12 @@ class SchedulezeController extends Controller
         $first = time();
         $last = $first + 1209500;
 
+        $tt = array();
+
+        $flag = 0;
+
         /*$businesshours = BusinessHours::where([['user_id','=',$id],['removed','=',0]])->get();*/
-        return view('appointments.bookings', compact('id', 'first', 'last', 'form', 'administration'));
+        return view('appointments.bookings', compact('id', 'first', 'last', 'form', 'administration', 'tt', 'flag'));
     }
 
     public function Documents()

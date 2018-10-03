@@ -293,7 +293,7 @@ if(! function_exists('edit_filter')){
 		$html .="</div></td>";
 		$html .="<td class=\"display\"><div class=\"labelend\"><label>End time</label>".get_time_popup ($last, $designate="1", 1, 1, 1, 0, 0, 0, 'end');
 		$html .="</div></td>";
-		$html .="<td class=\"display\"><br><input type=\"submit\" value=\"Filter\">";
+		$html .="<td class=\"display\"><br><input type=\"submit\" id=\"txtSubmit\" value=\"Filter\">";
 		$html .="</td>";
 		
 		return $html;
@@ -1317,7 +1317,7 @@ if(! function_exists('get_timezone')){
 }
 
 if(! function_exists('display_for_edit')){
-	function display_for_edit($id, $first, $last, $order='type', $inc='') {
+	function display_for_edit($id, $first, $last, $order='type', $inc='', $tt, $flag) {
 		//get current time
 		$last_end_day = '';
 		$now = time();
@@ -1394,7 +1394,12 @@ if(! function_exists('display_for_edit')){
 
 		}
 
-		$tt = DB::table('bookings')->where($whereArr)->orderBy($order, $incdec)->get();
+		if ( $flag == 0 ) {
+
+			$tt = DB::table('bookings')->where($whereArr)->orderBy($order, $incdec)->get();
+		}
+
+		//$tt = DB::table('bookings')->where($whereArr)->orderBy($order, $incdec)->get();
 
 		/*if (($first=="")) {
 			
@@ -1428,7 +1433,7 @@ if(! function_exists('display_for_edit')){
 				}
 				
 				// format the building type:
-				$siz = get_full_description($row->building_type, $row->building_size, $row->building_age);				
+				$siz = get_full_description($row->building_type, $row->building_size, $row->building_age);
 				//format the times
 				$start = date("g:ia", $row->starttime-1);
 				$start_day = date(" D, M j", $row->starttime-1);
@@ -1441,7 +1446,7 @@ if(! function_exists('display_for_edit')){
 					$html .= "
 					<tr>
 						<td colspan = \"7\" bgcolor=\"#FFCD49\"><b>".$full_day_label."</b>&nbsp;&nbsp;";
-					$url = "https://needsecured.com/developer/scheduleze/scheduleze/dayticket/$row->user_id/1/$start_of_day";
+					$url = "$url ='http://scheduleze20.com/rick/scheduleze/dayticket/$row->user_id/1/$start_of_day";
 					$html .= '<a href="'.$url.'" target="_blank" class="note">Print Day Ticket &#187;</a></td>
 					</tr>';
 					
@@ -1502,7 +1507,7 @@ if(! function_exists('display_for_edit')){
 
 					$city = DB::table('locations')->select('name')->where([['id', '=', $location],['removed', '=', 0]])->first();
 
-					$encrypt = Crypt::encrypt($inspection_address, $city->name);
+					$encrypt = Crypt::encrypt($inspection_address.', '.$city->name);
 					$route = 'http://scheduleze20.com/rick/scheduleze/mapmyday'.'/'.$encrypt;
 
 					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\"><a href=\"$route\">$inspection_address, $city->name</a></td>\n";
@@ -1530,7 +1535,7 @@ if(! function_exists('display_for_edit')){
 
 				if ($row->type == "1"){
 					//$url ='/scheduleze/blockout/EditBlockout/'.$blockout_id;
-					$url ='/developer/scheduleze/scheduleze/blockout/EditBlockout/'.$blockout_id;
+					$url ='http://scheduleze20.com/rick/scheduleze/blockout/EditBlockout/'.$blockout_id;
 					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\"><nobr><a href=\"$url\" class=\"note_link\">Edit</a><span class\"note\">  </span><a href=\"delete/$blockout_id\"  class=\"note_link\">Remove</a></nobr></td>\n";
 				} else {
 					//$url = "https://needsecured.com/developer/scheduleze/public/scheduleze/booking/edit/$id";

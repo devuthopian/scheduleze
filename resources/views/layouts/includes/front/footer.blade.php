@@ -84,7 +84,7 @@
             <div class="modal-body">
                 <div class="signup_cont nsignup_cont">
                     <div class="container">
-                        <form action="#" method="POST">
+                        <form action="{{ url('/scheduleze/booking/AdvanceFilter') }}" method="POST">
                         @csrf
                             <div class="form-group">
                                 <div class="col-sm-12">
@@ -113,12 +113,16 @@
                                     <input type="text" name="txtKeyword">
                                 </div>
                             </div>
-                            {!!
-                                Form::button('Search', array(
-                                    'class'             => 'btn btn-success gmailbtn',
-                                    'type'              => 'submit',
-                                ))
-                            !!}
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    {!!
+                                        Form::button('Search', array(
+                                            'class'             => 'btn btn-success gmailbtn',
+                                            'type'              => 'submit',
+                                        ))
+                                    !!}
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>

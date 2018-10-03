@@ -10,19 +10,24 @@
 @endif
 
 <?php 
-	$GOOGLE_MAP_KEY = env('GOOGLE_MAP_KEY');
+$GOOGLE_MAP_KEY = env('GOOGLE_MAP_KEY');
+	if(!empty($location)){
 
-	$prepAddr = str_replace(' ','+',$location);
-	$geocode = file_get_contents('https://maps.google.com/maps/api/geocode/json?key='.$GOOGLE_MAP_KEY.'&address='.$prepAddr.'&sensor=false');
-	$output = json_decode($geocode);
-	if($output->error_message){
-		$error = $output->error_message;
+		$prepAddr = str_replace(' ','+',$location);
+		$geocode = file_get_contents('https://maps.google.com/maps/api/geocode/json?key='.$GOOGLE_MAP_KEY.'&address='.$prepAddr.'&sensor=false');
+		$output = json_decode($geocode);
+		if($output->error_message){
+			$error = $output->error_message;
+			$latitude = '';
+			$longitude = '';
+		}else{
+			$error = '';
+			$latitude = $output->results[0]->geometry->location->lat;
+			$longitude = $output->results[0]->geometry->location->lng;
+		}
+	}else{
 		$latitude = '';
 		$longitude = '';
-	}else{
-		$error = '';
-		$latitude = $output->results[0]->geometry->location->lat;
-		$longitude = $output->results[0]->geometry->location->lng;
 	}
 ?>
 
@@ -53,7 +58,7 @@
 	function initMap() {
 	    var pyrmont = {
 	        lat: parseFloat('{{$latitude}}'),
-	        lng: parseFloat('{{$longitude}}'
+	        lng: parseFloat('{{$longitude}}')
         };
 
         map = new google.maps.Map(document.getElementById('map'), {

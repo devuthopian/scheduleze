@@ -30,10 +30,16 @@
 @endif
 <div class="bookingmain">
 	<div class="bookingcontainer">
-		<form action="{{ url('/scheduleze/booking/'.$form.'') }}" method="post">
+		@if($form == 'AdvanceFilter')
+			<form action="{{ url('/scheduleze/booking/appointment') }}" method="post">
+		@else
+			<form action="{{ url('/scheduleze/booking/'.$form.'') }}" method="post">
+		@endif
 			@csrf
 			<input type="hidden" name="action" value="{{$form}}">
+
 			{!! edit_filter($first, $id, $i_name, $last, $administration) !!}
+
 			@if($form == 'appointment')
 				@php
 					$inc='book'; 
@@ -77,7 +83,7 @@
 								</div>
 								<table cellpadding="3" cellspacing="0" border="0" width="100%" class="table border table-responsive table-borderd table-striped select-default">
 									<form action="#" method="post" name="FormName">
-										{!! display_for_edit($id, $first, $last, $order='', $inc) !!}
+										{!! display_for_edit($id, $first, $last, $order='', $inc, $tt, $flag) !!}
 									</form>
 								</table>
 								<!-- <span class="note"><a href="index.php" class="note_link">&laquo; Return to Admin Home</a></span> -->
