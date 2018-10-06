@@ -308,14 +308,15 @@ if(! function_exists('get_inspector_popup')){
 		if(empty($id)){
 			$id = session('id');
 		}
-		$permission = session('permission');
-		if ($permission == 1) {
+		$administrator = session('administrator');
+
+		if ($administrator == 1) {
 			$where = " where business = '".$bus."' and removed = '0'";
 		} else {
 			$where = " where business = '".$bus."' and removed = '0' and id = '".$id."'";
 		}
 
-		$rows = DB::select('select * from users_details '.$where.' order by permission DESC');
+		$rows = DB::select('select * from users_details '.$where.' order by administrator DESC');
 		$html = "\n\t\t\t<select name=\"users_details\" class=\"smallselect\">";
 
 		if($administration == 1){
@@ -1446,7 +1447,7 @@ if(! function_exists('display_for_edit')){
 					$html .= "
 					<tr>
 						<td colspan = \"7\" bgcolor=\"#FFCD49\"><b>".$full_day_label."</b>&nbsp;&nbsp;";
-					$url = "$url ='http://scheduleze20.com/rick/scheduleze/dayticket/$row->user_id/1/$start_of_day";
+					$url = "http://scheduleze20.com/rick/scheduleze/dayticket/$row->user_id/1/$start_of_day";
 					$html .= '<a href="'.$url.'" target="_blank" class="note">Print Day Ticket &#187;</a></td>
 					</tr>';
 					

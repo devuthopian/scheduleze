@@ -95,6 +95,16 @@ class LoginController extends Controller
             auth()->logout();
             return back()->with('warning', 'You need to confirm your account. We have sent you an activation code, please check your email.');
         }
+
+        if($request->input('txtremember') == 'on'){
+            //Cookie::queue(Cookie::forget('name'));
+            $username = $user->name;
+            $expire = time() + 960*60*24*180;
+            print_r($username);
+            //$response->withCookie(Cookie::queue('name', $username, $expire));
+            Cookie::queue('name', $username, $expire);
+        }
+        
         //$PanelTemplate = $user->Panel($user->id);
         $PanelTemplate = PanelTemplate::where('user_id', $user->id)->first();
         if(empty($PanelTemplate)){
@@ -129,14 +139,6 @@ class LoginController extends Controller
                     'SESSION_LIFETIME=120', 'SESSION_LIFETIME=1440', file_get_contents($path)
                 ));
             }
-        }
-
-        if($request->input('txtremember') == 'on'){
-            //Cookie::queue(Cookie::forget('name'));
-            $username = $user->name;
-            $expire = time() + 960*60*24*180;
-            //$response->withCookie(cookie()->forever('name', $username));
-            Cookie::queue('name', $username, $expire);
         }
 
         return redirect()->intended($this->redirectPath());

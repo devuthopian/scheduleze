@@ -43,7 +43,7 @@
 						<tbody class="txtBuildId">
 							<input type="hidden" id="txtypol" value="{{ $users_details }}">
 							@php $i=0; @endphp
-							@unless($Building->isEmpty())
+							@unless($Building == '' || $Building->isEmpty())
 								@foreach($Building as $BuildType)
 									<tr class="trtable_{{ $i }}">
 										<td>

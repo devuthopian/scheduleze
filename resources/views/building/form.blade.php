@@ -110,7 +110,7 @@
 								$i=0;
 
 							@endphp							
-							@unless($Building->isEmpty())
+							@unless($Building == '' || $Building->isEmpty())
 								@foreach($Building as $BuildType)
 
 									<tr class="trtable_{{ $i }}">

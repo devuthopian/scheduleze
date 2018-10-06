@@ -11,11 +11,14 @@
 
 <?php 
 $GOOGLE_MAP_KEY = env('GOOGLE_MAP_KEY');
+echo $GOOGLE_MAP_KEY;
 	if(!empty($location)){
 
 		$prepAddr = str_replace(' ','+',$location);
 		$geocode = file_get_contents('https://maps.google.com/maps/api/geocode/json?key='.$GOOGLE_MAP_KEY.'&address='.$prepAddr.'&sensor=false');
 		$output = json_decode($geocode);
+
+		//dd($output);
 		if($output->error_message){
 			$error = $output->error_message;
 			$latitude = '';

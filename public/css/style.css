@@ -1919,7 +1919,7 @@
      width: 100%;
      height: 100%;
      overflow: visible;
-     background: #fff url('/developer/scheduleze/images/Preloader_2.gif') no-repeat center center;
+     background: #fff url('/images/Preloader_2.gif') no-repeat center center;
 }
  .joinemail input {
      width: 48% !important;

@@ -113,44 +113,9 @@ class BuildingController extends Controller
     public function store(Request $request)
     {
         $businessid = $this->businessid;
-        /*$validatedData = Validator::make($request->all(), [
-            'price' => 'bail|required',
-            'rank' => 'bail|required',
-            'forcecall' => 'bail|required',
-        ]);
-
-        if ($validatedData->fails()) {
-            return redirect('BuildingTypess')->withErrors($validatedData)->withInput();
-        }*/
-
         $data = Input::get();
-        //dd($data);
-        /*
-        $redirecturl = $data['txtform'];
-        $txtForm = 'App\\Dp'.$data['txtform'];
-        $htmldata = array_diff_key($data, ['_token' => "xy", 'txtform' => "xy", 'submit' => "xy", 'id' => '0']);
-        $BuildingTypes = $txtForm::updateOrCreate(
-            ['id' => $data['id'],'business' => $businessid],
-            [
-                'business' => $businessid,
-                'form_html' => json_encode($htmldata['htmlFormat']),
-                'builder_area' => json_encode($htmldata['txtBuilderArea'])
-            ]
-        );*/
-
-        /*if(isset($data['selectedusers']) && !empty($data['selectedusers'])){
-            $getselectedusers = array();
-            foreach ($data['selectedusers'] as $keyselect => $value) {
-                $getselectedusers[] = $data['selectedusers'][$keyselect];
-            }
-        }*/
 
         $collection = get_bus_users();
-        /*$col = array();
-        foreach ($collection as $keycol => $value) {                
-            $resevercol[] = $collection[$keycol]->user_id;
-        }*/
-
 
         foreach ($data['desc'] as $key => $value) {
 
@@ -204,7 +169,7 @@ class BuildingController extends Controller
             }else{
                 $type = 4;
             }
-            //echo "<pre>"; print_r($col);
+
             if(isset($col) && !empty($col)){
                 foreach ($col as $keysel => $v) {
                     Exceptions::updateOrCreate(

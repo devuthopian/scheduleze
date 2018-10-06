@@ -239,8 +239,6 @@ class SchedulezeController extends Controller
 
             if(!empty($data['txtAgentName'])){
                 $bookings->where('agent_name', 'like', '%'.$data['txtAgentName'].'%');
-
-                /*$whereArr[] = ['agent_name', 'like', '%'.$data['txtAgentName'].'%'];*/
             }
 
             if(!empty($data['txtKeyword'])){
@@ -541,7 +539,8 @@ class SchedulezeController extends Controller
         } else {
             $starttime = $temp_start;
             $endtime = $temp_end;
-        }        
+        }
+
         $inspection_address = $data['Inspection_Address'];
         $firstname = $data['Firstname'];
         $lastname = $data['Lastname'];

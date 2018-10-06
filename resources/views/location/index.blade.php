@@ -23,7 +23,7 @@
 						</tr>
 						<tbody class="txtlocationId"> 
 							@php $i=0; @endphp
-							@unless($locations->isEmpty())
+							@unless($locations == '' || $locations->isEmpty())
 								@foreach($locations as $location)
 									<tr class="trtable_{{ $i }}">
 										<input type="hidden" class="form-control" name="id[{{ $i }}]" value="{{ $location->id }}">
