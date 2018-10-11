@@ -38,6 +38,10 @@ class AppointmentController extends Controller
         // Set the user_id
         $this->user_id = session('id');
         $this->business_id = session('business_id');
+        $this->administrator = session('administrator');
+        if(session('permission') == null || session('permission') == 0){
+            return redirect('/scheduleze/booking/appointment')->send();
+        }
     }
     /**
      * Display a listing of the resource.
@@ -47,7 +51,11 @@ class AppointmentController extends Controller
     public function index()
     {
         $id = $this->user_id;
-        $businessinfo = Business::where('user_id', $this->user_id)->first();
+        if($this->administrator){
+            $businessinfo = Business::where('user_id', $this->user_id)->first();
+        }else{
+            $businessinfo = Business::where('id', $this->business_id)->first();
+        }
         $ages = !empty($businessinfo->BuildingAges) ? $businessinfo->BuildingAges : '';
         $sizes = !empty($businessinfo->BuildingSizes) ? $businessinfo->BuildingSizes : '';
         $types = !empty($businessinfo->BuildingTypes) ? $businessinfo->BuildingTypes : '';

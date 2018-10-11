@@ -100,7 +100,7 @@ class LoginController extends Controller
             //Cookie::queue(Cookie::forget('name'));
             $username = $user->name;
             $expire = time() + 960*60*24*180;
-            print_r($username);
+            //print_r($username);
             //$response->withCookie(Cookie::queue('name', $username, $expire));
             Cookie::queue('name', $username, $expire);
         }
@@ -116,16 +116,20 @@ class LoginController extends Controller
         $administrator = get_field("users_details", "administrator", $user->id); //get administrator details
         $indus_id = get_field("users_details", "indus_id", $user->id);
         session(['id' => $user->id, 'username' => $user->name, 'hashvalue' => $panelurl, 'permission' => $permission, 'indus_id' => $indus_id, 'administrator' => $administrator]);
-        $business = Business::where('user_id', $user->id)->first();
 
-        if($business){
-            session(['business_id' => $business->id]);
-            get_business_information($business->id);
+        if($administrator == 1) {
+            $business = Business::where('user_id', $user->id)->first();
+
+            if($business){
+                session(['business_id' => $business->id]);
+                get_business_information($business->id);
+            }else{
+                return redirect('business_info')->with('warning', 'You need to fill business info before proceeding to anything else. It will help us to cooperate with you!');
+            }
         }else{
-            return redirect('business_info')->with('warning', 'You need to fill business info before proceeding to anything else. It will help us to cooperate with you!');
+            $user_details = get_field("users_details", "business", $user->id);
+            session(['business_id' => $user_details]);
         }
-
-       
 
         //if(!empty($PanelTemplate->unique_url)){
             //return redirect('/template/'.$PanelTemplate->unique_url);

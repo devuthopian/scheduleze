@@ -8,7 +8,7 @@
 		width: 100%;
 		height: 100%;
 		overflow: visible;
-		background: #fff url('/developer/scheduleze/images/Preloader_2.gif') no-repeat center center;
+		background: #fff url('/images/Preloader_2.gif') no-repeat center center;
 	}
 </style>
 <link rel="stylesheet" href="{{ URL::asset('css/panelstyle.css') }}">

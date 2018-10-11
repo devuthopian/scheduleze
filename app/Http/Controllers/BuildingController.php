@@ -32,6 +32,9 @@ class BuildingController extends Controller
     { 
         // Set the businessid
         $this->businessid = !empty(session('business_id')) ? session('business_id') : '';
+        if(session('permission') == null || session('permission') == 0){
+            return redirect('/scheduleze/booking/appointment')->send();
+        }
     }
 
     /**

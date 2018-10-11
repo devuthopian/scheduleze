@@ -26,6 +26,7 @@
             @else
                 @php 
                     $hashvalue = session('hashvalue');
+                    $permission = session('permission');
                     $id = Auth::user()->id;
                     $now = time();
                     $tomorrow = time() + 86400;
@@ -77,54 +78,58 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="arrowicon">
-                            <a href="#">Blockouts</a>
-                            <ul >
-                                <li>
-                                    <a href="{{ url('/scheduleze/booking/blockouts') }}">Blockouts</a>
-                                </li>
-                                <li>
-                                    <a href="{{ url('/scheduleze/blockout/AddBlockout') }}">Add Blockout</a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('Reoccurrence') }}">Recurring</a>
-                                </li>
-                                <li>
-                                    <a href="{{ url('scheduleze/BusinessHours') }}">Business Hours</a>
-                                </li>
-                            </ul>
-                        </li>
+                        @if($permission == 1 || $administration == 1)
+                            <li class="arrowicon">
+                                <a href="#">Blockouts</a>
+                                <ul >
+                                    <li>
+                                        <a href="{{ url('/scheduleze/booking/blockouts') }}">Blockouts</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ url('/scheduleze/blockout/AddBlockout') }}">Add Blockout</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('Reoccurrence') }}">Recurring</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ url('scheduleze/BusinessHours') }}">Business Hours</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        @endif
                         <li>
                             <a href="{{ route('Document') }}">Document</a>
                         </li>
-                        <li class="arrowicon">
-                            <a href="{{ url('/form/BuildingTypes') }}">{{ __('nav.services') }}</a>
-                            <ul >
-                                <li>
-                                    <a href="{{ url('/form/BuildingTypes') }}">{{ $getbusindus->type_label }}</a>
-                                </li>
-                                <li>
-                                    <a href="{{ url('/form/BuildingSizes') }}">{{ $getbusindus->size_label }}</a>
-                                </li>
-                                <li>
-                                    <a href="{{ url('/form/BuildingAges') }}">{{ $getbusindus->age_label }}</a>
-                                </li>
-                                <li>
-                                    <a href="{{ url('/form/Addons') }}">{{ $getbusindus->addon_label }}</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="arrowicon">
-                            <a href="{{ route('Location') }}">Locations</a>
-                            <ul >
-                                <li>
-                                    <a href="{{ route('Location') }}">Add/Remove Location</a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('Drivetime') }}">Drivetimes</a>
-                                </li>
-                            </ul>
-                        </li>
+                        @if($permission == 1 || $administration == 1)
+                            <li class="arrowicon">
+                                <a href="{{ url('/form/BuildingTypes') }}">{{ __('nav.services') }}</a>
+                                <ul >
+                                    <li>
+                                        <a href="{{ url('/form/BuildingTypes') }}">{{ $getbusindus->type_label }}</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ url('/form/BuildingSizes') }}">{{ $getbusindus->size_label }}</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ url('/form/BuildingAges') }}">{{ $getbusindus->age_label }}</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ url('/form/Addons') }}">{{ $getbusindus->addon_label }}</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="arrowicon">
+                                <a href="{{ route('Location') }}">Locations</a>
+                                <ul >
+                                    <li>
+                                        <a href="{{ route('Location') }}">Add/Remove Location</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('Drivetime') }}">Drivetimes</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        @endif
                         <li>
                             <a href="{{ route('ZigZag') }}">ZigZag</a>
                         </li>
@@ -134,9 +139,11 @@
                                 <li>
                                     <a href="{{ route('Inspectors') }}">Inspectors</a>
                                 </li>
-                                <li>
-                                    <a href="{{ route('AddInspector') }}">Add Inspector</a>
-                                </li>
+                                @if($permission == 1 || $administration == 1)
+                                    <li>
+                                        <a href="{{ route('AddInspector') }}">Add Inspector</a>
+                                    </li>
+                                @endif
                             </ul>
                         </li>
                         <li class="arrowicon">
@@ -148,7 +155,7 @@
                                 <li>
                                     <a href="{{ url('business_info') }}">Business Profile</a>
                                 </li>
-                                @if(session('administrator') == 1)
+                                @if($administration == 1)
                                     <li>
                                         <a href="{{ url('services/content') }}">Services Content</a>
                                     </li>

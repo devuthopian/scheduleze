@@ -59,6 +59,8 @@ Route::group(['middleware' => ['web']], function () {
 	Route::post('/scheduleze/bookappointment', 'AppointmentController@storebookingappointment')->name('BookAppointment');
 	Route::get('/appointment/receipt/{id?}','AppointmentController@reciept');
 
+	Route::get('/practice/vue/js', 'PracticeController@index'); //remove it after prcatice
+
 	/*Route::get('/faq', 'FAQController@index');
 	Route::post('/faq/question/{faq}/{type?}', 'FAQController@incrementClick');
 
@@ -92,6 +94,7 @@ Route::group(['middleware' => ['web']], function () {
 		Route::get('/services/content', 'SchedulezeController@changeContent');
 		Route::post('/services/content', 'SchedulezeController@changeContent');
 		Route::get('/scheduleze/mapmyday/{location?}', 'SchedulezeController@mapmyday');
+		Route::post('/scheduleze/mapmyday', 'SchedulezeController@mapmyday');
 
 		Route::get('/scheduleze/zigzag','SchedulezeController@ZigZag')->name('ZigZag');
 		Route::post('/scheduleze/zigzag','SchedulezeController@storeZigZag');

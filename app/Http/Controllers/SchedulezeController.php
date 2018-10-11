@@ -49,14 +49,67 @@ class SchedulezeController extends Controller
         return view('scheduleze.welcome');
     }
 
-    public function mapmyday($location = '')
+    public function mapmyday($location = '', $first = '', $last = '', $id = '')
     {
-        if(!empty($location)){
-            $location = Crypt::decrypt($location);
-        }else{
-            $location = '';
+        $id = $this->user_id;
+        $first = time();
+        $last = $first + 1209500;
+
+        $data = Input::get();
+
+        if(!empty($data)){
+            if(empty($data['users_details'])){
+                $id = $this->user_id;
+            }else{
+                $id = $data['users_details'];
+            }
+
+            $first = "12:00 AM ".$data['monthstart'][0]."/".$data['daystart'][0]."/".$data['yearstart'][0]."";
+            //echo "first: $first<br>";
+            $first = strtotime($first);
+            $last = "11:59 PM ".$_POST['monthend'][1]."/".$_POST['dayend'][1]."/".$_POST['yearend'][1]."";
+            //echo "last:$last<br>";
+            $last = strtotime($last);
+
+           /* $first = $data['first'];
+            $last = $data['last'];*/
         }
-        return view('scheduleze.mapmyday', compact('location'));
+
+        $administration = get_field('users_details', 'administrator', $this->user_id);
+
+        if(!empty($location)){
+
+            $loca = Crypt::decrypt($location);
+
+            $arr = explode(",", $loca, 2);
+            $firstlocation = $arr[0];
+
+            //$tt = Booking::where([['inspection_address', 'like', '%'.$firstlocation.'%'],['endtime', '>', $first],['starttime', '<', $last],['removed', '=', 0]])->orderBy('type', 'ASC')->orderBy('starttime', 'ASC')->first();
+
+            $tt = Booking::where([['inspection_address', 'like', '%'.$firstlocation.'%'],['removed', '=', 0]])->orderBy('type', 'ASC')->orderBy('starttime', 'ASC')->first();
+
+            $jobname = $tt->building_types;
+        }else{
+
+            if($id == 'all'){
+                $tt = Booking::where([['business', '=', $this->business_id],['endtime', '>', $first],['starttime', '<', $last],['removed', '=', 0]])->orderBy('type', 'ASC')->orderBy('starttime', 'ASC')->get();
+            }else{
+                $tt = Booking::where([['endtime', '>', $first],['user_id', '=', $id],['starttime', '<', $last],['removed', '=', 0]])->orderBy('type', 'ASC')->orderBy('starttime', 'ASC')->get();
+            }
+
+            if(count($tt) > 0){
+                foreach ($tt as $key) {
+                    $jobname[] = $key->building_types;
+                    $loca[] = $key->locations;
+                }
+            }else{
+                $loca = '';
+                $jobname = '';
+            }      
+
+            //$location = '';
+        }
+        return view('scheduleze.mapmyday', compact('loca', 'jobname', 'first', 'last', 'administration', 'id'));
     }
 
     public function changeContent()

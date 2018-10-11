@@ -27,4 +27,9 @@ class Booking extends Model
     {
         return $this->belongsTo('App\BuildingAges', 'building_age')->where('removed', 0);
     }
+
+    public function locations()
+    {
+        return $this->belongsTo('App\Location', 'location')->where('removed', 0);
+    }
 }
