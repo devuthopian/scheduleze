@@ -108,9 +108,9 @@
 	                	var referrer =  document.referrer;
 	                	//$('.loader').fadeOut(1000); 
 	                	if(referrer.indexOf('Location') >= 0){
-	                		window.location.replace('https://needsecured.com/developer/scheduleze/scheduleze/DriveTime');
+	                		window.location.replace('http://scheduleze20.com/rick/scheduleze/DriveTime');
 	                	}else{
-	                		window.location.replace('https://needsecured.com/developer/scheduleze/scheduleze/booking/appointment');
+	                		window.location.replace('http://scheduleze20.com/rick/scheduleze/booking/appointment');
 	                	}
 
 	                	//$('.alert-info').html('<a href="{{ URL::previous() }}"><strong>Ok</strong></a>');

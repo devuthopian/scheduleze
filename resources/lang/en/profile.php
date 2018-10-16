@@ -20,6 +20,7 @@ return [
     'password'      => 'Password',
     'password_confirmation'      => 'Password Confirmation',
     'updateSuccess'      => 'User Profile Sucessfully Updated',
+    'warning' => 'You can\'t do it. You have no rights to edit.',
 
     'business_name'             => 'Business Name',
     'business_fname'            => 'Contact Firstname',
@@ -50,6 +51,6 @@ return [
 
     'password_confirmation'        => 'Password Confirmation',
     'updateSuccess'                => 'User Profile Sucessfully Updated',
-    'submitButton'                 => 'submit',
+    'submitButton'                 => 'Submit',
     'updatebusinessButton'         => 'Update Business Profile',
 ];

@@ -82,6 +82,7 @@ $(document).ready(function() {
                 success:function(data){
                     $("#showtxt").html(data.msg);
                     $('.load').fadeOut(1000);
+                    $('.submit').trigger('click');
                 }
             });
         }

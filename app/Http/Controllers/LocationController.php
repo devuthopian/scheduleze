@@ -63,13 +63,14 @@ class LocationController extends Controller
         $businessid = $this->businessid;
         $data = Input::get();
 
-        for($i = 0; $i < count($data['name']); $i++) {
+        //for($i = 0; $i < count($data['name']); $i++) {
+        foreach ($data['name'] as $key => $value) {
             $BuildingTypes = Location::updateOrCreate(
-                ['id' => $data['id'][$i],'removed' => '0'],
+                ['id' => $data['id'][$key],'removed' => '0'],
                 [
                     'business' => $businessid,
-                    'name' => $data['name'][$i],
-                    'price' => str_replace('$', '', $data['price'][$i])
+                    'name' => $data['name'][$key],
+                    'price' => str_replace('$', '', $data['price'][$key])
                 ]
             );
         }

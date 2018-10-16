@@ -313,7 +313,7 @@ if(! function_exists('get_inspector_popup')){
 		if ($administrator == 1) {
 			$where = " where business = '".$bus."' and removed = '0'";
 		} else {
-			$where = " where business = '".$bus."' and removed = '0' and id = '".$id."'";
+			$where = " where business = '".$bus."' and removed = '0' and user_id = '".$id."'";
 		}
 
 		$rows = DB::select('select * from users_details '.$where.' order by administrator DESC');
@@ -354,7 +354,7 @@ if(! function_exists('get_addon_checkboxes')){
 			$whereArr = [['business', '=', $businessId], ['removed', '=', 0]];
 		//}
 		
-		$rows = DB::table($table)->where($whereArr)->orderBy($order, $direction)->get()->toArray();
+		$rows = DB::table($table)->where($whereArr)->orderBy($order, $direction)->get();
 		//$sql = "select * from $table where ".$insert."business='$_SESSION[business]' and removed='0' order by $order $direction";
 		//$rows = $this->pull_multi($sql);
 		if (count($rows)>0){
@@ -365,17 +365,20 @@ if(! function_exists('get_addon_checkboxes')){
 				$c = 0;
 			}
 			foreach ($rows as $row) {
-				if(is_array($default_id) || isset($default_id)){
+				if (!empty($default_id)){
+					if(is_array($default_id)){
 
-					if (in_array(parse_str($row->id), $default_id)){
-						$selected = "checked"; 
-					} else {
-						$selected = ""; 
+						if (in_array($row->id, $default_id)){
+							$selected = "checked"; 
+						} else {
+							$selected = ""; 
+						}
+
 					}
-
 				} else {
 					if ($row->id == $default_id){ $selected = "checked"; } else { $selected = ""; }
 				}
+
 				if ($row->price > 0){
 					$price = " - $".$row->price;
 				} else {
@@ -410,7 +413,7 @@ if(! function_exists('get_addon_checkboxes')){
 }
 
 if(! function_exists('get_total_price')){
-	function get_total_price($building_type, $building_size, $building_age, $location='', $addons=''){
+	function get_total_price($building_type, $building_size, $building_age, $location='', $addons = ''){
 		$prices = get_field("building_types", 'price', $building_type);
 		if ($building_size > 0){
 			$size_price = get_field("building_sizes", 'price', $building_size);
@@ -424,9 +427,11 @@ if(! function_exists('get_total_price')){
 			$location_price = get_field("locations", 'price', $location);
 			$prices = $prices + $location_price;
 		}
-		if (is_array($addons) || isset($addons)){
-			$adds = format_addons($addons);
-			$prices = $prices + $adds['price'];
+		if (!empty($addons) || isset($addons)){
+			if (is_array($addons)){
+				$adds = format_addons($addons);
+				$prices = $prices + $adds['price'];
+			}
 		}
 		
 		return $prices;
@@ -575,7 +580,15 @@ if(! function_exists('get_field')){
 
 if(! function_exists('get_inspector_exceptions')){
 	function get_inspector_exceptions($business, $building_type, $building_size, $building_age, $addons, $price){
-		$working_inspectors = DB::table('users_details')->where([['business', '=', $business],['removed', '=', '0']])->get();
+
+		$user_id = session('id');
+		$administrator = session('administrator');
+
+		if($administrator == 1){
+			$working_inspectors = DB::table('users_details')->where([['business', '=', $business],['removed', '=', '0']])->get();
+		}else{
+			$working_inspectors = DB::table('users_details')->where([['user_id', '=', $user_id],['removed', '=', '0']])->get();
+		}
 		
 		// construct exception sql portion
 		$skk = "(type = '1' and exception = '$building_type')";  //types check
@@ -1441,14 +1454,26 @@ if(! function_exists('display_for_edit')){
 				$end = date("g:ia", $row->endtime+1);
 				$end_day = date(" D, M j", $row->endtime+1);
 				$this_end_day = date("j", $row->endtime+1);
+				if ($row->type != 1) {
+					$inspection_address = $row->inspection_address;
+					$location = $row->location;
+					$city = DB::table('locations')->select('name')->where('id', $location)->first();
+				}
 				if ($last_end_day != $this_end_day){
 					$full_day_label = date("l, F jS", $row->endtime);
 					$start_of_day = get_todays_starttime($row->endtime);
 					$html .= "
 					<tr>
 						<td colspan = \"7\" bgcolor=\"#FFCD49\"><b>".$full_day_label."</b>&nbsp;&nbsp;";
-					$url = "http://scheduleze20.com/rick/scheduleze/dayticket/$row->user_id/1/$start_of_day";
-					$html .= '<a href="'.$url.'" target="_blank" class="note">Print Day Ticket &#187;</a></td>
+					if ($row->type != 1) {
+						$url = "http://scheduleze20.com/rick/scheduleze/dayticket/$row->user_id/1/$start_of_day";
+						$encrypt = Crypt::encrypt($inspection_address.', '.$city->name);
+						$route = '<a href="http://scheduleze20.com/rick/scheduleze/mapmyday'.'/'.$encrypt.'" target="_blank" class="note">Map My Day &#187;</a>';
+					}else{
+						$route = '';
+					}
+
+					$html .= '<a href="'.$url.'" target="_blank" class="note">Print Day Ticket &#187;</a>&nbsp;&nbsp;'.$route.'</td>
 					</tr>';
 					
 				}
@@ -1506,12 +1531,14 @@ if(! function_exists('display_for_edit')){
 
 					//$city = $this->get_field("location", "name", "$location");
 
-					$city = DB::table('locations')->select('name')->where([['id', '=', $location],['removed', '=', 0]])->first();
+					//$city = DB::table('locations')->select('name')->where([['id', '=', $location],['removed', '=', 0]])->first();
 
-					$encrypt = Crypt::encrypt($inspection_address.', '.$city->name);
-					$route = 'http://scheduleze20.com/rick/scheduleze/mapmyday'.'/'.$encrypt;
+					//$city = DB::table('locations')->select('name')->where('id', $location)->first(); //recently commented
 
-					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\"><a href=\"$route\">$inspection_address, $city->name</a></td>\n";
+					//$encrypt = Crypt::encrypt($inspection_address.', '.$city->name);
+					$rote = 'http://scheduleze20.com/rick/scheduleze/mapmyday'.'/'.$encrypt;
+
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\"><a href=\"$rote\">$inspection_address, $city->name</a></td>\n";
 
 					if ($user_notes !=""){ $user_notes = "<br>$user_notes"; }
 					if ($notes !=""){ $user_notes .= "<br><b>$notes</b>"; }
@@ -1594,7 +1621,7 @@ if(! function_exists('get_pricing_popup')){
 					if ($default_override == $row->id){ $selected = " selected"; } else { $selected = ""; }
 				}
 				
-				$html_parts .= "\n\t\t\t\t<option value=\"\"$selected>$row->name</option>";
+				$html_parts .= "\n\t\t\t\t<option value=\"$row->id\" $selected>$row->name</option>";
 			}
 			//return $arrayName;
 			$html = "\n\t\t\t<select name=\"$variable\" class=\"$class\" required>";
@@ -2043,9 +2070,10 @@ if(! function_exists('get_business_information')){
 if(! function_exists('format_addons')){
 	function format_addons($addons, $verbose = 'yes'){
 		$adns = array();
-		$adns['price'] = '';
+		$adns['price'] = 0;
 		$adns['services'] = '';
 		if (is_array($addons)){
+			$c = 0;
 			foreach ($addons as $addon) {
 				$c++;
 				if ($c > 1){
@@ -2059,7 +2087,7 @@ if(! function_exists('format_addons')){
 					$adns['price'] = ($adns['price'] + (get_field('addons', 'price', $addon->id)));  //depreciated
 					$adns['services'] .= (($also_includes).(get_field('addons', 'name', $addon->id)));
 				} else {
-					$adns['price'] = ($adns['price'] + (get_field('addons', 'price', $addon)));  //depreciated
+					$adns['price'] = ($adns['price'] + (get_field('addons', 'price', $addon)));
 					$adns['services'] .= (($also_includes).(get_field('addons', 'name', $addon)));
 				}
 			}

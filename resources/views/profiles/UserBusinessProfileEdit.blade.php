@@ -17,9 +17,19 @@
            <div class="sign_up_inner_cont">
             <h3>Business Profile</h3>
 
+            @if(session('administrator') == 0)
+                @php 
+                    $behaviour = 'disabled';
+                    
+                @endphp
+            @else
+                @php 
+                    $behaviour = '';
+                    
+                @endphp
+            @endif
 
-
-            {!! Form::model($UserBusinessData, array('action' => array('ProfileController@updateUserBusinessAccount'), 'method' => 'POST','id'=>'Userdata')) !!}
+            {!! Form::model($UserBusinessData, array('action' => array('ProfileController@updateUserBusinessAccount'), 'method' => 'POST', 'id'=>'Userdata')) !!}
 
 
 
@@ -37,9 +47,6 @@
                     <div class="form-group">
 
                         {!! Form::label('business_name', trans('profile.business_name') , array('class' => 'control-label')); !!}
-
-
-
                         {!! Form::text('business_name',$UserBusinessData['name'], array('id' => 'business_name', 'class' => 'form-control', 'placeholder' => trans('profile.business_name'))) !!}
 
 
@@ -864,7 +871,6 @@
     <div class="form-group">
 
 
-
         {!! Form::button(trans('profile.updatebusinessButton'),
 
 
@@ -878,6 +884,8 @@
 
 
         'type'              => 'submit',
+
+        $behaviour
 
 
 

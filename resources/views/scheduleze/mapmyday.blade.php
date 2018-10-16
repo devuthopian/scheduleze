@@ -13,12 +13,12 @@ $GOOGLE_MAP_KEY = env('GOOGLE_MAP_KEY');
 	if(empty($GOOGLE_MAP_KEY)){
 		$GOOGLE_MAP_KEY='AIzaSyAN_GbtrVtZfOedD5lhuggGCTMdDp0MHPw';
 	}
-	if(!empty($loca)){
-		if(is_array($loca)){
-			for ($i=0; $i < count($loca); $i++) {
-				if(!empty($loca[$i])){
+	if(!empty($inspection_address)){
+		if(is_array($inspection_address)){
+			for ($i=0; $i < count($inspection_address); $i++) {
+				if(!empty($inspection_address[$i])){
 
-					$prepAddr = str_replace(' ','+',$loca[$i]->name);
+					$prepAddr = str_replace(' ','+',$inspection_address[$i]);
 					$geocode = file_get_contents('https://maps.google.com/maps/api/geocode/json?key='.$GOOGLE_MAP_KEY.'&address='.$prepAddr.'&sensor=false');
 					$output = json_decode($geocode);
 
@@ -43,7 +43,7 @@ $GOOGLE_MAP_KEY = env('GOOGLE_MAP_KEY');
 			}
 		}else{
 
-			$prepAddr = str_replace(' ','+',$loca);
+			$prepAddr = str_replace(' ','+',$inspection_address);
 			$geocode = file_get_contents('https://maps.google.com/maps/api/geocode/json?key='.$GOOGLE_MAP_KEY.'&address='.$prepAddr.'&sensor=false');
 			$output = json_decode($geocode);
 
@@ -65,6 +65,9 @@ $GOOGLE_MAP_KEY = env('GOOGLE_MAP_KEY');
 		$longitude = '';
 		$place_id = '';
 	}
+		
+	$current_address = session('business_information.address').', '.session('business_information.city').', '.session('business_information.state').', '.session('business_information.zip');
+	
 ?>
 <div class="set_recc_block">
 	<div class="container">
@@ -90,6 +93,19 @@ $GOOGLE_MAP_KEY = env('GOOGLE_MAP_KEY');
 			<h5>Your timeline in Google Maps helps you find the places and the routes between them.</h5>
 		</div>
 		<div id="directions-panel"></div>
+
+			@if(is_array($latitude))
+				@for($i=0;$i<count($latitude);$i++)
+					@php $lat[] = $latitude[$i].','.$longitude[$i].'/'; @endphp
+				@endfor
+				@php $lat = implode('', $lat); @endphp
+			@else
+				@php $lat = $latitude.','.$longitude; @endphp
+			@endif
+
+
+		<a href="https://www.google.com/maps/dir//{{$lat}}" target="_blank">Click here to open Google MAP</a>
+
 		<h4>Map for {!! get_field('users', 'name', $id) !!}</h4>
 		<div id="map"></div>
 	</div>
@@ -104,12 +120,12 @@ $GOOGLE_MAP_KEY = env('GOOGLE_MAP_KEY');
 		var directionsService = new google.maps.DirectionsService;
         var directionsDisplay = new google.maps.DirectionsRenderer;
 @php
-			if(!empty($loca)){
-				if(is_array($loca)){
+			if(!empty($inspection_address)){
+				if(is_array($inspection_address)){
 @endphp
 				    var pyrmont = {
-				        lat: parseFloat('{{ $latitude[1] }}'),
-				        lng: parseFloat('{{ $longitude[1] }}')
+				        lat: parseFloat('{{ $latitude[0] }}'),
+				        lng: parseFloat('{{ $longitude[0] }}')
 			        };       
 
 			        map = new google.maps.Map(document.getElementById('map'), {
@@ -128,13 +144,13 @@ $GOOGLE_MAP_KEY = env('GOOGLE_MAP_KEY');
 			       	var marker;
 			        @php
 
-			        for ($j = 0; $j < count($loca); $j++) {
-			        	if(!empty($loca[$j])) {
+			        for ($j = 0; $j < count($inspection_address); $j++) {
+			        	if(!empty($inspection_address[$j]) || $inspection_address[$j] != null) {
 			        		@endphp
 
-					        function calculateAndDisplayRoute(directionsService, directionsDisplay, jobname, jobprice) {
+					        function calculateAndDisplayRoute(directionsService, directionsDisplay) {
 								var waypts = [];
-								@php for ($k = 1; $k < count($loca)-1; $k++) { @endphp
+								@php for ($k = 0; $k < count($inspection_address)-1; $k++) { @endphp
 									waypts.push({
 										location: '{{$formatted_address[$k]}}',
 										stopover: true
@@ -142,8 +158,8 @@ $GOOGLE_MAP_KEY = env('GOOGLE_MAP_KEY');
 								@php } @endphp
 
 								directionsService.route({
-									origin: '{{$formatted_address[0]}}',
-									destination: '{{$formatted_address[count($loca)-1]}}',
+									origin: '{{ $current_address }}',
+									destination: '{{$formatted_address[count($inspection_address)-1]}}',
 									waypoints: waypts,
 									optimizeWaypoints: true,
 									travelMode: 'DRIVING'
@@ -159,7 +175,6 @@ $GOOGLE_MAP_KEY = env('GOOGLE_MAP_KEY');
 											var routeSegment = i + 1;
 											summaryPanel.innerHTML += '<b>Route Segment: ' + routeSegment +
 											  '</b><br>';
-											//summaryPanel.innerHTML += '<div><strong>' + 'Job Detail: </strong><span class="jobnamespan">{{$jobname[$j]["name"]}}</span><br> Price: $<span class="jobspanprice">{{$jobname[$j]["price"]}}</span></div>';
 											summaryPanel.innerHTML += route.legs[i].start_address + ' to ';
 											summaryPanel.innerHTML += route.legs[i].end_address + '<br>';
 											summaryPanel.innerHTML += route.legs[i].distance.text + '<br><br>';
@@ -194,11 +209,53 @@ $GOOGLE_MAP_KEY = env('GOOGLE_MAP_KEY');
 
 				        map = new google.maps.Map(document.getElementById('map'), {
 				            center: pyrmont,
-				            zoom: 15
+				            zoom: 15,
+				            mapTypeId: google.maps.MapTypeId.ROADMAP
 				        });
 
 				        infowindow = new google.maps.InfoWindow();
 				        var service = new google.maps.places.PlacesService(map);
+
+				        directionsDisplay.setMap(map);
+						calculateAndDisplayRoute(directionsService, directionsDisplay);
+
+				        function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+							var waypts = [];
+
+							waypts.push({
+								location: '{{$inspection_address}}',
+								stopover: true
+							});
+
+							directionsService.route({
+								origin: '{{ $current_address }}',
+								destination: '{{ $inspection_address }}',
+								waypoints: waypts,
+								optimizeWaypoints: true,
+								travelMode: 'DRIVING'
+							}, function(response, status) {
+								if (status === 'OK') {
+									directionsDisplay.setDirections(response);
+									var route = response.routes[0];
+									var summaryPanel = document.getElementById('directions-panel');
+									summaryPanel.innerHTML = '';
+												
+									// For each route, display summary information.
+									for (var i = 0; i < route.legs.length; i++) {
+										var routeSegment = i + 1;
+										summaryPanel.innerHTML += '<b>Route Segment: ' + routeSegment +
+										  '</b><br>';
+										summaryPanel.innerHTML += route.legs[i].start_address + ' to ';
+										summaryPanel.innerHTML += route.legs[i].end_address + '<br>';
+										summaryPanel.innerHTML += route.legs[i].distance.text + '<br><br>';
+									}
+								} else {
+									window.alert('Directions request failed due to ' + status);
+								}
+							});
+						}
+
+				        
 				        var marker = new google.maps.Marker({position: pyrmont, map: map});
 
 				        service.getDetails({

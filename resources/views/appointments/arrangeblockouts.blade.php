@@ -66,10 +66,10 @@
 							<label>Inspector:&nbsp;</label>
 							{!! $inspector_popup !!}
 						
-						<div class="location_blockout">
+						<!-- <div class="location_blockout">
 							<label>&nbsp;Location:&nbsp;</label>
 							{!! $location !!}
-						</div>
+						</div> -->
 						<div class="start_admin">
 							<label>Start:&nbsp; </label>
 								{!! $start_popup !!}

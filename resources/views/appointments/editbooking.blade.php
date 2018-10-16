@@ -221,15 +221,17 @@
                             <span class="signup_label_optional">Client Notes:<br>
                                 <textarea name="user_notes" rows="4" cols="70">{{ $groupdata['booking']->user_notes }}</textarea></span>
                             </div>
-                        <div class="textfield_full">
-                            <span class="signup_label_optional">Includes:<br>
-                                </span>{!! $groupdata['add_on_checkboxes'] !!}
-                         </div>
+                            @if(isset($groupdata['add_on_checkboxes']))
+                                <div class="textfield_full">
+                                    <span class="signup_label_optional">Includes:<br>
+                                        </span>{!! $groupdata['add_on_checkboxes'] !!}
+                                 </div>
+                            @endif
                         <div class="textfield_full">
                                 <input type="hidden" name="trigger" value="1">
                                 <input type="hidden" name="action" value="edit_booking"><input type="hidden" name="target" value="{{ $groupdata['id'] }}">
-                                <input type="submit" name="submit" value="Edit Appointment &raquo;">
-                                &nbsp;&nbsp;<input type="checkbox" name="send_again" value="1"><span class="note">Resend Email Receipts</span>
+                                <input type="submit" name="submit" value="Update Appointment &raquo;">
+                                &nbsp;&nbsp;<!-- <input type="checkbox" name="send_again" value="1"><span class="note">Resend Email Receipts</span> -->
                             </div>
                 </form>
 </div>

@@ -30,6 +30,6 @@ class Booking extends Model
 
     public function locations()
     {
-        return $this->belongsTo('App\Location', 'location')->where('removed', 0);
+        return $this->belongsTo('App\Location', 'location');
     }
 }

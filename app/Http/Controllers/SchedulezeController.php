@@ -52,10 +52,11 @@ class SchedulezeController extends Controller
     public function mapmyday($location = '', $first = '', $last = '', $id = '')
     {
         $id = $this->user_id;
-        $first = time();
-        $last = $first + 1209500;
+        $first = strtotime('today midnight');
+        $last   = strtotime("tomorrow", $first) - 1;        
 
         $data = Input::get();
+        $businessID = $this->business_id;
 
         if(!empty($data)){
             if(empty($data['users_details'])){
@@ -73,7 +74,7 @@ class SchedulezeController extends Controller
 
            /* $first = $data['first'];
             $last = $data['last'];*/
-        }
+        }        
 
         $administration = get_field('users_details', 'administrator', $this->user_id);
 
@@ -89,27 +90,29 @@ class SchedulezeController extends Controller
             $tt = Booking::where([['inspection_address', 'like', '%'.$firstlocation.'%'],['removed', '=', 0]])->orderBy('type', 'ASC')->orderBy('starttime', 'ASC')->first();
 
             $jobname = $tt->building_types;
+
+            $inspection_address = $tt->inspection_address.','.$tt->zip;
         }else{
 
             if($id == 'all'){
                 $tt = Booking::where([['business', '=', $this->business_id],['endtime', '>', $first],['starttime', '<', $last],['removed', '=', 0]])->orderBy('type', 'ASC')->orderBy('starttime', 'ASC')->get();
             }else{
-                $tt = Booking::where([['endtime', '>', $first],['user_id', '=', $id],['starttime', '<', $last],['removed', '=', 0]])->orderBy('type', 'ASC')->orderBy('starttime', 'ASC')->get();
+                $tt = Booking::where([['endtime', '<', $last],['user_id', '=', $id],['starttime', '>', $first],['removed', '=', 0]])->orderBy('type', 'ASC')->orderBy('starttime', 'ASC')->get();
             }
 
             if(count($tt) > 0){
                 foreach ($tt as $key) {
                     $jobname[] = $key->building_types;
                     $loca[] = $key->locations;
+                    $inspection_address[] = $key->inspection_address.','.$key->zip;
                 }
             }else{
                 $loca = '';
                 $jobname = '';
-            }      
-
+            }
             //$location = '';
         }
-        return view('scheduleze.mapmyday', compact('loca', 'jobname', 'first', 'last', 'administration', 'id'));
+        return view('scheduleze.mapmyday', compact('loca', 'jobname', 'first', 'last', 'administration', 'id', 'businessID', 'inspection_address'));
     }
 
     public function changeContent()
@@ -564,15 +567,8 @@ class SchedulezeController extends Controller
     public function UpdateBooking(Request $request, $id)
     {
         $data = Input::get();
+        //dd($data);
         $getstend = DB::table('bookings')->select('starttime', 'endtime')->where('id', $id)->first();
-
-        if (isset($data['quote_override'])){
-            if($data['quote_override'] != "1"){
-                $this_total_price = get_total_price($data['building_type'],$data['building_size'],$data['building_age'], $data['location'], $data['addon']);
-            }
-        } else {
-            $this_total_price = str_replace("$", "", $data['price']);
-        }
 
         $starttime = $data['hourstarttime'][0].":".$data['minutestarttime'][0]." ".$data['amstarttime'][0]." ".$data['monthstarttime'][0]."/".$data['daystarttime'][0]."/".$data['yearstarttime'][0];
 
@@ -592,6 +588,37 @@ class SchedulezeController extends Controller
         } else {
             $starttime = $temp_start;
             $endtime = $temp_end;
+        }
+
+        $building_type = $data['building_type'];
+
+        $building_size = 0;
+        if (isset($data['building_size'])){
+            if($data['building_size'] > 0){
+                $building_size = $data['building_size'];
+            }
+        }
+
+        $building_age = 0;
+        if (isset($data['building_age']) > 0){
+            if($data['building_age'] > 0){
+                $building_age = $data['building_age'];
+            }
+        }
+
+        $addons = '';
+        if(isset($data['addon'])){
+            if (is_array($data['addon'])){
+                $addons = $data['addon'];
+            }
+        }
+
+        $this_total_price = get_total_price($building_type, $building_size, $building_age, $data['location'], $addons);
+
+        if (isset($data['quote_override'])){
+            if($data['quote_override'] == 1){
+                $this_total_price = str_replace("$", "", $_POST['price']);
+            }
         }
 
         $inspection_address = $data['Inspection_Address'];
@@ -617,17 +644,6 @@ class SchedulezeController extends Controller
         //$inspector = $data['inspector'];
         $business = session('business_id');
 
-        $building_type = $data['building_type'];
-        if ($data['building_size'] > 0){
-            $building_size = $data['building_size'];
-        } else {
-            $building_size = 0;
-        }
-        if ($data['building_age'] > 0){
-            $building_age = $data['building_age'];
-        } else {
-            $building_age = 0;
-        }
         $notes = $data['notes'];
         $user_notes = $data['user_notes'];
         $type = 0;
@@ -676,22 +692,24 @@ class SchedulezeController extends Controller
             ]
         );
 
-        if (is_array($data['addon'])){
+        if(isset($data['addon'])){
+            if (is_array($data['addon'])){
 
-            $delete = DB::table('addons_bookings')->where('booings', $data['target'])->delete();
+                $delete = DB::table('addons_bookings')->where('booking', $data['target'])->delete();
 
-            foreach ($data['addon'] as $addn){
-                DB::table('addons_bookings')->insert(
-                    ['addon' => $addn, 'booking' => $data['target']]
-                );
+                foreach ($data['addon'] as $addn){
+                    DB::table('addons_bookings')->insert(
+                        ['addon' => $addn, 'booking' => $data['target']]
+                    );
+                }
             }
         }
 
         if($flash == 1){
-            return redirect('/scheduleze/booking/edit/'.$id)->withErrors('Start time occurs after the specified endtime.  No change made to start or end times, other edits executed successfully');
+            return redirect('/scheduleze/booking/edit/'.$id)->withErrors(trans('scheduleze.AppointmentWarning'));
         }
 
-        return redirect('/scheduleze/booking/appointment')->with('message', 'success');
+        return redirect('/scheduleze/booking/appointment')->with('message', trans('scheduleze.UpdateAppointment'));
     }
 
     public function EditBooking(Request $request, $id)
@@ -714,9 +732,16 @@ class SchedulezeController extends Controller
 
         //$ss = "select addon from addons_bookings where booking = '$row[id]'";
         $addons_edit = DB::table('addons_bookings')->select('addon')->where('booking', $booking->id)->get()->toArray();
+
         //$addons_edit = $l->pull_flat_multi($ss);
-        if(!isset($addons_edit)){
+        if(empty($addons_edit)){
             $addons_edit = '';
+        }else{
+            $c=0;
+            foreach ($addons_edit as $value) {
+                $addons_edit[$c] = $value->addon;
+                $c++;
+            }
         }
 
         $add_on_checkboxes = get_addon_checkboxes("addons", "id", "name", "addon", "", "rank", "ASC", "40", $addons_edit, 3);

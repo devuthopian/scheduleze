@@ -129,6 +129,7 @@ class LoginController extends Controller
         }else{
             $user_details = get_field("users_details", "business", $user->id);
             session(['business_id' => $user_details]);
+            get_business_information($user_details);
         }
 
         //if(!empty($PanelTemplate->unique_url)){

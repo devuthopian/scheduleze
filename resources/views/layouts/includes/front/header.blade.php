@@ -71,32 +71,30 @@
                                     <a href="{{ url('/scheduleze/dayticket/'.$id.'/'.$tomorrow) }}">My Tomorrow </a>
                                 </li>
                                 <li>
-                                    <a href="{{ url('/scheduleze/mapmyday') }}">Map My Day</a>
+                                    <a href="{{ url('/scheduleze/mapmyday') }}">Map My Today</a>
                                 </li>
                                 <li>
                                     <a href="#" data-toggle="modal" data-target="#myModal">Search</a>
                                 </li>
                             </ul>
+                        </li>                        
+                        <li class="arrowicon">
+                            <a href="#">Blockouts</a>
+                            <ul >
+                                <li>
+                                    <a href="{{ url('/scheduleze/booking/blockouts') }}">Blockouts</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('/scheduleze/blockout/AddBlockout') }}">Add Blockout</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('Reoccurrence') }}">Recurring</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('scheduleze/BusinessHours') }}">Business Hours</a>
+                                </li>
+                            </ul>
                         </li>
-                        @if($permission == 1 || $administration == 1)
-                            <li class="arrowicon">
-                                <a href="#">Blockouts</a>
-                                <ul >
-                                    <li>
-                                        <a href="{{ url('/scheduleze/booking/blockouts') }}">Blockouts</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ url('/scheduleze/blockout/AddBlockout') }}">Add Blockout</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('Reoccurrence') }}">Recurring</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ url('scheduleze/BusinessHours') }}">Business Hours</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        @endif
                         <li>
                             <a href="{{ route('Document') }}">Document</a>
                         </li>
@@ -210,6 +208,15 @@
             </div>
         @endif
     </div>
+
+    <div class="col-sm-10">
+        @if(session()->has('warning'))
+            <div class="alert alert-warning">
+                {{ session()->get('warning') }}
+            </div>
+        @endif
+    </div>
+
     @guest
     @else
         <?php if(empty(session('business_id'))){ ?>

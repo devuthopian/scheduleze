@@ -39,9 +39,9 @@ class AppointmentController extends Controller
         $this->user_id = session('id');
         $this->business_id = session('business_id');
         $this->administrator = session('administrator');
-        if(session('permission') == null || session('permission') == 0){
+        /*if(session('permission') == null || session('permission') == 0){
             return redirect('/scheduleze/booking/appointment')->send();
-        }
+        }*/
     }
     /**
      * Display a listing of the resource.
@@ -392,6 +392,8 @@ class AppointmentController extends Controller
         //$hashvalue = Session::get('hashvalue');
 
         $data = session('data');
+
+        $administrator = session('administrator');
         $bookingavailable = session('bookingavailable');
         if( $bookingavailable == null){
 
@@ -404,7 +406,13 @@ class AppointmentController extends Controller
         $formdata = Input::get();
 
         if(!array_key_exists('inspector', $formdata)){
-            $Inspectors = UserDetails::where([['business','=',$data['businessId']], ['removed','=','0']])->first();
+
+            if($administrator == 0){
+                $Inspectors = UserDetails::where([['user_id', '=', $data['reference_id']], ['removed','=','0']])->first();
+            }else{
+                $Inspectors = UserDetails::where([['business', '=', $data['businessId']], ['removed','=','0']])->first();
+            }
+
             $formdata['inspector'] = $Inspectors->user_id;
         }
         array_splice($formdata, 0, 1);
@@ -416,7 +424,7 @@ class AppointmentController extends Controller
 
         $PanelForm = PanelForm::where('panel_id', $panel_id)->first();
 
-        return view('appointments.appointment_form', compact('PanelForm','data'));
+        return view('appointments.appointment_form', compact('PanelForm', 'data'));
     }
 
     public function storebookingappointment(Request $request)
@@ -609,7 +617,9 @@ class AppointmentController extends Controller
                     $message->to($data['requiredEmail'])->subject('+ On-line inspection booking at '.$start.' - #'.$Booking->id.'');
                     $message->from('support@scheduleze.com', $business_name);
                     $message->replyTo('noreply@scheduleze.com', 'no Reply');
-                    $message->attach(public_path().'/attachments/'.$data['business'].'/'.$attachment->email_attachment);
+                    if(file_exists('/attachments/'.$data['business'].'/'.$attachment->email_attachment)){
+                        $message->attach('/attachments/'.$data['business'].'/'.$attachment->email_attachment);
+                    }
                     //$message->setBody("You have requested an inspection with the following details:<br>", 'text/html'); // for HTML rich messages;
                 });
             }
@@ -625,10 +635,16 @@ class AppointmentController extends Controller
                 });
             }
 
+            if(!empty($business_name)){
+                if($business_name == session('username')){
+                    return redirect('/')->with('message', 'Booked Successfully');
+                }
+            }
+
             return redirect('/appointment/receipt/'.Crypt::encrypt($Booking->id).'');
         }
 
-        return redirect('/scheduling_solutions')->with('message', 'That time has just been booked by someone else.');
+        return redirect('/')->with('message', 'That time has just been booked by someone else.');
     }
 
     /**

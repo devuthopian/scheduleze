@@ -128,15 +128,27 @@ class ProfileController extends Controller
 
     public function UserBusinessProfile()
     {
-        $userid           =   Auth::id();
-        $UserBusinessData =   Business::where('user_id', $userid)->first();
+        //$userid           =   Auth::id();
+        $business_id = session('business_id');
+
+        $admin_user_id = UserDetails::select('user_id', 'administrator')->where([['business', '=', $business_id], ['administrator', '=', 1]])->first();
+
+        $UserBusinessData = Business::where('user_id', $admin_user_id->user_id)->first();
+
         $data = [
             'UserBusinessData' => $UserBusinessData,
+            'administrator' => $admin_user_id->administrator
         ];
+
         return view('profiles.UserBusinessProfileEdit')->with($data);
     }
     public function updateUserBusinessAccount(Request $request)
     {
+        $administrator = session('administrator');
+        if($administrator == 0){
+            return redirect('/business_info')->with('warning', trans('profile.warning'));
+        }
+
         $userid =   Auth::id();
         $business_profile_validator = $this->business_profile_validator($request->all());
 

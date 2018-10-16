@@ -246,8 +246,15 @@ class PanelController extends Controller
     public function show($id)
     {
         $business_id = session('business_id');
-        
-        $inspectors = UserDetails::where([['business', '=', $business_id],['removed', '=', '0']])->get();
+        $user_id = session('id');
+        $administrator = session('administrator');
+
+        if($administrator == 0){
+            $inspectors = UserDetails::where([['user_id', '=', $user_id],['removed', '=', '0']])->get();
+        }else{
+            $inspectors = UserDetails::where([['business', '=', $business_id],['removed', '=', '0']])->get();
+        }
+
         $template = PanelTemplate::where('unique_url', $id)->orWhere('id', $id)->first();
         session(['panel_id' => $template->id]);
 
