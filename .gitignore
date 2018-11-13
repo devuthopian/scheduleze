@@ -20,3 +20,4 @@ tests/Browser/Pages/HomePage.php
 tests/Browser/ExampleTest.php
 tests/Browser/LoginTest.php
 tests/Unit/ExampleTest.php
+tests/Unit/ExampleTest.php
