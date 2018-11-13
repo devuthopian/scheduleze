@@ -94,7 +94,7 @@ class BuildingController extends Controller
             ]
         );
 
-        return redirect('/services/content')->with('message', 'Content saved');
+        return redirect('/services/content')->with('message', trans('scheduleze.MessageServiceContent'));
     }
 
     /**
@@ -189,7 +189,7 @@ class BuildingController extends Controller
 
         $txtForm = strtolower($txtForm);
 
-        return redirect('/scheduleze/appointments')->with('message','Successfully saved!');
+        return redirect('/scheduleze/appointments')->with('message', trans('scheduleze.MessageforSuccess'));
     }
 
     public function storeException(Request $request)

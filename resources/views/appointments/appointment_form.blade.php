@@ -10,14 +10,17 @@
     }
     $userId = Auth::id();
 @endphp
+<title>Scheduleze | Customer Scheduling Solutions</title>
+<meta name="keywords" content="Scheduleze | Customer Scheduling Solutions"/>
+<meta name="body" content="Scheduleze | Customer Scheduling Solutions"/>
+<meta name="description" content="Scheduleze | Customer Scheduling Solutions"/>
+<meta name="summary" content="Scheduleze | Customer Scheduling Solutions"/>
+<meta http-equiv="Bulletin-Text" content="Scheduleze | Customer Scheduling Solutions"/>
+<meta name="page-topic" content="Scheduleze | Customer Scheduling Solutions"/>
+<link rel="shortcut icon" href="{{ asset('images/favicon_icon.png') }}" type="image/x-icon" />
+<link rel="stylesheet" href="{{ URL::asset('css/style.css') }}">
+<div class="loader"></div>
 
-@if($data['reference_id'] == $userId)
-    <link rel="stylesheet" href="{{ URL::asset('css/style.css') }}">
-    @include('layouts.includes.front.header')
-@else
-    <link rel="stylesheet" href="{{ URL::asset('css/style.css') }}">
-    <div class="loader"></div>
-@endif
 
 {!! $gjs->gjs_html !!}
 <style type="text/css">
@@ -27,6 +30,7 @@
 
     .header_section {
         float: unset !important;
+        width: 96%;
     }
 </style>
 <div class="NewForm">
@@ -81,7 +85,7 @@
                 $building_age = '';
             }
 
-            $authorized_inspectors = get_inspector_exceptions($businessId, $BuildType, $building_size, $building_age, $addons, session('total_price'));
+            $authorized_inspectors = get_inspector_exceptions($businessId, $BuildType, $building_size, $building_age, $addons, session('total_price'), $data['reference_id']);
             $increment = 900;
             if(!empty($data['addon'])){
                 session(['addon' => $data['addon']]);
@@ -229,16 +233,14 @@
                                     <tr>
                                         <td valign="top"><span class="signup_label_optional">Agent Name</span>
                                             <br>
-                                            <?php $cookies = Cookie::get(); ?>
-                                            <input type="text" name="Agent_Name" value="" size="20">
+                                            <input type="text" name="Agent_Name" value="{{ $agent_name_cookie }}" size="20">
                                         </td>
                                         <td valign="top"><span class="signup_label_optional">Agent Phone</span>
                                             <br>
-                                            <input type="text" name="Agent_Phone" value="" size="20">
+                                            <input type="text" name="Agent_Phone" value="{{ $agent_phone_cookie }}" size="20">
                                         </td>
-                                        <td valign="top"><span class="signup_label_optional">Agent Email<br>
-        											</span>
-                                            <input type="email" name="Agent_Email" value="" size="20">
+                                        <td valign="top"><span class="signup_label_optional">Agent Email<br></span>
+                                            <input type="email" name="Agent_Email" value="{{ $agent_email_cookie }}" size="20">
                                         </td>
                                     </tr>
                                     <tr>

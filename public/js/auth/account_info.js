@@ -6,129 +6,15 @@ var animating; //flag to prevent quick multi-click glitches
 
 $(".next").click(function(){
 	if($('.active').html() == 'Business Details'){
-		if($('#contact_firstname').val() == ''){
-			$('.contact_firstname').show();
-			return false;
-		}else{
-			$('.contact_firstname').hide();
-		}
-
-		if($('#contact_lastname').val() == ''){
-			$('.contact_lastname').show();
-			return false;
-		}else{
-			$('.contact_lastname').hide();
-		}
-
-		if($('#business_city').val() == ''){
-			$('.business_city').show();
-			return false;
-		}else{
-			$('.business_city').hide();
-		}
-
-		if($('#business_state').val() == ''){
-			$('.business_state').show();
-			return false;
-		}else{
-			$('.business_state').hide();
-		}
-
-		if($('#business_zip').val() == ''){
-			$('.business_zip').show();
-			return false;
-		}else{
-			$('.business_zip').hide();
-
-			var input_value = $('#business_zip').val();
-
-			if (validatezip(input_value)) {
-				$('.business_zip').hide();
-			}else{
-				$('.business_zip').show();
-				$('.business_zip').text('Zip code is invalid! Must have five characters');
-				return false;
-			}
-		}
-
-		if($('#business_phone').val() == ''){
-			$('.business_phone').show();
-			return false;
-		}else{
-			//var phone_pattern = '/([0-9]{10})|(\([0-9]{3}\)\s+[0-9]{3}\-[0-9]{4})/'; 
-			//var phone_pattern = '[0-9\-\(\)\s]+';
-
-			var input_value = $('#business_phone').val();
-
-			if (validatePhone(input_value)) {
-				$('.business_phone').hide();
-			}else{
-				$('.business_phone').show();
-				$('.business_phone').text('Number is invalid!');
-				return false;
-			}
-		}
+		
 	}
 
 	if($('.current').html() == 'Additional Information'){
-		/*if($('#additional_phone').val() == ''){
-			$('.additional_phone').show();
-			return false;
-		}else{
-			$('.additional_phone').hide();
-		}*/
-
-		if($('#timezone').val() == ''){
-			$('.timezone').show();
-			return false;
-		}else{
-			$('.timezone').hide();
-		}
-
-		/*if($('#business_website').val() == ''){
-			$('.business_website').show();
-			return false;
-		}else{
-			$('.business_website').hide();
-		}*/
-
-		if($('#requested_email').val() == ''){
-			$('.requested_email').show();
-			return false;
-		}else{
-			var input_value = $('#requested_email').val();
-
-			if (isEmail(input_value)) {
-				$('.requested_email').hide();
-			}else{
-				$('.requested_email').show();
-				$('.requested_email').text('Email is invalid!');
-				return false;
-			}
-		}
+		
 	}
 
 	if($('.current').html() == 'Account Setup'){
-		if($('#Username').val() == ''){
-			$('.Username').show();
-			return false;
-		}else{
-			$('.Username').hide();
-		}
 
-		if($('#pass').val() == ''){
-			$('.pass').show();
-			return false;
-		}else{
-			$('.pass').hide();
-		}
-
-		if($('#cpass').val() == ''){
-			$('.cpass').show();
-			return false;
-		}else{
-			$('.cpass').hide();
-		}
 	}
 
 	function isEmail(email) {

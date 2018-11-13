@@ -5,7 +5,7 @@
 	{!! Form::open([ 'route' => ['storelocation'],'method' => 'post'] ) !!}
 <div class="set_recc_block">
 	<div class="container">
-		<div class="frameadmin">
+		<div class="frameadmin" id="adminlocation">
 			<h2>Locations</h2>
 			<h5>Order is the order the items appear in the popup menu, use radio button to set menu default.<!--<br>Cap is the total number of this class of service you wish to allow booked in a single calendar day.</span>--></h5>				
 				<table border="0" cellspacing="0" cellpadding="2" class="table table-responsive table-bordered">
@@ -62,7 +62,7 @@
 							</td>
 						</tr>
 						<tr>
-							<a href="#" class="add_columnfor_location" id="add_columnfor_location">Add Column</a>
+							<a href="" class="add_columnfor_location" id="add_columnfor_location" @click="addcolumnlocation">Add Column</a>
 						</tr>
 					</tbody>
 				</table>

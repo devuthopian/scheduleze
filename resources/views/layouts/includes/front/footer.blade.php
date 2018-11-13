@@ -1,36 +1,36 @@
 @guest
-    <div class="footer_section">
-@else
+<div class="footer_section">
+    @else
     <div class="footer_section loguser">
-@endguest
-    <div class="container">
-        <!-- <div class="footer_top">
-            <div class="footer_top_cont">
-                <img src="{{ url('images/footer_icon1.png') }}" alt="">
-                <p>Snailmail Address:<br>
-                    Scheduleze ,PO Box 670382<br>
-                    Chugiak, Alaska 99567
-                </p>
-            </div>
-            <div class="footer_top_cont">
-                <img src="{{ url('images/footer_icon1.png') }}" alt="">
-                <p>Sometimes you just want a <br>'real' person::<br> 907.223.4958  </p>
-            </div>
-            <div class="footer_top_cont">
-                <img src="{{ url('images/footer_icon1.png') }}" alt="">
-                <p>Email:<br> General Email:<br> info@scheduleze.com </p>
-            </div>
-        </div> -->
-        @guest
+        @endguest
+        <div class="container">
+            <!-- <div class="footer_top">
+                <div class="footer_top_cont">
+                    <img src="{{ url('images/footer_icon1.png') }}" alt="">
+                    <p>Snailmail Address:<br>
+                        Scheduleze ,PO Box 670382<br>
+                        Chugiak, Alaska 99567
+                    </p>
+                </div>
+                <div class="footer_top_cont">
+                    <img src="{{ url('images/footer_icon1.png') }}" alt="">
+                    <p>Sometimes you just want a <br>'real' person::<br> 907.223.4958  </p>
+                </div>
+                <div class="footer_top_cont">
+                    <img src="{{ url('images/footer_icon1.png') }}" alt="">
+                    <p>Email:<br> General Email:<br> info@scheduleze.com </p>
+                </div>
+            </div> -->
+            @guest
             <div class="footer_bottom">
-                
-                    <div class="col-sm-4">
-                        <h3>Contact <br> Scheduleze</h3>
-                        <p>Thanks for your interest in Scheduleze. Please contact us<br>
-                            at one of these cell-phone free email addresses.
-                        </p>
-                    </div>
-                
+
+                <div class="col-sm-4">
+                    <h3>Contact <br> Scheduleze</h3>
+                    <p>Thanks for your interest in Scheduleze. Please contact us<br>
+                        at one of these cell-phone free email addresses.
+                    </p>
+                </div>
+
                 <div class="col-sm-4">
                     <div class="quick_links">
                         <h3>Quick <br> Links</h3>
@@ -45,102 +45,146 @@
                     </div>
                 </div>
                 @php 
-                    $strchr = substr(strrchr(url()->current(),"/"),1); 
+                $strchr = substr(strrchr(url()->current(),"/"),1); 
                 @endphp
 
                 @if($strchr != 'login' && $strchr != 'account_info')
-                    <div class="col-sm-4" id="signup">
-                        <h3>Try it now free for <br>30 days</h3>
-                        @php $allindustries = getallIndustries() @endphp
-                        <form method="POST" action="{{ route('register') }}" aria-label="{{ __('Register') }}">
-                            @csrf
-                            <select name="txtIndustries" required>
-                                <option value="-1">Select Industrial</option>
-                                @foreach($allindustries as $key => $industries)
-                                    <option  value="{{ $key }}">{{ $industries }}</option>
-                                @endforeach
-                            </select>
-                            <input id="email" type="email" class="{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" placeholder="Business Email" required>
-                            <!-- <input type="text" placeholder="Business Email"> -->
-                            <input type="submit" value="TRY IT NOW" name="">
-                        </form>
-                    </div>
-                @endif
-                
-            </div>
-        @endguest
-    </div>
-
-    <!-- Popup for search menu -->
-    <div id="myModal" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-lg">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Search Appointments</h4>
-            </div>
-            <div class="modal-body">
-                <div class="signup_cont nsignup_cont">
-                    <div class="container">
-                        <form action="{{ url('/scheduleze/booking/AdvanceFilter') }}" method="POST">
+                <div class="col-sm-4" id="signup">
+                    <h3>Try it now free for <br>30 days</h3>
+                    @php
+                        $allindustries = getallIndustries();
+                        $get_all_usernames = get_all_usernames('users', 'name');
+                        $get_key_usernames = array_values(array_filter($get_all_usernames));
+                        $key_username = implode(",", $get_key_usernames);
+                    @endphp
+                    <form method="POST" action="{{ route('register') }}" aria-label="{{ __('Register') }}" id="PostForm" class="form" @submit.prevent="validateBeforeSubmit">
                         @csrf
-                            <div class="form-group">
-                                <div class="col-sm-12">
-                                    {!! Form::label('address', 'Address', array('class' => 'control-label')); !!}
-                                    <input type="text" name="txtAddress">
-                                </div>
-                            </div>
 
-                            <div class="form-group">
-                                <div class="col-sm-12">
-                                    {!! Form::label('client_name', 'Client Name', array('class' => 'control-label')); !!}
-                                    <input type="text" name="txtClientName">
-                                </div>
-                            </div>
+                        <select name="txtIndustries" v-validate="'excluded:-1'" data-vv-as="selected">
+                            <option value="-1">Select Industrial</option>
+                            @foreach($allindustries as $key => $industries)
+                            <option  value="{{ $key }}">{{ $industries }}</option>
+                            @endforeach
+                        </select>
+                        <i v-show="errors.has('txtIndustries')" class="fa fa-warning"></i>
+                        <span v-show="errors.has('txtIndustries')" class="help is-danger">@{{ errors.first('txtIndustries') }}</span>
 
-                            <div class="form-group">
-                                <div class="col-sm-12">
-                                    {!! Form::label('agent_name', 'Agent Name', array('class' => 'control-label')); !!}
-                                    <input type="text" name="txtAgentName">
-                                </div>
-                            </div>
+                        <input type="text" name="email" v-validate="'required|email'" :class="{'input': true, 'is-danger': errors.has('email') }" placeholder="Business Email" />
+                        <i v-show="errors.has('email')" class="fa fa-warning"></i>
+                        <span v-show="errors.has('email')" class="help is-danger">@{{ errors.first('email') }}</span>
 
+                        <input type="text" name="name" v-validate="'required|alpha|excluded:{{ $key_username }}'" :class="{'input': true, 'is-danger': errors.has('name')}" placeholder="Username">
+                        <i v-show="errors.has('name')" class="fa fa-warning"></i>
+                        <span v-show="errors.has('name')" class="help is-danger">@{{ errors.first('name') }}</span>
+                        <!--  <signupform-component></signupform-component> -->
+
+                        <p>Before you can complete your registration, you must accept our <a href="{{ url('terms_policy') }}" target="_blank" title="Terms of Service">Terms of Service</a>.</p>
+                        <div class="bussthree_cont">
                             <div class="form-group">
-                                <div class="col-sm-12">
-                                    {!! Form::label('keyword', 'Keyword', array('class' => 'control-label')); !!}
-                                    <input type="text" name="txtKeyword">
-                                </div>
+                                <input name="term_checkbox" type="checkbox" id="agree_term" value="check" @click="clickagreementcheck">
+                                <label for="agree_term" class="control-label">I accept the Terms of Service</label>
                             </div>
-                            <div class="form-group">
-                                <div class="col-sm-6">
-                                    {!!
-                                        Form::button('Search', array(
+                        </div>
+                        <input class="btn cls-agree-btn" type="submit" value="TRY IT NOW" disabled name="">
+                    </form>
+                </div>
+                <script src="{{ asset('js/app.js') }}"></script>
+                @endif
+
+            </div>
+            @endguest
+        </div>
+
+        <!-- Popup for search menu -->
+        <div id="myModal" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-lg">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Search Appointments</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="signup_cont nsignup_cont">
+                            <div class="container">
+                                <form action="{{ url('/scheduleze/booking/AdvanceFilter') }}" method="POST">
+                                    @csrf
+                                    <div class="form-group">
+                                        <div class="col-sm-12">
+                                            {!! Form::label('address', 'Address', array('class' => 'control-label')); !!}
+                                            <input type="text" name="txtAddress">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-sm-12">
+                                            {!! Form::label('client_name', 'Client Name', array('class' => 'control-label')); !!}
+                                            <input type="text" name="txtClientName">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-sm-12">
+                                            {!! Form::label('agent_name', 'Agent Name', array('class' => 'control-label')); !!}
+                                            <input type="text" name="txtAgentName">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-sm-12">
+                                            {!! Form::label('keyword', 'Keyword', array('class' => 'control-label')); !!}
+                                            <input type="text" name="txtKeyword">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-6">
+                                            {!!
+                                            Form::button('Search', array(
                                             'class'             => 'btn btn-success gmailbtn',
                                             'type'              => 'submit',
-                                        ))
-                                    !!}
-                                </div>
+                                            ))
+                                            !!}
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
-                        </form>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
             </div>
         </div>
 
-        </div>
-    </div>
+        <!-- <div id="myModalTerms" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+        
+                Modal content
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Modal Header</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Some text in the modal.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+        
+            </div>
+        </div> -->
 
-    <div class="copyright_section">
-        <div class="container">
-            <div class="copright_left">&copy; copyright all rights reserved</div>
-            <div class="copright_right" bgcolor="#dfa427">
-                <a href="mailto:support@scheduleze.com" class="bottom">support@scheduleze.com</a>
+        <div class="copyright_section">
+            <div class="container">
+                <div class="copright_left">&copy; copyright all rights reserved</div>
+                <div class="copright_right" bgcolor="#dfa427">
+                    <a href="mailto:support@scheduleze.com" class="bottom">support@scheduleze.com</a>
+                </div>
             </div>
         </div>
     </div>
-</div>

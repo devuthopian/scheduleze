@@ -7,15 +7,17 @@
     }
     $userId = Auth::id();
 @endphp
-   
-    
-    @if($data['reference_id'] == $userId)
-        <link rel="stylesheet" href="{{ URL::asset('css/style.css') }}">
-        @include('layouts.includes.front.header')
-    @else
-        <link rel="stylesheet" href="{{ URL::asset('css/style.css') }}">
-        <div class="loader"></div>
-    @endif
+    <title>Scheduleze | Customer Scheduling Solutions</title>
+    <meta name="keywords" content="Scheduleze | Customer Scheduling Solutions"/>
+    <meta name="body" content="Scheduleze | Customer Scheduling Solutions"/>
+    <meta name="description" content="Scheduleze | Customer Scheduling Solutions"/>
+    <meta name="summary" content="Scheduleze | Customer Scheduling Solutions"/>
+    <meta http-equiv="Bulletin-Text" content="Scheduleze | Customer Scheduling Solutions"/>
+    <meta name="page-topic" content="Scheduleze | Customer Scheduling Solutions"/>
+    <link rel="shortcut icon" href="{{ asset('images/favicon_icon.png') }}" type="image/x-icon" />
+    <link rel="stylesheet" href="{{ URL::asset('css/style.css') }}">
+    <div class="loader"></div>
+
 
 {!! $gjs->gjs_html !!}
 <style type="text/css">
@@ -25,7 +27,9 @@
 
     .header_section {
         float: unset !important;
+        width: 96%;
     }
+
 </style>
 <div class="NewForm" style="display: none;">
     @if (is_array($PanelForm) || is_object($PanelForm))
@@ -76,7 +80,7 @@
                 $building_age = '';
             }
 
-            $authorized_inspectors = get_inspector_exceptions($businessId, $BuildType, $building_size, $building_age, $addons, session('total_price'));
+            $authorized_inspectors = get_inspector_exceptions($businessId, $BuildType, $building_size, $building_age, $addons, session('total_price'), $data['reference_id']);
 
             $increment = 900;
         @endphp

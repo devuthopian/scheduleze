@@ -12,3 +12,11 @@ yarn-error.log
 .env
 *.lock
 public/template/
+tests/Unit/Test.php
+tests/Unit/ExampleTest.php
+tests/DuskTestCase.php
+tests/Browser/Pages/Page.php
+tests/Browser/Pages/HomePage.php
+tests/Browser/ExampleTest.php
+tests/Browser/LoginTest.php
+tests/Unit/ExampleTest.php

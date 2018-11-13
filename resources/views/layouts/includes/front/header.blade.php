@@ -36,8 +36,8 @@
                     $administration = get_field('users_details', 'administrator', $id);
                     $day = 10;
                 @endphp
-                <nav>
-                    <a href="#" class="n_toggle"><i class="fa fa-bars fa-2x"></i></a>
+                <nav id="app">
+                    <a href="#" class="n_toggle" @click="doSomething"><i class="fa fa-bars fa-2x"></i></a>
                     <ul>
                         @guest
                             <li>
@@ -45,16 +45,16 @@
                             </li>
                         @endguest
                         <li class="arrowicon">
-                            <a href="#">Appointments</a>
+                            <a href="#" @click="doSomethinginmenu">Appointments</a>
                             <ul >
                                 <li>
                                     <a href="{{ url('/scheduleze/booking/appointment') }}">Bookings</a>
                                 </li>
                                 <li>
                                     @if(!empty($hashvalue))
-                                        <a href="{{ url('template/'.$hashvalue) }}">Add Appointment</a>
+                                        <a href="{{ url('template/'.$hashvalue) }}" target="_blank">Add Appointment</a>
                                     @else
-                                        <a href="{{ url('scheduleze/appointments') }}">Add Appointment</a>
+                                        <a href="{{ url('scheduleze/appointments') }}" target="_blank">Add Appointment</a>
                                     @endif
                                 </li>
                                 <li>
@@ -79,7 +79,7 @@
                             </ul>
                         </li>                        
                         <li class="arrowicon">
-                            <a href="#">Blockouts</a>
+                            <a href="#" @click="doSomethinginmenu">Blockouts</a>
                             <ul >
                                 <li>
                                     <a href="{{ url('/scheduleze/booking/blockouts') }}">Blockouts</a>
@@ -100,7 +100,7 @@
                         </li>
                         @if($permission == 1 || $administration == 1)
                             <li class="arrowicon">
-                                <a href="{{ url('/form/BuildingTypes') }}">{{ __('nav.services') }}</a>
+                                <a href="{{ url('/form/BuildingTypes') }}"  @click="doSomethinginmenu">{{ __('nav.services') }}</a>
                                 <ul >
                                     <li>
                                         <a href="{{ url('/form/BuildingTypes') }}">{{ $getbusindus->type_label }}</a>
@@ -117,7 +117,7 @@
                                 </ul>
                             </li>
                             <li class="arrowicon">
-                                <a href="{{ route('Location') }}">Locations</a>
+                                <a href="{{ route('Location') }}"  @click="doSomethinginmenu">Locations</a>
                                 <ul >
                                     <li>
                                         <a href="{{ route('Location') }}">Add/Remove Location</a>
@@ -128,11 +128,8 @@
                                 </ul>
                             </li>
                         @endif
-                        <li>
-                            <a href="{{ route('ZigZag') }}">ZigZag</a>
-                        </li>
                         <li class="arrowicon">
-                            <a href="#">Users</a>
+                            <a href="#"  @click="doSomethinginmenu">Users</a>
                             <ul >
                                 <li>
                                     <a href="{{ route('Inspectors') }}">Inspectors</a>
@@ -145,7 +142,7 @@
                             </ul>
                         </li>
                         <li class="arrowicon">
-                            <a href="{{ url('profile') }}">Profile</a>
+                            <a href="{{ url('profile') }}"  @click="doSomethinginmenu">Profile</a>
                             <ul>
                                 <li>
                                     <a href="{{ url('profile') }}">User Profile</a>
@@ -164,10 +161,15 @@
                                 <li>
                                     <a href="#">Recurring Payment</a>
                                 </li>
-                                <li>
-                                    <a href="{{ route('schedulepanel') }}">{{ __('nav.SchedulePanel') }}</a>
-                                </li>
+                                @if($permission == 1 || $administration == 1)
+                                    <li>
+                                        <a href="{{ route('schedulepanel') }}">{{ __('nav.SchedulePanel') }}</a>
+                                    </li>
+                                @endif
                             </ul>
+                        </li>
+                        <li>
+                            <a href="{{ route('ZigZag') }}">ZigZag</a>
                         </li>
                         <li class="arrowicon">
                             <a href="{{ url('profile') }}">{{ ucfirst(Auth::user()->name) }}</a>
@@ -204,7 +206,7 @@
     <div class="col-sm-10">
         @if(session()->has('message'))
             <div class="alert alert-success">
-                {{ session()->get('message') }}
+                {!! session()->get('message') !!}
             </div>
         @endif
     </div>

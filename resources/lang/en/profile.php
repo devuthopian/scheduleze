@@ -53,4 +53,6 @@ return [
     'updateSuccess'                => 'User Profile Sucessfully Updated',
     'submitButton'                 => 'Submit',
     'updatebusinessButton'         => 'Update Business Profile',
+    'domain_name'                  => 'Domain Name',
+    'placeholder_domain_name'      => 'Please enter your Schedule Panel web address',
 ];

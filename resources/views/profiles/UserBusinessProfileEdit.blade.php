@@ -17,7 +17,7 @@
            <div class="sign_up_inner_cont">
             <h3>Business Profile</h3>
 
-            @if(session('administrator') == 0)
+            @if(session('permission') == 0)
                 @php 
                     $behaviour = 'disabled';
                     
@@ -636,6 +636,18 @@
 
     </div>
 </div>
+
+@if(!empty(session('hashvalue')))
+    <div>
+        <div class="bussthree_cont">  
+            <div class="form-group">
+                {!! Form::label('Domain Name', trans('profile.domain_name') , array('class' => 'control-label')); !!}
+
+                {!! Form::text('domain_name',session('hashvalue'), array('id' => 'domain_name', 'class' => 'form-control', 'placeholder' => trans('profile.placeholder_domain_name'))) !!}
+            </div>
+        </div>
+    </div>
+@endif     
 
 
 <div class="textfield_full">

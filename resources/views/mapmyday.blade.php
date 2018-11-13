@@ -8,8 +8,7 @@
         </div>
     </div>
 @endif
-<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
-<?php
+<?php 
 $GOOGLE_MAP_KEY = env('GOOGLE_MAP_KEY');
 	if(empty($GOOGLE_MAP_KEY)){
 		$GOOGLE_MAP_KEY='AIzaSyAN_GbtrVtZfOedD5lhuggGCTMdDp0MHPw';
@@ -21,23 +20,20 @@ $GOOGLE_MAP_KEY = env('GOOGLE_MAP_KEY');
 
 					$prepAddr = str_replace(' ','+',$inspection_address[$i]);
 					$geocode = file_get_contents('https://maps.google.com/maps/api/geocode/json?key='.$GOOGLE_MAP_KEY.'&address='.$prepAddr.'&sensor=false');
-					$output = json_decode($geocode);                    
+					$output = json_decode($geocode);
 
 					if($output->status == 'REQUEST_DENIED')
 					{
 						$error = $output->error_message;
 						$latitude = '';
 						$longitude = '';
-					}else{
+					}
 
-                        if( $output->results ){
-        					$error = '';
-        					$latitude[$i] = $output->results[0]->geometry->location->lat;
-        					$longitude[$i] = $output->results[0]->geometry->location->lng;
-        					$place_id[$i] = $output->results[0]->place_id;
-        					$formatted_address[$i] = $output->results[0]->formatted_address;
-                        }
-                    }
+					$error = '';
+					$latitude[$i] = $output->results[0]->geometry->location->lat;
+					$longitude[$i] = $output->results[0]->geometry->location->lng;
+					$place_id[$i] = $output->results[0]->place_id;
+					$formatted_address[$i] = $output->results[0]->formatted_address;
 
 				}else{
 					$latitude[$i] = '';
@@ -56,20 +52,11 @@ $GOOGLE_MAP_KEY = env('GOOGLE_MAP_KEY');
 				$error = $output->error_message;
 				$latitude = '';
 				$longitude = '';
-                $place_id = '';
-			}else{
-                if( $output->results ){
-        			$error = '';
-        			$latitude = $output->results[0]->geometry->location->lat;
-        			$longitude = $output->results[0]->geometry->location->lng;
-        			$place_id = $output->results[0]->place_id;
-                }else{
-                    $error = 'Something went Wrong. Perhaps Directions request failed due to NOT_FOUND';
-                    $latitude = '';
-                    $longitude = '';
-                    $place_id = '';
-                }
-            }
+			}
+			$error = '';
+			$latitude = $output->results[0]->geometry->location->lat;
+			$longitude = $output->results[0]->geometry->location->lng;
+			$place_id = $output->results[0]->place_id;
 
 		}
 
@@ -115,24 +102,9 @@ $GOOGLE_MAP_KEY = env('GOOGLE_MAP_KEY');
 			@else
 				@php $lat = $latitude.','.$longitude; @endphp
 			@endif
-        
-            <b>Additional Options</b>
-            <ul>
-                <li>
-                    <a href="https://www.google.com/maps/dir//{{$lat}}" target="_blank">
-                        <b>
-                            Click here to open Google MAP
-                        </b>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="here_from">
-                        <b>
-                            Check route from your current Location
-                        </b>
-                    </a>
-                </li>
-            </ul>
+
+
+		<a href="https://www.google.com/maps/dir//{{$lat}}" target="_blank">Click here to open Google MAP</a>
 
 		<h4>Map for {!! get_field('users', 'name', $id) !!}</h4>
 		<div id="map"></div>
@@ -146,8 +118,6 @@ $GOOGLE_MAP_KEY = env('GOOGLE_MAP_KEY');
 	function initMap() {
 		var directionsService = new google.maps.DirectionsService;
         var directionsDisplay = new google.maps.DirectionsRenderer;
-
-        var current_address = '{{ $current_address }}';
 @php
 			if(!empty($inspection_address)){
 				if(is_array($inspection_address)){
@@ -158,60 +128,46 @@ $GOOGLE_MAP_KEY = env('GOOGLE_MAP_KEY');
 			        };       
 
 			        map = new google.maps.Map(document.getElementById('map'), {
+			        	
 			            center: pyrmont,
-			            zoom: 13
+			            zoom: 13,
+			            mapTypeId: google.maps.MapTypeId.ROADMAP
 			        });
 
 			        directionsDisplay.setMap(map);
-					calculateAndDisplayRoute(directionsService, directionsDisplay, current_address);
+					calculateAndDisplayRoute(directionsService, directionsDisplay);
 			        
 			        infowindow = new google.maps.InfoWindow();
 			       	var service = new google.maps.places.PlacesService(map);
 			       	// var marker = new google.maps.Marker({position: pyrmont, map: map});
-			       	var marker;                    
+			       	var marker;
 
-                    jQuery('.here_from').on('click', function ($) {
-                        // Try HTML5 geolocation.
-                        if (navigator.geolocation) {
-                            navigator.geolocation.getCurrentPosition(function(position) {
-                                var pos = {
-                                    lat: position.coords.latitude,
-                                    lng: position.coords.longitude
-                                };
+			       	// Try HTML5 geolocation.
+					if (navigator.geolocation) {
+						navigator.geolocation.getCurrentPosition(function(position) {
+							var pos = {
+								lat: position.coords.latitude,
+								lng: position.coords.longitude
+							};
 
-                                infowindow.setPosition(pos);
-                                infowindow.setContent('Location found.');
-                                infowindow.open(map);
-                                map.setCenter(pos);
-
-                                $.getJSON( {
-                                    url  : 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyAN_GbtrVtZfOedD5lhuggGCTMdDp0MHPw',
-                                    data : {
-                                        latlng : pos.lat+','+pos.lng,
-                                        sensor  : true
-                                    },
-                                    success : function( data, textStatus ) {
-                                        current_address = data.results[0].formatted_address;
-                                        console.log( current_address );
-                                        calculateAndDisplayRoute(directionsService, directionsDisplay, current_address);
-                                    }
-                                } );
-                            }, function() {
-                                handleLocationError(true, infowindow, map.getCenter());
-                            });
-                        } else {
-                            // Browser doesn't support Geolocation
-                            handleLocationError(false, infowindow, map.getCenter());
-                        }
-                    });
-			       
+							infoWindow.setPosition(pos);
+							infoWindow.setContent('Location found.');
+							infoWindow.open(map);
+							map.setCenter(pos);
+						}, function() {
+							handleLocationError(true, infoWindow, map.getCenter());
+						});
+					} else {
+						// Browser doesn't support Geolocation
+						handleLocationError(false, infoWindow, map.getCenter());
+					}
 			        @php
 
-			        for ($j = 0; $j < count($formatted_address); $j++) {
+			        for ($j = 0; $j < count($inspection_address); $j++) {
 			        	if(!empty($inspection_address[$j]) || $inspection_address[$j] != null) {
 			        		@endphp
 
-					        function calculateAndDisplayRoute(directionsService, directionsDisplay, current_address) {
+					        function calculateAndDisplayRoute(directionsService, directionsDisplay) {
 								var waypts = [];
 								@php for ($k = 0; $k < count($inspection_address)-1; $k++) { @endphp
 									waypts.push({
@@ -221,8 +177,8 @@ $GOOGLE_MAP_KEY = env('GOOGLE_MAP_KEY');
 								@php } @endphp
 
 								directionsService.route({
-									origin: current_address,
-									destination: '{{$formatted_address[count($formatted_address)-1]}}',
+									origin: '{{ $current_address }}',
+									destination: '{{$formatted_address[count($inspection_address)-1]}}',
 									waypoints: waypts,
 									optimizeWaypoints: true,
 									travelMode: 'DRIVING'
@@ -272,52 +228,18 @@ $GOOGLE_MAP_KEY = env('GOOGLE_MAP_KEY');
 
 				        map = new google.maps.Map(document.getElementById('map'), {
 				            center: pyrmont,
-				            zoom: 15
+				            zoom: 15,
+				            mapTypeId: google.maps.MapTypeId.ROADMAP
 				        });
-
-                        directionsDisplay.setMap(map);
-                        
-                        calculateAndDisplayRoute(directionsService, directionsDisplay, current_address);
 
 				        infowindow = new google.maps.InfoWindow();
 				        var service = new google.maps.places.PlacesService(map);
 
-                        jQuery('.here_from').on('click', function ($) {
-                            // Try HTML5 geolocation.
-                            if (navigator.geolocation) {
-                                navigator.geolocation.getCurrentPosition(function(position) {
-                                    var pos = {
-                                        lat: position.coords.latitude,
-                                        lng: position.coords.longitude
-                                    };
-                                    infowindow.setPosition(pos);
-                                    infowindow.setContent('Location found.');
-                                    infowindow.open(map);
-                                    map.setCenter(pos);
-                                    $.getJSON( {
-                                        url  : 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyAN_GbtrVtZfOedD5lhuggGCTMdDp0MHPw',
-                                        data : {
-                                            latlng : pos.lat+','+pos.lng,
-                                            sensor  : true
-                                        },
-                                        success : function( data, textStatus ) {
-                                            current_address = data.results[0].formatted_address;
-                                            console.log( 'here from '+current_address );
-                                            calculateAndDisplayRoute(directionsService, directionsDisplay, current_address);
-                                        }
-                                    } );
-                                }, function() {
-                                    handleLocationError(true, infowindow, map.getCenter());
-                                });
-                            } else {
-                                // Browser doesn't support Geolocation
-                                handleLocationError(false, infowindow, map.getCenter());
-                            }
-                        });
+				        directionsDisplay.setMap(map);
+						calculateAndDisplayRoute(directionsService, directionsDisplay);
 
-				        function calculateAndDisplayRoute(directionsService, directionsDisplay, current_address) {
+				        function calculateAndDisplayRoute(directionsService, directionsDisplay) {
 							var waypts = [];
-                            console.log(current_address);
 
 							waypts.push({
 								location: '{{$inspection_address}}',
@@ -325,11 +247,12 @@ $GOOGLE_MAP_KEY = env('GOOGLE_MAP_KEY');
 							});
 
 							directionsService.route({
-								origin: current_address,
+								origin: '{{ $current_address }}',
 								destination: '{{ $inspection_address }}',
 								waypoints: waypts,
 								optimizeWaypoints: true,
-								travelMode: 'DRIVING'
+								travelMode: 'DRIVING',
+								alternatives: true
 							}, function(response, status) {
 								if (status === 'OK') {
 									directionsDisplay.setDirections(response);
@@ -371,10 +294,10 @@ $GOOGLE_MAP_KEY = env('GOOGLE_MAP_KEY');
 			} @endphp
     }
 
-    function handleLocationError(browserHasGeolocation, infowindow, pos) {
-		infowindow.setPosition(pos);
-		infowindow.setContent(browserHasGeolocation ? 'Error: The Geolocation service failed.' : 'Error: Your browser doesn\'t support geolocation.');
-		infowindow.open(map);
+    function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+		infoWindow.setPosition(pos);
+		infoWindow.setContent(browserHasGeolocation ? 'Error: The Geolocation service failed.' : 'Error: Your browser doesn\'t support geolocation.');
+		infoWindow.open(map);
 	}
 </script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key={{$GOOGLE_MAP_KEY}}&libraries=places&callback=initMap"></script>

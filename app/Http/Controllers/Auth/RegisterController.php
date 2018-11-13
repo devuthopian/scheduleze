@@ -10,7 +10,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use Mail;
+//use Mail;
+use Illuminate\Support\Facades\Mail;
 use App\Mail\VerifyMail;
 use Illuminate\Http\Request;
 class RegisterController extends Controller
@@ -31,7 +32,7 @@ class RegisterController extends Controller
     protected function registered(Request $request, $user)
     {
         $this->guard()->logout();
-        return redirect('/ConfirmStatus')->with('confirmstatus', 'We sent you an activation code. Check your email and click on the link to verify.');
+        return redirect('/ConfirmStatus')->with('confirmstatus', trans('auth.MessageforCheckMail'));
     }
 
     /**
@@ -61,8 +62,8 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            //'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'name' => 'required|string|max:255|unique:users',
+            //'email' => 'required|string|email|max:255|unique:users',
             //'password' => 'required|string|min:6|confirmed',
         ]);
     }
@@ -76,7 +77,7 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $user = User::create([
-            //'name' => $data['name'],
+            'name' => $data['name'],
             'email' => $data['email'],
             //'password' => bcrypt($data['password']),
         ]);
@@ -91,10 +92,18 @@ class RegisterController extends Controller
             'indus_id' => $data['txtIndustries'],
             'permission' => 1
         ]);
-        
+
         Mail::to($user->email)->send(new VerifyMail($user));
- 
-        return $user;
+
+        if( count(Mail::failures()) > 0 ) {
+
+           foreach(Mail::failures as $email_address) {
+               echo "$email_address <br />";
+            }
+
+        }else{
+            return $user;
+        }
     }
 
     public function verifyUser($token)
@@ -105,22 +114,25 @@ class RegisterController extends Controller
             if(!$user->verified) {
                 $verifyUser->user->verified = 1;
                 $verifyUser->user->save();
-                $status = "Your e-mail is verified. You can now Signup Now.";
+                $status =  trans('auth.MessageStatusOne');
             }else{
-                $status = "Your e-mail is already verified. You can now login.";
+                $status = trans('auth.MessageforalVerification');
             }
         }else{
-            return redirect('/login')->with('warning', "Sorry your email cannot be identified.");
+            return redirect('/login')->with('warning', trans('auth.MessageforIdentification'));
         }
+
         $check_reg = Business::where('user_id', $verifyUser->user_id)->first();
+        $username = User::where('id', $verifyUser->user_id)->select('name')->first();
+
         if(isset($check_reg )){
             if(!$check_reg->registration_completed){
-            return redirect('/account_info/?token='.$token)->with('status', $status);
+            return redirect('/account_info/?token='.$token)->with('status', $status)->with('username', $username);
             } else {
-            return redirect('/login')->with('warning', "Registration is already completed.");
+            return redirect('/login')->with('warning', trans('auth.MessageforRegisterWarning'));
             }
         } else{
-            return redirect('/account_info/?token='.$token)->with('status', $status);
+            return redirect('/account_info/?token='.$token)->with('status', $status)->with('username', $username);
         }
     }
 
@@ -129,19 +141,39 @@ class RegisterController extends Controller
         $verifyUser = VerifyUser::where('token',$_GET['token'])->first();
 
         $check_reg = Business::where('user_id', $verifyUser->user_id)->first();
+        $username = User::where('id', $verifyUser->user_id)->select('name')->first();
         if(isset($check_reg )){
             if(!$check_reg->registration_completed){
-                return view('auth.account_info');
+                return view('auth.account_info', compact('username'));
             } else {
-                return redirect('/login')->with('warning', "Registration is already completed.");
+                return redirect('/login')->with('warning', trans('auth.MessageforRegisterWarning'));
             }
         } else{
-            return view('auth.account_info');
+            return view('auth.account_info', compact('username'));
         }
     }
 
     public function account_info_save(Request $request)
     {
+        $validatedData = Validator::make($request->all(), [
+            'name' => 'required',
+            'contact_firstname' => 'required',
+            'contact_lastname' => 'required',
+            'address' => 'required',
+            'city' => 'required',
+            'state' => 'required',
+            'zip' => 'required',
+            'phone' => 'required',
+            'public_phone' => 'required',
+            //'timezone' => $request->input('timezone'),
+            'website' => 'required',
+            'email2' => 'required'
+        ]);
+
+        if ($validatedData->fails()) {
+            return back()->withErrors($validatedData)->withInput();
+        }
+
         $user_token = $request->input('user_token'); // option 1
         $verifyUser = VerifyUser::where('token', $user_token)->first();
         if(isset($verifyUser) ){
@@ -177,12 +209,12 @@ class RegisterController extends Controller
                 $userdetails->save();
 
                 session(['business_id' => $business->id]);
-                $status = "Your Signup process is complete, you can log in now.";
+                $status =  trans('auth.MessageforSignComplete');
             }else{
-                $status = "Your e-mail is already verified. You can now login.";
+                $status =  trans('auth.MessageforalVerification');
             }
         }else{
-            return redirect('/login')->with('warning', "Sorry your email cannot be identified.");
+            return redirect('/login')->with('warning', trans('auth.MessageforIdentification'));
         }
         return redirect('/login')->with('status', $status);
     }

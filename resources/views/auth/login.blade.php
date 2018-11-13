@@ -8,7 +8,13 @@
                     {{ session('warning') }}
                 </div>
             @endif
-            <div class="login_section">
+            @php
+                $allindustries = getallIndustries();
+                $get_all_usernames = get_all_usernames('users', 'name');
+                $get_key_usernames = array_values(array_filter($get_all_usernames));
+                $key_username = implode(",", $get_key_usernames);
+            @endphp
+            <div class="login_section" id="signup">
                 <div class="container">
                     <!-- <div class="login_left_cont">
                         <img src="images/login_img.png" alt="">
@@ -21,12 +27,9 @@
                                 <div class="form-group row">
                                    <!--  <label for="email" class="col-sm-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label> -->
                                     <div class="col-md-12">
-                                        <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ $value ? $value : '' }}" placeholder="Username" required autofocus>
-                                        @if ($errors->has('name'))
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $errors->first('name') }}</strong>
-                                            </span>
-                                        @endif
+                                        <input id="name" type="text" v-validate="'required|alpha|included:{{ $key_username }}'" :class="{'input': true, 'is-danger': errors.has('name')}" name="name" value="{{ $value ? $value : '' }}" placeholder="Username" required autofocus>
+                                        <i v-show="errors.has('name')" class="fa fa-warning"></i>
+                                        <span v-show="errors.has('name')" class="help is-danger-login">@{{ errors.first('name') }}</span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -61,7 +64,7 @@
                                 </div>
                                 <div class="form-group row mb-0">
                                     <div class="col-md-12 offset-md-4">
-                                        <input type="submit" value="{{ __('Login') }}">
+                                        <input type="submit" value="{{ __('Login') }}" :disabled="errors.any()">
                                       
                                         <a class="btn btn-link" href="{{ route('password.request') }}">
                                             {{ __('Forgot Your Password?') }}
@@ -84,6 +87,7 @@
                     </div>
                 </div>
             </div>
+            <script src="{{ asset('js/app.js') }}"></script>
         </div>
     </div>
 </div>

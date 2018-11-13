@@ -93,7 +93,7 @@ class LoginController extends Controller
     {
         if (!$user->verified) {
             auth()->logout();
-            return back()->with('warning', 'You need to confirm your account. We have sent you an activation code, please check your email.');
+            return back()->with('warning', trans('auth.MessageforConfirmAccount'));
         }
 
         if($request->input('txtremember') == 'on'){
@@ -106,16 +106,11 @@ class LoginController extends Controller
         }
         
         //$PanelTemplate = $user->Panel($user->id);
-        $PanelTemplate = PanelTemplate::where('user_id', $user->id)->first();
-        if(empty($PanelTemplate)){
-            $panelurl = '';
-        }else{
-            $panelurl = $PanelTemplate->unique_url;
-        }
+        
         $permission = get_field("users_details", "permission", $user->id); //get permission details
         $administrator = get_field("users_details", "administrator", $user->id); //get administrator details
         $indus_id = get_field("users_details", "indus_id", $user->id);
-        session(['id' => $user->id, 'username' => $user->name, 'hashvalue' => $panelurl, 'permission' => $permission, 'indus_id' => $indus_id, 'administrator' => $administrator]);
+        
 
         if($administrator == 1) {
             $business = Business::where('user_id', $user->id)->first();
@@ -124,13 +119,24 @@ class LoginController extends Controller
                 session(['business_id' => $business->id]);
                 get_business_information($business->id);
             }else{
-                return redirect('business_info')->with('warning', 'You need to fill business info before proceeding to anything else. It will help us to cooperate with you!');
+                return redirect('business_info')->with('warning', trans('auth.MessageforBusinessWarning'));
             }
         }else{
             $user_details = get_field("users_details", "business", $user->id);
             session(['business_id' => $user_details]);
             get_business_information($user_details);
         }
+
+        $businessID = session('business_id');
+
+        $PanelTemplate = PanelTemplate::where('business', $businessID)->first();
+        if(empty($PanelTemplate)){
+            $panelurl = '';
+        }else{
+            $panelurl = $PanelTemplate->unique_url;
+        }
+
+        session(['id' => $user->id, 'username' => $user->name, 'hashvalue' => $panelurl, 'permission' => $permission, 'indus_id' => $indus_id, 'administrator' => $administrator]);
 
         //if(!empty($PanelTemplate->unique_url)){
             //return redirect('/template/'.$PanelTemplate->unique_url);
@@ -141,7 +147,7 @@ class LoginController extends Controller
 
             if (file_exists($path)) {
                 file_put_contents($path, str_replace(
-                    'SESSION_LIFETIME=120', 'SESSION_LIFETIME=1440', file_get_contents($path)
+                    'SESSION_LIFETIME=60', 'SESSION_LIFETIME=1440', file_get_contents($path)
                 ));
             }
         }

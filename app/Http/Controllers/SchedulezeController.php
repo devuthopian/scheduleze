@@ -20,6 +20,7 @@ use DB;
 use Validator;
 use Auth;
 use Crypt;
+use File;
 
 class SchedulezeController extends Controller
 {    
@@ -36,7 +37,7 @@ class SchedulezeController extends Controller
     {
         // Set the user_id
         $this->user_id = session('id');
-        $this->business_id = !empty(session('business_id')) ? session('business_id') : '';
+        $this->business_id = session('business_id');
     }
 	 /**
      * Show the application homepage.
@@ -47,6 +48,11 @@ class SchedulezeController extends Controller
     public function index()
     {
         return view('scheduleze.welcome');
+    }
+
+    public function terms_policy()
+    {
+        return view('scheduleze.service_agreement');
     }
 
     public function mapmyday($location = '', $first = '', $last = '', $id = '')
@@ -90,8 +96,11 @@ class SchedulezeController extends Controller
             $tt = Booking::where([['inspection_address', 'like', '%'.$firstlocation.'%'],['removed', '=', 0]])->orderBy('type', 'ASC')->orderBy('starttime', 'ASC')->first();
 
             $jobname = $tt->building_types;
-
-            $inspection_address = $tt->inspection_address.','.$tt->zip;
+            if($tt->zip){
+                $inspection_address = $tt->inspection_address.','.$tt->zip;
+            }else{
+                $inspection_address = $tt->inspection_address;
+            }
         }else{
 
             if($id == 'all'){
@@ -204,7 +213,7 @@ class SchedulezeController extends Controller
             //$message = 'Zigzag Control'.$act;
         }
 
-        return redirect('/scheduleze/zigzag')->with('message', 'ZigZag changes saved');
+        return redirect('/scheduleze/zigzag')->with('message', trans('scheduleze.MessageforZigzagChanges'));
     }
 
     /*public function ListBlockout()
@@ -400,7 +409,7 @@ class SchedulezeController extends Controller
 
         $blockId = $Booking->id;
 
-        return redirect('/scheduleze/booking/blockouts')->with('message', 'blockout changes saved');
+        return redirect('/scheduleze/booking/blockouts')->with('message', trans('scheduleze.MessageforBlockout'));
     }
 
     /**
@@ -416,7 +425,10 @@ class SchedulezeController extends Controller
             $id = $userid;
         }
 
-        $administration = get_field('users_details', 'administrator', $id);
+        $administration = session('administrator');
+        if($administration == null || empty($administration)){
+            $administration = get_field('users_details', 'administrator', $id);
+        }
 
         $first = time();
         $last = $first + 1209500;
@@ -516,13 +528,13 @@ class SchedulezeController extends Controller
             ]
         );
 
-        return redirect('/scheduling_solutions')->with('message','Report added');
+        return redirect('/scheduling_solutions')->with('message', trans('scheduleze.MessageforReport'));
     }
 
     public function ViewReport($id='', $go='', $code='')
     {
         if ( (!is_numeric($id)) or ((strlen($go)<5)) ) {
-            return redirect('/scheduleze/documents')->with('message', 'Not allowed to do that');
+            return redirect('/scheduleze/documents')->with('message', trans('scheduleze.MessageforNotAllowed'));
         } else {
 
             $now = time();
@@ -770,7 +782,7 @@ class SchedulezeController extends Controller
             return back()->with('message', $appoint.' Removed!');
         }
 
-        return back()->with('message', 'Process Failed! Please try again');
+        return back()->with('message', trans('scheduleze.MessageforDeleteBooking'));
 
     }
 
@@ -846,7 +858,11 @@ class SchedulezeController extends Controller
     public function scheduling_panel()
     {
         $id = $this->user_id;
-        $businessinfo = PanelTemplate::where('user_id', $id)->first();
+        $business = $this->business_id;
+        if(session('permission') == 0){
+            return redirect('/');
+        }
+        $businessinfo = PanelTemplate::where('business', $business)->first();
         if(isset($businessinfo->gjs_html) && !empty($businessinfo->gjs_html)){
             $html = $businessinfo->gjs_html;
             $user_id = $businessinfo->user_id;
@@ -878,10 +894,10 @@ class SchedulezeController extends Controller
         $panelurl = $data['txtDomain'];
 
         if (strpos($panelurl, ".") !== false) {
-            $rchar = array('.', 'https', 'http', 'www', 'com', 'co'); // content to be deleted from string
+            $rchar = array('https', 'http', 'www'); // content to be deleted from string
 
             $panelurl = str_replace($rchar, "", $panelurl);
-            $panelurl = preg_replace('/[^A-Za-z0-9\-]/', '', $panelurl);
+            //$panelurl = preg_replace('/[^A-Za-z0-9\-]/', '', $panelurl);
         }
 
         $panel = PanelTemplate::updateOrCreate(
@@ -894,7 +910,28 @@ class SchedulezeController extends Controller
 
         session(['hashvalue' => $panelurl]);
 
-        return redirect('/scheduling/schedulepanel')->with('message', 'success');
+        $data = json_encode(['Element 1','Element 2','Element 3','Element 4','Element 5']);
+        $file ='.htaccess';
+        $destinationPath = storage_path('upload/');
+        if (!is_dir($destinationPath)) { 
+            mkdir($destinationPath,0755,true);
+        }
+        $content_string = "RewriteEngine On\n";
+
+        // change www.website.com for your website
+        $content_string .= "Redirect 301 / http://scheduleze20.com/template/".$panelurl."\n";
+        File::put($destinationPath.$file, $content_string);
+        $destinationPath = storage_path('upload/'.$file);
+        //return response()->download($destinationPath);
+
+        return redirect('/scheduling/schedulepanel')->with('message', 'Please download the file <a href="http://scheduleze20.com/schedulepanel/'.$file.'">.htaccess file</a>');
+        //return redirect('/scheduling/schedulepanel')->with('message', 'success');
+    }
+
+    public function downloadfile($file='')
+    {
+        $file_path = storage_path('upload/'.$file);
+        return response()->download($file_path);
     }
 
      /**

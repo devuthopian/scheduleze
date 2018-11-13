@@ -10,6 +10,7 @@ use Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
 use DB;
+use File;
 
 
 class ProfileController extends Controller
@@ -130,30 +131,43 @@ class ProfileController extends Controller
     {
         //$userid           =   Auth::id();
         $business_id = session('business_id');
-
-        $admin_user_id = UserDetails::select('user_id', 'administrator')->where([['business', '=', $business_id], ['administrator', '=', 1]])->first();
-
+        $admin_user_id = UserDetails::select('user_id')->where([['business', '=', $business_id], ['administrator', '=', 1]])->first();
         $UserBusinessData = Business::where('user_id', $admin_user_id->user_id)->first();
 
+        //$panel_template = DB::table('panel_template')->select('unique_id')->where([['user_id', '=', $admin_user_id->user_id],['marked_domain', '=', 1]])->first();
+
         $data = [
-            'UserBusinessData' => $UserBusinessData,
-            'administrator' => $admin_user_id->administrator
+            'UserBusinessData' => $UserBusinessData
         ];
 
         return view('profiles.UserBusinessProfileEdit')->with($data);
     }
     public function updateUserBusinessAccount(Request $request)
     {
+        $permission = session('permission');
         $administrator = session('administrator');
-        if($administrator == 0){
+        $business_id = session('business_id');
+
+        if($permission == 0){
             return redirect('/business_info')->with('warning', trans('profile.warning'));
         }
 
-        $userid =   Auth::id();
         $business_profile_validator = $this->business_profile_validator($request->all());
 
         if ($business_profile_validator->fails()) {
             return back()->withErrors($business_profile_validator)->withInput();
+        }
+
+        $userid =   Auth::id();
+        $unique_url = DB::table('panel_template')->where('business', $business_id)->update(['unique_url' => $request->input('domain_name'), 'marked_domain' => 1]);
+
+        if($unique_url){
+            session(['hashvalue' => $request->input('domain_name')]);
+        }
+
+        if($administrator == 0){
+            $userid = UserDetails::select('user_id')->where([['business', '=', $business_id], ['administrator', '=', 1]])->first();
+            $userid = $userid->user_id;
         }
 
         $UserBusinessDetails = Business::firstOrNew(array('user_id' => $userid));
@@ -192,8 +206,32 @@ class ProfileController extends Controller
 
         session(['business_id' => $UserBusinessDetails->id]);
         get_business_information($UserBusinessDetails->id);
+
+        $panelurl = $request->input('domain_name');
+        if (strpos($panelurl, ".") !== false) {
+            $rchar = array('https', 'http', 'www'); // content to be deleted from string
+
+            $panelurl = str_replace($rchar, "", $panelurl);
+            //$panelurl = preg_replace('/[^A-Za-z0-9\-]/', '', $panelurl);
+        }
+
+        $data = json_encode(['Element 1','Element 2','Element 3','Element 4','Element 5']);
+        $file ='.htaccess';
+        $destinationPath = storage_path('upload/');
+        if (!is_dir($destinationPath)) { 
+            mkdir($destinationPath,0755,true);
+        }
+        $content_string = "RewriteEngine On\n";
+
+        // change www.website.com for your website
+        $content_string .= "Redirect 301 / http://scheduleze20.com/template/".$panelurl."\n";
+        File::put($destinationPath.$file, $content_string);
+        $destinationPath = storage_path('upload/'.$file);
+        //return response()->download($destinationPath);
+
+        return redirect('/business_info')->with('message', 'Please download the file <a href="http://scheduleze20.com/schedulepanel/'.$file.'">.htaccess file</a> and paste it into your root folder in '.$panelurl);
         
-        return redirect('/business_info')->with('message', trans('profile.updateSuccess'));
+        //return redirect('/business_info')->with('message', trans('profile.updateSuccess'));
     }
 
 }

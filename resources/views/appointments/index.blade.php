@@ -11,6 +11,13 @@
 		background: #fff url('/images/Preloader_2.gif') no-repeat center center;
 	}
 </style>
+<title>Scheduleze | Customer Scheduling Solutions</title>
+<meta name="keywords" content="Scheduleze | Customer Scheduling Solutions"/>
+<meta name="body" content="Scheduleze | Customer Scheduling Solutions"/>
+<meta name="description" content="Scheduleze | Customer Scheduling Solutions"/>
+<meta name="summary" content="Scheduleze | Customer Scheduling Solutions"/>
+<meta http-equiv="Bulletin-Text" content="Scheduleze | Customer Scheduling Solutions"/>
+<meta name="page-topic" content="Scheduleze | Customer Scheduling Solutions"/>
 <link rel="stylesheet" href="{{ URL::asset('css/panelstyle.css') }}">
 <link rel="shortcut icon" href="{{ asset('images/favicon_icon.png') }}" type="image/x-icon" />
 <!-- <a href="{{ URL::previous() }}" class="gobutton">Go Back</a> -->
@@ -108,9 +115,9 @@
 	                	var referrer =  document.referrer;
 	                	//$('.loader').fadeOut(1000); 
 	                	if(referrer.indexOf('Location') >= 0){
-	                		window.location.replace('http://scheduleze20.com/rick/scheduleze/DriveTime');
+	                		window.location.replace('http://scheduleze20.com/scheduleze/DriveTime');
 	                	}else{
-	                		window.location.replace('http://scheduleze20.com/rick/scheduleze/booking/appointment');
+	                		window.location.replace('http://scheduleze20.com/scheduleze/booking/appointment');
 	                	}
 
 	                	//$('.alert-info').html('<a href="{{ URL::previous() }}"><strong>Ok</strong></a>');

@@ -12,6 +12,7 @@ use Session;
 use Illuminate\Support\Facades\Hash;
 use DB;
 use File;
+use Storage;
 
 class PanelController extends Controller
 {
@@ -23,12 +24,12 @@ class PanelController extends Controller
     public function index($id, $panel_defualt = '')
     {
         $data = '';
-
+        $business_id = session('business_id');
         if(!empty($panel_defualt)){
-            $template = PanelDefault::where('user_id', $id)->first();
+            $template = PanelDefault::where('business', $business_id)->first();
         }
         else{
-            $template = PanelTemplate::where('user_id', $id)->first();
+            $template = PanelTemplate::where('business', $business_id)->first();
         }
 
         if(!empty($template)){
@@ -64,12 +65,13 @@ class PanelController extends Controller
         $hashvalue = Session::get('hashvalue');
         $data = Input::get();
         $username = session('username');
+        $business_id = session('business_id');
 
         if(empty($hashvalue)){
             $hashvalue = str_replace ('/', '', Hash::make($username, ['Saringan'=>'Naruto Uzumaki! Road To Ninja.']));
             Session::put('hashvalue', $hashvalue);
         }
-        $paneltemp = PanelTemplate::where('user_id', $id)->first();
+        $paneltemp = PanelTemplate::where('business', $business_id)->first();
         if($paneltemp){
             $gjs_html = $paneltemp->gjs_html;
             if(!empty($gjs_html)){
@@ -88,16 +90,16 @@ class PanelController extends Controller
         }
 
         $PanelTemplate = PanelTemplate::updateOrCreate(
-            ['user_id' => $id],
+            ['business' => $business_id],
             [   
-                'user_id' => $id,
+                'business' => $business_id,
                 'gjs_html' => $gjs_html,
                 'unique_url' => $hashvalue,
                 'gjs_css' => $gjs_css
             ]
         );
 
-        $PanelDefault = PanelDefault::where('user_id', $id)->first();
+        $PanelDefault = PanelDefault::where('business', $business_id)->first();
         if($PanelDefault){
             $gjs_html = $PanelDefault->gjs_html;
             if(!empty($gjs_html)){
@@ -116,9 +118,9 @@ class PanelController extends Controller
         }
 
         $PanelDefault = PanelDefault::updateOrCreate(
-            ['user_id' => $id],
+            ['business' => $business_id],
             [   
-                'user_id' => $id,
+                'business' => $business_id,
                 'gjs_html' => $gjs_html,
                 'unique_url' => $hashvalue,
                 'gjs_css' => $gjs_css
@@ -127,7 +129,7 @@ class PanelController extends Controller
 
         
         if($PanelTemplate->id){
-            $ans = array('message' => 'Successfully Saved!' );
+            $ans = array('message' =>  trans('scheduleze.MessageforSuccess'));
             return json_encode($ans);
         }
     }
@@ -142,8 +144,14 @@ class PanelController extends Controller
     {
         //$username = Session::get('username');
         $username = session('username');
+        $business_id = session('business_id');
         $hashvalue = Session::get('hashvalue');
+        $indus_id = Session::get('indus_id');
+
+        $Industry_name = get_field("industries", "page_name", $indus_id);
         $data = Input::get();
+        $dbimages = json_decode($data['gjs-assets'], true);
+
         if(empty($hashvalue)){
             $hashvalue = str_replace ('/', '', Hash::make($username, ['Saringan'=>'Naruto Uzumaki! Road To Ninja.']));
             Session::put('hashvalue', $hashvalue);
@@ -160,7 +168,7 @@ class PanelController extends Controller
             $gjs_components = $data['gjs-components'];
         }
         $PanelTemplate = PanelTemplate::updateOrCreate(
-            ['user_id' => $id],
+            ['business' => $business_id],
             [
                 'gjs_assets' => $data['gjs-assets'], 
                 'gjs_css' => $data['gjs-css'], 
@@ -170,12 +178,19 @@ class PanelController extends Controller
                 'unique_url' => $hashvalue
             ]
         );
+
+
+        Storage::makeDirectory('/template/'.$Industry_name.'/'.$business_id, 0777, true);
+        Storage::disk('custom_local')->put($Industry_name.'/'.$business_id.'/index.html', $data['gjs-html']);
+        Storage::disk('custom_local')->append($Industry_name.'/'.$business_id.'/index.html', '<style>'.$data['gjs-css'].'</style>');
+        Storage::disk('custom_local')->put($Industry_name.'/'.$business_id.'/'.$dbimages[0]['src'], $dbimages[0]['src']);
+        
         if($PanelTemplate->id){
             session(['panel_id' => $PanelTemplate->id]);
-            $ans = array('message' => 'Successfully Saved!', 'sharelink' => $PanelTemplate->unique_url );
+            $ans = array('message' => trans('scheduleze.MessageforSuccess'), 'sharelink' => $PanelTemplate->unique_url );
             return json_encode($ans);
         }else{
-            $ans = array('message' => 'Something went wrong' );
+            $ans = array('message' => trans('scheduleze.MessageforWarning') );
             return json_encode($ans);
         }
     }
@@ -188,7 +203,11 @@ class PanelController extends Controller
      */
     public function saveimagetemplate(Request $request, $id)
     {
-        $template = PanelTemplate::where('user_id',$id)->first();
+        $indus_id = Session::get('indus_id');
+        $Industry_name = get_field("industries", "page_name", $indus_id);
+
+        $business_id = session('business_id');
+        $template = PanelTemplate::where('business', $business_id)->first();
         $files = $request->file();
 
         $hashvalue = Session::get('hashvalue');
@@ -209,7 +228,8 @@ class PanelController extends Controller
                 $getFilename = $value->getFilename();
                 $value->move( 'template/view/images/', $name );
 
-                File::copy('template/view/images/'.$name, 'scheduling/view/images/'.$name);
+                File::copy(base_path('template/view/images/'.$name), base_path('scheduling/view/images/'.$name));
+                Storage::disk('custom_local')->put($Industry_name.'/'.$business_id.'/view/images/'.$name, $name);
 
                 $filename[] = array('type' => 'image','src' => 'images/'.$name, "unitDim" => "px","height" => 0,"width" => 0 );
                 $viewfile[] = array('type' => 'image','src' => 'view/images/'.$name, "unitDim" => "px","height" => 0,"width" => 0 );
@@ -223,7 +243,7 @@ class PanelController extends Controller
         }
 
         $PanelTemplate = PanelTemplate::updateOrCreate(
-            ['user_id' => $id],
+            ['business' => $business_id],
             [
                 'gjs_assets' => json_encode($result),
                 'unique_url' => $hashvalue
@@ -238,6 +258,40 @@ class PanelController extends Controller
     }
 
     /**
+     * Download the zip file (we are not using it, right now.. until he asked for it to download the template from server)
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function zipFileDownload()
+    {
+        $business_id = session('business_id');
+
+        $indus_id = Session::get('indus_id');
+        $Industry_name = get_field("industries", "page_name", $indus_id);
+
+        $zipFileName = Carbon\Carbon::now().'.zip';
+        $zip = new ZipArchive;
+        $files = Storage::disk('custom_local')->allFiles($Industry_name.'/'.$business_id);
+
+        if ($zip->open('storage/app/' .$Industry_name.'/'.$business_id .'/'. $zipFileName, ZipArchive::CREATE) === TRUE) { 
+            foreach($files as $file) {
+                $zip->addFile($file->file_path, $file->file_name);
+            }    
+            $zip->close();
+        }
+        $headers = array(
+            'Content-Type' => 'application/octet-stream',
+        );
+
+        $filetopath = 'storage/app/' .$Industry_name.'/'.$business_id .'/'.$zipFileName;
+        if(file_exists($filetopath)){
+            return response()->download($filetopath, $zipFileName, $headers);
+        }
+        return ['status'=>'file does not exist'];
+    }
+
+    /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -248,8 +302,9 @@ class PanelController extends Controller
         $business_id = session('business_id');
         $user_id = session('id');
         $administrator = session('administrator');
+        $permission = session('permission');
 
-        if($administrator == 0){
+        if($permission == 0){
             $inspectors = UserDetails::where([['user_id', '=', $user_id],['removed', '=', '0']])->get();
         }else{
             $inspectors = UserDetails::where([['business', '=', $business_id],['removed', '=', '0']])->get();
@@ -265,8 +320,7 @@ class PanelController extends Controller
             get_business_information($business_id);
 
             $inspectors = UserDetails::where([['business', '=', $business_id],['removed', '=', '0']])->get();
-        }
-    
+        }    
 
         return view('building.template', compact('template','inspectors'));
     }
@@ -307,7 +361,7 @@ class PanelController extends Controller
             Session::flash('status', 'Form was successfully Saved!');
             return redirect('/scheduling_solutions');
         }else{
-            Session::flash('status', 'Something Went Wrong!');
+            Session::flash('status',  trans('scheduleze.MessageforWarning'));
             return redirect('/scheduling_solutions');
         }
     }

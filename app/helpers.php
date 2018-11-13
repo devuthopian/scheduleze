@@ -32,7 +32,7 @@ if (! function_exists('state')) {
     	$html = "\t\t\t\t<select name=\"state\" id=\"business_state\" size=\"1\" class=\"smallselect\">\n";
     	$html .= "\t\t\t\t<div class=\"form-group has-error business_state\" id=\"business_city\" style=\"display: none;\"><span class=\"help-block\">Business State is Required</span></div>";
     	if(!empty($selected)){
-    		$html .= "\t\t\t\t\t<option value=\".$selected.\">".$selected."</option>";
+    		$html .= "\t\t\t\t\t<option value=\"$selected\">".$selected."</option>";
     	}else{
     		$html .= "\t\t\t\t\t<option value=\"\">Business State</option>";
     	}
@@ -309,8 +309,9 @@ if(! function_exists('get_inspector_popup')){
 			$id = session('id');
 		}
 		$administrator = session('administrator');
+		$permission = session('permission');
 
-		if ($administrator == 1) {
+		if ($permission == 1) {
 			$where = " where business = '".$bus."' and removed = '0'";
 		} else {
 			$where = " where business = '".$bus."' and removed = '0' and user_id = '".$id."'";
@@ -566,6 +567,16 @@ if(! function_exists('get_zigpop')){
 	}
 }
 
+if(! function_exists('get_all_usernames')){
+	function get_all_usernames($table, $field) {
+		$get_all_usernames = DB::table($table)->select($field)->get();
+		foreach ($get_all_usernames as $key) {
+			$keyname[] = $key->name;
+		}
+		return $keyname;
+	}
+}
+
 if(! function_exists('get_field')){
 	function get_field($table, $field, $id) {
 		if($table == 'users_details'){
@@ -579,12 +590,16 @@ if(! function_exists('get_field')){
 }
 
 if(! function_exists('get_inspector_exceptions')){
-	function get_inspector_exceptions($business, $building_type, $building_size, $building_age, $addons, $price){
+	function get_inspector_exceptions($business, $building_type, $building_size, $building_age, $addons, $price, $user_id){
 
-		$user_id = session('id');
+		if(!empty(session('id'))){
+			$user_id = session('id');
+		}
+
 		$administrator = session('administrator');
+		$permission = session('permission');
 
-		if($administrator == 1){
+		if($permission == 1){
 			$working_inspectors = DB::table('users_details')->where([['business', '=', $business],['removed', '=', '0']])->get();
 		}else{
 			$working_inspectors = DB::table('users_details')->where([['user_id', '=', $user_id],['removed', '=', '0']])->get();
@@ -1466,9 +1481,9 @@ if(! function_exists('display_for_edit')){
 					<tr>
 						<td colspan = \"7\" bgcolor=\"#FFCD49\"><b>".$full_day_label."</b>&nbsp;&nbsp;";
 					if ($row->type != 1) {
-						$url = "http://scheduleze20.com/rick/scheduleze/dayticket/$row->user_id/1/$start_of_day";
+						$url = "http://scheduleze20.com/scheduleze/dayticket/$row->user_id/1/$start_of_day";
 						$encrypt = Crypt::encrypt($inspection_address.', '.$city->name);
-						$route = '<a href="http://scheduleze20.com/rick/scheduleze/mapmyday'.'/'.$encrypt.'" target="_blank" class="note">Map My Day &#187;</a>';
+						$route = '<a href="http://scheduleze20.com/scheduleze/mapmyday'.'/'.$encrypt.'" target="_blank" class="note">Map My Day &#187;</a>';
 					}else{
 						$route = '';
 					}
@@ -1536,7 +1551,7 @@ if(! function_exists('display_for_edit')){
 					//$city = DB::table('locations')->select('name')->where('id', $location)->first(); //recently commented
 
 					//$encrypt = Crypt::encrypt($inspection_address.', '.$city->name);
-					$rote = 'http://scheduleze20.com/rick/scheduleze/mapmyday'.'/'.$encrypt;
+					$rote = 'http://scheduleze20.com/scheduleze/mapmyday'.'/'.$encrypt;
 
 					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\"><a href=\"$rote\">$inspection_address, $city->name</a></td>\n";
 
@@ -1563,11 +1578,11 @@ if(! function_exists('display_for_edit')){
 
 				if ($row->type == "1"){
 					//$url ='/scheduleze/blockout/EditBlockout/'.$blockout_id;
-					$url ='http://scheduleze20.com/rick/scheduleze/blockout/EditBlockout/'.$blockout_id;
-					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\"><nobr><a href=\"$url\" class=\"note_link\">Edit</a><span class\"note\">  </span><a href=\"delete/$blockout_id\"  class=\"note_link\">Remove</a></nobr></td>\n";
+					$url ='http://scheduleze20.com/scheduleze/blockout/EditBlockout/'.$blockout_id;
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\"><nobr><a href=\"$url\" class=\"note_link\">Edit</a><span class\"note\">  </span><a href=\"http://scheduleze20.com/booking/delete/$blockout_id\"  class=\"note_link\">Remove</a></nobr></td>\n";
 				} else {
 					//$url = "https://needsecured.com/developer/scheduleze/public/scheduleze/booking/edit/$id";
-					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\"><nobr><a href=\"form/edit/$id\" class=\"note_link\">Edit</a><span class\"note\">  </span><a href=\"delete/$id\"  class=\"note_link\">Remove</a></nobr></td>\n";
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\"><nobr><a href=\"form/edit/$id\" class=\"note_link\">Edit</a><span class\"note\">  </span><a href=\"http://scheduleze20.com/booking/delete/$id\"  class=\"note_link\">Remove</a></nobr></td>\n";
 				}
 				$html .= "</tr>\n";
 				$last_end_day = date("j", $row->endtime);

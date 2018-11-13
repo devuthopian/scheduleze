@@ -27,11 +27,12 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('/cookie/get', 'CookieController@getCookie');
 
 	Route::get('/ConfirmStatus', 'SchedulezeController@confirm_status');
+	Route::get('/terms_policy', 'SchedulezeController@terms_policy');
 
 	Route::get('/template/{value}', 'PanelController@show');
 	Route::get('/scheduling_solutions', 'SchedulezeController@scheduling_solutions')->name('scheduling_solutions');
 	Route::get('/scheduling_faq', 'SchedulezeController@scheduling_faq');
-    Route::post('login/{inspector?}', 'Auth\InspectorAuthController@login');
+    //Route::post('login/{inspector?}', 'Auth\InspectorAuthController@login');
 
 	Route::get('/login/{social}','Auth\LoginController@socialLogin')->where('social','twitter|facebook|linkedin|google|github|bitbucket');
  
@@ -59,7 +60,7 @@ Route::group(['middleware' => ['web']], function () {
 	Route::post('/scheduleze/bookappointment', 'AppointmentController@storebookingappointment')->name('BookAppointment');
 	Route::get('/appointment/receipt/{id?}','AppointmentController@reciept');
 
-	Route::get('/practice/vue/js', 'PracticeController@index'); //remove it after prcatice
+	//Route::get('/practice/vue/js', 'PracticeController@index'); //remove it after prcatice
 
 	/*Route::get('/faq', 'FAQController@index');
 	Route::post('/faq/question/{faq}/{type?}', 'FAQController@incrementClick');
@@ -76,6 +77,7 @@ Route::group(['middleware' => ['web']], function () {
 		Route::get('/scheduling/schedulepanel', 'SchedulezeController@scheduling_panel')->name('schedulepanel');
 
 		Route::post('/scheduling/update_template_url', 'SchedulezeController@UpdateTemplateUrl');
+		Route::get('/schedulepanel/{file}', 'SchedulezeController@downloadfile');
 
 		Route::get('/scheduleze/BusinessHours', 'SchedulezeController@BusinessHours');
 		Route::post('/scheduleze/BusinessHours', 'SchedulezeController@BusinessHours');
@@ -85,7 +87,7 @@ Route::group(['middleware' => ['web']], function () {
 		Route::get('/scheduleze/DriveTime','SchedulezeController@drivetime')->name('Drivetime');
 		Route::get('/scheduleze/booking/{form?}/{userid?}','SchedulezeController@Bookings');
 		Route::get('/scheduleze/booking/form/edit/{id?}','SchedulezeController@EditBooking');
-		Route::get('/scheduleze/booking/delete/{id?}','SchedulezeController@DeleteBooking');
+		Route::get('/booking/delete/{id?}','SchedulezeController@DeleteBooking');
 		Route::post('/scheduleze/booking/update/{id?}','SchedulezeController@UpdateBooking');
 		Route::get('/scheduleze/dayticket/{inspector?}/{days?}/{start?}', 'SchedulezeController@dayticket');
 		Route::post('/scheduleze/booking/{form?}','SchedulezeController@BookingFilter');
@@ -107,6 +109,8 @@ Route::group(['middleware' => ['web']], function () {
 		//Route::get('/scheduleze/blockouts','SchedulezeController@ListBlockout')->name('ListBlockout');
 
 		Route::post('ajaxappointment', 'PanelController@storeAppointment');
+		Route::post('/panel/template/download', 'PanelController@zipFileDownload');
+
 		//Route::post('ajaxAppointmentForm', 'PanelController@storeAppointmentForm');
 		
 		Route::post('/scheduleze/storebusinesshours', 'AppointmentController@storebusinesshours')->name('StoreBusinessHours');

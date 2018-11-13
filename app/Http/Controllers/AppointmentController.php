@@ -39,9 +39,6 @@ class AppointmentController extends Controller
         $this->user_id = session('id');
         $this->business_id = session('business_id');
         $this->administrator = session('administrator');
-        /*if(session('permission') == null || session('permission') == 0){
-            return redirect('/scheduleze/booking/appointment')->send();
-        }*/
     }
     /**
      * Display a listing of the resource.
@@ -133,7 +130,7 @@ class AppointmentController extends Controller
                 ]
             );
         }
-        return redirect('/scheduleze/BusinessHours')->with('message','Successfully saved!');
+        return redirect('/scheduleze/BusinessHours')->with('message', trans('scheduleze.MessageforSuccess'));
     }
 
     /**
@@ -184,7 +181,7 @@ class AppointmentController extends Controller
             }
 
         }
-        return redirect('/scheduleze/booking/appointment')->with('message','Successfully saved!');
+        return redirect('/scheduleze/booking/appointment')->with('message', trans('scheduleze.MessageforSuccess'));
     }
 
 
@@ -270,7 +267,7 @@ class AppointmentController extends Controller
                 $i++;
             }
 
-            return redirect('/scheduleze/Reoccurrence')->with('message','Successfully saved!');
+            return redirect('/scheduleze/Reoccurrence')->with('message', trans('scheduleze.MessageforSuccess'));
         }
     }
 
@@ -394,6 +391,7 @@ class AppointmentController extends Controller
         $data = session('data');
 
         $administrator = session('administrator');
+        $permission = session('permission');
         $bookingavailable = session('bookingavailable');
         if( $bookingavailable == null){
 
@@ -407,7 +405,7 @@ class AppointmentController extends Controller
 
         if(!array_key_exists('inspector', $formdata)){
 
-            if($administrator == 0){
+            if($permission == 0){
                 $Inspectors = UserDetails::where([['user_id', '=', $data['reference_id']], ['removed','=','0']])->first();
             }else{
                 $Inspectors = UserDetails::where([['business', '=', $data['businessId']], ['removed','=','0']])->first();
@@ -423,8 +421,11 @@ class AppointmentController extends Controller
         $panel_id = session('panel_id');
 
         $PanelForm = PanelForm::where('panel_id', $panel_id)->first();
-
-        return view('appointments.appointment_form', compact('PanelForm', 'data'));
+        $agent_name_cookie = Cookie::get('agent_name_cookie');
+        $agent_email_cookie = Cookie::get('agent_email_cookie');
+        $agent_phone_cookie = Cookie::get('agent_phone_cookie');
+                
+        return view('appointments.appointment_form', compact('PanelForm', 'data', 'agent_name_cookie', 'agent_email_cookie', 'agent_phone_cookie'));
     }
 
     public function storebookingappointment(Request $request)
@@ -499,12 +500,12 @@ class AppointmentController extends Controller
 
                     $AddonBookings = AddonBookings::create([
                         'addon' => $addn,
-                        'booking' => $request->input('business')
+                        'booking' => $Booking->id
                     ]);
                 }
             }
 
-            if((!Cookie::get('agent_id')) || ($request->input('remember_agent') == "1")) {
+            if($request->input('remember_agent') == 1) {
                 $cookie_id = md5(microtime());
                 $AddonBookings = Agents::create([
                     'name' =>  $request->input('Agent_Name'),
@@ -517,10 +518,13 @@ class AppointmentController extends Controller
 
                 $expire = time() + 60*60*24*180;
 
-                Cookie::queue('agent_id', $AddonBookings->id, $expire);
+                // seperate saving of cookie for agent attributes here (Cookie::__construct() must be of the type string or null)
+                Cookie::queue('agent_name_cookie', $request->input('Agent_Name'), $expire);
+                Cookie::queue('agent_phone_cookie', $request->input('Agent_Phone'), $expire);
+                Cookie::queue('agent_email_cookie', $request->input('Agent_Email'), $expire);
             }
 
-                /*setcookie("agent_id", $ag[cookie_id], $expire, "/", ".scheduleze.com");*/ //old method for saving cookie
+            /*setcookie("agent_id", $ag[cookie_id], $expire, "/", ".scheduleze.com");*/ //old method for saving cookie
 
             $clean_addons = '';
             if (strlen($data['addons_description']) > 2){
@@ -637,14 +641,14 @@ class AppointmentController extends Controller
 
             if(!empty($business_name)){
                 if($business_name == session('username')){
-                    return redirect('/')->with('message', 'Booked Successfully');
+                    return redirect('/')->with('message', trans('scheduleze.MessageforBookingSuccess'));
                 }
             }
 
             return redirect('/appointment/receipt/'.Crypt::encrypt($Booking->id).'');
         }
 
-        return redirect('/')->with('message', 'That time has just been booked by someone else.');
+        return redirect('/')->with('message', trans('scheduleze.TimeWarning'));
     }
 
     /**

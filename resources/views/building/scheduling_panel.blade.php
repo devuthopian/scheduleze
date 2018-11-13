@@ -1,3 +1,10 @@
+<title>Scheduleze | Customer Scheduling Solutions</title>
+<meta name="keywords" content="Scheduleze | Customer Scheduling Solutions"/>
+<meta name="body" content="Scheduleze | Customer Scheduling Solutions"/>
+<meta name="description" content="Scheduleze | Customer Scheduling Solutions"/>
+<meta name="summary" content="Scheduleze | Customer Scheduling Solutions"/>
+<meta http-equiv="Bulletin-Text" content="Scheduleze | Customer Scheduling Solutions"/>
+<meta name="page-topic" content="Scheduleze | Customer Scheduling Solutions"/>
 <link href="https://unpkg.com/grapesjs/dist/css/grapes.min.css" rel="stylesheet">
 <link rel="stylesheet" href="{{ URL::asset('dist/grapesjs-preset-webpage.min.css') }}">
 <script src="{{ URL::asset('js/editor.js') }}"></script>
@@ -10,9 +17,12 @@
 <link rel="shortcut icon" href="{{ asset('images/favicon_icon.png') }}" type="image/x-icon" />
 <link rel="stylesheet" href="{{ URL::asset('css/style.css') }}">
 <link rel="stylesheet" href="{{ URL::asset('css/tooltip.css') }}">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.28.5/sweetalert2.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.28.5/sweetalert2.css">
+<script src="{{ URL::asset('js/vue.js') }}"></script>
 @include('layouts.includes.front.header')
 <div class="panel-main">
-    @php $value = session('id'); @endphp
+    @php $value = session('id'); $business = session('business_id'); $hashvalue = session('hashvalue'); @endphp
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
@@ -36,9 +46,12 @@
 </div>
 <div class="button" style="text-align:center;">
     <button class="common callDefualt" style="float: left;"><i class="fa fa-refresh" aria-hidden="true"></i>  Restore to Default</button>
-    <button class="common" onclick="history.go(-1);"><i class="fa fa fa-long-arrow-left" aria-hidden="true"></i> Go Back</button>
-    <button id="btnSave" class="common"><i class="fa fa-save" aria-hidden="true"></i> Save</button>
-    <button class="btnSaveTemplate"><i class="fa fa-folder" aria-hidden="true"></i> Save Template</button>
+    <!-- <button class="common" onclick="history.go(-1);"><i class="fa fa fa-long-arrow-left" aria-hidden="true"></i> Go Back</button> -->
+    <button id="btnSave" class="common"><i class="fa fa-save" aria-hidden="true"></i> Save Only</button>
+    <button class="btnSaveTemplate"><i class="fa fa-folder" aria-hidden="true"></i> Share</button>
+</div>
+<div id="PanelLinkID">
+    <a href="#" class="panellink" @click="GetPanelLink">Use Panel on your existing website</a>
 </div>
 
 <div id="info-panel" style="display:none">
@@ -70,31 +83,96 @@
             <div class="content">
                 <form action="{{ url('scheduling/update_template_url') }}" method="post">
                     @csrf
-                    <input type="hidden" name="">
-                    <fieldset>
-                        <legend>Enter your domain so we masked landing page URL as your domain name</legend>
-                        <label class="label" for="name">Domain name:</label>
-                        <input type="text" id="domain" name="txtDomain" placeholder="Enter your domain here">
-                    </fieldset>
-                    <button class="txtBtnSubmit" type="submit">Submit</button>
+                    <div id="root">
+                        <input type="hidden" name="">
+                        <fieldset>
+                            <legend>Enter your domain so we masked landing page URL as your domain name</legend>
+                            <label class="label" for="name">Domain name:</label>
+                                <input type="text" id="domain" name="txtDomain" placeholder="Enter your domain here" v-model="DomainName">
+                        </fieldset>
+                        <button class="txtBtnSubmit" type="submit">Submit</button>
+
+                        <p>Note(Important): <span class="note_submit">By submitting the domain name, you will be asked to download the file. Download that file and put in your root folder of <b class="domainName">@{{ DomainName }}</b> domain.</span></p>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 @endif
 
+<script>
+    let data = {
+        DomainName: ''
+    }
+
+    new Vue({
+        el: '#root',
+        data: data
+    });
+
+    if(document.getElementById("PanelLinkID")){
+        var nos = '{{ $hashvalue }}';
+        var url = window.location.href;
+        var afterWith = url.substr(0, url.lastIndexOf("scheduling/schedulepanel"));
+        new Vue({
+            el: '#PanelLinkID',
+
+            methods: {
+                GetPanelLink() {
+                    swal.mixin({
+                        input: 'text',
+                        showCancelButton: true,
+                        confirmButtonText: 'Next &rarr;',
+                        progressSteps: ['1', '2']
+                    }).queue([
+                        {
+                            title: 'Embed this panel on your website: Please press Ctrl+C to copy',
+                            input: 'text',
+                            inputValue: '<embed src="'+afterWith+'template/'+nos+'" style="width:500px; height: 300px;">',
+                            onOpen: function() {
+                                var input = swal.getInput()
+                                input.setSelectionRange(0, input.value.length)
+                            },
+                        },
+                        {
+                            title: 'Or you can Copy to preview link: Ctrl+C',
+                            input: 'text',
+                            inputValue: afterWith+'template/'+nos,
+                            confirmButtonText: 'Ok &rarr;',
+                            onOpen: function() {
+                                var input = swal.getInput()
+                                input.setSelectionRange(0, input.value.length)
+                            },
+                            showCancelButton: true,
+                        }
+                    ]).then((result) => {
+                        if (result.value) {
+                            swal({
+                                type: 'success',
+                                title: 'Thank you',
+                                confirmButtonText: 'Lovely!',
+                                timer: 1800
+                            });
+                        }
+                    });
+                }
+            }
+        });
+    }
+</script>
+
 <script type="text/javascript">
 
-@if(!isset($MarkDomain) || $MarkDomain == 0)
-    $('.modal-wrapper').toggleClass('open');
-    $('.panel-main').toggleClass('blur');
-
-    $('.trigger').click(function() {
+    @if(!isset($MarkDomain) || $MarkDomain == 0)
         $('.modal-wrapper').toggleClass('open');
         $('.panel-main').toggleClass('blur');
-        return false;
-    });
-@endif
+
+        $('.trigger').click(function() {
+            $('.modal-wrapper').toggleClass('open');
+            $('.panel-main').toggleClass('blur');
+            return false;
+        });
+    @endif
     //grapejs editor
     var editor = grapesjs.init({
         height: '100%',
@@ -115,7 +193,7 @@
                 modalImportTitle: 'Import Template',
                 modalImportLabel: '<div style="margin-bottom: 10px; font-size: 13px;">Paste here your HTML/CSS and click Import</div>',
                 modalImportContent: function(editor) {
-                  return editor.getHtml() + '<style>'+editor.getCss()+'</style>'
+                    return editor.getHtml() + '<style>'+editor.getCss()+'</style>'
                 }
             }
         },
@@ -207,15 +285,73 @@
 
 
     editor.on('storage:end:store', (resultObject) => {
-        if (resultObject.message) {
-            alert(resultObject.message);
-        }
+       
         if(resultObject.sharelink){
             var nos = resultObject.sharelink;
             var url = window.location.href;
             var afterWith = url.substr(0, url.lastIndexOf("scheduling/schedulepanel"));
-            prompt('Embed this panel on your website: Ctrl+C', '<embed src="'+afterWith+'template/'+nos+'" style="width:500px; height: 300px;">');  
-            prompt("Or you can Copy to preview link: Ctrl+C", afterWith+'template/'+nos);
+            if (resultObject.message) {
+                    swal({
+                        type: 'success',
+                        title: resultObject.message,
+                        confirmButtonText: 'Lovely!',
+                        timer: 1800
+                    });
+                }else{
+                    swal({
+                        type: 'warning',
+                        title: 'Something Went wrong!',
+                        confirmButtonText: 'Not Good!'
+                    });
+                }
+            /*swal.mixin({
+                input: 'text',
+                showCancelButton: true,
+                confirmButtonText: 'Next &rarr;',
+                progressSteps: ['1', '2']
+            }).queue([
+                {
+                    title: 'Embed this panel on your website: Please press Ctrl+C to copy',
+                    input: 'text',
+                    inputValue: '<embed src="'+afterWith+'template/'+nos+'" style="width:500px; height: 300px;">',
+                    onOpen: function() {
+                        var input = swal.getInput()
+                        input.setSelectionRange(0, input.value.length)
+                    },
+                },
+                {
+                    title: 'Or you can Copy to preview link: Ctrl+C',
+                    input: 'text',
+                    inputValue: afterWith+'template/'+nos,
+                    confirmButtonText: 'Ok &rarr;',
+                    onOpen: function() {
+                        var input = swal.getInput()
+                        input.setSelectionRange(0, input.value.length)
+                    },
+                    showCancelButton: true,
+                }
+            ]).then((result) => {
+                if (result.value) {
+                    if (resultObject.message) {
+
+                        swal({
+                            type: 'success',
+                            title: resultObject.message,
+                            confirmButtonText: 'Lovely!',
+                            timer: 1800
+                        });
+                    }else{
+                        swal({
+                            type: 'warning',
+                            title: 'Something Went wrong!',
+                            confirmButtonText: 'Not Good!'
+                        })
+                    }
+                }
+            });*/
+
+            //prompt('Embed this panel on your website: Ctrl+C', '<embed src="'+afterWith+'template/'+nos+'" style="width:500px; height: 300px;">');  
+            //prompt("Or you can Copy to preview link: Ctrl+C", afterWith+'template/'+nos);
         }
     });
 
@@ -450,7 +586,7 @@ nav a{
     height:32px;
     padding:1.5em 5%;
     overflow:hidden;
-    background:#01bce5;
+    /* background:#01bce5; */
 }
 
 .btn-close{
@@ -465,7 +601,7 @@ nav a{
     width:32px;
     height:6px;
     display:block;
-    background:#fff;
+    background:#4bc970;
 }
 
 .btn-close::before{
@@ -546,5 +682,11 @@ legend {
     form {
         max-width: 480px;
     }
+}
+.note_submit {
+    color: red;
+}
+.domainName {
+    color: green;
 }
 </style>

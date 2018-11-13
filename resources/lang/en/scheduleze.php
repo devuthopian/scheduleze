@@ -14,6 +14,16 @@ return [
     */
 
     'UpdateAppointment'     => 'Successfully Updated',
+    'MessageforSuccess' => 'Successfully Saved!',
+    'MessageforWarning' => 'Something went wrong',
+    'MessageforBookingSuccess' => 'Booked Successfully',
+    'MessageforZigzagChanges' => 'ZigZag changes saved',
+    'TimeWarning' => 'That time has just been booked by someone else.',
+    'MessageforBlockout' => 'Blockout changes saved!',
+    'MessageforReport' => 'Report added',
+    'MessageforNotAllowed' => 'Not allowed to do that',
+    'MessageServiceContent' => 'Content Saved!',
+    'MessageforDeleteBooking' => 'Process Failed! Something went Wrong! Please contact Technical Support!',
     'AppointmentWarning'    => 'Start time occurs after the specified endtime.  No change made to start or end times, other edits executed successfully',
 ];
 ?>
