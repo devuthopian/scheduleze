@@ -39,12 +39,13 @@
 			@endif
 			@if(!empty($businessinfo))
 			{!! Form::open([ 'route' => [$form],'method' => 'post', 'id' => 'txtForm'] ) !!}
-				Book your inspection now <br>
+
+				Book your Appointment now <br>
 
 				<br>
 				<input type="hidden" name="reference_id" value="{{ $id }}">
 				<input type="hidden" name="businessId" value="{{ $businessid }}">
-				<p class="bgtitle">Select Building Type Here</p>
+				<p class="bgtitle">Select <u><i>{{ $businessTypes->type_label }}</i></u> @if(count($sizes) > 0)  <u>-<i>{{ $businessTypes->size_label }}</i></u> @endif @if(count($ages) > 0) <u>-<i>{{ $businessTypes->age_label }}</i></u> @endif Here</p>
 
 				@if(count($types) > 0)
 					<select name="building_type" class="" required>
@@ -71,23 +72,33 @@
 							<option value="{{$age->id}}" @if($age->selected == 1) selected @endif>{{$age->name}}</option>
 						@endforeach
 					</select>
-					@endif
+				@endif
 
-				<p class="subhead">Please check all boxes that apply below:</p>
-				@php $i=0; @endphp
-				@foreach($addons as $addon)
-					<input type="checkbox" name="addon[{{$i}}]" id="{{ $addon->id }}" value="{{ $addon->id }}">{{ $addon->name }} - ${{ $addon->price }}
-					@php $i++; @endphp
-				@endforeach
+				@if(count($addons) > 0)
 
-				<p class="subhead">Select Location<br>
-										
-				<select name="location" class="small_select" required>
-					<option value="">--Select--</option>
-					@foreach ($Location as $id => $name)
-						<option value="{{ $id }}">{{ $name }}</option>
+					<p class="subhead">Please check all boxes that apply below ({{ $businessTypes->addon_label }}): </p>
+					@php $i=0; @endphp
+					@foreach($addons as $addon)
+						<input type="checkbox" name="addon[{{$i}}]" id="{{ $addon->id }}" value="{{ $addon->id }}">{{ $addon->name }} - ${{ $addon->price }}
+						@php $i++; @endphp
 					@endforeach
-				</select>
+				@endif
+
+				@if(session('engage') == 1)
+
+					@if(count($Location) > 0)
+
+						<p class="subhead">Select Location<br>
+												
+						<select name="location" class="small_select" required>
+							<option value="">--Select--</option>
+							@foreach ($Location as $id => $name)
+								<option value="{{ $id }}">{{ $name }}</option>
+							@endforeach
+						</select>
+
+					@endif
+				@endif
 				<input type="submit" value="Find Appointment »"></p>
 			{!! Form::close() !!}
 			@endif
@@ -99,7 +110,7 @@
 
 <script src="{{ asset('js/jquery.min.js') }}"></script>
 <script type="text/javascript">
-	var htmlcss = '.gjs-cv-canvas{top:0;width:100%;height:100%}.panel{width: 100%;max-width: fit-content;border-radius:3px;padding:30px 20px;margin:150px auto 0;background-color:#FFFFFF;box-shadow:0 3px 10px 0 rgba(0,0,0,0.25);color:rgb(0, 0, 0);font:caption;font-weight:100;border-style: solid;}.welcome{text-align:center;font-weight:100;margin:0}.logo{width:70px;height:70px;vertical-align:middle}.logo path{pointer-events:none;fill:none;stroke-linecap:round;stroke-width:7;stroke:#fff}.big-title{text-align:center;font-size:3.5rem;margin:15px 0}.description{text-align:justify;font-size:1rem;line-height:1.5rem}';
+	var htmlcss = '.gjs-cv-canvas{top:0;width:100%;height:100%}.panel{width: max-content;max-width: fit-content;border-radius:3px;padding:30px 20px;margin:150px auto 0;background-color:#FFFFFF;box-shadow:0 3px 10px 0 rgba(0,0,0,0.25);color:rgb(0, 0, 0);font:caption;font-weight:100;border-style: solid;}.welcome{text-align:center;font-weight:100;margin:0}.logo{width:70px;height:70px;vertical-align:middle}.logo path{pointer-events:none;fill:none;stroke-linecap:round;stroke-width:7;stroke:#fff}.big-title{text-align:center;font-size:3.5rem;margin:15px 0}.description{text-align:justify;font-size:1rem;line-height:1.5rem}';
 	$(document).ready(function() {
 		@if(!empty($businessinfo))
 			var wholehtml = $('.takehtml').html();

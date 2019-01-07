@@ -4,7 +4,8 @@
  @import url('https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,700');
  body {
      font-family: 'Poppins', sans-serif !important;
-     padding-top: 0px !important;
+     /* padding-top: 0px !important; */
+     padding-top: 72px !important;
 }
  a:hover {
      text-decoration: none !important;
@@ -16,9 +17,15 @@
      margin: 0px auto;
 }
  .header_section {
-     width: 100%;
-     float: left;
-     padding: 20px 30px 8px 20px;
+    width: 100%;
+    background: #fff;
+    float: left;
+    padding: 20px 30px 8px 20px;
+    /* box-shadow: 0px 3px 9px #d6d6d6; */
+    z-index: 999;
+    position: fixed;
+    left: 0;
+    top: 0;
 }
  .header_section .head_left {
      width: 20%;
@@ -33,7 +40,7 @@
      float: left;
      color: #fff;
      padding: 30px 0 26px;
-     background: url(../images/banner_bg.png);
+     background: url(../images/banner_bg.jpg);
      background-size: 100% 100%;
      background-position: center center;
      overflow: hidden;
@@ -163,7 +170,7 @@
      left: 50%;
      bottom: 0;
      margin-left: -110px;
-     background: url(../images/subscribe_icon.png);
+     background: url(../images/subscribe_icon.jpg);
      width: 110px;
      height: 109px;
 }
@@ -324,7 +331,7 @@
      width: 100%;
      float: left;
      padding: 50px 0 0;
-     background: url(../images/testimonial_bg.png);
+     background: url(../images/testimonial_bg.jpg);
      background-size: cover;
      color: #fff;
 }
@@ -634,7 +641,7 @@
  .sub_banner_section {
      width: 100%;
      float: left;
-     background: url(../images/sub_banner_bg.png);
+     background: url(../images/sub_banner_bg.jpg);
      background-size: 100% 100%;
      padding: 70px 0;
      color: #fff;
@@ -1174,9 +1181,9 @@
     height: 82vh !important;
     width: 100%;
 }
- .logohead{
-     width: 80%;
-     height: auto;
+.logohead{
+    width: 100%;
+    height: auto;
 }
  .take-command{
      text-align:center;
@@ -1544,13 +1551,16 @@
      margin: 5px 0 30px;
      border-bottom: 0px !important;
 }
+.equal_height select { 
+    height: 43px 
+}
  .nsignup_cont .textfield_full .three_col_cont select {
      width: 32%;
      float: left;
      margin-right: 2% 
 }
  .nsignup_cont .textfield_full .three_col_cont select:last-child {
-     float: right;
+     /* float: right; */
      margin-right: 0% 
 }
  .nsignup_cont .textfield_full .six_col_cont select {
@@ -1648,7 +1658,7 @@
      border: 1px solid #383838 !important;
      color: #fff;
 }
- #add_column, .add_columnfor_location {
+ #add_column, .add_columnfor {
      background: #ff6600;
      padding: 5px 15px;
      -webkit-border-radius: 30px;
@@ -1658,7 +1668,7 @@
      margin: 10px 0;
      color: #fff !important;
 }
- #add_column:hover, .add_columnfor_location:hover {
+ #add_column:hover, .add_columnfor:hover {
      background: #429caf;
 }
  .building_cont .select-wrapper .caret {
@@ -2067,5 +2077,86 @@ li.arrowicon>a {
     padding: 20px 20px;
     width: 90%;
     margin: 0 5%;
+}
+}
+div#myeditmode form .modal-body-edit {
+    padding: 15px 20px 0;
+}
+div#myeditmode form .modal-body-edit textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    border-radius: 15px;
+    background: #d8d8d8;
+    border: 0px;
+}
+div#myeditmode form .modal-footer .btn-default {
+    border-color: #ccc;
+    padding: 10px 20px;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    border-radius: 30px;
+    border: 1px solid #fff;
+    background: #429caf;
+    text-align: center;
+    color: #fff;
+    box-shadow: 0px 0px 18px #ccc;
+}
+div#myeditmode form .modal-footer .btn-default:hover {
+    background: #e2a729 !important;
+}
+
+span.dang_field {
+   position: relative;
+   display: inline-block;
+   width: 100%;
+}
+span.dang_field i.fas.fa-star-of-life {
+    color: red;
+    font-size: 18px;
+    position: absolute;
+    right: 12px;
+    top: 13px;
+}
+
+b.is-danger {
+    font-size: small;
+}
+
+.asteriskStar {
+    color: red;
+}
+
+
+.cls-option li {
+    padding-bottom: 5px;
+}
+
+.cls-option {
+    text-align: left;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding-top: 20px;
+}
+
+.cls-option-heading {
+    text-align: center;
+    font-size: 15px;
+    text-transform: uppercase;
+    color: #429caf;
+    letter-spacing: 2px;
+    font-weight: 600;
+}
+.darkHeader {
+    box-shadow: 0px 3px 9px #d6d6d6;
+}
+@media (max-width: 767px) {
+body {
+     padding-top: 0px !important;
+}
+ .header_section {
+    position: static;
 }
 }

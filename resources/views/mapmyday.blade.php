@@ -169,12 +169,7 @@ $GOOGLE_MAP_KEY = env('GOOGLE_MAP_KEY');
 
 					        function calculateAndDisplayRoute(directionsService, directionsDisplay) {
 								var waypts = [];
-								@php for ($k = 0; $k < count($inspection_address)-1; $k++) { @endphp
-									waypts.push({
-										location: '{{$formatted_address[$k]}}',
-										stopover: true
-									});
-								@php } @endphp
+								
 
 								directionsService.route({
 									origin: '{{ $current_address }}',

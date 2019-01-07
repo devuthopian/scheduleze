@@ -638,12 +638,27 @@
 </div>
 
 @if(!empty(session('hashvalue')))
+    <?php
+        $get_all_urls = get_all_urls('panel_template', 'unique_url');
+        $get_key_urls = array_values(array_filter($get_all_urls));
+
+        if (($key = array_search(session('hashvalue'), $get_key_urls)) !== false) {
+            unset($get_key_urls[$key]);
+        }
+
+        $key_urls = implode(",", $get_key_urls);
+    ?>
+    <div id="signup">
     <div>
         <div class="bussthree_cont">  
             <div class="form-group">
                 {!! Form::label('Domain Name', trans('profile.domain_name') , array('class' => 'control-label')); !!}
 
-                {!! Form::text('domain_name',session('hashvalue'), array('id' => 'domain_name', 'class' => 'form-control', 'placeholder' => trans('profile.placeholder_domain_name'))) !!}
+                <!-- {!! Form::text('domain_name',session('hashvalue'), array('id' => 'domain_name', 'class' => 'form-control', 'placeholder' => trans('profile.placeholder_domain_name'))) !!} -->
+
+                <input type="text" name="domain_name" v-validate="'required|excluded:{{ $key_urls }}'" :class="{'input': true, 'is-danger': errors.has('domain_name')}" placeholder="{{ trans('profile.placeholder_domain_name') }}" value="{{ session('hashvalue') }}">
+                <i v-show="errors.has('domain_name')" class="fa fa-warning"></i>
+                <span v-show="errors.has('domain_name')" class="help is-danger">@{{ errors.first('domain_name') }}</span>
             </div>
         </div>
     </div>
@@ -769,11 +784,11 @@
 
                 <option value="0">None</option>
 
-                <option value="1">Client Only</option>
+                <option value="1" @if(!empty($UserBusinessData['include_event_ics'])) @if($UserBusinessData['include_event_ics'] == 1) selected="selected" @endif @endif>Client Only</option>
 
-                <option value="2">Inspector Only</option>
+                <option value="2" @if(!empty($UserBusinessData['include_event_ics'])) @if($UserBusinessData['include_event_ics'] == 2) selected="selected" @endif @endif>Inspector Only</option>
 
-                <option value="4">Everyone</option>
+                <option value="3" @if(!empty($UserBusinessData['include_event_ics'])) @if($UserBusinessData['include_event_ics'] == 3) selected="selected" @endif @endif>Everyone</option>
 
             </select>
 
@@ -883,34 +898,38 @@
     <div class="form-group">
 
 
-        {!! Form::button(trans('profile.updatebusinessButton'),
-
-
-
+        <!-- {!! Form::button(trans('profile.updatebusinessButton'),
+        
+        
+        
         array(
-
-
-
+        
+        
+        
         'class'             => 'btn btn-success gmailbtn',
-
-
-
+        
+        
+        
         'type'              => 'submit',
-
+        
         $behaviour
+        
+        
+        
+        )) !!} -->
 
-
-
-        )) !!}
+        <button type="submit" name="submit" class="btn btn-success gmailbtn" {{ $behaviour }} :disabled="errors.any()">{{ trans('profile.updatebusinessButton') }}</button>
 
 
 
     </div>
+    
 
 
 
 </div>
-
+</div>
+<script src="{{ asset('js/app.js') }}"></script>
 
 
 {!! Form::close() !!}

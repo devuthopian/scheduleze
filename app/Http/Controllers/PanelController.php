@@ -72,19 +72,19 @@ class PanelController extends Controller
             Session::put('hashvalue', $hashvalue);
         }
         $paneltemp = PanelTemplate::where('business', $business_id)->first();
-        if($paneltemp){
+        if($paneltemp) {
             $gjs_html = $paneltemp->gjs_html;
-            if(!empty($gjs_html)){
+            if(!empty($gjs_html)) {
                 $new_html = $data['gjs_html'];
                 $new_html = str_replace("$","\\$",$new_html);
                 $divid = "dontbreakdiv";
                 $gjs_html = preg_replace("#<div[^>]*id=\"{$divid}\".*?</div>#si",$new_html,$gjs_html);
                 $gjs_css = $paneltemp->gjs_css;
-            }else{
+            }else {
                 $gjs_html = $data['gjs_html'];
                 $gjs_css = $data['gjs_css'];
             }
-        }else{
+        } else {
             $gjs_html = $data['gjs_html'];
             $gjs_css = $data['gjs_css'];
         }
@@ -117,9 +117,12 @@ class PanelController extends Controller
             $gjs_css = $data['gjs_css'];
         }
 
+        //for default button in schedule panel
+
         $PanelDefault = PanelDefault::updateOrCreate(
             ['business' => $business_id],
             [   
+                'user_id' => $id,
                 'business' => $business_id,
                 'gjs_html' => $gjs_html,
                 'unique_url' => $hashvalue,
@@ -183,7 +186,10 @@ class PanelController extends Controller
         Storage::makeDirectory('/template/'.$Industry_name.'/'.$business_id, 0777, true);
         Storage::disk('custom_local')->put($Industry_name.'/'.$business_id.'/index.html', $data['gjs-html']);
         Storage::disk('custom_local')->append($Industry_name.'/'.$business_id.'/index.html', '<style>'.$data['gjs-css'].'</style>');
-        Storage::disk('custom_local')->put($Industry_name.'/'.$business_id.'/'.$dbimages[0]['src'], $dbimages[0]['src']);
+        
+        if(!empty($dbimages)) {
+            Storage::disk('custom_local')->put($Industry_name.'/'.$business_id.'/'.$dbimages[0]['src'], $dbimages[0]['src']);
+        }
         
         if($PanelTemplate->id){
             session(['panel_id' => $PanelTemplate->id]);
@@ -304,7 +310,7 @@ class PanelController extends Controller
         $administrator = session('administrator');
         $permission = session('permission');
 
-        if($permission == 0){
+        if($permission == 0) {
             $inspectors = UserDetails::where([['user_id', '=', $user_id],['removed', '=', '0']])->get();
         }else{
             $inspectors = UserDetails::where([['business', '=', $business_id],['removed', '=', '0']])->get();

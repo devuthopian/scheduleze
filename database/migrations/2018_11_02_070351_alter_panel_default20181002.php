@@ -13,10 +13,10 @@ class AlterPanelDefault20181002 extends Migration
      */
     public function up()
     {
-        Schema::table('panel_defualt', function (Blueprint $table) {
+        /*Schema::table('panel_defualt', function (Blueprint $table) {
             $table->unsignedInteger('business')->after('user_id');
             $table->foreign('business')->references('id')->on('business');
-        });
+        });*/
     }
 
     /**
@@ -26,8 +26,8 @@ class AlterPanelDefault20181002 extends Migration
      */
     public function down()
     {
-        Schema::table('panel_defualt', function (Blueprint $table) {
+        /*Schema::table('panel_defualt', function (Blueprint $table) {
             $table->dropColumn('business');
-        });
+        });*/
     }
 }

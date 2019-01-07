@@ -29,6 +29,8 @@ class CreateBusinessType20181011 extends Migration
             $table->integer('random_image_end')->nullable()->default('3');
             $table->integer('removed')->nullable()->default('0');
             $table->timestamps();
+
+            $table->foreign('business')->references('id')->on('business')->onDelete('cascade');
         });
     }
 

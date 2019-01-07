@@ -40,6 +40,8 @@ class CreateUsersDetailsTable extends Migration
             $table->integer('added')->nullable();
             $table->integer('removed')->default('0');
             $table->timestamps();
+            
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

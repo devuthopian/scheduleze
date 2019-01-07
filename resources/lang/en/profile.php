@@ -47,7 +47,7 @@ return [
     'require_listing_agent'              => 'Require Listing Agent',
     'agent_company_label'              => 'Agent & Company Label',
     'enotice_days_before'              => 'Send Email Reminders',
-    'include_event_ics'              => 'Attach Event ICS File',
+    'include_event_ics'              => 'Calendar Sync in Booking',
 
     'password_confirmation'        => 'Password Confirmation',
     'updateSuccess'                => 'User Profile Sucessfully Updated',

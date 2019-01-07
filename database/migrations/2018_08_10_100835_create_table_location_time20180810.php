@@ -23,8 +23,8 @@ class CreateTableLocationTime20180810 extends Migration
             $table->integer('removed')->nullable()->default('0');
             $table->timestamps();
 
-            $table->foreign('business')->references('id')->on('business');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('business')->references('id')->on('business')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

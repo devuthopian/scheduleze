@@ -85,7 +85,13 @@ if (! function_exists('show_day_forward')) {
 
 if(! function_exists('getallIndustries')){
 	function getallIndustries(){
-		return DB::table('business_types')->pluck('agent_name', 'id');
+		return DB::table('business_types')->where('removed', 0)->pluck('agent_name', 'id');
+	}
+}
+
+if(! function_exists('getAllEngage')){
+	function getAllEngage(){
+		return DB::table('engage')->where('removed', 0)->pluck('engage_style', 'id');
 	}
 }
 
@@ -131,6 +137,14 @@ if(! function_exists('username')){
 		
 		$getformdata = DB::table('users')->select('name')->where('id',$id)->get();
 		return $getformdata[0]->name;
+	}
+}
+
+if(! function_exists('usernameAppoint')) {
+	function usernameAppoint($id){
+		
+		$getformdata = DB::table('business')->select('contact_firstname')->where('user_id',$id)->get();
+		return $getformdata[0]->contact_firstname;
 	}
 }
 
@@ -197,10 +211,14 @@ if(! function_exists('hour_popup')){
 }
 
 if(! function_exists('minute_popup')){
-	function minute_popup ($minute, $designate, $session) {
+	function minute_popup ($minute, $designate, $session, $new = '') {
 		$popup ="\t\t\t\t<select name=\"minute".$session."[".$designate."]\" class=\"smallselect\">\n";
 		$popup .="\t\t\t\t	<option value=\"$minute\" selected>$minute</option>\n";
-		$popup .="\t\t\t\t	<option value=\"00\">00</option>\n";
+		if($new == 1) {
+			$popup .="\t\t\t\t	<option value=\"00\" selected>00</option>\n";
+		} else {
+			$popup .="\t\t\t\t	<option value=\"00\">00</option>\n";
+		}
 		$popup .="\t\t\t\t	<option value=\"15\">15</option>\n";
 		$popup .="\t\t\t\t	<option value=\"30\">30</option>\n";
 		$popup .="\t\t\t\t	<option value=\"45\">45</option>\n";
@@ -504,7 +522,7 @@ if(! function_exists('get_proposed_inspection_information')){
 			foreach ($addons as $ddd){
 				$addons_information[] = DB::table('addons')->where([['id', '=', $ddd],['business', '=', $business],['removed', '=', '0']])->first();
 			}
-			if (is_array($addons_information) || !empty($addons_information)){
+			if (is_array($addons_information) || !empty($addons_information)) {
 				foreach($addons_information as $adz){
 					$more_price[] = $adz['price'];
 					$more_time[] = $adz['buffer'];
@@ -549,20 +567,20 @@ if(! function_exists('get_zigpop')){
 			$select .= "<option value=\"$time\" $do>$min min</option>\n";
 			$do="";
 		}
-		$select .= "
-					<option value=\"900\">15 min</option>
-					<option value=\"1800\" $do>30 min</option>
-					<option value=\"2700\">45 min</option>
-					<option value=\"3600\">60 min</option>
-					<option value=\"4500\">1:15</option>
-					<option value=\"5400\">1:30</option>
-					<option value=\"6300\">1:45</option>
-					<option value=\"7200\">2 hours</option>
-					<option value=\"8100\">2:15 hours</option>
-					<option value=\"9000\">2:30 hours</option>
-					<option value=\"9900\">2:45 hours</option>
-					<option value=\"10800\">3 hours</option>
-				</select>";
+			$select .= "<option value=\"900\">15 min</option>
+						<option value=\"1800\">30 min</option>
+						<option value=\"2700\">45 min</option>
+						<option value=\"3600\">60 min</option>
+						<option value=\"4500\">1:15</option>
+						<option value=\"5400\">1:30</option>
+						<option value=\"6300\">1:45</option>
+						<option value=\"7200\">2 hours</option>
+						<option value=\"8100\">2:15 hours</option>
+						<option value=\"9000\">2:30 hours</option>
+						<option value=\"9900\">2:45 hours</option>
+						<option value=\"10800\">3 hours</option>
+					</select>";
+		
 		return $select;
 	}
 }
@@ -572,6 +590,16 @@ if(! function_exists('get_all_usernames')){
 		$get_all_usernames = DB::table($table)->select($field)->get();
 		foreach ($get_all_usernames as $key) {
 			$keyname[] = $key->name;
+		}
+		return $keyname;
+	}
+}
+
+if(! function_exists('get_all_urls')){
+	function get_all_urls($table, $field) {
+		$get_all_usernames = DB::table($table)->select($field)->get();
+		foreach ($get_all_usernames as $key) {
+			$keyname[] = $key->unique_url;
 		}
 		return $keyname;
 	}
@@ -1292,14 +1320,19 @@ if(! function_exists('month_popup')){
 }
 
 if(! function_exists('am_popup')){
-	function am_popup($am, $designate, $session) {
+	function am_popup($am, $designate, $session, $new = '') {
 		$popup ="\t\t\t\t<select name=\"am".$session."[".$designate."]\" class=\"smallselect\">\n";
 		if($am == 'AM'){
 			$popup .="\t\t\t\t	<option value=\"AM\" selected>AM</option>\n";
 			$popup .="\t\t\t\t	<option value=\"PM\">PM</option>\n";
 		}else{
-			$popup .="\t\t\t\t	<option value=\"AM\">AM</option>\n";
-			$popup .="\t\t\t\t	<option value=\"PM\" selected>PM</option>\n";
+			if($new == 1) {
+				$popup .="\t\t\t\t	<option value=\"AM\" selected>AM</option>\n";
+				$popup .="\t\t\t\t	<option value=\"PM\">PM</option>\n";
+			} else {
+				$popup .="\t\t\t\t	<option value=\"AM\">AM</option>\n";
+				$popup .="\t\t\t\t	<option value=\"PM\" selected>PM</option>\n";
+			}
 		}
 		$popup .="\t\t\t\t</select>\n";
 		return $popup;
@@ -1307,8 +1340,12 @@ if(! function_exists('am_popup')){
 }
 
 if(! function_exists('PanelTemplate')){
-	function PanelTemplate($id) {
-		$template = DB::table('panel_template')->where('user_id',$id)->first();
+	function PanelTemplate($id, $type = '') {
+		if(!empty($type)) {
+			$template = DB::table('panel_template')->where($type, $id)->first();
+		}else {
+			$template = DB::table('panel_template')->where('user_id', $id)->first();
+		}
 	    return $template;
 	}
 }
@@ -1347,6 +1384,7 @@ if(! function_exists('get_timezone')){
 
 if(! function_exists('display_for_edit')){
 	function display_for_edit($id, $first, $last, $order='type', $inc='', $tt, $flag) {
+		$serverName = $_SERVER['SERVER_NAME'];
 		//get current time
 		$last_end_day = '';
 		$now = time();
@@ -1354,8 +1392,8 @@ if(! function_exists('display_for_edit')){
 			$order = "type";
 			$incdec = "asc";
 		} else {
-			$order = "id";
-			$incdec = "desc";
+			$order = "starttime";
+			$incdec = "asc";
 		}
 		if($id == 'all'){
 			$order = "user_id";
@@ -1440,9 +1478,13 @@ if(! function_exists('display_for_edit')){
 		
 		//
 		/*$tt = $this->pull_multi($sql);*/
-		$html = "<tr class=\"dark-table-heading\"><td bgcolor=\"F0F0F0\" class=\"display\"><b>Start &amp; End</b></td>\n
-		<td bgcolor=\"F0F0F0\" class=\"display\"><b><!--<a href=\"index.php?action=blockouts&track=2&order=type&first=$first&last=$last&inspector=$id\"> Inspection-->Address</b></td>\n
-			<td bgcolor=\"F0F0F0\" class=\"display\"><b>Agent/Notes</b></td>\n
+		if(session('engage') == 1) {
+			$html = "<tr class=\"dark-table-heading\"><td bgcolor=\"F0F0F0\" class=\"display\"><b>Start &amp; End</b></td>\n<td bgcolor=\"F0F0F0\" class=\"display\"><b><!--<a href=\"index.php?action=blockouts&track=2&order=type&first=$first&last=$last&inspector=$id\"> Inspection-->Address</b></td>\n";
+		} else {
+			$html = "<tr class=\"dark-table-heading\"><td bgcolor=\"F0F0F0\" class=\"display\"><b>Start &amp; End</b></td>\n<td bgcolor=\"F0F0F0\" class=\"display\"><b><!--<a href=\"index.php?action=blockouts&track=2&order=type&first=$first&last=$last&inspector=$id\"> Inspector-->Address</b></td>\n";
+		}
+
+		$html .= "<td bgcolor=\"F0F0F0\" class=\"display\"><b>Agent/Notes</b></td>\n
 			<td bgcolor=\"F0F0F0\" class=\"display\"><b>Price</b></td>\n
 			<td bgcolor=\"F0F0F0\" class=\"display\"><b>Client/Type</b></td>\n
 			<td bgcolor=\"F0F0F0\" class=\"display\"><b>Numbers</b></td>\n
@@ -1472,7 +1514,9 @@ if(! function_exists('display_for_edit')){
 				if ($row->type != 1) {
 					$inspection_address = $row->inspection_address;
 					$location = $row->location;
-					$city = DB::table('locations')->select('name')->where('id', $location)->first();
+					if(session('engage') == 1) {
+						$city = DB::table('locations')->select('name')->where('id', $location)->first();
+					}
 				}
 				if ($last_end_day != $this_end_day){
 					$full_day_label = date("l, F jS", $row->endtime);
@@ -1480,10 +1524,21 @@ if(! function_exists('display_for_edit')){
 					$html .= "
 					<tr>
 						<td colspan = \"7\" bgcolor=\"#FFCD49\"><b>".$full_day_label."</b>&nbsp;&nbsp;";
+					$url = '';
 					if ($row->type != 1) {
-						$url = "http://scheduleze20.com/scheduleze/dayticket/$row->user_id/1/$start_of_day";
-						$encrypt = Crypt::encrypt($inspection_address.', '.$city->name);
-						$route = '<a href="http://scheduleze20.com/scheduleze/mapmyday'.'/'.$encrypt.'" target="_blank" class="note">Map My Day &#187;</a>';
+						$url = "http://".$serverName."/scheduleze/dayticket/$row->user_id/1/$start_of_day";
+
+						if(session('engage') == 1) {
+							if(!empty($city)) {
+								$encrypt = Crypt::encrypt($inspection_address.',&nbsp'.$city->name);
+							} else {
+								$encrypt = Crypt::encrypt($inspection_address.',&nbsp');
+							}
+						} else {
+							$encrypt = Crypt::encrypt($inspection_address);
+						}
+
+						$route = '<a href="https://'.$serverName.'/scheduleze/mapmyday'.'/'.$encrypt.'" target="_blank" class="note">Map My Day &#187;</a>';
 					}else{
 						$route = '';
 					}
@@ -1511,6 +1566,7 @@ if(! function_exists('display_for_edit')){
 				} else {
 					$price = "";
 				}
+
 				//create html
 				$html .= "<tr>\n";
 				$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\">$hora</td>\n";
@@ -1551,9 +1607,17 @@ if(! function_exists('display_for_edit')){
 					//$city = DB::table('locations')->select('name')->where('id', $location)->first(); //recently commented
 
 					//$encrypt = Crypt::encrypt($inspection_address.', '.$city->name);
-					$rote = 'http://scheduleze20.com/scheduleze/mapmyday'.'/'.$encrypt;
+					$rote = 'https://'.$serverName.'/scheduleze/mapmyday'.'/'.$encrypt;
 
-					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\"><a href=\"$rote\">$inspection_address, $city->name</a></td>\n";
+					if(session('engage') == 1) {
+						if(!empty($city)) {
+							$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\"><a href=\"$rote\">$inspection_address, $city->name</a></td>\n";
+						} else {
+							$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\"><a href=\"$rote\">$inspection_address</a></td>\n";
+						}
+					} else {
+						$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\"><a href=\"$rote\">$inspection_address</a></td>\n";
+					}
 
 					if ($user_notes !=""){ $user_notes = "<br>$user_notes"; }
 					if ($notes !=""){ $user_notes .= "<br><b>$notes</b>"; }
@@ -1561,6 +1625,11 @@ if(! function_exists('display_for_edit')){
 						$agent_name = "<a href=\"mailto:$agent_email\" class=\"note_link\">$agent_name</a>";
 					} else {
 						$agent_name = $agent_name;
+					}
+
+					$agent_phone = '';
+					if(!empty($agent_phone)) {
+						$agent_phone = preg_replace("/^(\d{3})(\d{3})(\d{4})$/", "$1-$2-$3", $agent_phone);
 					}
 					
 					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\">$agent_name  $agent_phone $user_notes</td>\n";
@@ -1573,16 +1642,26 @@ if(! function_exists('display_for_edit')){
 
 					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\">$price</td>\n";
 					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\"><nobr>$client_name</nobr><br>$siz</td>\n";
+					$dayphone = preg_replace("/^(\d{3})(\d{3})(\d{4})$/", "$1-$2-$3", $dayphone);
+					$homephone = preg_replace("/^(\d{3})(\d{3})(\d{4})$/", "$1-$2-$3", $homephone);
 					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\"><nobr>$dayphone</nobr><br><nobr>$homephone</nobr></td>\n";
 				}
 
+				$fullName = '';
+				if(!empty($firstname) && !empty($lastname)) {
+					$fullName = $firstname." ".$lastname;
+				}
+				$businessName = DB::table('business')->select('contact_firstname')->where('id', $business)->first();
+
+				$text = 'Do you want to remove '.$businessName->contact_firstname.'\'s appointment for '.$start.', '.$start_day.', with '.$fullName;
+
 				if ($row->type == "1"){
 					//$url ='/scheduleze/blockout/EditBlockout/'.$blockout_id;
-					$url ='http://scheduleze20.com/scheduleze/blockout/EditBlockout/'.$blockout_id;
-					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\"><nobr><a href=\"$url\" class=\"note_link\">Edit</a><span class\"note\">  </span><a href=\"http://scheduleze20.com/booking/delete/$blockout_id\"  class=\"note_link\">Remove</a></nobr></td>\n";
+					$url ='http://'.$serverName.'/scheduleze/blockout/EditBlockout/'.$blockout_id;
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\"><nobr><a href=\"$url\" class=\"\">Edit</a> | <span class\"note\">  </span><a href=\"http://$serverName/booking/delete/$blockout_id\" full-text=\"$text\" class=\"appointmentPage\">Remove</a></nobr></td>\n";
 				} else {
 					//$url = "https://needsecured.com/developer/scheduleze/public/scheduleze/booking/edit/$id";
-					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\"><nobr><a href=\"form/edit/$id\" class=\"note_link\">Edit</a><span class\"note\">  </span><a href=\"http://scheduleze20.com/booking/delete/$id\"  class=\"note_link\">Remove</a></nobr></td>\n";
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display borderdisplay\"><nobr><a href=\"form/edit/$id\" class=\"\">Edit</a> | <span class\"note\">  </span><a href=\"http://$serverName/booking/delete/$id\" full-text=\"$text\" class=\"appointmentPage\">Remove</a></nobr></td>\n";
 				}
 				$html .= "</tr>\n";
 				$last_end_day = date("j", $row->endtime);
@@ -1788,9 +1867,11 @@ if(! function_exists('display_dayticket')){
 			$total_earnings = 0;
 			foreach ($tt as $row) {
 				//$h++;
-
-				if($row->location != 0)
-					$city = get_field("locations", "name", $row->location);
+				$city = '';
+				if(session('engage') == 1) {
+					if($row->location != 0)
+						$city = get_field("locations", "name", $row->location);
+				}
 
 				// format the building type:
 				//format the times
@@ -1840,18 +1921,41 @@ if(! function_exists('display_dayticket')){
 						$client_email = '';
 					}
 					$bookings_total_count ++;
-					if ($row->price != ""){ $price = "$".$row->price.""; $total_earnings = ($total_earnings + $row->price); }
+					$price = '';
+					
+
+					if (!empty($row->price)) {
+						$price = "$".$row->price."";
+						$total_earnings = ($total_earnings + (int) $row->price);
+					}
+
 					if ($row->user_notes !=""){ $row->user_notes = "<b>Note:</b> ".$row->user_notes."<br>"; }
 					if ($row->notes !=""){ $row->notes = "<b>Memo:</b> ".$row->notes.""; }
 					if ($row->entry_method !=""){ $row->entry_method = "<b>Entry:</b> ".$row->entry_method."<br>"; }
 					if ($row->mls !=""){ $row->mls = "<br>MLS: ".$row->mls.""; }
 					if ($row->agent_name!=""){ $agent_info = "<br><b>Agent: ".$row->agent_name."</b>";} else { $agent_info = ""; }
-					if ($row->agent_phone!=""){ $agent_info .= "<br>".$row->agent_phone."";}
+
+					if(!empty($row->agent_phone)) {
+						$agent_phone = preg_replace("/^(\d{3})(\d{3})(\d{4})$/", "$1-$2-$3", $row->agent_phone);
+					}
+
+					if ($row->agent_phone!=""){ $agent_info .= "<br>".$agent_phone."";}
 					if ($agent_email != "") { $agent_info .= " ".$agent_email; }
 					if($row->listing_agent!=""){ $agent_info .= "<br><b>Listing: ".$row->listing_agent."</b>";}
-					if($row->listing_phone!=""){ $agent_info .= "<br>".$row->listing_phone;}
+
+					if(!empty($row->listing_phone)) {
+						$listing_phone = preg_replace("/^(\d{3})(\d{3})(\d{4})$/", "$1-$2-$3", $row->listing_phone);
+					}
+
+					if(!empty($row->listing_phone)) { $agent_info .= "<br>".$listing_phone;}
 					if($row->firstname != "" || $row->lastname != ""){ $client_info = "<b>".$row->firstname." ".$row->lastname."</b>"; } else { $client_info = ""; }
-					if($row->dayphone != ""  || $row->homephone != ""){ $email_addon = "<br>"; $client_info .= "<br>".$row->dayphone." ".$row->homephone.""; }
+
+					if($row->dayphone != ""  || $row->homephone != "") {
+						$dayphone = preg_replace("/^(\d{3})(\d{3})(\d{4})$/", "$1-$2-$3", $row->dayphone);
+						$homephone = preg_replace("/^(\d{3})(\d{3})(\d{4})$/", "$1-$2-$3", $row->homephone);
+					}
+
+					if($row->dayphone != ""  || $row->homephone != ""){ $email_addon = "<br>"; $client_info .= "<br>".$dayphone." ".$homephone.""; }
 					if ($client_email != "") { $client_info .= $email_addon.$client_email; }
 					$siz = get_full_description($row->building_type, $row->building_size, $row->building_age);
 					$addons = get_addon_information($row->id);
@@ -1860,7 +1964,13 @@ if(! function_exists('display_dayticket')){
 					$html .= "<tr>\n";
 					$html .= "<td bgcolor=\"#$bgcolor\" valign=\"top\">$hora</td>\n";
 					$html .= "<td bgcolor=\"#$bgcolor\" align=\"right\" valign=\"top\">$price</td>\n";
-					$html .= "<td bgcolor=\"#$bgcolor\" valign=\"top\">$row->inspection_address, $city<br>$siz<span class=\"note\">".$addons['services']."</span></td>\n";
+
+					if(session('engage') == 1) {
+						$html .= "<td bgcolor=\"#$bgcolor\" valign=\"top\">$row->inspection_address, $city<br>$siz<span class=\"note\">".$addons['services']."</span></td>\n";
+					} else {
+						$html .= "<td bgcolor=\"#$bgcolor\" valign=\"top\">$row->inspection_address<br>$siz<span class=\"note\">".$addons['services']."</span></td>\n";
+					}
+
 					$html .= "<td bgcolor=\"#$bgcolor\" valign=\"top\"><span class=\"note\">$row->entry_method $row->user_notes $row->notes</span></td>\n";
 					$html .= "<td bgcolor=\"#$bgcolor\" valign=\"top\"><span class=\"note\"><nobr>$client_info</nobr>$agent_info $row->mls</span></td>\n";
 					$html .= "</tr>\n";
@@ -1869,7 +1979,9 @@ if(! function_exists('display_dayticket')){
 			}
 			$timezone = get_field('business', 'timezone', $row->business);
 			$generated_date = date ("g:ia l, F jS",($now + $timezone));
-			$total_earnings = number_format($total_earnings);
+			if(!empty($total_earnings)) {
+				$total_earnings = number_format($total_earnings);
+			}
 			$bookings_name = '';
 			if ($bookings_total_count > 1){
 				//$bookings_name = "Bookings";
@@ -2002,12 +2114,28 @@ if(! function_exists('display_master_ticket')){
 							if ($row->entry_method != ""){ $row->entry_method = "<b>Entry:</b> ".$row->entry_method."<br>"; }
 							if ($row->mls != ""){ $row->mls = "<br>MLS: ".$row->mls.""; }
 							if($row->agent_name != ""){ $agent_info = "<br><b>Agent: ".$row->agent_name."</b>";} else { $agent_info = ""; }
-							if($row->agent_phone != ""){ $agent_info .= "<br>".$row->agent_phone."";}
+
+							if($row->agent_phone != "") {
+								$agent_phone = preg_replace("/^(\d{3})(\d{3})(\d{4})$/", "$1-$2-$3", $row->agent_phone);
+							}
+
+							if($row->agent_phone != ""){ $agent_info .= "<br>".$agent_phone."";}
 							if ($agent_email != "") { $agent_info .= " ".$agent_email; }
 							if($row->listing_agent != ""){ $agent_info .= "<br><b>Listing: ".$row->listing_agent."</b>";}
-							if($row->listing_phone!= ""){ $agent_info .= "<br>".$row->listing_phone."";}
+
+							if($row->listing_phone != "") {
+								$listing_phone = preg_replace("/^(\d{3})(\d{3})(\d{4})$/", "$1-$2-$3", $row->listing_phone);
+							}
+
+							if($row->listing_phone!= ""){ $agent_info .= "<br>".$listing_phone."";}
 							if($row->firstname != "" || $row->lastname != ""){ $client_info = "<b>".$row->firstname." ".$row->lastname."</b>"; } else { $client_info = ""; }
-							if($row->dayphone != ""  || $row->homephone != ""){ $email_addon = "<br>"; $client_info .= "<br>".$row->dayphone." ".$row->homephone.""; }
+
+							if($row->dayphone != ""  || $row->homephone != "") {
+								$dayphone = preg_replace("/^(\d{3})(\d{3})(\d{4})$/", "$1-$2-$3", $row->dayphone);
+								$homephone = preg_replace("/^(\d{3})(\d{3})(\d{4})$/", "$1-$2-$3", $row->homephone);
+							}
+
+							if($row->dayphone != ""  || $row->homephone != ""){ $email_addon = "<br>"; $client_info .= "<br>".$dayphone." ".$homephone.""; }
 							if ($client_email != "") { $client_info .= $email_addon.$client_email; }
 							$siz = get_full_description($row->building_type, $row->building_size,$row->building_age);
 							$addons = get_addon_information($row->id);
@@ -2072,8 +2200,11 @@ if(! function_exists('get_business_information')){
 			$html .= $row->public_address."<br>";
 		}
 		if (strlen($row->public_phone) > 3){
-			$html .= $row->public_phone;
-			session(['business_information.phone' => $row->public_phone]);
+			if($row->public_phone != "") {
+				$public_phone = preg_replace("/^(\d{3})(\d{3})(\d{4})$/", "$1-$2-$3", $row->public_phone);
+			}
+			$html .= $public_phone;
+			session(['business_information.phone' => $public_phone]);
 		}
 		$html .= "</span></div>";
 		session(['business_card' => $html]);
@@ -2319,11 +2450,21 @@ if(! function_exists('view_for_reports')){
 					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\">Blockout</td>\n";
 					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\">$row->notes</td>\n";
 				} else {
-					$city = get_field("locations", "name", $row->location);
-					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\">$row->inspection_address<br>$city</td>\n";
+					if(session('engage') == 1) {
+						$city = get_field("locations", "name", $row->location);
+						$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\">$row->inspection_address<br>$city</td>\n";
+					} else {
+						$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\">$row->inspection_address<br></td>\n";
+					}
 					if ($row->user_notes != ""){ $row->user_notes = "<br>$row->user_notes"; }
 					if ($row->notes != ""){ $row->user_notes .= "<br><b>$row->notes</b>"; }
-					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\">$row->agent_name  $row->agent_phone $row->user_notes</td>\n";
+
+					$agent_phone = '';
+					if($row->agent_phone != "") {
+						$agent_phone = preg_replace("/^(\d{3})(\d{3})(\d{4})$/", "$1-$2-$3", $row->agent_phone);
+					}
+
+					$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\">$row->agent_name  $agent_phone $row->user_notes</td>\n";
 				}
 				if($row->email!=""){
 					$client_name = "<a href=\"mailto:$row->email\">$row->firstname $row->lastname</a>";
@@ -2332,7 +2473,18 @@ if(! function_exists('view_for_reports')){
 				}
 				$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\">$price</td>\n";
 				$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\">$client_name</td>\n";
-				$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\"><nobr>$row->dayphone</nobr><br><nobr>$row->homephone</nobr></td>\n";
+
+				$dayphone = '';
+				if($row->dayphone != "") {
+					$dayphone = preg_replace("/^(\d{3})(\d{3})(\d{4})$/", "$1-$2-$3", $row->dayphone);
+				}
+				
+				$homephone = '';
+				if($row->homephone != "") {
+					$homephone = preg_replace("/^(\d{3})(\d{3})(\d{4})$/", "$1-$2-$3", $row->homephone);
+				}
+
+				$html .= "<td bgcolor=\"#$bgcolor\" class=\"display\"><nobr>$dayphone</nobr><br><nobr>$homephone</nobr></td>\n";
 				
 				//does the booking have a report?
 				/*$sql = "select * from reports where booking='$row[id]' and removed=0";

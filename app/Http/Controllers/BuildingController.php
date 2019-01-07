@@ -29,7 +29,7 @@ class BuildingController extends Controller
      * Constructor
      */
     public function __construct()
-    { 
+    {
         // Set the businessid
         $this->businessid = !empty(session('business_id')) ? session('business_id') : '';
         if(session('permission') == null || session('permission') == 0){
@@ -45,9 +45,20 @@ class BuildingController extends Controller
     public function index($name)
     {
         $businessid = $this->businessid;
-        $Model = 'App\\'.$name;
 
-        $Building = !empty(Business::find($businessid)->$name) ? Business::find($businessid)->$name : '';
+        $Model = 'App\\Building'.$name;
+        $modelTableName = 'Building'.$name;
+        $BladeName = 'building'.strtolower($name);
+
+        $Building = !empty(Business::find($businessid)->$modelTableName) ? Business::find($businessid)->$modelTableName : '';
+
+        if($name == 'Addons'){
+            $Model = 'App\\'.$name;
+            $BladeName = strtolower($name);
+            $Building = !empty(Business::find($businessid)->$name) ? Business::find($businessid)->$name : '';
+        }
+
+        //$Building = !empty(Business::find($businessid)->$name) ? Business::find($businessid)->$name : '';
         //$Buildingdesc = $Model::where([['business', $businessid],['removed',0]])->pluck('name', 'id');
 
         $Modelproduct = new $Model;
@@ -55,46 +66,32 @@ class BuildingController extends Controller
 
         $users_details = DB::table('users')
         ->join('users_details', 'users.id', '=', 'users_details.user_id')
-        ->select('users.id', 'users.name', 'users_details.administrator')
+        ->select('users.id', 'users_details.name', 'users_details.administrator')
         ->where('users_details.business', '=', $businessid)
         ->get();
 
         $ServiceContent = ServiceContent::where([['business_type_id', '=', session('indus_id')],['business', '=', $this->businessid]])->first();
 
         //$Building = $Model::where([['business', $businessid]])->first();
-        $BladeName = strtolower($name);
+        
 
-        if ($name == 'BuildingTypes'){
+        if ($name == 'Types') {
             $type = 1;
-        }elseif ($name == 'BuildingSizes') {
+        } elseif ($name == 'Sizes') {
             $type = 2;
-        }elseif ($name == 'BuildingAges') {
+        } elseif ($name == 'Ages') {
             $type = 3;
-        }else{
+        } else {
             $type = 4;
         }
 
+        $getbusindus = getBusinessIndustry(session('indus_id'));
+
         $exception = Exceptions::select('exception','user_id')->where('type', $type)->get();
+        $nameStrLower = strtolower(substr_replace($name, "", -1)).'_label';
+        $labelName = $getbusindus->$nameStrLower;
 
-        return view('building.'.$BladeName, compact('Building', 'name', 'ColumnName', 'exception', 'users_details', 'ServiceContent'));
-    }
-
-
-    public function storeServiceContent(Request $request)
-    {
-        $data = Input::get();
-        
-        $BusinessTypes = ServiceContent::updateOrCreate(
-            ['business' => $this->businessid, 'business_type_id' => $data['txtBusinessType']],
-            [
-                'type_content' => $data['building_type'],
-                'size_content' => $data['building_size'],
-                'age_content' => $data['building_age'],
-                'add_on_service_content' => $data['add_on_service']
-            ]
-        );
-
-        return redirect('/services/content')->with('message', trans('scheduleze.MessageServiceContent'));
+        return view('building.'.$BladeName, compact('Building', 'name', 'ColumnName', 'exception', 'users_details', 'ServiceContent', 'labelName'));
     }
 
     /**
@@ -138,7 +135,13 @@ class BuildingController extends Controller
                     $selected = 0;
                 }
                 $redirecturl = $data['txtform'];
-                $txtForm = 'App\\'.$data['txtform'];
+
+                if($data['txtform'] == 'Addons') {
+                    $txtForm = 'App\\'.$data['txtform'];
+                }  else {
+                    $txtForm = 'App\\Building'.$data['txtform'];
+                }
+
                 $BuildingTypes = $txtForm::updateOrCreate(
                     ['id' => $data['id'][$key],'removed' => '0'],
                     [
@@ -163,13 +166,13 @@ class BuildingController extends Controller
             }
 
             $type = $data['txtform'];
-            if ($type == 'BuildingTypes'){
+            if ($type == 'Types') {
                 $type = 1;
-            }elseif ($type == 'BuildingSizes') {
+            } elseif ($type == 'Sizes') {
                 $type = 2;
-            }elseif ($type == 'BuildingSizes') {
+            } elseif ($type == 'Ages') {
                 $type = 3;
-            }else{
+            } else {
                 $type = 4;
             }
 
@@ -196,11 +199,11 @@ class BuildingController extends Controller
     {
         $data = Input::get();
         //dd($data);
-        if ($data['type'] == 'BuildingTypes'){
+        if ($data['type'] == 'Types'){
             $type = 1;
-        }elseif ($data['type'] == 'BuildingSizes') {
+        }elseif ($data['type'] == 'Sizes') {
             $type = 2;
-        }elseif ($data['type'] == 'BuildingAges') {
+        }elseif ($data['type'] == 'Ages') {
             $type = 3;
         }else{
             $type = 4;
@@ -268,8 +271,13 @@ class BuildingController extends Controller
     {
         $id = $request->input('id');
         $table = $request->input('table');
-        $ModelTable = 'App\\'.$table;
-        $BuildingTypes = $ModelTable::where('id',$id)->update(['removed'=> 1]);
+        if($table == 'Addons' || $table == 'BusinessTypes' || $table == 'Location') {
+            $ModelTable = 'App\\'.$table;
+        }
+        else {
+            $ModelTable = 'App\\Building'.$table;
+        }
+        $ModelTable::where('id',$id)->update(['removed'=> 1]);
 
         $result = array('msg' => 'Successfully removed!' );
 

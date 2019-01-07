@@ -15,12 +15,16 @@ import { Validator } from 'vee-validate';
 const dict = {
   	custom: {
 	    email: {
-	      required: 'Your email is empty'
+	    	required: 'Your email is empty'
 	    },
 	    name: {
 			required: () => 'Your name is empty',
 			excluded: 'This Username is already taken',
 			included: 'We don\'t have this username in our database.'
+	    },
+	    domain_name: {
+			required: () => 'Domain Name is empty',
+			excluded: 'This Domain is already taken'
 	    }
   	}
 };

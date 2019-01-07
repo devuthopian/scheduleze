@@ -23,7 +23,7 @@ class CreateServiceContentTable20180918 extends Migration
             $table->longText('add_on_service_content')->nullable();
             $table->timestamps();
 
-            $table->foreign('business')->references('id')->on('business');
+            $table->foreign('business')->references('id')->on('business')->onDelete('cascade');
         });
     }
 

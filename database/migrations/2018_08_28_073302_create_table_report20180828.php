@@ -27,7 +27,7 @@ class CreateTableReport20180828 extends Migration
             $table->integer('removed')->nullable()->default('0');
             $table->timestamps();
 
-            $table->foreign('booking')->references('id')->on('bookings');
+            $table->foreign('booking')->references('id')->on('bookings')->onDelete('cascade');
         });
     }
 

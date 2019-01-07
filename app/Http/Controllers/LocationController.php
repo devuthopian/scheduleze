@@ -33,10 +33,9 @@ class LocationController extends Controller
     public function index()
     {
         $businessinfo = Business::find($this->businessid);
+        $locations = '';
         if(!empty($businessinfo->location)){
             $locations = $businessinfo->location;
-        }else{
-            $locations = '';
         }
         
         return view('location.index', compact('businessinfo', 'locations'));
@@ -64,15 +63,17 @@ class LocationController extends Controller
         $data = Input::get();
 
         //for($i = 0; $i < count($data['name']); $i++) {
-        foreach ($data['name'] as $key => $value) {
-            $BuildingTypes = Location::updateOrCreate(
-                ['id' => $data['id'][$key],'removed' => '0'],
-                [
-                    'business' => $businessid,
-                    'name' => $data['name'][$key],
-                    'price' => str_replace('$', '', $data['price'][$key])
-                ]
-            );
+        if(!empty($data['name'])) {
+            foreach ($data['name'] as $key => $value) {
+                $BuildingTypes = Location::updateOrCreate(
+                    ['id' => $data['id'][$key],'removed' => '0'],
+                    [
+                        'business' => $businessid,
+                        'name' => $data['name'][$key],
+                        'price' => str_replace('$', '', $data['price'][$key])
+                    ]
+                );
+            }
         }
 
         return redirect('/scheduleze/appointments')->with('message', trans('scheduleze.MessageforSuccess'));

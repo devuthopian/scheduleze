@@ -2,11 +2,11 @@
 <a href="{{ URL::previous() }}" class="gobutton">Go Back</a>
 <hr> -->
 @php 
-    if(empty(session('id'))){
-        $gjs = PanelTemplate($data['reference_id']);
+    if(empty(session('business_id'))){
+        $gjs = PanelTemplate($data['reference_id'], 'user_id');
     }
     else{
-        $gjs = PanelTemplate(session('id'));
+        $gjs = PanelTemplate(session('business_id'), 'business');
     }
     $userId = Auth::id();
 @endphp
@@ -60,7 +60,7 @@
                 $building_age = '';
             }
             
-            $location = $data['location'];
+            $location = !empty($data['location']) ? $data['location'] : '';
             if(array_key_exists('addons', $data)){
                 $addons = $data['addons'];
             }
@@ -103,6 +103,26 @@
             if(!empty($data['building_size'])){
                 $building_sizes = $data['building_size'];
             }
+
+            if(!empty(session('engage'))) {
+                $engage = session('engage');
+            } else {
+                $engage = get_field('users_details', 'engage', $data['reference_id']);
+            }
+
+            if(!empty(session('business_information.address'))) {
+                $address = session('business_information.address');
+                $city = session('business_information.city');
+                $state = session('business_information.state');
+                $zip = session('business_information.zip');
+                $phone = session('business_information.phone');
+            } else {
+                $address = get_field('business', 'address', $data['reference_id']);
+                $city = get_field('business', 'city', $data['reference_id']);
+                $state = get_field('business', 'state', $data['reference_id']);
+                $zip = get_field('business', 'zip', $data['reference_id']);
+                $phone = get_field('business', 'phone', $data['reference_id']);
+            }
         @endphp
         <table class="accent" width="650">
             <tbody>
@@ -136,7 +156,8 @@
                                     <tr>
                                         <td colspan="3">                                            
                                             <input type="hidden" name="inspector" value="{{ $data[0]['inspector'] }}">
-                                            <input type="hidden" name="location" value="{{ $data['location'] }}">
+                                            <input type="hidden" name="location" value="{{ $location }}">
+                                            <input type="hidden" name="engage" value="{{ $engage }}">
                                             <input type="hidden" name="building_type" value="{{ $data['building_type'] }}">
                                             <input type="hidden" name="building_ages" value="{{ $building_ages }}">
                                             <input type="hidden" name="building_size" value="{{ $building_sizes }}">
@@ -146,7 +167,7 @@
                                             @endif
                                             @if(empty($data[0]['starttime']))
                                                 <span class="subhead">
-                                                    Click menu to view all openings for {!! username($data[0]['inspector']) !!}
+                                                    Click menu to view all openings for {!! usernameAppoint($data[0]['inspector']) !!}
                                                 </span>
                                                 <br>
                                                 @foreach($authorized_inspectors as $qualified_inspector)
@@ -160,16 +181,25 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="3"><span class="formlabel"><b>Inspection {!! getlocation($data['location']) !!}</b></span>
+                                        @if($engage == 1 && !empty($location))
+                                            <td colspan="3"><span class="formlabel"><b>Inspection in {!! getlocation($location) !!}</b></span>
+                                                <br>
+                                                <input type="text" name="requiredInspection_Address" size="40" value="" required>
+                                        @else
+                                            <td colspan="3"><span class="formlabel"><b>Appointment in {{ $city }}</b>
+                                                <input type="hidden" name="requiredInspection_Address" size="40" value="{{ $city }} at {{ $address }}, {{ $state }}, {{ $zip }} #{{$phone}}" required>
+                                                <br>
+                                                at {{ $address }}, {{ $city }}, {{ $state }}, {{ $zip }}</span>
                                             <br>
-                                            <input type="text" name="requiredInspection_Address" size="40" value="" required>
-                                            <br>
-                                            @if(!empty($data[0]['starttime']))
-                                                <span class="note"><b>Beginning at {{ $start_date }}.  <!-- Cost: ${!! CountAppFormCost($data) !!} --></b></span>
-                                            @endif
-                                            <br>
-                                            <!--<span class="note">Home/Condo 2501-3500 sq. ft. ($475)<br>
-        											 Total Cost: $500</span>--></td>
+                                        @endif
+                                                <br>
+                                                @if(!empty($data[0]['starttime']))
+                                                    <span class="note"><b>Beginning at {{ $start_date }}.  <!-- Cost: ${!! CountAppFormCost($data) !!} --></b></span>
+                                                @endif
+                                                <br>
+                                                <!--<span class="note">Home/Condo 2501-3500 sq. ft. ($475)<br>
+            											 Total Cost: $500</span>-->
+                                            </td>
                                     </tr>
                                     <tr>
                                         <td><span class="signuplabel"><b>First name</b></span>

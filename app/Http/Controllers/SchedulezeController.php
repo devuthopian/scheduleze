@@ -13,13 +13,18 @@ use App\PanelTemplate;
 use App\Location;
 use App\UserDetails;
 use App\Reports;
+use App\IndustriesTable;
 use App\ServiceContent;
+use App\BuildingTypes;
+use App\BuildingSizes;
+use App\BuildingAges;
 use Illuminate\Support\Facades\Input;
 use PDF;
 use DB;
 use Validator;
 use Auth;
 use Crypt;
+use Mail;
 use File;
 
 class SchedulezeController extends Controller
@@ -53,6 +58,27 @@ class SchedulezeController extends Controller
     public function terms_policy()
     {
         return view('scheduleze.service_agreement');
+    }
+
+    public function b2bmessage()
+    {
+        $data = Input::get();
+        if(!empty($data)) {
+
+            $email_body = $data['textareaMessage'];
+            $email = $data['txtEmail'];
+            $name = $data['txtName'];
+
+            Mail::send(['html' => 'scheduleze.b2bmail'], ['email_body' => $email_body, 'email' => $email, 'name' => $name ] , function($message) use ($email_body, $name, $email) {
+                $message->to('info@scheduleze.com')->subject('B2B Message');
+                $message->from($email, 'Scheduleze');
+                $message->replyTo($email, $name);
+                $message->setBody("Message from Client:\n\n".$email_body."", 'text/html'); // for HTML rich messages;
+            });
+            return back()->with('message', trans('scheduleze.MessageforSubmit'));
+        }
+
+        return back()->with('warning', trans('scheduleze.MessageforWarning'));
     }
 
     public function mapmyday($location = '', $first = '', $last = '', $id = '')
@@ -94,12 +120,14 @@ class SchedulezeController extends Controller
             //$tt = Booking::where([['inspection_address', 'like', '%'.$firstlocation.'%'],['endtime', '>', $first],['starttime', '<', $last],['removed', '=', 0]])->orderBy('type', 'ASC')->orderBy('starttime', 'ASC')->first();
 
             $tt = Booking::where([['inspection_address', 'like', '%'.$firstlocation.'%'],['removed', '=', 0]])->orderBy('type', 'ASC')->orderBy('starttime', 'ASC')->first();
-
-            $jobname = $tt->building_types;
-            if($tt->zip){
-                $inspection_address = $tt->inspection_address.','.$tt->zip;
-            }else{
-                $inspection_address = $tt->inspection_address;
+            
+            if(!empty($tt)) {
+                $jobname = $tt->building_types;
+                if($tt->zip){
+                    $inspection_address = $tt->inspection_address.','.$tt->zip;
+                }else{
+                    $inspection_address = $tt->inspection_address;
+                }
             }
         }else{
 
@@ -124,7 +152,35 @@ class SchedulezeController extends Controller
         return view('scheduleze.mapmyday', compact('loca', 'jobname', 'first', 'last', 'administration', 'id', 'businessID', 'inspection_address'));
     }
 
-    public function changeContent()
+    //moved to Backend Controller
+    /*public function Industries()
+    {
+        $data = Input::get();
+
+        if(!empty($data['name'])) {
+
+            foreach ($data['name'] as $key => $value) {
+                BusinessTypes::updateOrCreate(
+                    ['id' => $data['id'][$key], 'removed' => '0'],
+                    [
+                        'business' => $data['business'][$key],
+                        'type_label' => $data['type_label'][$key],
+                        'size_label' => $data['size_label'][$key],
+                        'age_label' => $data['age_label'][$key],
+                        'agent_name' => $data['name'][$key],
+                        'addon_label' => $data['addon_label'][$key],
+                        'directory' => strtolower(str_replace(' ', '_', $data['name'][$key])).'/'
+                    ]
+                );
+            }
+        }
+
+        $BusinessTypes = BusinessTypes::where('removed', 0)->get();
+        return view('profiles.Industries', compact('BusinessTypes'));
+    }*/
+
+    //moved to Backend Controller
+    /*public function changeContent()
     {
         $data = Input::get();
         $default = !empty($data) ? $data['txtIndustries'] : '1';
@@ -133,7 +189,7 @@ class SchedulezeController extends Controller
         $ServiceContent = ServiceContent::where([['business', '=', $this->business_id], ['business_type_id', '=', $default]])->first();
 
         return view('profiles.ServiceContent', compact('BusinessTypes', 'ServiceContent'));
-    }
+    }*/
 
     public function confirm_status()
     {
@@ -155,7 +211,9 @@ class SchedulezeController extends Controller
 
     public function scheduling_solutions()
     {
-        if(Auth::id()){
+        $business_id = session('business_id');
+        if(!empty($business_id)) {
+            //if(Auth::id()) {
             return redirect('/scheduleze/booking/appointment');
         }
         //auth()->logout();
@@ -170,7 +228,7 @@ class SchedulezeController extends Controller
     public function ZigZag()
     {
         $id = $this->user_id;
-        $businesshours = BusinessHours::where([['user_id','=',$id],['removed','=',0]])->get();
+        $businesshours = BusinessHours::where([['user_id','=', $id],['removed','=',0]])->get();
 
         //zigzag stuff
         $z = get_field('users_details', 'zigzag', $id);
@@ -192,7 +250,7 @@ class SchedulezeController extends Controller
         $id = $this->user_id;
 
         if ($data['trigger'] == 1) {
-            if ($data['zigzag'] == 1) {
+            if (!empty($data['zigzag']) && $data['zigzag'] == 1) {
                 $act = "Enabled";
                 $zigzag = $data['zigzag'];
                 $zzamount = $data['zigpop'];
@@ -248,7 +306,7 @@ class SchedulezeController extends Controller
             $id = $this->user_id;
         }
         
-        $businesshours = BusinessHours::where([['user_id','=',$id],['removed','=',0]])->get();
+        $businesshours = BusinessHours::where([['user_id','=', $id],['removed','=',0]])->get();
         return view('appointments.business_hours', compact('id', 'businesshours'));
     }
 
@@ -354,7 +412,14 @@ class SchedulezeController extends Controller
         }
         $administration = get_field('users_details', 'administrator', $this->user_id);
 
-        return view('appointments.bookings', compact('id', 'first', 'last', 'order', 'inc', 'form', 'administration', 'tt', 'flag'));
+        $businesshours = BusinessHours::where([['user_id','=', $id],['removed','=',0]])->get();
+
+        $LocationTime = LocationTime::where([['business', '=', $this->business_id],['removed', '=', 0]])->orderBy('start', 'ASC')->get()->toArray();
+        $Location = Location::where([['business','=', $this->business_id],['removed','=',0]])->get()->toArray();
+
+        $BuildingTypes = BuildingTypes::where([['business','=', $this->business_id],['removed','=',0]])->get()->toArray();
+
+        return view('appointments.bookings', compact('id', 'first', 'last', 'order', 'inc', 'form', 'administration', 'tt', 'flag', 'businesshours', 'LocationTime', 'Location', 'BuildingTypes'));
     }
 
     public function storeBlockout(Request $request, $form)
@@ -362,7 +427,10 @@ class SchedulezeController extends Controller
         $data = Input::get();
         check_permission($data['users_details']);
 
-        $location = $data['location'];
+        $location = '';
+        if(!empty($data['location'])) {
+            $location = $data['location'];
+        }
 
         $starttime = $data['hourstarttime'][0].":".$data['minutestarttime'][0]." ".$data['amstarttime'][0]." ".$data['monthstarttime'][0]."/".$data['daystarttime'][0]."/".$data['yearstarttime'][0];
 
@@ -436,9 +504,16 @@ class SchedulezeController extends Controller
         $tt = array();
 
         $flag = 0;
+        $businesshours = BusinessHours::where([['user_id','=', $id],['removed','=',0]])->get();
 
-        /*$businesshours = BusinessHours::where([['user_id','=',$id],['removed','=',0]])->get();*/
-        return view('appointments.bookings', compact('id', 'first', 'last', 'form', 'administration', 'tt', 'flag'));
+        $LocationTime = LocationTime::where([['business', '=', $this->business_id],['removed', '=', 0]])->orderBy('start', 'ASC')->get()->toArray();
+        $Location = Location::where([['business','=', $this->business_id],['removed','=',0]])->get()->toArray();
+
+        $BuildingTypes = BuildingTypes::where([['business','=', $this->business_id],['removed','=',0]])->get()->toArray();
+        //$BuildingSizes = BuildingSizes::where([['business','=', $this->business_id],['removed','=',0]])->get()->toArray();
+        //$BuildingAges = BuildingAges::where([['business','=', $this->business_id],['removed','=',0]])->get()->toArray();
+
+        return view('appointments.bookings', compact('id', 'first', 'last', 'form', 'administration', 'tt', 'flag', 'businesshours', 'LocationTime', 'Location', 'BuildingTypes'));
     }
 
     public function Documents()
@@ -612,8 +687,8 @@ class SchedulezeController extends Controller
         }
 
         $building_age = 0;
-        if (isset($data['building_age']) > 0){
-            if($data['building_age'] > 0){
+        if (isset($data['building_age']) > 0) {
+            if($data['building_age'] > 0) {
                 $building_age = $data['building_age'];
             }
         }
@@ -626,9 +701,10 @@ class SchedulezeController extends Controller
         }
 
         $this_total_price = get_total_price($building_type, $building_size, $building_age, $data['location'], $addons);
+        $full_description = get_full_description($building_type, $building_size, $building_age);
 
-        if (isset($data['quote_override'])){
-            if($data['quote_override'] == 1){
+        if (isset($data['quote_override'])) {
+            if($data['quote_override'] == 1) {
                 $this_total_price = str_replace("$", "", $_POST['price']);
             }
         }
@@ -638,8 +714,10 @@ class SchedulezeController extends Controller
         $lastname = $data['Lastname'];
         $address = $data['Current_Address'];
         $state = $data['State'];
-        $dayphone = $data['Phone'];
-        $homephone = $data['phone2'];
+        $dayphone = preg_replace('/[^A-Za-z0-9\-]/', '', $data['Phone']);
+        $homephone = preg_replace('/[^A-Za-z0-9\-]/', '', $data['phone2']);
+        //$dayphone = $data['Phone'];
+        //$homephone = $data['phone2'];
         $city = $data['City'];
         $zip = $data['ZIP'];
         $email = $data['Email'];
@@ -664,6 +742,10 @@ class SchedulezeController extends Controller
 
         if (check_permission($inpector_attempt_hit)){
             $edited = time();
+        }
+
+        if ($price > 0){
+            $print_price = ("Cost: $".($price)." plus tax");
         }
 
         //$sql = make_sql($sq, "bookings", "update", "id", "$_POST[target]");
@@ -717,6 +799,93 @@ class SchedulezeController extends Controller
             }
         }
 
+        $agent_name2 = "<br>Agent Information:<br>&nbsp;Agent Name: ".!empty($agent_name) ? $agent_name : ''."<br>";
+        $agent_phone2 = "&nbsp;Agent Phone: ".!empty($agent_phone) ? $agent_phone : ''."<br>";
+        $agent_email2 = "&nbsp;Agent Email: ".!empty($agent_email) ? $agent_email : ''."<br>";
+
+        $adds_info = '';
+        $addons_description = '';
+        if(!empty($data['addon'])){
+            $adds_info = format_addons($data['addon']);
+            $addons_description = $adds_info['services'];
+        }
+
+        $clean_addons = '';
+        if(!empty($data['addons_description'])) {
+            if (strlen($data['addons_description']) > 2) {
+                $clean_addons = "&nbsp;";
+                $clean_addons .= str_replace("<br>", "", $data['addons_description']);
+                $clean_addons .= "<br>";
+            }
+        }
+
+        $location_name = get_field('locations', 'name', $location);
+
+        if(session('engage') == 1) {
+            $inspect = 'Inspection';
+        }
+        else {
+            $inspect = 'Inspector';
+        }
+
+        if(isset($data['send_confirm'])) {
+            $email_body = $inspect." Address: ".$inspection_address." in ".$location_name."<br><br>";
+            $email_body .= $inspect." Booked for:<br>";
+            $email_body .= "&nbsp;&nbsp;&nbsp;".$firstname." ".$lastname."<br>";
+
+            if(!empty($address)){
+                $email_body .= "&nbsp;&nbsp;&nbsp;".$address."<br>&nbsp;".$city." ".$state."  ".$zip."<br>";
+            }
+
+            $added = time();
+
+            $start_date = date ("g:i a, F jS", $starttime);
+            $inspector_name = get_field('users', 'name', $Booking->user_id);
+
+            $email_body .= "&nbsp;&nbsp;&nbsp;Cell phone: ".$dayphone."<br>";
+            $email_body .= "&nbsp;&nbsp;&nbsp;Work phone: ".$homephone."<br>";
+            $email_body .= "&nbsp;&nbsp;&nbsp;E-mail: ".$email."<br><br>";
+            $email_body .= "Appointment time: ".$start_date."<br>";
+            $email_body .= "&nbsp;&nbsp;&nbsp;Inspector: ".$inspector_name."<br>";
+            $email_body .= "&nbsp;&nbsp;&nbsp;Appointment Type: ".$full_description."<br>";
+            $email_body .= "&nbsp;&nbsp;&nbsp;".$print_price."<br>";
+            $email_body .= "".$clean_addons."<br><br>";
+
+            $email_body .= "Agent Information: <br>";
+            $email_body .= "&nbsp;&nbsp;&nbsp;Agent Name: ".$agent_name2."<br>";
+            $email_body .= "&nbsp;&nbsp;&nbsp;Agent Phone: ".$agent_phone2."<br>";
+            $email_body .= "&nbsp;&nbsp;&nbsp;Agent Email: ".$agent_email2."<br><br>";
+
+            $attachment = Business::select('email_attachment')->where('id', $business)->first();
+            $timezone = get_field('business', 'timezone', $business);
+            $business_name = session('business_information.name');
+            $start = date("g:i a, l, F jS", $starttime);
+
+            if(!empty($notes)){
+                $email_body .= "Note: ".$notes."<br><br>";
+            }
+
+            $email_body .= ("<br>Reservation made at: ".date("g:i a, F jS", ($added + $timezone)));
+            $email_body .= "<br>Thanks for using ".$business_name."!<br>";
+            //$email_body .= "".$includes[email_footer]."\n\n";
+            
+            $email_body = stripslashes($email_body);
+
+            $text = "<h2>You have received an on-line booking for ".$start." with the following information:</h2><br> <h2>IMPORTANT NOTICE:</h2> <i>A copy of our ".$inspect." Agreement is attachment for your review prior to the inspection.</i><br>";
+
+            Mail::send(['html' => 'appointments.mail'], ['email_body' => $email_body, 'emails' => $email, 'text' => $text, 'attachment' => $attachment] , function($message) use ($email_body, $email, $text, $attachment) {
+                $message->to($email)->subject('On-line '.$inspect.' booking');
+                $message->from('support@scheduleze.com', 'Scheduleze');
+                $message->replyTo('noreply@scheduleze.com', 'no Reply');
+
+                if(isset($data['send_agreement'])) {
+                    if(file_exists('/attachments/'.$business.'/'.$attachment->email_attachment)){
+                        $message->attach('/attachments/'.$business.'/'.$attachment->email_attachment);
+                    }
+                }
+            });
+        }
+
         if($flash == 1){
             return redirect('/scheduleze/booking/edit/'.$id)->withErrors(trans('scheduleze.AppointmentWarning'));
         }
@@ -728,40 +897,43 @@ class SchedulezeController extends Controller
     {
         $userid = $this->user_id;
         $booking = Booking::where('id', $id)->first();
+        if(!empty($booking)) {
+            $location_popup = get_location_popup($booking->location);
 
-        $location_popup = get_location_popup($booking->location);
+            $business = $this->business_id; //get business id from session
+            $type_pop = get_pricing_popup($business, "building_types", "building_type", "smallselect", $booking->building_type);
+            $size_pop = get_pricing_popup($business, "building_sizes", "building_size",  "smallselect", $booking->building_size);
+            $age_pop = get_pricing_popup($business, "building_ages", "building_age", "smallselect", $booking->building_age);
 
-        $business = $this->business_id; //get business id from session
-        $type_pop = get_pricing_popup($business, "building_types", "building_type", "smallselect", $booking->building_type);
-        $size_pop = get_pricing_popup($business, "building_sizes", "building_size",  "smallselect", $booking->building_size);
-        $age_pop = get_pricing_popup($business, "building_ages", "building_age", "smallselect", $booking->building_age);
+            $inspector_popup = get_inspector_popup('name', $userid);
 
-        $inspector_popup = get_inspector_popup('name', $userid);
-
-        $start_popup = get_time_popup ($booking->starttime, $designate = "", 1, 1, 1, 1, 1, 1, 'starttime');
-        $end_popup = get_time_popup (($booking->endtime + 2), $designate = "1", 1, 1, 1, 1, 1, 1, 'endtime');
+            $start_popup = get_time_popup ($booking->starttime, $designate = "", 1, 1, 1, 1, 1, 1, 'starttime');
+            $end_popup = get_time_popup (($booking->endtime + 2), $designate = "1", 1, 1, 1, 1, 1, 1, 'endtime');
 
 
-        //$ss = "select addon from addons_bookings where booking = '$row[id]'";
-        $addons_edit = DB::table('addons_bookings')->select('addon')->where('booking', $booking->id)->get()->toArray();
+            //$ss = "select addon from addons_bookings where booking = '$row[id]'";
+            $addons_edit = DB::table('addons_bookings')->select('addon')->where('booking', $booking->id)->get()->toArray();
 
-        //$addons_edit = $l->pull_flat_multi($ss);
-        if(empty($addons_edit)){
-            $addons_edit = '';
-        }else{
-            $c=0;
-            foreach ($addons_edit as $value) {
-                $addons_edit[$c] = $value->addon;
-                $c++;
+            //$addons_edit = $l->pull_flat_multi($ss);
+            if(empty($addons_edit)){
+                $addons_edit = '';
+            }else{
+                $c=0;
+                foreach ($addons_edit as $value) {
+                    $addons_edit[$c] = $value->addon;
+                    $c++;
+                }
             }
+
+            $add_on_checkboxes = get_addon_checkboxes("addons", "id", "name", "addon", "", "rank", "ASC", "40", $addons_edit, 3);
+
+            $groupdata = array('userid' => $userid, 'booking' => $booking, 'location_popup' => $location_popup, 'type_pop' => $type_pop, 'size_pop' => $size_pop, 'age_pop' => $age_pop, 'start_popup' => $start_popup, 'end_popup' => $end_popup, 'add_on_checkboxes' => $add_on_checkboxes, 'id' => $id);
+
+            
+            return view('appointments.editbooking', compact('groupdata', 'inspector_popup'));
+        } else {
+            return back()->with('message', 'Unknown Query'); 
         }
-
-        $add_on_checkboxes = get_addon_checkboxes("addons", "id", "name", "addon", "", "rank", "ASC", "40", $addons_edit, 3);
-
-        $groupdata = array('userid' => $userid, 'booking' => $booking, 'location_popup' => $location_popup, 'type_pop' => $type_pop, 'size_pop' => $size_pop, 'age_pop' => $age_pop, 'start_popup' => $start_popup, 'end_popup' => $end_popup, 'add_on_checkboxes' => $add_on_checkboxes, 'id' => $id);
-
-        
-        return view('appointments.editbooking', compact('groupdata', 'inspector_popup'));
     }
 
     public function DeleteBooking($id)
@@ -774,13 +946,18 @@ class SchedulezeController extends Controller
             $appoint = "blockout";
         } else {
             $appoint = "booking";
-        }       
+        }
 
-        $update = Booking::where('id', $id)->update(['removed' => 1]);
+        $bookID = Booking::where('id', $id)->delete();
+        if($bookID) {
+            return back()->with('message', $appoint.' Removed!');
+        }
+
+        /*$update = Booking::where('id', $id)->update(['removed' => 1]);
 
         if($update == 1){
             return back()->with('message', $appoint.' Removed!');
-        }
+        }*/
 
         return back()->with('message', trans('scheduleze.MessageforDeleteBooking'));
 
@@ -918,13 +1095,14 @@ class SchedulezeController extends Controller
         }
         $content_string = "RewriteEngine On\n";
 
+        $serverName = $_SERVER['SERVER_NAME'];
         // change www.website.com for your website
-        $content_string .= "Redirect 301 / http://scheduleze20.com/template/".$panelurl."\n";
+        $content_string .= "Redirect 301 / http://".$serverName."/template/".$panelurl."\n";
         File::put($destinationPath.$file, $content_string);
         $destinationPath = storage_path('upload/'.$file);
         //return response()->download($destinationPath);
 
-        return redirect('/scheduling/schedulepanel')->with('message', 'Please download the file <a href="http://scheduleze20.com/schedulepanel/'.$file.'">.htaccess file</a>');
+        return redirect('/scheduling/schedulepanel')->with('message', 'Please download the file <a href="http://'.$serverName.'/schedulepanel/'.$file.'">.htaccess file</a> and paste it into your root folder i.e in public_html in '.$file.' server.');
         //return redirect('/scheduling/schedulepanel')->with('message', 'success');
     }
 

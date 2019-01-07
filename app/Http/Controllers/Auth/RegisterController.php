@@ -14,6 +14,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\VerifyMail;
 use Illuminate\Http\Request;
+use DB;
 class RegisterController extends Controller
 {
     /*
@@ -87,11 +88,16 @@ class RegisterController extends Controller
             'token' => str_random(40)
         ]);
 
-        UserDetails::create([
+        $userdetails = UserDetails::create([
             'user_id' => $user->id,
             'indus_id' => $data['txtIndustries'],
+            'engage' => $data['txtEngage'],
             'permission' => 1
         ]);
+
+        $users = User::firstOrNew(array('id' => $user->id));
+        $users->users_details_id = $userdetails->id;
+        $users->save();
 
         Mail::to($user->email)->send(new VerifyMail($user));
 
@@ -142,20 +148,22 @@ class RegisterController extends Controller
 
         $check_reg = Business::where('user_id', $verifyUser->user_id)->first();
         $username = User::where('id', $verifyUser->user_id)->select('name')->first();
+        $engageStyle = DB::table('users_details')->where('user_id', $verifyUser->user_id)->select('engage')->first();
+
         if(isset($check_reg )){
             if(!$check_reg->registration_completed){
-                return view('auth.account_info', compact('username'));
+                return view('auth.account_info', compact('username', 'engageStyle'));
             } else {
                 return redirect('/login')->with('warning', trans('auth.MessageforRegisterWarning'));
             }
         } else{
-            return view('auth.account_info', compact('username'));
+            return view('auth.account_info', compact('username', 'engageStyle'));
         }
     }
 
     public function account_info_save(Request $request)
     {
-        $validatedData = Validator::make($request->all(), [
+        /*$validatedData = Validator::make($request->all(), [
             'name' => 'required',
             'contact_firstname' => 'required',
             'contact_lastname' => 'required',
@@ -165,14 +173,12 @@ class RegisterController extends Controller
             'zip' => 'required',
             'phone' => 'required',
             'public_phone' => 'required',
-            //'timezone' => $request->input('timezone'),
-            'website' => 'required',
-            'email2' => 'required'
+            'website' => 'required'
         ]);
 
         if ($validatedData->fails()) {
             return back()->withErrors($validatedData)->withInput();
-        }
+        }*/
 
         $user_token = $request->input('user_token'); // option 1
         $verifyUser = VerifyUser::where('token', $user_token)->first();
@@ -194,6 +200,7 @@ class RegisterController extends Controller
                     'website' => $request->input('business_website'),
                     'email2' => $request->input('requested_email'),
                     'registration_completed' => '1',
+                    'first_screen_note' => $request->input('use_scheduleze'),
                 ]);
                 /*UserDetails::create([
                     'user_id' => $verifyUser->user_id,
@@ -205,6 +212,8 @@ class RegisterController extends Controller
 
                 $userdetails = UserDetails::firstOrNew(array('user_id' => $verifyUser->user_id));
                 $userdetails->business = $business->id;
+                $userdetails->name = $request->input('contact_firstname');
+                $userdetails->lastname = $request->input('contact_lastname');
                 $userdetails->administrator = 1;
                 $userdetails->save();
 

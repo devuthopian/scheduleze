@@ -24,7 +24,7 @@ class CreatePanelDefualt20180925 extends Migration
             $table->string('unique_url')->unique();
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

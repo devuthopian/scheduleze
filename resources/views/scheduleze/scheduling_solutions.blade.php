@@ -25,7 +25,7 @@
                         <a href="#">Get Started</a>
                     </div>
                     <div class="col-sm-6">
-                        <img src="{{ url('images/ban-thum.png') }}" alt="">
+                        <img src="{{ url('images/ban-thum.jpg') }}" alt="">
                     </div>
                 </div>
                 <div class="item">
@@ -34,7 +34,7 @@
                         <a href="#">Get Started</a>
                     </div>
                     <div class="col-sm-6">
-                        <img src="{{ url('images/ban-thum1.png') }}" alt="">
+                        <img src="{{ url('images/ban-thum1.jpg') }}" alt="">
                     </div>
                 </div>
                 <div class="item">
@@ -43,7 +43,7 @@
                         <a href="#">Get Started</a>
                     </div>
                     <div class="col-sm-6">
-                        <img src="{{ url('images/testimonial_img.png') }}" alt="">
+                        <img src="{{ url('images/testimonial_img.jpg') }}" alt="">
                     </div>
                 </div>
             </div>
@@ -188,7 +188,7 @@
             <div class="carousel-inner">
                 <div class="item active">
                     <div class="col-sm-4">
-                        <img src="{{ url('images/testimonial_img.png') }}" alt="">
+                        <img src="{{ url('images/testimonial_img.jpg') }}" alt="">
                     </div>
                     <div class="col-sm-8">
                         <div class="testi_text">
@@ -200,7 +200,7 @@
                 </div>
                 <div class="item">
                     <div class="col-sm-4">
-                        <img src="{{ url('images/testimonial_img1.png') }}" alt="">
+                        <img src="{{ url('images/testimonial_img1.jpg') }}" alt="">
                     </div>
                     <div class="col-sm-8">
                         <div class="testi_text">
@@ -212,7 +212,7 @@
                 </div>
                 <div class="item">
                     <div class="col-sm-4">
-                        <img src="{{ url('images/testimonial_img.png') }}" alt="">
+                        <img src="{{ url('images/testimonial_img.jpg') }}" alt="">
                     </div>
                     <div class="col-sm-8">
                         <div class="testi_text">

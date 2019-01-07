@@ -14,8 +14,8 @@ class AlterPanelTemplate20181002 extends Migration
     public function up()
     {
         Schema::table('panel_template', function (Blueprint $table) {
-            $table->unsignedInteger('business')->after('user_id');
-            $table->foreign('business')->references('id')->on('business');
+            //$table->unsignedInteger('business')->after('user_id');
+            //$table->foreign('business')->references('id')->on('business');
         });
     }
 

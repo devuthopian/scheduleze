@@ -57,6 +57,8 @@ class AddBusinesstable20180716 extends Migration
             $table->bigInteger('registration_email_date')->unsigned()->nullable();
             $table->tinyInteger('registration_completed')->unsigned()->default('0');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

@@ -222,7 +222,7 @@ $GOOGLE_MAP_KEY = env('GOOGLE_MAP_KEY');
 
 								directionsService.route({
 									origin: current_address,
-									destination: '{{$formatted_address[count($formatted_address)-1]}}',
+									destination: current_address,
 									waypoints: waypts,
 									optimizeWaypoints: true,
 									travelMode: 'DRIVING'
@@ -319,10 +319,10 @@ $GOOGLE_MAP_KEY = env('GOOGLE_MAP_KEY');
 							var waypts = [];
                             console.log(current_address);
 
-							waypts.push({
+							/*waypts.push({
 								location: '{{$inspection_address}}',
 								stopover: true
-							});
+							});*/
 
 							directionsService.route({
 								origin: current_address,

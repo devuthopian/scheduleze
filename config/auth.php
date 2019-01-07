@@ -50,6 +50,11 @@ return [
             'driver' => 'token',
             'provider' => 'users',
         ],
+
+        'backend' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
     ],
 
     /*
@@ -75,14 +80,14 @@ return [
             'model' => App\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
-
         'inspectors' => [
             'driver' => 'eloquent',
             'model' => App\InspectorAuth::class,
+        ],
+
+        'backend' => [
+            'driver' => 'eloquent',
+            'model' => App\User::class,
         ],
     ],
 

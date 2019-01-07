@@ -21,6 +21,32 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('/faq', 'SchedulezeController@faq')->name('faq');
 	Route::get('/signup', 'SchedulezeController@signup')->name('signup');
 	Route::get('/contact', 'SchedulezeController@contact')->name('contact');
+
+	Route::post('b2b', 'SchedulezeController@b2bmessage');
+
+	/*Route::get('/backend', 'Backend\BackendController@index');
+	Route::get('/backend/login', 'Auth\LoginController@LoginForm');*/
+
+	Route::group(['prefix' => 'backend', 'namespace' => 'Backend'], function () {
+	    Route::get('/', 'Auth\LoginController@showLoginForm');
+	    Route::post('login', 'Auth\LoginController@login')->name('backend.login');
+	    
+	    Route::get('register', 'Auth\RegisterController@showRegistrationForm');
+	    Route::post('register', 'Auth\RegisterController@register')->name('backend.register');
+	});
+
+	Route::group(['middleware' => ['web', 'backend']], function () {
+		Route::group(['prefix' => 'backend', 'namespace' => 'Backend'], function () {
+			Route::get('/services/industries', 'BackendController@index');
+			Route::post('/services/industries', 'BackendController@index')->name('storeIndustries');
+
+			Route::get('/services/content', 'BackendController@changeContent');
+			Route::post('/services/content', 'BackendController@changeContent');
+			Route::post('/services/storeServiceContent', 'BackendController@storeServiceContent');
+			Route::post('logout', 'Auth\LoginController@logout')->name('backend.logout');
+		});
+	});
+
 	Route::get('/user/verify/{token}', 'Auth\RegisterController@verifyUser');
 
 	Route::get('/cookie/set', 'CookieController@setCookie');
@@ -93,8 +119,9 @@ Route::group(['middleware' => ['web']], function () {
 		Route::post('/scheduleze/booking/{form?}','SchedulezeController@BookingFilter');
 		Route::get('/scheduleze/blockout/{form?}/{id?}','SchedulezeController@Blockout');
 		Route::post('/scheduleze/blockout/{form?}','SchedulezeController@storeBlockout');
-		Route::get('/services/content', 'SchedulezeController@changeContent');
-		Route::post('/services/content', 'SchedulezeController@changeContent');
+
+		
+
 		Route::get('/scheduleze/mapmyday/{location?}', 'SchedulezeController@mapmyday');
 		Route::post('/scheduleze/mapmyday', 'SchedulezeController@mapmyday');
 
@@ -125,15 +152,12 @@ Route::group(['middleware' => ['web']], function () {
 		Route::get('/form/{name?}', 'BuildingController@index')->name('Building');
 		Route::post('/storebuild', 'BuildingController@store')->name('storebuild');
 		Route::post('/storeException', 'BuildingController@storeException');
-		Route::post('/services/storeServiceContent', 'BuildingController@storeServiceContent');
 		
 
 		Route::post('/ajaxrequest', 'BuildingController@updatebuild');
 
 		Route::get('/business/Location', 'LocationController@index')->name('Location');
 		Route::post('/store', 'LocationController@store')->name('storelocation');
-
-		
 
 		Route::get('/profile/{id?}', 'ProfileController@UserProfile')->name('profile');
 		Route::get('/profile/remove/{id?}', 'ProfileController@RemoveUserProfile');

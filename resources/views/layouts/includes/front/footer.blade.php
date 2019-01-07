@@ -21,7 +21,11 @@
                     <p>Email:<br> General Email:<br> info@scheduleze.com </p>
                 </div>
             </div> -->
+            @php 
+                $strchr = substr(strrchr(url()->current(),"/"),1); 
+            @endphp
             @guest
+            @if($strchr != 'ConfirmStatus')
             <div class="footer_bottom">
 
                 <div class="col-sm-4">
@@ -29,6 +33,7 @@
                     <p>Thanks for your interest in Scheduleze. Please contact us<br>
                         at one of these cell-phone free email addresses.
                     </p>
+                    <span><a href="#" data-toggle="modal" data-target="#myModalTerms">B2B Inquiries</a></span>
                 </div>
 
                 <div class="col-sm-4">
@@ -44,51 +49,62 @@
                         </ul>
                     </div>
                 </div>
-                @php 
-                $strchr = substr(strrchr(url()->current(),"/"),1); 
-                @endphp
+            @endif
+                
 
-                @if($strchr != 'login' && $strchr != 'account_info')
-                <div class="col-sm-4" id="signup">
-                    <h3>Try it now free for <br>30 days</h3>
-                    @php
-                        $allindustries = getallIndustries();
-                        $get_all_usernames = get_all_usernames('users', 'name');
-                        $get_key_usernames = array_values(array_filter($get_all_usernames));
-                        $key_username = implode(",", $get_key_usernames);
-                    @endphp
-                    <form method="POST" action="{{ route('register') }}" aria-label="{{ __('Register') }}" id="PostForm" class="form" @submit.prevent="validateBeforeSubmit">
-                        @csrf
+                @if($strchr != 'login' && $strchr != 'account_info' && $strchr != 'ConfirmStatus')
+                    <div class="col-sm-4" id="signup">
+                        <h3>Try it now free for <br>30 days</h3>
+                        @php
+                            $allindustries = getallIndustries();
+                            $allEngage = getAllEngage();
+                            $get_all_usernames = get_all_usernames('users', 'name');
+                            $get_key_usernames = array_values(array_filter($get_all_usernames));
+                            $key_username = implode(",", $get_key_usernames);
+                        @endphp
+                        <form method="POST" action="{{ route('register') }}" aria-label="{{ __('Register') }}" id="PostForm" class="form" @submit.prevent="validateBeforeSubmit">
+                            @csrf
 
-                        <select name="txtIndustries" v-validate="'excluded:-1'" data-vv-as="selected">
-                            <option value="-1">Select Industrial</option>
-                            @foreach($allindustries as $key => $industries)
-                            <option  value="{{ $key }}">{{ $industries }}</option>
-                            @endforeach
-                        </select>
-                        <i v-show="errors.has('txtIndustries')" class="fa fa-warning"></i>
-                        <span v-show="errors.has('txtIndustries')" class="help is-danger">@{{ errors.first('txtIndustries') }}</span>
+                            <!-- Industries Dropdown -->
+                            <select name="txtIndustries" v-validate="'excluded:-1'" data-vv-as="selected">
+                                <option value="-1">Select Industrial</option>
+                                @foreach($allindustries as $key => $industries)
+                                    <option  value="{{ $key }}">{{ $industries }}</option>
+                                @endforeach
+                            </select>
+                            <i v-show="errors.has('txtIndustries')" class="fa fa-warning"></i>
+                            <span v-show="errors.has('txtIndustries')" class="help is-danger">@{{ errors.first('txtIndustries') }}</span>
 
-                        <input type="text" name="email" v-validate="'required|email'" :class="{'input': true, 'is-danger': errors.has('email') }" placeholder="Business Email" />
-                        <i v-show="errors.has('email')" class="fa fa-warning"></i>
-                        <span v-show="errors.has('email')" class="help is-danger">@{{ errors.first('email') }}</span>
+                            <!-- Engage Dropdown -->
+                            <select name="txtEngage" v-validate="'excluded:-1'" data-vv-as="selected">
+                                <option value="-1">How do you engage your Customers?</option>
+                                @foreach($allEngage as $key => $engage)
+                                    <option  value="{{ $key }}">{{ $engage }}</option>
+                                @endforeach
+                            </select>
+                            <i v-show="errors.has('txtEngage')" class="fa fa-warning"></i>
+                            <span v-show="errors.has('txtEngage')" class="help is-danger">@{{ errors.first('txtEngage') }}</span>
 
-                        <input type="text" name="name" v-validate="'required|alpha|excluded:{{ $key_username }}'" :class="{'input': true, 'is-danger': errors.has('name')}" placeholder="Username">
-                        <i v-show="errors.has('name')" class="fa fa-warning"></i>
-                        <span v-show="errors.has('name')" class="help is-danger">@{{ errors.first('name') }}</span>
-                        <!--  <signupform-component></signupform-component> -->
+                            <input type="text" name="email" v-validate="'required|email'" :class="{'input': true, 'is-danger': errors.has('email') }" placeholder="Business Email" />
+                            <i v-show="errors.has('email')" class="fa fa-warning"></i>
+                            <span v-show="errors.has('email')" class="help is-danger">@{{ errors.first('email') }}</span>
 
-                        <p>Before you can complete your registration, you must accept our <a href="{{ url('terms_policy') }}" target="_blank" title="Terms of Service">Terms of Service</a>.</p>
-                        <div class="bussthree_cont">
-                            <div class="form-group">
-                                <input name="term_checkbox" type="checkbox" id="agree_term" value="check" @click="clickagreementcheck">
-                                <label for="agree_term" class="control-label">I accept the Terms of Service</label>
+                            <input type="text" name="name" v-validate="'required|alpha|excluded:{{ $key_username }}'" :class="{'input': true, 'is-danger': errors.has('name')}" placeholder="Username">
+                            <i v-show="errors.has('name')" class="fa fa-warning"></i>
+                            <span v-show="errors.has('name')" class="help is-danger">@{{ errors.first('name') }}</span>
+                            <!--  <signupform-component></signupform-component> -->
+
+                            <p>Before you can complete your registration, you must accept our <a href="{{ url('terms_policy') }}" target="_blank" title="Terms of Service">Terms of Service</a>.</p>
+                            <div class="bussthree_cont">
+                                <div class="form-group">
+                                    <input name="term_checkbox" type="checkbox" id="agree_term" value="check" @click="clickagreementcheck">
+                                    <label for="agree_term" class="control-label">I accept the Terms of Service</label>
+                                </div>
                             </div>
-                        </div>
-                        <input class="btn cls-agree-btn" type="submit" value="TRY IT NOW" disabled name="">
-                    </form>
-                </div>
-                <script src="{{ asset('js/app.js') }}"></script>
+                            <input class="btn cls-agree-btn" type="submit" value="TRY IT NOW" disabled name="">
+                        </form>
+                    </div>
+                    <script src="{{ asset('js/app.js') }}" defer></script>
                 @endif
 
             </div>
@@ -159,25 +175,50 @@
             </div>
         </div>
 
-        <!-- <div id="myModalTerms" class="modal fade" role="dialog">
+        <div id="myModalTerms" class="modal fade" role="dialog">
             <div class="modal-dialog">
-        
-                Modal content
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Modal Header</h4>
+                        <h4 class="modal-title">We look forward to hearing about future business opportunities; however, our #1 priority is to our subscribers. Please send us your message in the space provided; we will cheerfully reply as time permits. Thank you</h4>
                     </div>
-                    <div class="modal-body">
-                        <p>Some text in the modal.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
+                    <form action="{{ url('/b2b') }}" method="post">
+                        @csrf
+                        <div class="modal-body">
+                            <div>
+                                <div class="container">
+                                    <div class="form-group">
+                                        <div class="col-sm-12">
+                                            {!! Form::label('email', 'Your Email', array('class' => 'control-label')); !!}
+                                            <input type="email" name="txtEmail" class="form-control" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-sm-12">
+                                            {!! Form::label('name', 'Your Name', array('class' => 'control-label')); !!}
+                                            <input type="text" name="txtName" class="form-control" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-sm-12">
+                                            {!! Form::label('message', 'Message', array('class' => 'control-label')); !!}
+                                            <textarea class="form-control" name="textareaMessage" rows="5" required></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" name="txtSubmit" class="btn" value="Send" style="width: auto;">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
                 </div>
         
             </div>
-        </div> -->
+        </div>
 
         <div class="copyright_section">
             <div class="container">

@@ -25,8 +25,8 @@ class CreateAppointmentFormTable20180809 extends Migration
             $table->string('unique_url')->unique();
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('panel_id')->references('id')->on('panel_template');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('panel_id')->references('id')->on('panel_template')->onDelete('cascade');
         });
     }
 

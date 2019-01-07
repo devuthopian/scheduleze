@@ -62,7 +62,7 @@
 							</td>
 						</tr>
 						<tr>
-							<a href="" class="add_columnfor_location" id="add_columnfor_location" @click="addcolumnlocation">Add Column</a>
+							<a href="" class="add_columnfor" id="add_columnfor" @click="addcolumnlocation">Add Column</a>
 						</tr>
 					</tbody>
 				</table>

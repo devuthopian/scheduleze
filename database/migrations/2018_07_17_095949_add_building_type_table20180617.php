@@ -27,7 +27,7 @@ class AddBuildingTypeTable20180617 extends Migration
             $table->timestamps();
 
             $table->index('name',150)->unsigned()->nullable();
-            $table->foreign('business')->references('id')->on('business');
+            $table->foreign('business')->references('id')->on('business')->onDelete('cascade');;
         });
     }
 

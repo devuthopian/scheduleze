@@ -19,8 +19,8 @@ class CreateAddonsBookingTable20180814 extends Migration
             $table->unsignedInteger('booking')->nullable()->default('0');
             $table->timestamps();
 
-            $table->foreign('booking')->references('id')->on('bookings');
-            $table->foreign('addon')->references('id')->on('addons');
+            $table->foreign('booking')->references('id')->on('bookings')->onDelete('cascade');
+            $table->foreign('addon')->references('id')->on('addons')->onDelete('cascade');
         });
     }
 

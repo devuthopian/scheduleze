@@ -23,7 +23,7 @@ class AddAppointmentPanelFormTable20180801 extends Migration
             $table->longText('gjs_components')->nullable();
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

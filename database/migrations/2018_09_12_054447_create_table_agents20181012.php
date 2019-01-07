@@ -24,7 +24,7 @@ class CreateTableAgents20181012 extends Migration
             $table->integer('removed')->nullable()->default('0');
             $table->timestamps();
 
-            $table->foreign('business')->references('id')->on('business');
+            $table->foreign('business')->references('id')->on('business')->onDelete('cascade');
         });
     }
 

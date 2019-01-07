@@ -76,7 +76,7 @@ class ProfileController extends Controller
     public function SaveEmailAttachment(Request $request)
     {
         Validator::make($request->file(), [
-            'file' => 'required|max:10000|mimes:doc,docx,pdf',
+            'file' => 'required|max:10000|mimes:doc,docx,pdf,jpg',
         ])->validate();
 
         $data = Input::get();
@@ -223,13 +223,14 @@ class ProfileController extends Controller
         }
         $content_string = "RewriteEngine On\n";
 
+        $serverName = $_SERVER['SERVER_NAME'];
         // change www.website.com for your website
-        $content_string .= "Redirect 301 / http://scheduleze20.com/template/".$panelurl."\n";
+        $content_string .= "Redirect 301 / http://".$serverName."/template/".$panelurl."\n";
         File::put($destinationPath.$file, $content_string);
         $destinationPath = storage_path('upload/'.$file);
         //return response()->download($destinationPath);
 
-        return redirect('/business_info')->with('message', 'Please download the file <a href="http://scheduleze20.com/schedulepanel/'.$file.'">.htaccess file</a> and paste it into your root folder in '.$panelurl);
+        return redirect('/business_info')->with('message', 'Successfully Updated! Please download the file <a href="http://'.$serverName.'/schedulepanel/'.$file.'">.htaccess file</a> and paste it into your root folder i.e in public_html in '.$panelurl.' server.');
         
         //return redirect('/business_info')->with('message', trans('profile.updateSuccess'));
     }

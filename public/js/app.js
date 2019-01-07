@@ -22042,18 +22042,24 @@ window.Vue = __webpack_require__(38);
 
 /*import VueResource from "vue-resource";*/
 var dict = {
-  custom: {
-    email: {
-      required: 'Your email is empty'
-    },
-    name: {
-      required: function required() {
-        return 'Your name is empty';
-      },
-      excluded: 'This Username is already taken',
-      included: 'We don\'t have this username in our database.'
-    }
-  }
+	custom: {
+		email: {
+			required: 'Your email is empty'
+		},
+		name: {
+			required: function required() {
+				return 'Your name is empty';
+			},
+			excluded: 'This Username is already taken',
+			included: 'We don\'t have this username in our database.'
+		},
+		domain_name: {
+			required: function required() {
+				return 'Domain Name is empty';
+			},
+			excluded: 'This Domain is already taken'
+		}
+	}
 };
 // or use the instance method
 Vue.use(__WEBPACK_IMPORTED_MODULE_0_vee_validate__["b" /* default */]);
@@ -22070,34 +22076,34 @@ Vue.component('example-component', __webpack_require__(41));
 Vue.component('signupform-component', __webpack_require__(44));
 
 var app = new Vue({
-  el: '#signup',
-  data: function data() {
-    return {
-      email: null,
-      name: null
-    };
-  },
-  methods: {
-    clickagreementcheck: function clickagreementcheck(event) {
-      if (event.target.checked) {
-        $('.cls-agree-btn').removeAttr('disabled');
-      } else {
-        $('.cls-agree-btn').attr('disabled', 'disabled');
-      }
-    },
-    validateBeforeSubmit: function validateBeforeSubmit() {
-      this.$validator.validateAll().then(function (result) {
-        if (result) {
-          $('form#PostForm').submit();
-          //$('form#msform').submit();
-          // eslint-disable-next-line
-          //alert('Form Submitted!');
-          //return;
-        }
-        //alert('Correct them errors!');
-      });
-    }
-  }
+	el: '#signup',
+	data: function data() {
+		return {
+			email: null,
+			name: null
+		};
+	},
+	methods: {
+		clickagreementcheck: function clickagreementcheck(event) {
+			if (event.target.checked) {
+				$('.cls-agree-btn').removeAttr('disabled');
+			} else {
+				$('.cls-agree-btn').attr('disabled', 'disabled');
+			}
+		},
+		validateBeforeSubmit: function validateBeforeSubmit() {
+			this.$validator.validateAll().then(function (result) {
+				if (result) {
+					$('form#PostForm').submit();
+					//$('form#msform').submit();
+					// eslint-disable-next-line
+					//alert('Form Submitted!');
+					//return;
+				}
+				//alert('Correct them errors!');
+			});
+		}
+	}
 });
 
 /***/ }),

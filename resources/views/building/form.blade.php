@@ -16,23 +16,7 @@
 		<div class="frameadmin">
 
 			<span class="head">
-
-                @if($name == 'BuildingSizes')
-
-                    <h1>Setting Building Sizes</h1>
-
-                @elseif($name == 'BuildingTypes')
-
-                    <h1>Setting Building Types and Prices</h1>
-
-                @else($name == 'BuildingAges')
-
-                    <h1>Setting Building Ages</h1>
-
-                @endif
-
-				
-
+                <h1>Setting {{ $labelName }}</h1>
 			</span>
 
 			<span class="note">Order is the order the items appear in the popup menu, use radio button to set menu default.<!--<br>Cap is the total number of this class of service you wish to allow booked in a single calendar day.</span>--><p></p>
@@ -53,7 +37,7 @@
 
 							<td>
 
-                                @if($name == 'BuildingAges' || $name == 'BuildingSizes'  )
+                                @if($name == 'Ages' || $name == 'Sizes'  )
 
 								    <span class="formlabel">Add'l Time</span><br>
 
@@ -148,18 +132,29 @@
 										</td> -->
 
 										<td>
+											@if( $name == 'Sizes'  )
+												<select name="forcecall[{{ $i }}]" class="form-control" size="1">
 
-											<select name="forcecall[{{ $i }}]" class="form-control" size="1">
+													<option value="1" @if($BuildType->status == 1) selected="" @endif>Book on-line</option>
 
-												<option value="1" @if($BuildType->status == 1) selected="" @endif>Book using size/age</option>
+													<option value="0" @if($BuildType->status == 0) selected="" @endif>Require phone call</option>
 
-												<option value="2" @if($BuildType->status == 2) selected="" @endif>Book as standalone</option>
+													<option value="3" @if($BuildType->status == 3) selected="" @endif>Use as Label Box</option>							
+													
+												</select>
+											@else
+												<select name="forcecall[{{ $i }}]" class="form-control" size="1">
 
-												<option value="0" @if($BuildType->status == 0) selected="" @endif>Require phone call</option>
+													<option value="3" @if($BuildType->status == 3) selected="" @endif>Use to Label Box</option>
 
-												<option value="3" @if($BuildType->status == 3) selected="" @endif>Use as Label</option>
+													<option value="2" @if($BuildType->status == 2) selected="" @endif>Standalone Service Type</option>
 
-											</select>
+													<option value="1" @if($BuildType->status == 1) selected="" @endif>Use with 2nd/3rd Modifiers</option>
+
+													<option value="0" @if($BuildType->status == 0) selected="" @endif>Require phone call</option>
+													
+												</select>
+											@endif
 
 										</td>
 
@@ -171,7 +166,7 @@
 
 										<td>
 
-											<a href='#' class='note_link' id="{{ $i }}" data-model="{{$name}}" data-id="{{ $BuildType->id }}">Remove</a>
+											<a href='#' class='note_link' id="{{ $i }}" data-model="{{$name}}" data-id="{{ $BuildType->id }}" >Remove</a>
 
 										</td>
 
@@ -187,12 +182,19 @@
 
 										    $('.dropdown-content.multiple-select-dropdown input[type="checkbox"]:not(:checked)').not(':disabled').prop('checked', 'checked');
 
-										    var values = $('.dropdown-content.multiple-select-dropdown input[type="checkbox"]:checked').not(':disabled').parent().map(function() {
+										    var values = $('.my_select_{{ $i }} option:not(:disabled)').parent().map(function() {
 
 										        return $(this).text();
 
 										    }).get();
 
+
+										    /*var values = $('.dropdown-content.multiple-select-dropdown input[type="checkbox"]:checked').not(':disabled').parent().map(function() {
+
+										        return $(this).text();
+
+										    }).get();
+*/
 										    $('input.select-dropdown').val(values.join(', '));
 											
 
@@ -247,18 +249,29 @@
                                     </td> -->
 
 									<td>
+										@if( $name == 'Sizes'  )
+											<select name="forcecall[{{ $i }}]" class="form-control" size="1">
 
-										<select class="form-control" name="forcecall[0]" size="1">
+												<option value="1" selected>Book on-line</option>
 
-											<option value="1" selected="">Book using size/age</option>
+												<option value="0">Require phone call</option>
 
-											<option value="2">Book as standalone</option>
+												<option value="3">Use as Label Box</option>							
+												
+											</select>
+										@else
+											<select class="form-control" name="forcecall[0]" size="1">
 
-											<option value="0">Require phone call</option>
+												<option value="3" selected>Use to Label Box</option>
 
-											<option value="3">Use as Label</option>
+												<option value="2">Standalone Service Type</option>
 
-										</select>
+												<option value="1">Use with 2nd/3rd Modifiers</option>
+
+												<option value="0">Require phone call</option>
+
+											</select>
+										@endif
 
 									</td>
 
@@ -313,7 +326,7 @@
 
 						<tr>
 
-							<td colspan="8"><input type="submit" name="submit" value="Save Building Types" class="submit btn btn-success bluebtn">
+							<td colspan="8"><input type="submit" name="submit" value="Save {{ $labelName }}" class="submit btn btn-success bluebtn">
 
 								<input type="hidden" name="action" value="building_types">
 
@@ -325,7 +338,7 @@
 
 						<tr>
 
-							<a href="#" class="add_column" id="add_column">Add Column</a>
+							<a href="#" class="add_column" id="add_column">Add Row</a>
 
 						</tr>
 
@@ -341,9 +354,9 @@
 
 			
 
-				@if($name == 'BuildingSizes')
+				@if($name == 'Sizes')
 					<span class="subhead">
-						Building Sizes Strategy
+						{{ $labelName }} Strategy
 					</span>
 
 					@if(!empty($ServiceContent->size_content))
@@ -352,9 +365,9 @@
 						The fewer ranges here the better. Simpler forms encourage people to complete them. Provide additional costs and additional time required for each range or "0" if there is no additional impacts for that Building Size over your primary service cost/time which you established in your Building Types menu.
 					@endif
 
-                @elseif($name == 'BuildingTypes')
+                @elseif($name == 'Types')
 					<span class="subhead">
-						Building Types and Prices Strategy
+						{{ $labelName }} Strategy
 					</span>
 
 					@if(!empty($ServiceContent->type_content))
@@ -363,9 +376,9 @@
 							You must have a Building Types menu with at least one type of service, time and cost for Scheduleze to function properly.  Building Size popups and Building Age popups are optional, and can be configured to add additional time and cost to the basic Building Type selected by the client.<br><br>If you are not going to use price modifiers, you may wish to list various service combinations here and provide total prices for each.  This creates the simplest user interface for your clients and increases the likelihood of the client to book immediately on-line (simple forms look easier to complete).<br><br>However, if you are going to setup Building Age and Building Size popups as well, use this menu for basic Building Type only.  Provide the absolute minimum price and time for each service type as the modifier popups will add additional time and costs that you specify to this baseline cost for each Building Type.<br><br>
 					@endif
 
-                @else($name == 'BuildingAges')
+                @else($name == 'Ages')
 					<span class="subhead">
-						Building Ages Strategy
+						{{ $labelName }} Strategy
 					</span>
 					@if(!empty($ServiceContent->age_content))
 						{!! $ServiceContent->age_content !!}
@@ -412,11 +425,19 @@
 
 				    $('.dropdown-content.multiple-select-dropdown input[type="checkbox"]:not(:checked)').not(':disabled').prop('checked', 'checked');
 
-				    var values = $('.dropdown-content.multiple-select-dropdown input[type="checkbox"]:checked').not(':disabled').parent().map(function() {
+				    var values = $('.my_select_'+newcolid+' option:not(:disabled)').parent().map(function() {
 
 				        return $(this).text();
 
 				    }).get();
+
+				    console.log(values);
+
+				    /*var values = $('.dropdown-content.multiple-select-dropdown input[type="checkbox"]:checked').not(':disabled').parent().map(function() {
+
+				        return $(this).text();
+
+				    }).get();*/
 
 				    $('input.select-dropdown').val(values.join(', '));
 

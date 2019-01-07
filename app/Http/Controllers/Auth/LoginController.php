@@ -96,7 +96,7 @@ class LoginController extends Controller
             return back()->with('warning', trans('auth.MessageforConfirmAccount'));
         }
 
-        if($request->input('txtremember') == 'on'){
+        if($request->input('txtremember') == 'on') {
             //Cookie::queue(Cookie::forget('name'));
             $username = $user->name;
             $expire = time() + 960*60*24*180;
@@ -110,6 +110,7 @@ class LoginController extends Controller
         $permission = get_field("users_details", "permission", $user->id); //get permission details
         $administrator = get_field("users_details", "administrator", $user->id); //get administrator details
         $indus_id = get_field("users_details", "indus_id", $user->id);
+        $engage = get_field("users_details", "engage", $user->id);
         
 
         if($administrator == 1) {
@@ -136,7 +137,7 @@ class LoginController extends Controller
             $panelurl = $PanelTemplate->unique_url;
         }
 
-        session(['id' => $user->id, 'username' => $user->name, 'hashvalue' => $panelurl, 'permission' => $permission, 'indus_id' => $indus_id, 'administrator' => $administrator]);
+        session(['id' => $user->id, 'username' => $user->name, 'hashvalue' => $panelurl, 'permission' => $permission, 'indus_id' => $indus_id, 'administrator' => $administrator, 'engage' => $engage]);
 
         //if(!empty($PanelTemplate->unique_url)){
             //return redirect('/template/'.$PanelTemplate->unique_url);

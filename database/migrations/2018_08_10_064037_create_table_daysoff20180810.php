@@ -26,8 +26,8 @@ class CreateTableDaysoff20180810 extends Migration
 
             $table->index('day')->unsigned()->nullable();
             $table->index('removed')->unsigned()->nullable();
-            $table->foreign('business')->references('id')->on('business');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('business')->references('id')->on('business')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

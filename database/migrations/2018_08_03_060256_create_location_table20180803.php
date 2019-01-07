@@ -23,7 +23,7 @@ class CreateLocationTable20180803 extends Migration
 
             $table->index('name',99)->unsigned()->nullable();
             $table->index('removed')->unsigned();
-            $table->foreign('business')->references('id')->on('business');
+            $table->foreign('business')->references('id')->on('business')->onDelete('cascade');
         });
     }
 

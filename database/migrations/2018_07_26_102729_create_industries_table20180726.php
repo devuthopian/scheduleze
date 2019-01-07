@@ -17,7 +17,10 @@ class CreateIndustriesTable20180726 extends Migration
             $table->increments('id')->unique();
             $table->string('name')->nullable();
             $table->string('page_name')->nullable();
+            $table->integer('removed')->unsigned()->default('0');
             $table->timestamps();
+
+            $table->index('removed')->unsigned();
         });
     }
 

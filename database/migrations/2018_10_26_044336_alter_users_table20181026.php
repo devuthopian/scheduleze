@@ -15,6 +15,9 @@ class AlterUsersTable20181026 extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->unique('name');
+            $table->unsignedInteger('users_details_id')->after('id');
+
+            $table->foreign('users_details_id')->references('id')->on('users_details')->onDelete('cascade');
         });
     }
 

@@ -66,8 +66,8 @@ class CreateTableBookings20180813 extends Migration
             $table->unsignedInteger('removed')->default('0');
             $table->timestamps();
 
-            $table->foreign('business')->references('id')->on('business');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('business')->references('id')->on('business')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

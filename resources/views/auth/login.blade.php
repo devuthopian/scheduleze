@@ -3,11 +3,6 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12 cls_login">
-            @if (session('warning'))
-                <div class="alert alert-warning">
-                    {{ session('warning') }}
-                </div>
-            @endif
             @php
                 $allindustries = getallIndustries();
                 $get_all_usernames = get_all_usernames('users', 'name');
@@ -20,6 +15,9 @@
                         <img src="images/login_img.png" alt="">
                     </div> -->
                     <div class="login_right_cont">
+                        @foreach($errors->all() as $error)
+                            <p class="alert {{ Session::get('alert-class', 'alert-danger') }}">{{ $error }}</P>
+                        @endforeach
                         <div class="card-header">{{ __('Login') }}</div>
                         <div class="card-body">
                             <form method="POST" action="{{ route('login') }}" aria-label="{{ __('Login') }}">
@@ -27,7 +25,8 @@
                                 <div class="form-group row">
                                    <!--  <label for="email" class="col-sm-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label> -->
                                     <div class="col-md-12">
-                                        <input id="name" type="text" v-validate="'required|alpha|included:{{ $key_username }}'" :class="{'input': true, 'is-danger': errors.has('name')}" name="name" value="{{ $value ? $value : '' }}" placeholder="Username" required autofocus>
+                                        <!-- <input id="name" type="text" v-validate="'required|alpha|included:{{ $key_username }}'" :class="{'input': true, 'is-danger': errors.has('name')}" name="name" value="{{ $value ? $value : '' }}" placeholder="Username" required autofocus> -->
+                                        <input id="name" type="text" v-validate="'required|alpha'" :class="{'input': true, 'is-danger': errors.has('name')}" name="name" value="{{ $value ? $value : '' }}" placeholder="Username" required autofocus> 
                                         <i v-show="errors.has('name')" class="fa fa-warning"></i>
                                         <span v-show="errors.has('name')" class="help is-danger-login">@{{ errors.first('name') }}</span>
                                     </div>

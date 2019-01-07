@@ -1,20 +1,18 @@
 @extends('layouts.front')
 
-
-
 @section('content')
 
 <!-- MultiStep Form -->
 <div class="col-sm-10">
     @if (count($errors) > 0)
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <!-- <li>{{ $error }}</li> -->
-                @endforeach
-                <p>Please fill up the form</p>
-            </ul>
-        </div>
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+            <!-- <li>{{ $error }}</li> -->
+            @endforeach
+            <p>Please fill up the form</p>
+        </ul>
+    </div>
     @endif
 </div>
 <div class="signup_section account_info_token_sec">
@@ -51,45 +49,50 @@
 
                         <br>
 
+                        <span class="dang_field">
+                            <input type="text" name="business_name" id="business_name" title="Business Name" v-validate.initial="'required'" data-vv-as="Business Name" :class="{'input': true, 'is-danger': errors.has('business_name') }" placeholder="Business Name"/>
+
+                                   <i v-show="errors.has('business_name')" class="fas fa-star-of-life">*</i>
 
 
-                        <input type="text" name="business_name" id="business_name" title="Business Name" v-validate="'required'" data-vv-as="Business Name" :class="{'input': true, 'is-danger': errors.has('business_name') }" placeholder="Business Name"/>
-
-                        <i v-show="errors.has('business_name')" class="fa fa-warning"></i>
-
-                        <span v-show="errors.has('business_name')" class="help is-danger">@{{ errors.first('business_name') }}</span>
+    <!-- <span v-show="errors.has('business_name')" class="help is-danger">@{{ errors.first('business_name') }}</span> -->
+                        </span>
 
 
+                        <span class="dang_field">
+                            <input type="text" name="contact_firstname" id="contact_firstname" title="Firstname" v-validate.initial="'required'" data-vv-as="Firstname" :class="{'input': true, 'is-danger': errors.has('contact_firstname') }" placeholder="Contact Firstname"/>
 
-                        <input type="text" name="contact_firstname" id="contact_firstname" title="Firstname" v-validate="'required'" data-vv-as="Firstname" :class="{'input': true, 'is-danger': errors.has('contact_firstname') }" placeholder="Contact Firstname"/>
+                                   <i v-show="errors.has('contact_firstname')" class="fas fa-star-of-life">*</i>
 
-                        <i v-show="errors.has('contact_firstname')" class="fa fa-warning"></i>
-
-                        <span v-show="errors.has('contact_firstname')" class="help is-danger">@{{ errors.first('contact_firstname') }}</span>
-
-
-
-                        <input type="text" name="contact_lastname" id="contact_lastname" title="Lastname" v-validate="'required'" data-vv-as="Lastname" :class="{'input': true, 'is-danger': errors.has('contact_lastname') }" placeholder="Contact Lastname"/>
-
-                        <i v-show="errors.has('contact_lastname')" class="fa fa-warning"></i>
-
-                        <span v-show="errors.has('contact_lastname')" class="help is-danger">@{{ errors.first('contact_lastname') }}</span>
+    <!--<span v-show="errors.has('contact_firstname')" class="help is-danger">@{{ errors.first('contact_firstname') }}</span> -->
+                        </span>
 
 
+                        <span class="dang_field">
+                            <input type="text" name="contact_lastname" id="contact_lastname" title="Lastname" v-validate.initial="'required'" data-vv-as="Lastname" :class="{'input': true, 'is-danger': errors.has('contact_lastname') }" placeholder="Contact Lastname"/>
 
-                        <input type="text" name="business_address" id ="business_address" title="Business Address" v-validate="'required'" data-vv-as="Address" :class="{'input': true, 'is-danger': errors.has('business_address') }" placeholder="Business Address"/>
+                                   <i v-show="errors.has('contact_lastname')" class="fas fa-star-of-life">*</i>
 
-                        <i v-show="errors.has('business_address')" class="fa fa-warning"></i>
-
-                        <span v-show="errors.has('business_address')" class="help is-danger">@{{ errors.first('business_address') }}</span>
-
+    <!--<span v-show="errors.has('contact_lastname')" class="help is-danger">@{{ errors.first('contact_lastname') }}</span> -->
+                        </span>
 
 
-                        <input type="text" name="business_city" id="business_city" title="Business City" v-validate="'required'" data-vv-as="City" :class="{'input': true, 'is-danger': errors.has('business_city') }" placeholder="Business City"/>
+                        <span class="dang_field">
+                            <input type="text" name="business_address" id ="business_address" title="Business Address" v-validate.initial="'required'" data-vv-as="Address" :class="{'input': true, 'is-danger': errors.has('business_address') }" placeholder="Business Address"/>
 
-                        <i v-show="errors.has('business_city')" class="fa fa-warning"></i>
+                                   <i v-show="errors.has('business_address')" class="fas fa-star-of-life">*</i>
 
-                        <span v-show="errors.has('business_city')" class="help is-danger">@{{ errors.first('business_city') }}</span>
+<!-- <span v-show="errors.has('business_address')" class="help is-danger">@{{ errors.first('business_address') }}</span> -->
+                        </span>
+
+
+                        <span class="dang_field">
+                            <input type="text" name="business_city" id="business_city" title="Business City" v-validate.initial="'required'" data-vv-as="City" :class="{'input': true, 'is-danger': errors.has('business_city') }" placeholder="Business City"/>
+
+                                   <i v-show="errors.has('business_city')" class="fas fa-star-of-life">*</i>
+
+<!-- <span v-show="errors.has('business_city')" class="help is-danger">@{{ errors.first('business_city') }}</span> -->
+                        </span>
 
 
 
@@ -109,25 +112,33 @@
 
                         <div class="col-md-4">
 
-                            <input type="text" name="business_zip" id="business_zip" v-validate="'required'" data-vv-as="Zip" :class="{'input': true, 'is-danger': errors.has('business_zip') }" title="ZIP" placeholder="ZIP"/>
+                            <span class="dang_field">
 
-                            <i v-show="errors.has('business_zip')" class="fa fa-warning"></i>
+                                <input type="text" name="business_zip" id="business_zip" v-validate.initial="'required'" data-vv-as="Zip" :class="{'input': true, 'is-danger': errors.has('business_zip') }" title="ZIP" placeholder="ZIP"/>
 
-                            <span v-show="errors.has('business_zip')" class="help is-danger">@{{ errors.first('business_zip') }}</span>
+                                       <i v-show="errors.has('business_zip')" class="fas fa-star-of-life">*</i>
+
+<!-- <span v-show="errors.has('business_zip')" class="help is-danger">@{{ errors.first('business_zip') }}</span> -->
+                            </span>
 
                         </div>
 
+                        <span class="dang_field">
 
+                            <input type="text" name="business_phone" id="business_phone" title="Business Phone" v-validate.initial="'required|numeric'" data-vv-as="Phone" :class="{'input': true, 'is-danger': errors.has('business_phone') }" placeholder="Business Phone"/>
 
-                        <input type="text" name="business_phone" id="business_phone" title="Business Phone" v-validate.continues="'required|numeric'" data-vv-as="Phone" :class="{'input': true, 'is-danger': errors.has('business_phone') }" placeholder="Business Phone"/>
-
-                        <i v-show="errors.has('business_phone')" class="fa fa-warning"></i>
-
-                        <span v-show="errors.has('business_phone')" class="help is-danger">@{{ errors.first('business_phone') }}</span>
+                                   <i v-show="errors.has('business_phone')" class="fas fa-star-of-life">*</i>
+                            <span v-show="errors.has('business_phone')" class="help is-danger phoneValid">@{{ errors.first('business_phone') }}</span>
+                        </span>
 
                         <br>
 
-                        <input type="button" name="next" class="next action-button FirstNext" :disabled="errors.any()" value="Next"/>
+
+                        <input type="button" name="next" class="next action-button FirstNext" value="Next"/>
+
+                        <div>
+                            <b class="is-danger">Mandatory fields are marked with an asterisk (<span class="asteriskStar">*</span>)</b>
+                        </div>
 
                     </fieldset>
 
@@ -139,53 +150,54 @@
 
                         <input type="text" name="additional_phone" id="additional_phone" title="Additional Phone" placeholder="Additional Phone"/>
 
+                        <span class="dang_field" style="margin-bottom: 11px;">
+                            <select name="timezone" id="timezone" class="form-control" v-validate.initial="'excluded:Timezone'" data-vv-as="selected">
 
+                                <option value="Timezone">Select Timezone</option>
 
-                        <select name="timezone" id="timezone" class="form-control" v-validate="'excluded:Timezone'" data-vv-as="selected">
+                                <option value="Eastern">Eastern</option>
 
-                            <option value="Timezone">Select Timezone</option>
+                                <option value="Central">Central</option>
 
-                            <option value="Eastern">Eastern</option>
+                                <option value="Mountain">Mountain</option>
 
-                            <option value="Central">Central</option>
+                                <option value="Pacific">Pacific</option>
 
-                            <option value="Mountain">Mountain</option>
+                                <option value="Alaska">Alaska</option>
 
-                            <option value="Pacific">Pacific</option>
+                                <option value="Hawaii">Hawaii</option>
 
-                            <option value="Alaska">Alaska</option>
+                                <option value="Other">Other</option>
 
-                            <option value="Hawaii">Hawaii</option>
+                            </select>
 
-                            <option value="Other">Other</option>
+                            <i v-show="errors.has('timezone')" class="fas fa-star-of-life">*</i>
 
-                        </select>
-
-                        <i v-show="errors.has('timezone')" class="fa fa-warning"></i>
-
-                        <span v-show="errors.has('timezone')" class="help is-danger">@{{ errors.first('timezone') }}</span>
+<!-- <span v-show="errors.has('timezone')" class="help is-danger">@{{ errors.first('timezone') }}</span> -->
+                        </span>
 
                         <br>
-
-
 
                         <input type="text" name="business_website" id="business_website" title="Business Website" placeholder="Business Website"/>
 
 
+                        <input type="text" name="requested_email" id="requested_email" title="Business Email" placeholder="Business email" />
 
-                        <input type="text" name="requested_email" id="requested_email" v-validate.continues="'required|email'" :class="{'input': true, 'is-danger': errors.has('requested_email') }" data-vv-as="Business Email" title="Business Email" placeholder="Business email" />
-
+                        <!-- <input type="text" name="requested_email" id="requested_email" v-validate.initial="'required|email'" :class="{'input': true, 'is-danger': errors.has('requested_email') }" data-vv-as="Business Email" title="Business Email" placeholder="Business email" />
+                        
                         <i v-show="errors.has('requested_email')" class="fa fa-warning"></i>
-
-                        <span v-show="errors.has('requested_email')" class="help is-danger">@{{ errors.first('requested_email') }}</span>
-
-
+                        
+                        <span v-show="errors.has('requested_email')" class="help is-danger">@{{ errors.first('requested_email') }}</span> -->
 
                         <br>
 
                         <input type="button" name="previous" class="previous action-button-previous" value="Previous"/>
 
-                        <input type="button" name="next" class="next action-button SecondNext" value="Next" :disabled="errors.any()"/>
+                        <input type="button" name="next" class="next action-button SecondNext" value="Next"/>
+
+                        <div>
+                            <b class="is-danger">Mandatory fields are marked with an asterisk (<span class="asteriskStar">*</span>)</b>
+                        </div>
 
                     </fieldset>
 
@@ -195,49 +207,95 @@
 
                         <h3 class="fs-subtitle">Fill in your credentials</h3>
 
-                        <input type="text" name="Username" id="Username" title="Username" v-validate.continues="'required|alpha'" :class="{'input': true, 'is-danger': errors.has('Username') }" placeholder="Username" value="{{ $username->name }}" />
+                        <span class="dang_field">
 
-                        <i v-show="errors.has('Username')" class="fa fa-warning"></i>
+                            <input type="text" name="Username" id="Username" title="Username" v-validate.initial="'required|alpha'" :class="{'input': true, 'is-danger': errors.has('Username') }" placeholder="Username" value="{{ $username->name }}" />
 
-                        <span v-show="errors.has('Username')" class="help is-danger">@{{ errors.first('Username') }}</span>
+                                   <i v-show="errors.has('Username')" class="fas fa-star-of-life">*</i>
 
-
-
-                        <input type="password" name="pass" id="pass" v-validate="'required|min:5'" :class="{'is-danger': errors.has('pass')}" title="Password" placeholder="Password" ref="pass" data-vv-as="Password"/>
-
-                        <i v-show="errors.has('pass')" class="fa fa-warning"></i>
-
-                        <span v-show="errors.has('pass')" class="help is-danger">@{{ errors.first('pass') }}</span>
+<!--<span v-show="errors.has('Username')" class="help is-danger">@{{ errors.first('Username') }}</span> -->
+                        </span>
 
 
+                        <span class="dang_field">
 
-                        <input type="password" v-validate="'required|confirmed:pass'" name="cpass" id="cpass" :class="{'is-danger': errors.has('cpass')}" title="Confirm Password" placeholder="Confirm Password" data-vv-as="Confirmed Password"/>
+                            <input type="password" name="pass" id="pass" v-validate.initial="'required|min:5'" :class="{'is-danger': errors.has('pass')}" title="Password" placeholder="Password" ref="pass" data-vv-as="Password"/>
 
-                         <i v-show="errors.has('cpass')" class="fa fa-warning"></i>
+                                   <i v-show="errors.has('pass')" class="fas fa-star-of-life">*</i>
 
-                        <span v-show="errors.has('cpass')" class="help is-danger">@{{ errors.first('cpass') }}</span>
+<!-- <span v-show="errors.has('pass')" class="help is-danger">@{{ errors.first('pass') }}</span> -->
+                        </span>
+
+
+                        <span class="dang_field">
+                            <input type="password" v-validate.initial="'required|confirmed:pass'" name="cpass" id="cpass" :class="{'is-danger': errors.has('cpass')}" title="Confirm Password" placeholder="Confirm Password" data-vv-as="Confirmed Password"/>
+
+                                   <i v-show="errors.has('cpass')" class="fas fa-star-of-life">*</i>
+
+                            <span v-show="errors.has('cpass')" class="help is-danger confirmedPassword">@{{ errors.first('cpass') }}</span>
+                        </span>
 
 
 
                         <select name="use_scheduleze" class="form-control">
 
+                            <option value="How would you like to use Scheduleze?">How would you like to use Scheduleze?</option>
+
                             <option value="I am not sure, please contact me to discuss options">I am not sure, please contact me to discuss options</option>
 
-                            <option value="saab">I'd like to use Scheduleze on-the-fly web page to take bookings</option>
+                            <option value="I'd like to use Scheduleze on-the-fly web page to take bookings">I'd like to use Scheduleze on-the-fly web page to take bookings</option>
 
-                            <option value="opel">I would like to use Scheduleze on my existing website</option>
+                            <option value="I would like to use Scheduleze on my existing website">I would like to use Scheduleze on my existing website</option>
 
-                            <option value="audi">I would like to have my own site for use with Scheduleze   </option>
+                            <option value="I would like to have my own site for use with Scheduleze">I would like to have my own site for use with Scheduleze   </option>
 
-                            <option value="audi"> I don't currently have a website, contact me about options </option>
+                            <option value="I don't currently have a website, contact me about options"> I don't currently have a website, contact me about options </option>
 
                         </select>
 
                         <input type="button" name="previous" class="previous action-button-previous" value="Previous"/>
 
-                        <input type="submit" name="submit" class="submit action-button" value="Submit" :disabled="errors.any()"/>
+                        <!-- <input type="submit" name="submit" class="submit action-button finalSubmit" value="Submit" :disabled="errors.any()" data-toggle="modal" data-target="#accountInfo"/> -->
+                        <input type="submit" name="submit" class="submit action-button finalSubmit" value="Submit" :disabled="errors.any()">
+                        <div>
+                            <b class="is-danger">Mandatory fields are marked with an asterisk (<span class="asteriskStar">*</span>)</b>
+                        </div>
 
                     </fieldset>
+
+                    <!-- Modal -->
+                    <div id="accountInfo" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+                                </div>
+                                <div class="modal-body">
+                                    <div class="cls-error-msg">
+                                        <span class="cls-option-heading">You scheduleze account will not function propperly until these settings have been determined.</span>
+                                        <ul class="cls-option">
+                                            @if($engageStyle->engage == 1)
+                                                <li>You have not set the types and prices of services you offer.</li>
+                                            @endif
+                                            
+                                            @if($engageStyle->engage == 1)
+                                                <li>You have not set the location(s) you serve.</li>
+                                                <li>You have not set the driving distances between the location you serve.</li>
+                                            @endif
+
+                                            <li>You have to set your business hours.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default accountInfo" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
 
                 </form>
 

@@ -18,6 +18,7 @@ use Session;
 use DB;
 use Mail;
 use App\Agents;
+use App\BusinessTypes;
 use Cookie;
 use PDF;
 use Crypt;
@@ -26,6 +27,7 @@ class AppointmentController extends Controller
 {
     /**
     * @var User ID
+    * @var Business ID
     */
     protected $user_id = '';
     protected $business_id = '';
@@ -66,7 +68,9 @@ class AppointmentController extends Controller
             $Location = '';
         }
 
-        return view('appointments.index', compact('businessinfo', 'ages', 'sizes', 'types', 'addons', 'Location', 'id', 'Inspector', 'businessid'));
+        $businessTypes = BusinessTypes::select('type_label', 'size_label', 'age_label', 'addon_label')->where('id', session('indus_id'))->first();
+
+        return view('appointments.index', compact('businessinfo', 'ages', 'sizes', 'types', 'addons', 'Location', 'id', 'Inspector', 'businessid', 'businessTypes'));
     }
 
     /**
@@ -143,45 +147,49 @@ class AppointmentController extends Controller
     {
         $data = Input::get();
 
-        foreach ($data['dt'] as $k => $drive) {
-            foreach ($drive as $j => $time) {
-                $sq['1'] = $k;
-                $sq['2'] = $j;
-                $sq['3'] = $time;
-                $sq['4'] = $this->business_id;
+        if(!empty($data['dt'])) {
+            foreach ($data['dt'] as $k => $drive) {
+                foreach ($drive as $j => $time) {
+                    $sq['1'] = $k;
+                    $sq['2'] = $j;
+                    $sq['3'] = $time;
+                    $sq['4'] = $this->business_id;
 
-                $sql = make_sql_value_insert($sq).", ";
+                    $sql = make_sql_value_insert($sq).", ";
 
-                $sq['1']=$j;
-                $sq['2']=$k;
+                    $sq['1']=$j;
+                    $sq['2']=$k;
 
-                $sql .= make_sql_value_insert($sq).", ";
-                $sql = substr($sql, 0, -2);
+                    $sql .= make_sql_value_insert($sq).", ";
+                    $sql = substr($sql, 0, -2);
+                    
+                    $array = explode(',', $sql);
+                    $carry[] = array_chunk($array,4);
+                }
+               
+            }
+            $i = 0;
+            foreach ($carry as $key => $value) {
                 
-                $array = explode(',', $sql);
-                $carry[] = array_chunk($array,4);
-            }
-           
-        }
-        $i = 0;
-        foreach ($carry as $key => $value) {
-            
-            foreach ($value as $key => $val) {
-                LocationTime::updateOrCreate(
-                    ['id' => $i],
-                    [
-                        'user_id' => $this->user_id,
-                        'business' => $this->business_id,
-                        'start' => $val[0], 
-                        'destination' => $val[1],
-                        'time' => $val[2]
-                    ]
-                );
-                $i++;
-            }
+                foreach ($value as $key => $val) {
+                    LocationTime::updateOrCreate(
+                        ['id' => $i],
+                        [
+                            'user_id' => $this->user_id,
+                            'business' => $this->business_id,
+                            'start' => $val[0], 
+                            'destination' => $val[1],
+                            'time' => $val[2]
+                        ]
+                    );
+                    $i++;
+                }
 
+            }
+            return redirect('/scheduleze/booking/appointment')->with('message', trans('scheduleze.MessageforSuccess'));
+        } else {
+            return back()->with('message', 'Please fill up atleast two locations.');
         }
-        return redirect('/scheduleze/booking/appointment')->with('message', trans('scheduleze.MessageforSuccess'));
     }
 
 
@@ -276,7 +284,7 @@ class AppointmentController extends Controller
         $id = Crypt::decrypt($id);
         $row = DB::table('bookings')->where([['id', '=', $id],['removed', '=', 0]])->first();
 
-        if ($row->business == "0"){
+        if ($row->business == 0){
             $row->business = $this->business_id;
         }
 
@@ -295,7 +303,10 @@ class AppointmentController extends Controller
             $siz = "Size: ".get_field('sizes', 'name', $row->size);
         }
         $inspect = "Inspector: ".get_field('users', 'name', $row->user_id);
-        $location_name = get_field('locations', 'name', $row->location);
+
+        if(!empty($row->location)) {
+            $location_name = get_field('locations', 'name', $row->location);
+        }
 
 
         $agent_name = "Agent Name: ".!empty($row->agent_name) ? $row->agent_name : ''."<br>";
@@ -320,9 +331,20 @@ class AppointmentController extends Controller
         $end = date("g:i a", $row->endtime);
         $addss['services'] = !empty($addss['services']) ? $addss['services'] : '';
 
-        $list = "<div class='middleinfo'><b class='inspectAdd'>Inspection Address:</b>
-            <div class=\"indent\"> ".$row->inspection_address." in ".$location_name."</div><br>
-            <span class=\"note\"><b class='italianinspect'>Inspection booked for:</b><br></span>
+        $inspect = 'Inspector';
+        if(session('engage') == 1) {
+            $inspect = 'Inspection';
+        }
+
+            $list = "<div class='middleinfo'><b class='inspectAdd'>".$inspect." Address:</b>";
+
+        if(!empty($row->location)) {
+            $list .=  "<div class=\"indent\"> ".$row->inspection_address." in ".$location_name."</div><br>";
+        } else {
+            $list .=  "<div class=\"indent\"> ".$row->inspection_address."</div><br>";
+        }
+
+        $list .=  "<span class=\"note\"><b class='italianinspect'>".$inspect." booked for:</b><br></span>
             <div class=\"indent\"> ".$row->firstname." ".$row->lastname.
                 $composite_address."
                     Contact phone: <a href='#'>".$row->dayphone." ".$comp_homephone. "</a><br>".
@@ -405,9 +427,9 @@ class AppointmentController extends Controller
 
         if(!array_key_exists('inspector', $formdata)){
 
-            if($permission == 0){
+            if($permission == 0) {
                 $Inspectors = UserDetails::where([['user_id', '=', $data['reference_id']], ['removed','=','0']])->first();
-            }else{
+            } else{
                 $Inspectors = UserDetails::where([['business', '=', $data['businessId']], ['removed','=','0']])->first();
             }
 
@@ -440,6 +462,8 @@ class AppointmentController extends Controller
         $data = Input::get();
         $added = time();
 
+        $engage = $data['engage'];
+
         $building_type = !empty($data['building_type']) ? $data['building_type'] : '';
         $building_size = !empty($data['building_size']) ? $data['building_size'] : '';
         $building_age = !empty($data['building_age']) ? $data['building_size'] : '';
@@ -448,8 +472,14 @@ class AppointmentController extends Controller
 
         $full_description = get_full_description($building_type, $building_size, $building_age);
 
-        $location_name = get_field('locations', 'name', $data['location']);
-        $inspector_name = get_field('users', 'name', $request->input('inspector'));
+        $location = !empty($data['location']) ? $data['location'] : '';
+
+        if($engage == 1) {
+            $location_name = get_field('locations', 'name', $location);
+        }
+
+        $inspector_name = get_field('business', 'contact_firstname', $request->input('business'));
+        //$inspector_name = get_field('users', 'name', $request->input('inspector'));
 
         $adds_info = '';
         $addons_description = '';
@@ -551,9 +581,13 @@ class AppointmentController extends Controller
             if (strlen($includes[email_header])>3){
                 $email_body .= "\n\n";
             }*/
+            if($data['engage'] == 1) {
+                $email_body = "Inspection Address: ".$data['requiredInspection_Address']." in ".$location_name."<br><br>";
+            } else {
+                $email_body = "Appointment Address: ".$data['requiredInspection_Address']."<br><br>";
+            }
 
-            $email_body = "Inspection Address: ".$data['requiredInspection_Address']." in ".$location_name."<br><br>";
-            $email_body .= "Inspection Booked for:<br>";
+            $email_body .= "Appointment Booked for:<br>";
             $email_body .= "&nbsp;&nbsp;&nbsp;".$data['requiredFirstname']." ".$data['requiredLastname']."<br>";
 
             if(!empty($data['Current_Address'])){
@@ -604,10 +638,15 @@ class AppointmentController extends Controller
 
             $emails = [$inspector_email, $inspector_additional_email, $business_info_email, $business_info_email2];
 
-            $text = "<h2>You have received an on-line booking for ".$start." with the following information:</h2><br> <h2>IMPORTANT NOTICE:</h2> <i>A copy of our Inspection Agreement is attachment for your review prior to the inspection.</i><br>";
+            $inspect = 'Inspector';
+            if(session('engage') == 1) {
+                $inspect = 'Inspection';
+            }
+
+            $text = "<h2>You have received an on-line booking for ".$start." with the following information:</h2><br> <h2>IMPORTANT NOTICE:</h2> <i>A copy of our Inspection Agreement is attachment for your review prior to the Inspection</i><br>";
 
             Mail::send(['html' => 'appointments.mail'], ['email_body' => $email_body, 'emails' => $emails, 'text' => $text] , function($message) use ($email_body, $emails, $text) {
-                $message->to($emails)->subject('On-line inspection booking');
+                $message->to($emails)->subject('On-line Inspection booking');
                 $message->from('support@scheduleze.com', 'Scheduleze');
                 $message->replyTo('noreply@scheduleze.com', 'no Reply');
                 //$message->setBody("You have received an on-line inspection booking with the following information:\n\n".$email_body."", 'text/html'); // for HTML rich messages;
@@ -615,10 +654,10 @@ class AppointmentController extends Controller
 
             if (!empty($data['requiredEmail'])){ //reasonably valid email address for the client
 
-                $text = "<h2>You have requested a inspection for ".$start." with the following details:</h2><br> <h2>IMPORTANT NOTICE:</h2> <i>A copy of our Inspection Agreement is attachment for your review prior to the inspection.</i><br>";
+                $text = "<h2>You have requested a Inspection for ".$start." with the following details:</h2><br> <h2>IMPORTANT NOTICE:</h2> <i>A copy of our Inspection Agreement is attachment for your review prior to the Inspection</i><br>";
 
                 Mail::send(['html' => 'appointments.mail'], ['start' => $start, 'email_body' => $email_body, 'data' => $data, 'business_name' => $business_name, 'attachment' => $attachment, 'text' => $text] , function($message) use ($email_body, $data, $business_name, $start, $Booking, $attachment, $text) {
-                    $message->to($data['requiredEmail'])->subject('+ On-line inspection booking at '.$start.' - #'.$Booking->id.'');
+                    $message->to($data['requiredEmail'])->subject('+ On-line Inspection booking at '.$start.' - #'.$Booking->id.'');
                     $message->from('support@scheduleze.com', $business_name);
                     $message->replyTo('noreply@scheduleze.com', 'no Reply');
                     if(file_exists('/attachments/'.$data['business'].'/'.$attachment->email_attachment)){
@@ -629,7 +668,7 @@ class AppointmentController extends Controller
             }
             
             if (!empty($data['Agent_Email'])){ //reasonably valid email address for the agent
-                $text = "<h2>An on-line inspection has been requested for ".$start." with the following details:</h2><br> <h2>IMPORTANT NOTICE:</h2> <i>A copy of our Inspection Agreement is attachment for your review prior to the inspection.</i><br>";
+                $text = "<h2>An on-line Inspector has been requested for ".$start." with the following details:</h2><br> <h2>IMPORTANT NOTICE:</h2> <i>A copy of our Inspection Agreement is attachment for your review prior to the Inspector.</i><br>";
 
                 Mail::send(['html' => 'appointments.mail'], ['start' => $start, 'email_body' => $email_body, 'data' => $data, 'inspector_email' => $inspector_email, 'text' => $text] , function($message) use ($email_body, $inspector_email, $data, $business_name, $start, $Booking, $text) {
                     $message->to($data['Agent_Email'])->subject('+ On-line booking at '.$start.' - #'.$Booking->id.'');

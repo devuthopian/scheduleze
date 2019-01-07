@@ -137,11 +137,17 @@
 
 									    $('.dropdown-content.multiple-select-dropdown input[type="checkbox"]:not(:checked)').not(':disabled').prop('checked', 'checked');
 
-									    var values = $('.dropdown-content.multiple-select-dropdown input[type="checkbox"]:checked').not(':disabled').parent().map(function() {
+									    var values = $('.my_select_{{ $i }} option:not(:disabled)').parent().map(function() {
 
 									        return $(this).text();
 
 									    }).get();
+
+									    /*var values = $('.dropdown-content.multiple-select-dropdown input[type="checkbox"]:checked').not(':disabled').parent().map(function() {
+
+									        return $(this).text();
+
+									    }).get();*/
 
 									    $('input.select-dropdown').val(values.join(', '));
 
@@ -166,7 +172,7 @@
 							</td>
 						</tr>
 						<tr>
-							<a href="" class="add_column columnaddons" id="add_column">Add Column</a>
+							<a href="" class="add_column columnaddons" id="add_column">Add Row</a>
 						</tr>
 					</tbody>
 				</table>
@@ -204,11 +210,17 @@
 
 				    $('.dropdown-content.multiple-select-dropdown input[type="checkbox"]:not(:checked)').not(':disabled').prop('checked', 'checked');
 
-				    var values = $('.dropdown-content.multiple-select-dropdown input[type="checkbox"]:checked').not(':disabled').parent().map(function() {
+				    var values = $('.my_select_'+newcolid+' option:not(:disabled)').parent().map(function() {
 
 				        return $(this).text();
 
 				    }).get();
+
+				    /*var values = $('.dropdown-content.multiple-select-dropdown input[type="checkbox"]:checked').not(':disabled').parent().map(function() {
+
+				        return $(this).text();
+
+				    }).get();*/
 
 				    $('input.select-dropdown').val(values.join(', '));
 

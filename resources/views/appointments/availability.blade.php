@@ -1,9 +1,9 @@
-@php 
-    if(empty(session('id'))){
-        $gjs = PanelTemplate($data['reference_id']);
+@php     
+    if(empty(session('business_id'))){
+        $gjs = PanelTemplate($data['reference_id'], 'user_id');
     }
     else{
-        $gjs = PanelTemplate(session('id'));
+        $gjs = PanelTemplate(session('business_id'), 'business');
     }
     $userId = Auth::id();
 @endphp
@@ -55,7 +55,7 @@
             }
 
             $building_age = $data['building_age'];
-            $location = $data['location'];
+            $location = !empty($data['location']) ? $data['location'] : '';
             if(array_key_exists('addons', $data)){
                 $addons = $data['addons'];
             }
@@ -83,12 +83,35 @@
             $authorized_inspectors = get_inspector_exceptions($businessId, $BuildType, $building_size, $building_age, $addons, session('total_price'), $data['reference_id']);
 
             $increment = 900;
+
+            if(!empty(session('engage'))) {
+                $engage = session('engage');
+            } else {
+                $engage = get_field('users_details', 'engage', $data['reference_id']);
+            }
+
+            if(!empty(session('business_information.address'))) {
+                $address = session('business_information.address');
+                $city = session('business_information.city');
+                $state = session('business_information.state');
+                $zip = session('business_information.zip');
+            } else {
+                $address = get_field('business', 'address', $data['reference_id']);
+                $city = get_field('business', 'city', $data['reference_id']);
+                $state = get_field('business', 'state', $data['reference_id']);
+                $zip = get_field('business', 'zip', $data['reference_id']);
+            }
         @endphp
 	    <table class="accent">
 			<tbody>
 				<tr>
 					<td>
-						<span class="grayhead"><b>Scheduling an inspection in {!! getlocation($data['location']) !!}</b></span><br>
+                        @if($engage == 1 && !empty($location))
+                            <span class="grayhead"><b>Scheduling an inspection in {!! getlocation($location) !!}</b></span><br>
+                        @else
+                            <span class="grayhead"><b>Scheduling an Appointment in {{ $city }}</b></span><br>
+                            at {{ $address }}, {{ $city }}, {{ $state }}, {{ $zip }}
+                        @endif
 						<span class="head"><h3></h3></span>
 						<div class="small_indent"><span class="address"></span></div>
 						@foreach($authorized_inspectors as $qualified_inspector)

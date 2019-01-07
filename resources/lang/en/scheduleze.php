@@ -15,6 +15,7 @@ return [
 
     'UpdateAppointment'     => 'Successfully Updated',
     'MessageforSuccess' => 'Successfully Saved!',
+    'MessageforSubmit' => 'Successfully submitted!',
     'MessageforWarning' => 'Something went wrong',
     'MessageforBookingSuccess' => 'Booked Successfully',
     'MessageforZigzagChanges' => 'ZigZag changes saved',

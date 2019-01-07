@@ -5,18 +5,18 @@
 <div class="container">
     <form class="recurring-form" action="{{ url('/scheduleze/Reoccurrence') }}" method="post">
         @csrf
-                        <div class="set_recc_cont">
-                            <input type="hidden" name="action" value="reoccurrence">
-                            <h2>Set Recurring Blockouts</h2>
-                            <h4>Please specify any reoccurring time off for</h4>
-                        </div>
-                        <div class="set_recc_cont">
-                            <div class="select_field">
-                                {!! get_inspector_popup("name", $id) !!}
-                            <input type="submit" name="Submit" class="submit" value="Switch">
-                            <h5>(For example, Sundays, every week, or the second Tuesday of each month)</h5><br>
-                        </div>
-                    </form>
+        <div class="set_recc_cont">
+            <input type="hidden" name="action" value="reoccurrence">
+            <h2>Set Recurring Blockouts</h2>
+            <h4>Please specify any reoccurring time off for</h4>
+        </div>
+        <div class="set_recc_cont">
+            <div class="select_field">
+                {!! get_inspector_popup("name", $id) !!}
+            <input type="submit" name="Submit" class="submit" value="Switch">
+            <h5>(For example, Sundays, every week, or the second Tuesday of each month)</h5><br>
+        </div>
+    </form>
 	<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin: 0 auto;">
     <tbody>
         <tr>
@@ -136,13 +136,13 @@
                                                         <input type="checkbox" name="weeks[{{$i}}][1]" checked=""><label>1st&nbsp;</label>
                                                     </div>
                                                     <div>
-                                                        <input type="checkbox" name="weeks[{{$i}}][2]" checked=""><label>2st&nbsp;</label>
+                                                        <input type="checkbox" name="weeks[{{$i}}][2]" checked=""><label>2nd&nbsp;</label>
                                                     </div>
                                                     <div>
-                                                        <input type="checkbox" name="weeks[{{$i}}][3]" checked=""><label>3st&nbsp;</label>
+                                                        <input type="checkbox" name="weeks[{{$i}}][3]" checked=""><label>3rd&nbsp;</label>
                                                     </div>
                                                     <div>
-                                                        <input type="checkbox" name="weeks[{{$i}}][4]" checked=""><label>4st&nbsp;</label>
+                                                        <input type="checkbox" name="weeks[{{$i}}][4]" checked=""><label>4th&nbsp;</label>
                                                     </div>
                                                     <div>
                                                         <input type="checkbox" name="weeks[{{$i}}][5]" checked=""><label>5th&nbsp;week(s)</label>

@@ -1,4 +1,4 @@
-@extends('layouts.front')
+@extends('layouts.includes.front.backend.front')
 
 @section('content')
 
@@ -42,7 +42,7 @@
 
 					@php $allindustries = getallIndustries() @endphp
 
-					<form method="POST" action="{{ url('/services/content') }}">
+					<form method="POST" action="{{ url('backend/services/content') }}">
 
 						@csrf
 
@@ -50,7 +50,7 @@
 
 							<h2>Set Service Content</h2>
 
-							<h4>Please specify any business hours for</h4>
+							<h4>Please specify Industries to change the content for specified columns</h4>
 
 						</div>
 
@@ -78,7 +78,7 @@
 
 					</form>
 
-					<form method="POST" action="{{ url('/services/storeServiceContent') }}">
+					<form method="POST" action="{{ url('backend/services/storeServiceContent') }}">
 
 						@csrf
 
