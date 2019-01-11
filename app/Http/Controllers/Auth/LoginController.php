@@ -137,7 +137,13 @@ class LoginController extends Controller
             $panelurl = $PanelTemplate->unique_url;
         }
 
+
+
         session(['id' => $user->id, 'username' => $user->name, 'hashvalue' => $panelurl, 'permission' => $permission, 'indus_id' => $indus_id, 'administrator' => $administrator, 'engage' => $engage]);
+
+        $IndustryName = get_field('business_types', 'business', $indus_id); //tablename, columnname, Id
+
+        session(['IndustryName' => $IndustryName]);
 
         //if(!empty($PanelTemplate->unique_url)){
             //return redirect('/template/'.$PanelTemplate->unique_url);

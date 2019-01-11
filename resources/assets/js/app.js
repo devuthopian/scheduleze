@@ -67,6 +67,14 @@ const app = new Vue({
 				}
 			//alert('Correct them errors!');
 			});
-	    }
+	    },
+	    doSubmit() {
+			this.$validator.validateAll().then(function(result) => {
+				if (!result){
+					//this means a validation failed, so exit without doing anything
+				  	return;
+				}
+			});
+		},
     }
 });

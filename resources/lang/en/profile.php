@@ -53,6 +53,7 @@ return [
     'updateSuccess'                => 'User Profile Sucessfully Updated',
     'submitButton'                 => 'Submit',
     'updatebusinessButton'         => 'Update Business Profile',
-    'domain_name'                  => 'Domain Name',
+    'domain_name'                  => 'Create Your Unique Link To Your Scheduling Panel',
     'placeholder_domain_name'      => 'Please enter your Schedule Panel web address',
+    'upload_logo'                  => 'Upload Logo',
 ];

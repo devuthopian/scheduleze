@@ -19,7 +19,7 @@
                         <input type="text" name="Inspection_Address" size="40" value="{{ $groupdata['booking']->inspection_address }}" required>
                     </div>
                     @if(!empty($groupdata['location_popup']))
-                        <div class="textfield_right equal_height">
+                        <div class="textfield_right equal_height extrajump">
                             <span class="signuplabel">Location:<br>
                             {!! $groupdata['location_popup'] !!}</span>
                         </div>
@@ -53,7 +53,7 @@
                         <input type="text" name="Lastname" size="20" value="{{ $groupdata['booking']->lastname }}">
                     </div>
                     <div class="textfield_left">
-                        <span class="signuplabel">Inspectors</span><br>
+                        <span class="signuplabel">{{ session('IndustryName') }}</span><br>
                         <div>
                             {!! $inspector_popup !!}
                     </div>

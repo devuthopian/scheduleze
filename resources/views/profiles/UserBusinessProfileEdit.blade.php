@@ -8,11 +8,18 @@
 
 <div class="signup_section">
 
-
-
     <div class="signup_cont nsignup_cont">
         
         <div class="container">
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
 
            <div class="sign_up_inner_cont">
             <h3>Business Profile</h3>
@@ -29,17 +36,11 @@
                 @endphp
             @endif
 
-            {!! Form::model($UserBusinessData, array('action' => array('ProfileController@updateUserBusinessAccount'), 'method' => 'POST', 'id'=>'Userdata')) !!}
+            {!! Form::model($UserBusinessData, array('action' => array('ProfileController@updateUserBusinessAccount'), 'method' => 'POST', 'id'=>'Userdata', 'files' => true)) !!}
 
 
 
             {{ csrf_field() }}
-
-
-
-
-
-
 
             <div class="textfield_full">
                 <div class="bussthree_cont">
@@ -317,7 +318,7 @@
 
 
 
-            {!! Form::text('business_phone',$UserBusinessData['phone'], array('id' => 'business_phone', 'class' => 'form-control', 'placeholder' => trans('profile.business_phone'))) !!}
+            {!! Form::text('business_phone', preg_replace("/^(\d{3})(\d{3})(\d{4})$/", "$1-$2-$3", $UserBusinessData['phone']), array('id' => 'business_phone', 'class' => 'form-control', 'placeholder' => trans('profile.business_phone'))) !!}
 
 
 
@@ -647,16 +648,19 @@
         }
 
         $key_urls = implode(",", $get_key_urls);
+
+        $domainName = URL::to('/').'/template/'.session('hashvalue');
     ?>
     <div id="signup">
     <div>
         <div class="bussthree_cont">  
             <div class="form-group">
-                {!! Form::label('Domain Name', trans('profile.domain_name') , array('class' => 'control-label')); !!}
+                {!! Form::label('Create Your Unique Link To Your Scheduling Panel', trans('profile.domain_name') , array('class' => 'control-label')); !!}
 
                 <!-- {!! Form::text('domain_name',session('hashvalue'), array('id' => 'domain_name', 'class' => 'form-control', 'placeholder' => trans('profile.placeholder_domain_name'))) !!} -->
 
-                <input type="text" name="domain_name" v-validate="'required|excluded:{{ $key_urls }}'" :class="{'input': true, 'is-danger': errors.has('domain_name')}" placeholder="{{ trans('profile.placeholder_domain_name') }}" value="{{ session('hashvalue') }}">
+                <input type="text" name="domain_name" v-validate="'required|excluded:{{ $key_urls }}'" :class="{'input': true, 'is-danger': errors.has('domain_name')}" placeholder="{{ trans('profile.placeholder_domain_name') }}" value="{{ $domainName }}">
+
                 <i v-show="errors.has('domain_name')" class="fa fa-warning"></i>
                 <span v-show="errors.has('domain_name')" class="help is-danger">@{{ errors.first('domain_name') }}</span>
             </div>
@@ -882,11 +886,24 @@
 
 
 <div class="textfield_full">
+    
+   <div class="textfield_left">
+        <div class="form-group">
+            {{ Form::checkbox('agent_company_label', 1, $UserBusinessData['agent_company_label']) }}
+            {!! Form::label('agent_company_label', trans('profile.agent_company_label') , array('class' => 'control-label')); !!}
+        </div>
+    </div>
+    <div class="textfield_right">
+        <div class="form-group">
+            {!! Form::label('Upload Logo', trans('profile.upload_logo') , array('class' => 'control-label')); !!}
 
-    <div class="form-group">
-        {{ Form::checkbox('agent_company_label',1,$UserBusinessData['agent_company_label']) }}
-        {!! Form::label('agent_company_label', trans('profile.agent_company_label') , array('class' => 'control-label')); !!}
+            <input type="file" name="upload_logo" size="24" class="{'input': true, 'is-danger': errors.has('upload_logo')}" v-validate.reject="'ext:png,gif,jpg,jpeg|size:8888'"> @if(!empty(session('user_logo'))) {{ $image = 'public/attachments/logo/'.session('id').'/'.session('user_logo') }} @endif
 
+            <i v-show="errors.has('upload_logo')" class="fa fa-warning"></i>
+            <span v-show="errors.has('upload_logo')" class="help is-danger">@{{ errors.first('upload_logo') }}</span>
+        </div>
+    </div>
+    
     </div>
 
 </div>
@@ -897,30 +914,7 @@
 
     <div class="form-group">
 
-
-        <!-- {!! Form::button(trans('profile.updatebusinessButton'),
-        
-        
-        
-        array(
-        
-        
-        
-        'class'             => 'btn btn-success gmailbtn',
-        
-        
-        
-        'type'              => 'submit',
-        
-        $behaviour
-        
-        
-        
-        )) !!} -->
-
         <button type="submit" name="submit" class="btn btn-success gmailbtn" {{ $behaviour }} :disabled="errors.any()">{{ trans('profile.updatebusinessButton') }}</button>
-
-
 
     </div>
     

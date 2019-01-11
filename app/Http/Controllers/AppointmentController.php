@@ -303,6 +303,8 @@ class AppointmentController extends Controller
             $siz = "Size: ".get_field('sizes', 'name', $row->size);
         }
         $inspect = "Inspector: ".get_field('users', 'name', $row->user_id);
+        $indus_id = get_field("users_details", "indus_id", $row->user_id);
+        $IndustryName = get_field('business_types', 'business', $indus_id);
 
         if(!empty($row->location)) {
             $location_name = get_field('locations', 'name', $row->location);
@@ -317,7 +319,8 @@ class AppointmentController extends Controller
         $user_notes = "Note: ".!empty($row->user_notes) ? $row->user_notes : ''."<br>";
         $composite_address = "".strlen($row->address) > 2 ? $row->address : ''." ".$row->city." ".$row->state." ".$row->zip."<br>";
         $comp_email = "E-mail: ".!empty($row->email) ? $row->email : ''."";
-        $comp_homephone = "Home phone: ".!empty($row->homephone) ? $row->homephone : ''."<br>";
+        $homePhone = preg_replace("/^(\d{3})(\d{3})(\d{4})$/", "$1-$2-$3", $row->homephone);
+        $comp_homephone = "Home phone: ".!empty($homePhone) ? $homePhone : ''."<br>";
 
         $paypal = get_field('business', 'paypal', $row->business);
 
@@ -331,12 +334,8 @@ class AppointmentController extends Controller
         $end = date("g:i a", $row->endtime);
         $addss['services'] = !empty($addss['services']) ? $addss['services'] : '';
 
-        $inspect = 'Inspector';
-        if(session('engage') == 1) {
-            $inspect = 'Inspection';
-        }
-
-            $list = "<div class='middleinfo'><b class='inspectAdd'>".$inspect." Address:</b>";
+        $inspect = 'Appointment';
+        $list = "<div class='middleinfo'><b class='inspectAdd'>".$inspect." Address:</b>";
 
         if(!empty($row->location)) {
             $list .=  "<div class=\"indent\"> ".$row->inspection_address." in ".$location_name."</div><br>";
@@ -344,10 +343,12 @@ class AppointmentController extends Controller
             $list .=  "<div class=\"indent\"> ".$row->inspection_address."</div><br>";
         }
 
+        $dayPhone = preg_replace("/^(\d{3})(\d{3})(\d{4})$/", "$1-$2-$3", $row->dayphone);
+
         $list .=  "<span class=\"note\"><b class='italianinspect'>".$inspect." booked for:</b><br></span>
             <div class=\"indent\"> ".$row->firstname." ".$row->lastname.
                 $composite_address."
-                    Contact phone: <a href='#'>".$row->dayphone." ".$comp_homephone. "</a><br>".
+                    Contact phone: <a href='#'>".$dayPhone." ".$comp_homephone. "</a><br>".
                 "Email: ".$comp_email."
             </div><br>
             <span class=\"note\"><b class='italianinspect'>Appointment details:</b></span>
@@ -373,7 +374,7 @@ class AppointmentController extends Controller
         $date_added = date("g:i a, F jS", ($row->added + $timezone));
         $date_printed = date("g:i a, F jS", ($time + $timezone));
 
-        $pdf = PDF::loadView('appointments.receipt', compact('business_name', 'business_email', 'business_phone', 'date_added', 'date_printed', 'list', 'paypal_link', 'row', 'id'));
+        $pdf = PDF::loadView('appointments.receipt', compact('business_name', 'IndustryName', 'business_email', 'business_phone', 'date_added', 'date_printed', 'list', 'paypal_link', 'row', 'id'));
         return $pdf->stream();
     }
 
@@ -645,8 +646,8 @@ class AppointmentController extends Controller
 
             $text = "<h2>You have received an on-line booking for ".$start." with the following information:</h2><br> <h2>IMPORTANT NOTICE:</h2> <i>A copy of our Inspection Agreement is attachment for your review prior to the Inspection</i><br>";
 
-            Mail::send(['html' => 'appointments.mail'], ['email_body' => $email_body, 'emails' => $emails, 'text' => $text] , function($message) use ($email_body, $emails, $text) {
-                $message->to($emails)->subject('On-line Inspection booking');
+            Mail::send(['html' => 'appointments.mail'], ['email_body' => $email_body, 'business_info_email' => $business_info_email, 'emails' => $emails, 'text' => $text] , function($message) use ($email_body, $emails, $text, $business_info_email) {
+                $message->to($emails)->subject('On-line '.$business_info_email.' booking');
                 $message->from('support@scheduleze.com', 'Scheduleze');
                 $message->replyTo('noreply@scheduleze.com', 'no Reply');
                 //$message->setBody("You have received an on-line inspection booking with the following information:\n\n".$email_body."", 'text/html'); // for HTML rich messages;
@@ -654,10 +655,10 @@ class AppointmentController extends Controller
 
             if (!empty($data['requiredEmail'])){ //reasonably valid email address for the client
 
-                $text = "<h2>You have requested a Inspection for ".$start." with the following details:</h2><br> <h2>IMPORTANT NOTICE:</h2> <i>A copy of our Inspection Agreement is attachment for your review prior to the Inspection</i><br>";
+                $text = "<h2>You have requested a Appointment for ".$start." with the following details:</h2><br> <h2>IMPORTANT NOTICE:</h2> <i>A copy of our Inspection Agreement is attachment for your review prior to the Inspection</i><br>";
 
                 Mail::send(['html' => 'appointments.mail'], ['start' => $start, 'email_body' => $email_body, 'data' => $data, 'business_name' => $business_name, 'attachment' => $attachment, 'text' => $text] , function($message) use ($email_body, $data, $business_name, $start, $Booking, $attachment, $text) {
-                    $message->to($data['requiredEmail'])->subject('+ On-line Inspection booking at '.$start.' - #'.$Booking->id.'');
+                    $message->to($data['requiredEmail'])->subject('+ On-line Appointment booking at '.$start.' - #'.$Booking->id.'');
                     $message->from('support@scheduleze.com', $business_name);
                     $message->replyTo('noreply@scheduleze.com', 'no Reply');
                     if(file_exists('/attachments/'.$data['business'].'/'.$attachment->email_attachment)){

@@ -15,9 +15,9 @@
                 {{ csrf_field() }}
                 <div class="has-feedback {{ $errors->has('firstname') ? ' has-error ' : '' }}">
 
-                    <div class="col-12">
+                    <div class="textfield_left">
                         <div class="form-group">
-                            <!-- {!! Form::label('firstname', trans('profile.firstname') , array('class' => 'col-12 control-label')); !!} -->
+                            {!! Form::label('firstname', trans('profile.firstname') , array('class' => 'formlabel')); !!} 
 
                             {!! Form::text('firstname',$UserData['name'], array('id' => 'firstname', 'class' => 'form-control', 'placeholder' => trans('profile.firstname'), 'title' => 'Firstname')) !!}
 
@@ -37,9 +37,9 @@
 
 
 
-                 <div class="col-12">
+                 <div class="textfield_right">
                     <div class="form-group">
-                        <!-- {!! Form::label('lastname', trans('profile.lastname') , array('class' => 'col-12 control-label')); !!} -->
+                        {!! Form::label('lastname', trans('profile.lastname') , array('class' => 'formlabel')); !!}
 
                         {!! Form::text('lastname',$UserData['lastname'], array('id' => 'lastname', 'class' => 'form-control', 'placeholder' => trans('profile.lastname'), 'title' => 'Lastname')) !!}
 
@@ -55,11 +55,47 @@
                     </div>
                 </div>
 
-                <div class="col-12 joinemail">
-                    <div class="form-group">
-                        <!-- {!! Form::label('backupEmail', trans('profile.backupEmail') , array('class' => 'col-12 control-label')); !!} -->
 
-                        {!! Form::text('Email', $UserData->user->email, array('id' => 'Email', 'class' => 'form-control', 'placeholder' => 'Email', 'title' => 'Email')) !!} <span class="slashspan">/</span> {!! Form::text('backupEmail', $UserData['email2'], array('id' => 'backupEmail', 'class' => 'form-control', 'placeholder' => trans('profile.backupEmail'), 'title' => 'Backup Email')) !!}
+
+
+
+                 <div class="textfield_left typeWorkPerfomed">
+                    <div class="form-group">
+                        {!! Form::label('typework', 'Type Of Work Performed', array('class' => 'formlabel')); !!}
+
+                        <select name="typework" id='typework' class='small_select'>
+                            <option value="-1">Select Industrial</option>
+                            @foreach($allindustries as $key => $industries)
+                                <option value="{{ $key }}" @if(session('IndustryName') == $industries) selected @endif>{{ $industries }}</option>
+                            @endforeach
+                        </select>
+
+                        <!-- {!! Form::text('typework', $UserData['typework'], array('id' => 'typework', 'class' => 'form-control', 'placeholder' => 'Type Of Work Performed', 'title' => 'typework')) !!} -->
+
+                        <span class="glyphicon {{ $errors->has('typework') ? ' glyphicon-asterisk ' : ' ' }} form-control-feedback" aria-hidden="true"></span>
+
+                        @if ($errors->has('typework'))
+
+                        <span class="help-block">
+                            <strong>{{ $errors->first('typework') }}</strong>
+                        </span>
+
+                        @endif
+                    </div>
+                </div>
+
+
+
+
+
+
+
+                <div class="textfield_right joinemail">
+                    <div class="form-group">
+                        {!! Form::label('backupEmail', 'Primary Email / Backup Email' , array('class' => 'formlabel')); !!}
+
+                     <div class="mail_confirm">   {!! Form::text('Email', $UserData->user->email, array('id' => 'Email', 'class' => 'form-control', 'placeholder' => 'Email', 'title' => 'Email')) !!} <span class="slashspan">/</span> {!! Form::text('backupEmail', $UserData['email2'], array('id' => 'backupEmail', 'class' => 'form-control', 'placeholder' => trans('profile.backupEmail'), 'title' => 'Backup Email')) !!}
+                     </div>
 
                         <span class="glyphicon {{ $errors->has('backupEmail') ? ' glyphicon-asterisk ' : ' ' }} form-control-feedback" aria-hidden="true"></span>
 
@@ -73,9 +109,9 @@
                     </div>
                 </div>
 
-                <div class="col-12">
+                <div class="textfield_left">
                     <div class="form-group">
-                        <!-- {!! Form::label('username', trans('profile.username') , array('class' => 'col-12 control-label')); !!} -->
+                        {!! Form::label('username', 'Username' , array('class' => 'formlabel')); !!}
 
                         {!! Form::text('username', $UserData->user->name, array('id' => 'username', 'class' => 'form-control', 'placeholder' => trans('profile.username'), 'title' => 'Username')) !!}
 
@@ -91,8 +127,9 @@
                     </div>
                 </div>
 
-                 <div class="col-12">
+                 <div class="textfield_right">
                     <div class="form-group">
+                            {!! Form::label('password', 'Password' , array('class' => 'formlabel')); !!}
                         <input name="password" id="password" type="password" class="{{ $errors->has('password') ? ' is-invalid' : '' }} form-control" placeholder="Password" autofocus title="Password">
 
                        @if ($errors->has('password'))
@@ -105,13 +142,15 @@
                 </div>
 
                 <!-- Confirm Password -->
-                <div class="col-12">
+                <div class="textfield_left">
                     <div class="form-group">
+                    {!! Form::label('password_confirmation', 'Confirm Password', array('class' => 'formlabel')); !!}
+
                        <input name="password_confirmation" id="password-confirm" type="password" placeholder="Confirm Password" class="form-control" autofocus title="Confirm Password">
                     </div>
                 </div>
 
-                  <div class="col-12">
+                  <div class="textfield_right">
                    <div class="form-group">
                         {!! Form::Label('Days in Advance Padding', 'Days in Advance Padding') !!}
                         <br>
@@ -142,8 +181,8 @@
 
                 <div class="col-12">
                     <div class="form-group">
-                        {!! Form::Label('Inspector Masking', 'Inspector Masking') !!} <br>
-                        <span>Hide this Inspector from public booking view..</span>
+                        {!! Form::Label('Inspector Masking', session('IndustryName').' Masking') !!} <br>
+                        <span>Hide this {{ session('IndustryName') }} from public booking view..</span>
                         {{ Form::checkbox('throttle',1,$UserData->last_login) }}
                     </div>
                 </div>

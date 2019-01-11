@@ -1551,6 +1551,10 @@
      margin: 5px 0 30px;
      border-bottom: 0px !important;
 }
+
+.nsignup_cont .textfield_left.typeWorkPerfomed select {
+    margin: 5px 0 16px !important;
+}
 .equal_height select { 
     height: 43px 
 }
@@ -1807,6 +1811,20 @@
      color: #fff;
      font-size: 16px;
 }
+
+.col-sm-10.statusMess {
+    text-align: center;
+    width: 100%;
+}
+.statusMess .alert.alert-success {
+    display: inline-block;
+    width: 100%;
+    max-width: 500px;
+    margin-top: 30px;
+}
+
+
+
  @media (max-width: 1024px) {
      .bookingmain .bookingcontainer .labelInsp, .bookingmain .bookingcontainer .labelstart, .bookingmain .bookingcontainer .labelend {
          width: 33%;
@@ -2159,4 +2177,17 @@ body {
  .header_section {
     position: static;
 }
+}
+.textfield_right.equal_height.extrajump {
+    max-width: 213px;
+}
+.col-sm-10.statusMess {
+   text-align: center;
+   width: 100%;
+}
+.statusMess .alert.alert-success {
+   display: inline-block;
+   width: 100%;
+   max-width: 500px;
+   margin-top: 30px;
 }

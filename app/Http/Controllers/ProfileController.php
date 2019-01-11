@@ -58,11 +58,14 @@ class ProfileController extends Controller
             $userid           =   $id;
         }
 
-        $UserData         =   UserDetails::where('user_id', $userid)->first();
+        $UserData =   UserDetails::where('user_id', $userid)->first();
+        $allindustries = getallIndustries();
 
         $data = [
             'UserData' => $UserData,
+            'allindustries' => $allindustries
         ];
+
         return view('profiles.UserProfileEdit')->with($data);
     }
 
@@ -106,8 +109,12 @@ class ProfileController extends Controller
         if ($profile_validator->fails()) {
             return back()->withErrors($profile_validator)->withInput();
         }
+
+        $indus_id = $request->input('typework');
+
         $UserDetails = UserDetails::firstOrNew(array('user_id' => $userid));
         $UserDetails->user_id        = $userid;
+        $UserDetails->indus_id       = $indus_id;
         $UserDetails->name           = $request->input('firstname');
         $UserDetails->lastname       = $request->input('lastname');
         $UserDetails->email2         = $request->input('backupEmail');
@@ -123,6 +130,10 @@ class ProfileController extends Controller
         $UserDetails->business       = session('business_id');
         $UserDetails->save();
         $UserDetails->user->save();
+
+        $IndustryName = get_field('business_types', 'business', $indus_id); //tablename, columnname, Id
+
+        session(['IndustryName' => $IndustryName]);
       
         return redirect('/profile')->with('message', trans('profile.updateSuccess'));
     }
@@ -137,7 +148,8 @@ class ProfileController extends Controller
         //$panel_template = DB::table('panel_template')->select('unique_id')->where([['user_id', '=', $admin_user_id->user_id],['marked_domain', '=', 1]])->first();
 
         $data = [
-            'UserBusinessData' => $UserBusinessData
+            'UserBusinessData' => $UserBusinessData,
+            'admin_user_id' => $admin_user_id
         ];
 
         return view('profiles.UserBusinessProfileEdit')->with($data);
@@ -158,11 +170,14 @@ class ProfileController extends Controller
             return back()->withErrors($business_profile_validator)->withInput();
         }
 
+        $panelu = $request->input('domain_name');
+        $panelurl = substr($panelu, strrpos($panelu, '/') + 1);
+
         $userid =   Auth::id();
-        $unique_url = DB::table('panel_template')->where('business', $business_id)->update(['unique_url' => $request->input('domain_name'), 'marked_domain' => 1]);
+        $unique_url = DB::table('panel_template')->where('business', $business_id)->update(['unique_url' => $panelurl, 'marked_domain' => 1]);
 
         if($unique_url){
-            session(['hashvalue' => $request->input('domain_name')]);
+            session(['hashvalue' => $panelurl]);
         }
 
         if($administrator == 0){
@@ -200,14 +215,23 @@ class ProfileController extends Controller
 
         $UserBusinessDetails->save();
 
+        $files = $request->file();
+        $name = '';
+        foreach($files as $key){
+            $name = $key->getClientOriginalName();
+            //$keyextension = $key->getClientOriginalExtension();
+            $getFilename = $key->getFilename();
+            $key->move(public_path( 'attachments/logo/'.$userid ), $name );
+        }
+
         $UserDetails = UserDetails::firstOrNew(array('user_id' => $userid));
+        $UserDetails->upload_logo = $name;
         $UserDetails->business = $UserBusinessDetails->id;
         $UserDetails->save();
 
-        session(['business_id' => $UserBusinessDetails->id]);
+        session(['business_id' => $UserBusinessDetails->id, 'user_logo' => $name]);
         get_business_information($UserBusinessDetails->id);
-
-        $panelurl = $request->input('domain_name');
+        
         if (strpos($panelurl, ".") !== false) {
             $rchar = array('https', 'http', 'www'); // content to be deleted from string
 
@@ -230,7 +254,9 @@ class ProfileController extends Controller
         $destinationPath = storage_path('upload/'.$file);
         //return response()->download($destinationPath);
 
-        return redirect('/business_info')->with('message', 'Successfully Updated! Please download the file <a href="http://'.$serverName.'/schedulepanel/'.$file.'">.htaccess file</a> and paste it into your root folder i.e in public_html in '.$panelurl.' server.');
+        //return redirect('/business_info')->with('message', 'Successfully Updated! Please download the file <a href="http://'.$serverName.'/schedulepanel/'.$file.'">.htaccess file</a> and paste it into your root folder i.e in public_html in '.$panelurl.' server.');
+
+        return redirect('/business_info')->with('message', 'Successfully Updated!');
         
         //return redirect('/business_info')->with('message', trans('profile.updateSuccess'));
     }
