@@ -18,6 +18,7 @@ use App\ServiceContent;
 use App\BuildingTypes;
 use App\BuildingSizes;
 use App\BuildingAges;
+use App\PageHelper;
 use Illuminate\Support\Facades\Input;
 use PDF;
 use DB;
@@ -510,11 +511,32 @@ class SchedulezeController extends Controller
         $Location = Location::where([['business','=', $this->business_id],['removed','=',0]])->get()->toArray();
 
         $BuildingTypes = BuildingTypes::where([['business','=', $this->business_id],['removed','=',0]])->get()->toArray();
+
         //$BuildingSizes = BuildingSizes::where([['business','=', $this->business_id],['removed','=',0]])->get()->toArray();
         //$BuildingAges = BuildingAges::where([['business','=', $this->business_id],['removed','=',0]])->get()->toArray();
 
         return view('appointments.bookings', compact('id', 'first', 'last', 'form', 'administration', 'tt', 'flag', 'businesshours', 'LocationTime', 'Location', 'BuildingTypes'));
     }
+
+    /**
+     * show a newly created resource from storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getViaAjax()
+    {
+        $data = Input::get();
+        $slug = $data['id'];
+        $pageHelper = PageHelper::where('slug', $slug)->first();
+
+        if(empty($pageHelper)) {
+            return json_encode('no data');
+        } else {
+            return json_encode($pageHelper->content, JSON_UNESCAPED_SLASHES);
+        }
+    }
+
 
     public function Documents()
     {
@@ -842,11 +864,21 @@ class SchedulezeController extends Controller
             $start_date = date ("g:i a, F jS", $starttime);
             $inspector_name = get_field('users', 'name', $Booking->user_id);
 
+            $customIndusName = get_field('users_details', 'custom_indus_name', $Booking->user_id);
+
+            if(empty($customIndusName)) {
+                $indus_id = get_field('users_details', 'indus_id', $Booking->user_id);
+                $customIndusName = get_field('business_types', 'business', $indus_id);
+            }
+
+            $dayphone = preg_replace("/^(\d{3})(\d{3})(\d{4})$/", "$1-$2-$3", $dayphone);
+            $homephone = preg_replace("/^(\d{3})(\d{3})(\d{4})$/", "$1-$2-$3", $homephone);
+
             $email_body .= "&nbsp;&nbsp;&nbsp;Cell phone: ".$dayphone."<br>";
             $email_body .= "&nbsp;&nbsp;&nbsp;Work phone: ".$homephone."<br>";
             $email_body .= "&nbsp;&nbsp;&nbsp;E-mail: ".$email."<br><br>";
             $email_body .= "Appointment time: ".$start_date."<br>";
-            $email_body .= "&nbsp;&nbsp;&nbsp;Inspector: ".$inspector_name."<br>";
+            $email_body .= "&nbsp;&nbsp;&nbsp;".$customIndusName.": ".$inspector_name."<br>";
             $email_body .= "&nbsp;&nbsp;&nbsp;Appointment Type: ".$full_description."<br>";
             $email_body .= "&nbsp;&nbsp;&nbsp;".$print_price."<br>";
             $email_body .= "".$clean_addons."<br><br>";
@@ -927,7 +959,14 @@ class SchedulezeController extends Controller
 
             $add_on_checkboxes = get_addon_checkboxes("addons", "id", "name", "addon", "", "rank", "ASC", "40", $addons_edit, 3);
 
-            $groupdata = array('userid' => $userid, 'booking' => $booking, 'location_popup' => $location_popup, 'type_pop' => $type_pop, 'size_pop' => $size_pop, 'age_pop' => $age_pop, 'start_popup' => $start_popup, 'end_popup' => $end_popup, 'add_on_checkboxes' => $add_on_checkboxes, 'id' => $id);
+            $IndusName = '';
+            if(!empty(session('CustomIndustryName')) || session('CustomIndustryName') != null) {
+                $IndusName = session('CustomIndustryName');
+            } else {
+                $IndusName = session('IndustryName');
+            }
+
+            $groupdata = array('userid' => $userid, 'booking' => $booking, 'location_popup' => $location_popup, 'type_pop' => $type_pop, 'size_pop' => $size_pop, 'age_pop' => $age_pop, 'start_popup' => $start_popup, 'end_popup' => $end_popup, 'add_on_checkboxes' => $add_on_checkboxes, 'id' => $id, 'IndusName' => $IndusName);
 
             
             return view('appointments.editbooking', compact('groupdata', 'inspector_popup'));

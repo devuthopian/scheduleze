@@ -23,10 +23,12 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('/contact', 'SchedulezeController@contact')->name('contact');
 
 	Route::post('b2b', 'SchedulezeController@b2bmessage');
+	Route::post('getViaAjax', 'SchedulezeController@getViaAjax');
 
 	/*Route::get('/backend', 'Backend\BackendController@index');
 	Route::get('/backend/login', 'Auth\LoginController@LoginForm');*/
 
+	//Backend routes
 	Route::group(['prefix' => 'backend', 'namespace' => 'Backend'], function () {
 	    Route::get('/', 'Auth\LoginController@showLoginForm');
 	    Route::post('login', 'Auth\LoginController@login')->name('backend.login');
@@ -37,12 +39,23 @@ Route::group(['middleware' => ['web']], function () {
 
 	Route::group(['middleware' => ['web', 'backend']], function () {
 		Route::group(['prefix' => 'backend', 'namespace' => 'Backend'], function () {
+
+			//Industries
 			Route::get('/services/industries', 'BackendController@index');
 			Route::post('/services/industries', 'BackendController@index')->name('storeIndustries');
 
+			//Services Content
 			Route::get('/services/content', 'BackendController@changeContent');
 			Route::post('/services/content', 'BackendController@changeContent');
 			Route::post('/services/storeServiceContent', 'BackendController@storeServiceContent');
+
+			//Helper Links
+			Route::get('/services/helpers', 'BackendController@showHelpers');
+			Route::post('/services/helpers', 'BackendController@changeHelpersContent');
+
+			Route::get('/services/helpers/{page?}', 'BackendController@edit');
+			Route::post('/page/content/{page?}', 'BackendController@update');
+
 			Route::post('logout', 'Auth\LoginController@logout')->name('backend.logout');
 		});
 	});

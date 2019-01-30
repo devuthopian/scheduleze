@@ -55,20 +55,26 @@
                     </div>
                 </div>
 
-
-
-
-
-                 <div class="textfield_left typeWorkPerfomed">
+                <div class="textfield_left typeWorkPerfomed">
                     <div class="form-group">
                         {!! Form::label('typework', 'Type Of Work Performed', array('class' => 'formlabel')); !!}
 
-                        <select name="typework" id='typework' class='small_select'>
+                        @php
+                            if(!empty(session('CustomIndustryName')) || session('CustomIndustryName') != null) {
+                                $IndusName = session('CustomIndustryName');
+                            } else {
+                                $IndusName = session('IndustryName');
+                            }
+                        @endphp
+
+                        {!! Form::text('typework', $IndusName, array('id' => 'typework', 'class' => 'form-control small_select', 'placeholder' => 'Type Of Work Performed', 'title' => 'Type of work')) !!}
+
+                        <!-- <select name="typework" id='typework' class='small_select'>
                             <option value="-1">Select Industrial</option>
                             @foreach($allindustries as $key => $industries)
                                 <option value="{{ $key }}" @if(session('IndustryName') == $industries) selected @endif>{{ $industries }}</option>
                             @endforeach
-                        </select>
+                        </select> -->
 
                         <!-- {!! Form::text('typework', $UserData['typework'], array('id' => 'typework', 'class' => 'form-control', 'placeholder' => 'Type Of Work Performed', 'title' => 'typework')) !!} -->
 
@@ -83,12 +89,6 @@
                         @endif
                     </div>
                 </div>
-
-
-
-
-
-
 
                 <div class="textfield_right joinemail">
                     <div class="form-group">
@@ -181,8 +181,8 @@
 
                 <div class="col-12">
                     <div class="form-group">
-                        {!! Form::Label('Inspector Masking', session('IndustryName').' Masking') !!} <br>
-                        <span>Hide this {{ session('IndustryName') }} from public booking view..</span>
+                        {!! Form::Label('Inspector Masking', $IndusName.' Masking') !!} <br>
+                        <span>Hide this {{ $IndusName }} from public booking view..</span>
                         {{ Form::checkbox('throttle',1,$UserData->last_login) }}
                     </div>
                 </div>
@@ -191,7 +191,7 @@
                     <div class="form-group">
                         {!! Form::Label('User Privileges', 'User Privileges') !!}
                         <br>
-                        <span>Is company administrator (can manage Inspectors for SV Inspection Service).</span>
+                        <span>Is company administrator (can manage {{ $IndusName }} for SV Inspection Service).</span>
                         {{ Form::checkbox('permission',1,$UserData->permission) }}
                     </div>
                 </div>

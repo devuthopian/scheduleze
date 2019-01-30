@@ -64,8 +64,6 @@
 
                     $engage = session('engage');
 
-                    
-
 
                     $id = Auth::user()->id;
 
@@ -82,6 +80,12 @@
                     $administration = get_field('users_details', 'administrator', $id);
 
                     $day = 10;
+
+                    if(!empty(session('CustomIndustryName')) || session('CustomIndustryName') != null) {
+                        $IndusName = session('CustomIndustryName');
+                    } else {
+                        $IndusName = session('IndustryName');
+                    }
 
                 @endphp
 
@@ -112,6 +116,9 @@
                                     <li>
 
                                         <a href="{{ url('/scheduleze/booking/appointment') }}">Bookings</a>
+                                        <a href="" title="Help" data-toggle="modal" class="ajaxLink" data-id="bookings" data-name="Bookings">
+                                            <i class="fas fa-question-circle"></i>
+                                        </a>
 
                                     </li>
 
@@ -126,6 +133,9 @@
                                             <a href="{{ url('scheduleze/appointments') }}" target="_blank">Add Appointment</a>
 
                                         @endif
+                                        <a href="" title="Help" data-toggle="modal" class="ajaxLink" data-id="add_appointments" data-name="Add Appointments">
+                                            <i class="fas fa-question-circle"></i>
+                                        </a>
 
                                     </li>
 
@@ -141,29 +151,45 @@
 
                                         @endif
 
+                                        <a href="" title="Help" data-toggle="modal" class="ajaxLink" data-id="all_tickets" data-name="All Tickets">
+                                            <i class="fas fa-question-circle"></i>
+                                        </a>
+
                                     </li>
 
                                     <li>
 
                                         <a href="{{ url('/scheduleze/dayticket/'.$id) }}">My Today</a>
+                                        <a href="" title="Help" data-toggle="modal" class="ajaxLink" data-id="my_today" data-name="My Today">
+                                            <i class="fas fa-question-circle"></i>
+                                        </a>
 
                                     </li>
 
                                     <li>
 
                                         <a href="{{ url('/scheduleze/dayticket/'.$id.'/'.$tomorrow) }}">My Tomorrow </a>
+                                        <a href="" title="Help" data-toggle="modal" class="ajaxLink" data-id="my_tomorrow" data-name="My Tomorrow">
+                                            <i class="fas fa-question-circle"></i>
+                                        </a>
 
                                     </li>
 
                                     <li>
 
                                         <a href="{{ url('/scheduleze/mapmyday') }}">Map My Today</a>
+                                        <a href="" title="Help" data-toggle="modal" class="ajaxLink" data-id="map_my_day" data-name="Map My Day">
+                                            <i class="fas fa-question-circle"></i>
+                                        </a>
 
                                     </li>
 
                                     <li>
 
                                         <a href="#" data-toggle="modal" data-target="#myModal">Search</a>
+                                        <a href="" title="Help" data-toggle="modal" class="ajaxLink" data-id="search" data-name="Search">
+                                            <i class="fas fa-question-circle"></i>
+                                        </a>
 
                                     </li>
 
@@ -180,24 +206,36 @@
                                     <li>
 
                                         <a href="{{ url('/scheduleze/booking/blockouts') }}">Blockouts</a>
+                                        <a href="" title="Help" data-toggle="modal" class="ajaxLink" data-id="blockouts" data-name="Blockouts">
+                                            <i class="fas fa-question-circle"></i>
+                                        </a>
 
                                     </li>
 
                                     <li>
 
                                         <a href="{{ url('/scheduleze/blockout/AddBlockout') }}">Add Blockout</a>
+                                        <a href="" title="Help" data-toggle="modal" class="ajaxLink" data-id="add_blockouts" data-name="Add Blockouts">
+                                            <i class="fas fa-question-circle"></i>
+                                        </a>
 
                                     </li>
 
                                     <li>
 
                                         <a href="{{ route('Reoccurrence') }}">Recurring</a>
+                                        <a href="" title="Help" data-toggle="modal" class="ajaxLink" data-id="recurring" data-name="Recurring">
+                                            <i class="fas fa-question-circle"></i>
+                                        </a>
 
                                     </li>
 
                                     <li>
 
                                         <a href="{{ url('scheduleze/BusinessHours') }}">Business Hours</a>
+                                        <a href="" title="Help" data-toggle="modal" class="ajaxLink" data-id="business_hours" data-name="Business Hours">
+                                            <i class="fas fa-question-circle"></i>
+                                        </a>
 
                                     </li>
 
@@ -208,6 +246,9 @@
                             <li>
 
                                 <a href="{{ route('Document') }}">Document</a>
+                                <a href="" title="Help" data-toggle="modal" class="ajaxLink" data-id="document" data-name="Document">
+                                    <i class="fas fa-question-circle"></i>
+                                </a>
 
                             </li>
 
@@ -222,24 +263,36 @@
                                         <li>
 
                                             <a href="{{ url('/form/Types') }}">{{ $getbusindus->type_label }}</a>
+                                            <a href="" title="Help" data-toggle="modal" class="ajaxLink" data-id="service_types" data-name="Service Type">
+                                                <i class="fas fa-question-circle"></i>
+                                            </a>
 
                                         </li>
 
                                         <li>
 
                                             <a href="{{ url('/form/Sizes') }}">{{ $getbusindus->size_label }}</a>
+                                            <a href="" title="Help" data-toggle="modal" class="ajaxLink" data-id="service_sizes" data-name="Service Sizes">
+                                                <i class="fas fa-question-circle"></i>
+                                            </a>
 
                                         </li>
 
                                         <li>
 
                                             <a href="{{ url('/form/Ages') }}">{{ $getbusindus->age_label }}</a>
+                                            <a href="" title="Help" data-toggle="modal" class="ajaxLink" data-id="service_ages" data-name="Service Ages">
+                                                <i class="fas fa-question-circle"></i>
+                                            </a>
 
                                         </li>
 
                                         <li>
 
                                             <a href="{{ url('/form/Addons') }}">{{ $getbusindus->addon_label }}</a>
+                                            <a href="" title="Help" data-toggle="modal" class="ajaxLink" data-id="addon_services" data-name="Addon Services">
+                                                <i class="fas fa-question-circle"></i>
+                                            </a>
 
                                         </li>
 
@@ -252,18 +305,27 @@
                                     <li class="arrowicon">
 
                                         <a href="{{ route('Location') }}"  @click="doSomethinginmenu">Locations</a>
+                                        <!-- <a href="" title="Help" data-toggle="modal" class="ajaxLink" data-id="locations" data-name="Locations">
+                                            <i class="fas fa-question-circle"></i>
+                                        </a> -->
 
                                         <ul >
 
                                             <li>
 
                                                 <a href="{{ route('Location') }}">Add/Remove Location</a>
+                                                <a href="" title="Help" data-toggle="modal" class="ajaxLink" data-id="add_locations" data-name="Add Location">
+                                                    <i class="fas fa-question-circle"></i>
+                                                </a>
 
                                             </li>
 
                                             <li>
 
                                                 <a href="{{ route('Drivetime') }}">Drivetimes</a>
+                                                <a href="" title="Help" data-toggle="modal" class="ajaxLink" data-id="drivetimes" data-name="Drivetimes">
+                                                    <i class="fas fa-question-circle"></i>
+                                                </a>
 
                                             </li>
 
@@ -283,7 +345,10 @@
 
                                     <li>
 
-                                        <a href="{{ route('Inspectors') }}">{{ session('IndustryName') }}</a>
+                                        <a href="{{ route('Inspectors') }}">{{ $IndusName }}</a>
+                                        <a href="" title="Help" data-toggle="modal" class="ajaxLink" data-id="users" data-name="Users">
+                                            <i class="fas fa-question-circle"></i>
+                                        </a>
 
                                     </li>
 
@@ -291,7 +356,10 @@
 
                                         <li>
 
-                                            <a href="{{ route('AddInspector') }}">Add {{ session('IndustryName') }}</a>
+                                            <a href="{{ route('AddInspector') }}">Add {{ $IndusName }}</a>
+                                            <a href="" title="Help" data-toggle="modal" class="ajaxLink" data-id="add_users" data-name="Add Users">
+                                                <i class="fas fa-question-circle"></i>
+                                            </a>
 
                                         </li>
 
@@ -310,12 +378,18 @@
                                     <li>
 
                                         <a href="{{ url('profile') }}">User Profile</a>
+                                        <a href="" title="Help" data-toggle="modal" class="ajaxLink" data-id="user_profile" data-name="User Profile">
+                                            <i class="fas fa-question-circle"></i>
+                                        </a>
 
                                     </li>
 
                                     <li>
 
                                         <a href="{{ url('business_info') }}">Business Profile</a>
+                                        <a href="" title="Help" data-toggle="modal" class="ajaxLink" data-id="business_profile" data-name="Busniess Profile">
+                                            <i class="fas fa-question-circle"></i>
+                                        </a>
 
                                     </li>
 
@@ -338,12 +412,18 @@
                                     <li>
 
                                         <a href="{{ url('/profile/Email/Attachment') }}">Email Attachment</a>
+                                        <a href="" title="Help" data-toggle="modal" class="ajaxLink" data-id="email_attachment" data-name="Email Attachment">
+                                            <i class="fas fa-question-circle"></i>
+                                        </a>
 
                                     </li>
 
                                     <li>
 
                                         <a href="#">Recurring Payment</a>
+                                        <a href="" title="Help" data-toggle="modal" class="ajaxLink" data-id="recurring_payment" data-name="Recurring Payment">
+                                            <i class="fas fa-question-circle"></i>
+                                        </a>
 
                                     </li>
 
@@ -352,6 +432,9 @@
                                         <li>
 
                                             <a href="{{ route('schedulepanel') }}">{{ __('nav.SchedulePanel') }}</a>
+                                            <a href="" title="Help" data-toggle="modal" class="ajaxLink" data-id="setup_landing_page" data-name="Setup Landing Page">
+                                                <i class="fas fa-question-circle"></i>
+                                            </a>
 
                                         </li>
 
@@ -364,12 +447,24 @@
                             <li>
 
                                 <a href="{{ route('ZigZag') }}">ZigZag</a>
+                                <a href="" title="Help" data-toggle="modal" class="ajaxLink" data-id="zigzag" data-name="Zigzag">
+                                    <i class="fas fa-question-circle"></i>
+                                </a>
 
                             </li>
+                            
 
                             <li class="arrowicon">
+                                @php 
+                                    $userName = get_field("users_details", "name", Auth::user()->id);
+                                    if(empty($userName)) {
+                                        $username = Auth::user()->name;
+                                    } else {
+                                        $username = $userName;
+                                    }
+                                @endphp
 
-                                <a href="{{ url('profile') }}">{{ ucfirst(Auth::user()->name) }}</a>
+                                <a href="{{ url('profile') }}">{{ ucfirst($username) }}</a>
 
                                 <ul>
 
@@ -429,15 +524,11 @@
 
 </div>
 
-
-
-
-
     <div class="col-sm-10 statusMess">
 
         @if(session()->has('message'))
 
-            <div class="alert alert-success statusMess">
+            <div class="alert alert-success statusMess"  style="margin-top: 50px;">
 
                 {!! session()->get('message') !!}
 
@@ -453,7 +544,7 @@
 
         @if(session()->has('warning'))
 
-            <div class="alert alert-warning">
+            <div class="alert alert-warning"  style="margin-top: 50px;">
 
                 {{ session()->get('warning') }}
 

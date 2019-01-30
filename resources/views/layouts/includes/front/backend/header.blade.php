@@ -10,11 +10,14 @@
                         <a href="{{ url('profile') }}">Profile</a>
                         <ul>
                             <li>
-                                <a href="{{ url('backend/services/content') }}">Services Content</a>
+                                <a href="{{ url('backend/services/industries') }}">Industries</a>
                             </li>
                             <li>
-                                <a href="{{ url('backend/services/industries') }}">Industries</a>
-                            </li>                         
+                                <a href="{{ url('backend/services/helpers') }}">Helpers</a>
+                            </li>
+                            <li>
+                                <a href="{{ url('backend/services/content') }}">Services Content</a>
+                            </li>                    
                         </ul>
                     </li>
                     <li class="arrowicon">
@@ -39,7 +42,7 @@
 
     <div class="col-sm-10">
         @if(session()->has('message'))
-            <div class="alert alert-success">
+            <div class="alert alert-success" style="margin-top: 50px;">
                 {!! session()->get('message') !!}
             </div>
         @endif
@@ -47,7 +50,7 @@
 
     <div class="col-sm-10">
         @if(session()->has('warning'))
-            <div class="alert alert-warning">
+            <div class="alert alert-warning" style="margin-top: 50px;">
                 {{ session()->get('warning') }}
             </div>
         @endif

@@ -110,6 +110,7 @@ class LoginController extends Controller
         $permission = get_field("users_details", "permission", $user->id); //get permission details
         $administrator = get_field("users_details", "administrator", $user->id); //get administrator details
         $indus_id = get_field("users_details", "indus_id", $user->id);
+        $custom_indus_name = get_field("users_details", "custom_indus_name", $user->id);
         $engage = get_field("users_details", "engage", $user->id);
         
 
@@ -137,13 +138,14 @@ class LoginController extends Controller
             $panelurl = $PanelTemplate->unique_url;
         }
 
-
-
         session(['id' => $user->id, 'username' => $user->name, 'hashvalue' => $panelurl, 'permission' => $permission, 'indus_id' => $indus_id, 'administrator' => $administrator, 'engage' => $engage]);
 
         $IndustryName = get_field('business_types', 'business', $indus_id); //tablename, columnname, Id
-
         session(['IndustryName' => $IndustryName]);
+
+        if(!empty($custom_indus_name) || $custom_indus_name != null) {
+            session(['CustomIndustryName' => $custom_indus_name]);
+        }
 
         //if(!empty($PanelTemplate->unique_url)){
             //return redirect('/template/'.$PanelTemplate->unique_url);

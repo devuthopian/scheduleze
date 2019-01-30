@@ -53,7 +53,7 @@
                         <input type="text" name="Lastname" size="20" value="{{ $groupdata['booking']->lastname }}">
                     </div>
                     <div class="textfield_left">
-                        <span class="signuplabel">{{ session('IndustryName') }}</span><br>
+                        <span class="signuplabel">{{ $groupdata['IndusName'] }}</span><br>
                         <div>
                             {!! $inspector_popup !!}
                     </div>

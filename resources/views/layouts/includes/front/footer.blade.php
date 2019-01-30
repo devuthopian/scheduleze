@@ -40,7 +40,7 @@
                     <div class="quick_links">
                         <h3>Quick <br> Links</h3>
                         <ul>
-                            <li><a href="{{ url('/') }}">Scheduling Solutions</a></li>
+                            <li><a href="{{ url('scheduling_solutions') }}">Scheduling Solutions</a></li>
                             <li><a href="{{ url('success_stories') }}">Success  Stories</a></li>
                             <li><a href="{{ url('demo') }}">Video</a></li>
                             <li><a href="{{ url('scheduling_faq') }}">FAQ</a></li>
@@ -172,6 +172,25 @@
                     </div>
                 </div>
 
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="helpTarget" role="dialog">
+            <div class="modal-dialog helperClass">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title helperTitle">Modal Header</h4>
+                    </div>
+                    <div class="showHelperText">
+                        <p>Some text in the modal.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
             </div>
         </div>
 

@@ -283,8 +283,11 @@ class AppointmentController extends Controller
     {
         $id = Crypt::decrypt($id);
         $row = DB::table('bookings')->where([['id', '=', $id],['removed', '=', 0]])->first();
+        $admin_user_id = DB::table('users_details')->where([['business', '=', $row->business], ['administrator', '=', 1]])->first();
+        $user_logo = $admin_user_id->upload_logo;
+        $aUserID =  $admin_user_id->user_id;
 
-        if ($row->business == 0){
+        if ($row->business == 0) {
             $row->business = $this->business_id;
         }
 
@@ -304,7 +307,11 @@ class AppointmentController extends Controller
         }
         $inspect = "Inspector: ".get_field('users', 'name', $row->user_id);
         $indus_id = get_field("users_details", "indus_id", $row->user_id);
-        $IndustryName = get_field('business_types', 'business', $indus_id);
+        $IndustryName = get_field("users_details", "custom_indus_name", $row->user_id);
+
+        if(empty($IndustryName)) {
+            $IndustryName = get_field('business_types', 'business', $indus_id);
+        }
 
         if(!empty($row->location)) {
             $location_name = get_field('locations', 'name', $row->location);
@@ -374,7 +381,7 @@ class AppointmentController extends Controller
         $date_added = date("g:i a, F jS", ($row->added + $timezone));
         $date_printed = date("g:i a, F jS", ($time + $timezone));
 
-        $pdf = PDF::loadView('appointments.receipt', compact('business_name', 'IndustryName', 'business_email', 'business_phone', 'date_added', 'date_printed', 'list', 'paypal_link', 'row', 'id'));
+        $pdf = PDF::loadView('appointments.receipt', compact('business_name', 'IndustryName', 'business_email', 'business_phone', 'date_added', 'date_printed', 'list', 'paypal_link', 'row', 'id', 'user_logo', 'aUserID'));
         return $pdf->stream();
     }
 
@@ -475,7 +482,8 @@ class AppointmentController extends Controller
 
         $location = !empty($data['location']) ? $data['location'] : '';
 
-        if($engage == 1) {
+        $location_name = '';
+        if($engage == 1 && !empty($location)) {
             $location_name = get_field('locations', 'name', $location);
         }
 

@@ -78,7 +78,7 @@
 
 
 
-                       {!! Form::text('business_fname',$UserBusinessData['contact_firstname'], array('id' => 'lastname', 'class' => 'form-control', 'placeholder' => trans('profile.business_fname'))) !!}
+                       {!! Form::text('business_fname', $UserBusinessData['contact_firstname'], array('id' => 'lastname', 'class' => 'form-control', 'placeholder' => trans('profile.business_fname'))) !!}
 
 
 
@@ -897,7 +897,13 @@
         <div class="form-group">
             {!! Form::label('Upload Logo', trans('profile.upload_logo') , array('class' => 'control-label')); !!}
 
-            <input type="file" name="upload_logo" size="24" class="{'input': true, 'is-danger': errors.has('upload_logo')}" v-validate.reject="'ext:png,gif,jpg,jpeg|size:8888'"> @if(!empty(session('user_logo'))) {{ $image = 'public/attachments/logo/'.session('id').'/'.session('user_logo') }} @endif
+            <input type="file" name="upload_logo" size="24" class="{'input': true, 'is-danger': errors.has('upload_logo')}" v-validate.reject="'ext:png,gif,jpg,jpeg|size:8888'"> 
+            @if(!empty(session('user_logo'))) 
+                @php 
+                    $image = 'public/attachments/logo/'.$admin_user_id.'/'.session('user_logo') 
+                @endphp 
+                <img src="{{ $image }}" width="200" height="200">
+            @endif
 
             <i v-show="errors.has('upload_logo')" class="fa fa-warning"></i>
             <span v-show="errors.has('upload_logo')" class="help is-danger">@{{ errors.first('upload_logo') }}</span>

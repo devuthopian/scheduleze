@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).ready(function() {
 
     // ..not working in iphone, mobile issue(so it is commented) vue.js
     /*if(document.getElementById("app")){
@@ -26,13 +26,13 @@ $(document).ready(function () {
     // ..working everywhere so uncommented here
     var list = $("nav>ul li > a");
 
-    $("nav > a").click(function(event){
+    $("nav > a").click(function(event) {
         $("nav>ul").slideToggle();
     });
 
-    list.click(function (event) {
+    list.click(function(event) {
         var submenu = this.parentNode.getElementsByTagName("ul").item(0);
-        if(submenu!=null){
+        if (submenu != null) {
             event.preventDefault();
             $(submenu).slideToggle();
         }
@@ -60,21 +60,8 @@ $(document).ready(function () {
         }
     });
 
-    /*$('body').on('click', '.finalSubmit', function(event) {
-        event.preventDefault();
-    });
 
-    $('body').on('click', '.accountInfo', function(event) {
-        event.preventDefault();
-        //document.getElementById("msform").submit();
-        $('.action-button').attr('data-target', '');
-        $('.action-button').removeClass('finalSubmit');
-        //$('#msform').submit();
-        $('.action-button').trigger('click');
-    });*/
-
-
-    $(window).resize(function () {
+    $(window).resize(function() {
 
         if ($(window).width() > 1024) {
 
@@ -84,7 +71,7 @@ $(document).ready(function () {
 
     });
 
-    $("body").on('click', '#add_column', function (event) {
+    $("body").on('click', '#add_column', function(event) {
 
         event.preventDefault();
 
@@ -118,7 +105,7 @@ $(document).ready(function () {
 
         var html = [];
 
-        $.each(nuid, function (key, value) {
+        $.each(nuid, function(key, value) {
 
             html.push("<option value='" + value.id + "' data-in='" + value.administrator + "'>" + value.name + "</option>");
 
@@ -130,7 +117,7 @@ $(document).ready(function () {
 
             var selecthtml = "<select name='forcecall[" + actualstate + "]' class='selectpicker form-control' size='1'><option value='0'>Book on-line</option><option value='1'>Require phone call</option></select>";
 
-        } else if(document.location.href.match(/[^\/]+$/)[0] == 'Sizes' || document.location.href.match(/[^\/]+$/)[0] == 'Sizes#') {
+        } else if (document.location.href.match(/[^\/]+$/)[0] == 'Sizes' || document.location.href.match(/[^\/]+$/)[0] == 'Sizes#') {
             var selecthtml = "<select name='forcecall[" + actualstate + "]' class='selectpicker form-control' size='1'><option value='1'>Book on-line</option><option value='0'>Require phone call</option><option value='3'>Use as Label Box</option></select>";
         } else {
 
@@ -148,7 +135,7 @@ $(document).ready(function () {
 
     });
 
-    if(document.getElementById("adminlocation")){
+    if (document.getElementById("adminlocation")) {
         new Vue({
             el: '#adminlocation',
             methods: {
@@ -164,7 +151,7 @@ $(document).ready(function () {
         });
     }
 
-    if(document.getElementById("adminIndustries")){
+    if (document.getElementById("adminIndustries")) {
         new Vue({
             el: '#adminIndustries',
             methods: {
@@ -193,14 +180,14 @@ $(document).ready(function () {
 
     });*/
 
-    $("body").on('click', '.appointmentPage', function (event) {
+    $("body").on('click', '.appointmentPage', function(event) {
         var fullText = $(this).attr('full-text');
-        return confirm(fullText+'?');
+        return confirm(fullText + '?');
     });
 
 
 
-    $("body").on('click', '.note_link', function (event) {
+    $("body").on('click', '.note_link', function(event) {
 
         var result = confirm("Want to delete?");
         if (result) {
@@ -223,7 +210,12 @@ $(document).ready(function () {
                 /*$serverName = $_SERVER['SERVER_NAME'];
                 var location = "http://$serverName/";*/
 
-                Vue.http.post('/ajaxrequest', {id: dataid, _token: $('meta[name="csrf-token"]').attr('content'), table: datamodel, dataType: "JSON"}).then(response => {
+                Vue.http.post('/ajaxrequest', {
+                    id: dataid,
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                    table: datamodel,
+                    dataType: "JSON"
+                }).then(response => {
                     // get status
                     $("#showtxt").html(response.msg);
                     $('.submit').trigger('click');
@@ -280,11 +272,11 @@ $(document).ready(function () {
 
 
 
-    $('.columnaddons').click(function (event) {
+    $('.columnaddons').click(function(event) {
 
         /* Act on the event */
 
-        setTimeout(function () {
+        setTimeout(function() {
 
             $('.radiocolumn').remove();
 
@@ -298,25 +290,25 @@ $(document).ready(function () {
 
     $('#faq-box')
 
-            .on('show.bs.collapse', function (e) {
+    .on('show.bs.collapse', function(e) {
 
-                $.post('/faq/question/' + $(e.target).attr('data-id'));
-
-
-
-                $(e.target).parents('.card').addClass('card-info');
-
-            })
-
-            .on('hide.bs.collapse', function (e) {
-
-                $(e.target).parents('.card').removeClass('card-info');
-
-            });
+        $.post('/faq/question/' + $(e.target).attr('data-id'));
 
 
 
-    $('.btn-helpful').on('click', function (e) {
+        $(e.target).parents('.card').addClass('card-info');
+
+    })
+
+    .on('hide.bs.collapse', function(e) {
+
+        $(e.target).parents('.card').removeClass('card-info');
+
+    });
+
+
+
+    $('.btn-helpful').on('click', function(e) {
 
         e.preventDefault();
 
@@ -340,23 +332,19 @@ $(document).ready(function () {
 
             method: "POST",
 
-            data: {_token: $('meta[name="csrf-token"]').attr('content')},
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content')
+            },
 
             dataType: "JSON",
 
-            success: function (data) {
+            success: function(data) {
 
                 $footer.html("<div><small><span class=\"text-muted\">Thank you for your feedback.</span></small></div>");
 
             }
 
         });
-
-        /*$.post('/faq/question/' + $(this).attr('data-id') + '/' + $(this).attr('data-type'), function () {
-         
-         $footer.html("<div><small><span class=\"text-muted\">Thank you for your feedback.</span></small></div>");
-         
-         });*/
 
         return false;
 
@@ -394,17 +382,53 @@ $(document).ready(function () {
     $('#cpass').on('input', function() {
         $('.confirmedPassword').show();
     });
+
+
+    $('body').on('click', '.ajaxLink', function(event) {
+        event.preventDefault();
+
+        var dataid = $(this).attr('data-id');
+        var dataname = $(this).attr('data-name');
+
+        $.ajax({
+
+            url: '/getViaAjax',
+
+            method: "POST",
+
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                id: dataid
+            },
+
+            dataType: "JSON",
+
+            success: function(response) {
+                // get status
+                var str = response;
+
+                if (str === 'no data') {
+                    $(".showHelperText").html('<p style="text-align: center; ">We will soon be back on this one.</p>');
+                } else {
+                    $(".showHelperText").html(str);
+                }
+
+                $('.helperTitle').html(dataname);
+                $('#helpTarget').modal('show');
+            }
+        });
+    });
 });
 
 
 
-$(window).on('load', function () {
+$(window).on('load', function() {
 
     $('.loader').fadeOut(1000);
 
 });
 
-$(window).scroll(function() {    
+$(window).scroll(function() {
 
 
 
@@ -431,3 +455,40 @@ $(window).scroll(function() {
         }
     });
 }*/
+
+var paginationHandler = function() {
+    // store pagination container so we only select it once
+    var $paginationContainer = $(".pagination-container"),
+        $pagination = $paginationContainer.find('.pagination ul');
+
+    // click event
+    $pagination.find("li a").on('click.pageChange', function(e) {
+        e.preventDefault();
+
+        $pagination.find('li').removeClass('active');
+        $(this).parent('li').addClass("active");
+
+        // get parent li's data-page attribute and current page
+        var parentLiPage = $(this).parent('li').data("page"),
+            currentPage = parseInt($(".pagination-container div[data-page]:visible").data('page')),
+            numPages = $paginationContainer.find("div[data-page]").length;
+
+        // make sure they aren't clicking the current page
+        if (parseInt(parentLiPage) !== parseInt(currentPage)) {
+            // hide the current page
+            $paginationContainer.find("div[data-page]:visible").hide();
+
+            if (parentLiPage === '+') {
+                // next page
+                $paginationContainer.find("div[data-page=" + (currentPage + 1 > numPages ? numPages : currentPage + 1) + "]").show();
+            } else if (parentLiPage === '-') {
+                // previous page
+                $paginationContainer.find("div[data-page=" + (currentPage - 1 < 1 ? 1 : currentPage - 1) + "]").show();
+            } else {
+                // specific page
+                $paginationContainer.find("div[data-page=" + parseInt(parentLiPage) + "]").show();
+            }
+        }
+    });
+};
+jQuery(document).ready(paginationHandler);

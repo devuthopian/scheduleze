@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use App\BusinessTypes;
 use App\ServiceContent;
+use App\PageHelper;
 
 class BackendController extends Controller
 {
@@ -84,25 +85,13 @@ class BackendController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function showHelpers()
     {
-        //
+        return view('backend.helpers');
     }
 
     /**
@@ -111,9 +100,19 @@ class BackendController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($raw_page)
     {
-        //
+        if (strpos($raw_page, '_') !== false) {
+            $parts = explode('_', $raw_page);
+            $page = $parts[0].' '.$parts[1];
+            $page_name = ucwords($page);
+        } else {
+            $page_name = ucwords($raw_page);
+        }
+
+        $PageData = PageHelper::where('slug', $raw_page)->first();
+
+        return view('backend.form', compact('page_name', 'PageData', 'raw_page'));
     }
 
     /**
@@ -123,9 +122,62 @@ class BackendController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $raw_page)
     {
-        //
+        if (preg_match('/^[a-z]+_[a-z]+$/i', $raw_page)) {
+            $parts = explode('_', $raw_page);
+            $page = $parts[0].' '.$parts[1];
+        }
+        $page_name = ucwords($raw_page);
+
+        $detail = $request->summernoteInput;
+        try {
+            $dom = new \domdocument();
+            $dom->loadHtml($detail, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        } catch(Exception $e) {
+            dd($e);
+        }
+ 
+        $images = $dom->getelementsbytagname('img');
+
+        if(!empty($images)) {
+            foreach($images as $k => $img){                
+                $data = $img->getattribute('src');
+
+                if (\strpos($data, ';') !== false) {
+                    list($type, $data) = explode(';', $data);
+                    list(, $data)      = explode(',', $data);
+                    $data = base64_decode($data);
+                
+     
+                    $image_name = time().$k.'.png';
+                    $path = public_path() .'/'. $image_name;
+         
+                    file_put_contents($path, $data);
+
+                    $img->removeattribute('src');
+                    $img->setattribute('src', '/public/'.$image_name);
+                } else {
+                    $img->setattribute('src', $data);
+                }
+                
+            }
+        }
+ 
+        $detail = $dom->savehtml();
+
+        $PageData = PageHelper::updateOrCreate(
+            ['slug' => $raw_page],
+            [
+                'slug' => $raw_page,
+                'page_name' => $page_name, 
+                'content' => $detail
+            ]
+        );
+
+        return redirect('backend/services/helpers/'.$raw_page)->with('message', 'Updated Successfully');
+
+        //return view('backend.form', compact('page_name', 'PageData', 'raw_page'));
     }
 
     /**

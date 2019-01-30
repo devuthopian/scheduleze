@@ -126,9 +126,10 @@
      margin: 20px 0 30px;
 }
  .choose_industry_section .industry_cont {
-     border: 1px solid #eeeeee;
-     padding: 10px 30px;
-     margin-bottom: 20px;
+    border: 1px solid #eeeeee;
+    padding: 10px 30px;
+    margin-bottom: 20px;
+    text-decoration: none;
 }
  .choose_industry_section .industry_cont h3 {
      text-transform: uppercase;
@@ -2190,4 +2191,65 @@ body {
    width: 100%;
    max-width: 500px;
    margin-top: 30px;
+}
+.nsignup_cont .textfield_right label.change_file {
+    background: #e1e1e1;
+    padding: 0px 6px;
+    cursor: pointer;
+    color: #000;
+    font-weight: normal;
+    opacity: 1 !important;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    border: 1px solid #9a9a9a;
+}
+.hover08 figure img {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    -webkit-transition: .3s ease-in-out;
+    transition: .3s ease-in-out;
+}
+.hover08 .industry_cont:hover figure img {
+    -webkit-transform: scale(1.3);
+    transform: scale(1.3);
+    -webkit-animation: anim 1s infinite;
+    animation: anim 1s infinite;
+}
+
+@-webkit-keyframes anim {
+    from {-webkit-transform: rotateY(0deg);}
+    to {-webkit-transform: rotateY(360deg);}
+}
+
+@keyframes anim {
+    from {transform: rotateY(0deg);}
+    to {transform: rotateY(360deg);}
+}
+
+.hover08 .industry_cont:hover  h3 {
+    font-weight: 500;
+}
+
+.industry_cont a:focus {
+    text-decoration: none;
+}
+
+.helperClass {
+    width: 100% !important;
+    max-width: 990px;
+}
+
+.helperClass iframe {
+    width: 100%;
+}
+
+nav ul li ul li a.ajaxLink {
+    float: right;
+    position: absolute;
+    right: 10px;
+}
+
+a.ajaxLink {
+    padding: 0px !important;
+    position: relative;
+    right: 8px;
 }

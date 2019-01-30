@@ -112,9 +112,16 @@ class ProfileController extends Controller
 
         $indus_id = $request->input('typework');
 
+
         $UserDetails = UserDetails::firstOrNew(array('user_id' => $userid));
         $UserDetails->user_id        = $userid;
-        $UserDetails->indus_id       = $indus_id;
+
+        if(is_numeric($indus_id)) {
+            $UserDetails->indus_id   = $indus_id;
+        } else {
+            $UserDetails->custom_indus_name   = $indus_id;
+        }
+        
         $UserDetails->name           = $request->input('firstname');
         $UserDetails->lastname       = $request->input('lastname');
         $UserDetails->email2         = $request->input('backupEmail');
@@ -131,9 +138,12 @@ class ProfileController extends Controller
         $UserDetails->save();
         $UserDetails->user->save();
 
-        $IndustryName = get_field('business_types', 'business', $indus_id); //tablename, columnname, Id
-
-        session(['IndustryName' => $IndustryName]);
+        if(is_numeric($indus_id)) {
+            $IndustryName = get_field('business_types', 'business', $indus_id); //tablename, columnname, Id
+            session(['IndustryName' => $IndustryName]);
+        } else {
+            session(['IndustryName' => $indus_id]);
+        }
       
         return redirect('/profile')->with('message', trans('profile.updateSuccess'));
     }
@@ -142,14 +152,16 @@ class ProfileController extends Controller
     {
         //$userid           =   Auth::id();
         $business_id = session('business_id');
-        $admin_user_id = UserDetails::select('user_id')->where([['business', '=', $business_id], ['administrator', '=', 1]])->first();
+        $admin_user_id = UserDetails::where([['business', '=', $business_id], ['administrator', '=', 1]])->first();
         $UserBusinessData = Business::where('user_id', $admin_user_id->user_id)->first();
 
         //$panel_template = DB::table('panel_template')->select('unique_id')->where([['user_id', '=', $admin_user_id->user_id],['marked_domain', '=', 1]])->first();
 
+        session(['user_logo' => $admin_user_id->upload_logo]);
+
         $data = [
             'UserBusinessData' => $UserBusinessData,
-            'admin_user_id' => $admin_user_id
+            'admin_user_id' => $admin_user_id->user_id
         ];
 
         return view('profiles.UserBusinessProfileEdit')->with($data);

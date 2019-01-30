@@ -7,7 +7,7 @@
                 $allindustries = getallIndustries();
                 $get_all_usernames = get_all_usernames('users', 'name');
                 $get_key_usernames = array_values(array_filter($get_all_usernames));
-                $key_username = implode(",", $get_key_usernames);
+                //$key_username = implode(",", $get_key_usernames);
             @endphp
             <div class="login_section" id="signup">
                 <div class="container">
@@ -22,7 +22,7 @@
                                 <div class="form-group row">
                                    <!--  <label for="email" class="col-sm-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label> -->
                                     <div class="col-md-12">
-                                        <input id="name" type="text" v-validate="'required|alpha|included:{{ $key_username }}'" :class="{'input': true, 'is-danger': errors.has('name')}" name="name" placeholder="Username" required autofocus>
+                                        <input id="name" type="text" v-validate="'required|alpha'" :class="{'input': true, 'is-danger': errors.has('name')}" name="name" placeholder="Username" required autofocus>
                                         <i v-show="errors.has('name')" class="fa fa-warning"></i>
                                         <span v-show="errors.has('name')" class="help is-danger-login">@{{ errors.first('name') }}</span>
                                     </div>
